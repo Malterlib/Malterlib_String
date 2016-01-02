@@ -1,0 +1,139 @@
+// Copyright © 2015 Hansoft AB 
+// Distributed under the MIT license, see license text in LICENSE.Malterlib
+
+/** \page p_Malterlib_String_Formatting String Formatting Options
+
+To format an argument with the default options, just specify "{}".
+ 
+Format										| Result
+-------										| ------
+\code CFormat("{}") << 1\endcode			|\code"1"\endcode
+\code CFormat("{} {}") << 1 << 2\endcode	|\code"1 2"\endcode
+
+To use the data from a specific argument for the string just put the number as the first option.
+ 
+Format										| Result
+-------										| ------
+\code CFormat("{0}") << 1 << 2 << 3\endcode	|\code "1"\endcode
+\code CFormat("{1}") << 1 << 2 << 3\endcode	|\code "2"\endcode 
+\code CFormat("{2}") << 1 << 2 << 3\endcode	|\code "3"\endcode
+
+If there are several parameters each time a parameter is accessed without a specified number the parameters will be accessed in the order they are used. Examples:
+ 
+Format														| Result
+-------														| ------
+\code CFormat("{} {} {}") << 1 << 2 << 3\endcode			|\code "1 2 3"\endcode
+\code CFormat("{} {1} {}") << 1 << 2 << 3\endcode			|\code "1 2 2"\endcode
+\code CFormat("{sl*} {} {}") << 1 << 2 << 3 << 4\endcode	|\code " 1 3 4"\endcode
+
+In place of a fixed option it is in most circumstances possible to use one of the arguments passed to the formatting function instead. See which options accept this below in the 'Indirection' column.
+ 
+Format					| Description
+-------					| -----------
+\code "{*}"\endcode		|Will use the next available argument to signify the argument to use for this formatting.
+\code "{*1}"\endcode	|Will use the second argument to signify the argument to use for this formatting.
+\code "{sj*1}"\endcode	|Will use the second argument to signify the lenth of the formatted field.
+
+You can pass several options for each formatting argument. You must however specify the argument you want to format as the first option. If the same option is specified more than once, the last occurrence will be used.
+ Example					| Description
+--------					| -----------
+\code"{1}"\endcode			|Format from parameter 1.
+\code"{1,sz5}"\endcode		|Format from parameter 1, with the exact length of 5.
+\code"{1,sz5,sf0}"\endcode	|Format from parameter 1, with the exact length of 5, padding with zeroes.
+
+\section Common Formatting Options
+
+Option			| Description												| Indirection	| Example (`String`)
+------			| -----------												| -----------	| ----------------
+`l or sl`		|Min Length													|Yes			|\code "{l10}" -> "    String"\endcode
+`m or sm`		|Max Length													|Yes			|\code "{m5}" -> "tring"\endcode
+`sj or sz`		|Max and min length											|Yes			|\code "{sz5}" -> "tring"\endcode
+`sf`			|The character to fill with to max lenth					|No				|\code "{l10,sfX}" -> "XXXXString"\endcode
+`a-`			|Makes the field left aligned								|Yes			|\code "{l10,a-}" -> "String    "\endcode
+`a+`			|Makes the field right aligned (default)					|Yes			|\code "{l10,a+}" -> "    String"\endcode
+`a-*`			|Makes the field left aligned with offset from the left		|Yes			|\code "{l15,a-2}" -> "  String       "\endcode
+`a+*`			|Makes the field right aligned with offset from the right	|Yes			|\code "{l15,a+2}" -> "       String  "\endcode
+
+\section String Formatting Options
+ 
+Option	| Description			| Indirection	| Example (String)
+------	| -----------			| -----------	| ----------------
+`cu`	|String in upper case	|No				|\code "{cu}" -> "STRING"\endcode
+`cl`	|String in lower case	|No				|\code "{cl}" -> "string"\endcode
+`cc`	|Capitalize string		|No				|\code "{cc}" -> "String"\endcode
+`cd`	|Decapitalize string	|No				|\code "{cd}" -> "string"\endcode
+
+\section Integer Formatting Options
+
+Option		| Description																	| Indirection	| Example (1118)
+------		| -----------																	| -----------	| --------------
+`nh or nfh`	|Number format hexadecimal.														|No				|\code "{nh}" -> "45e"\endcode
+`no or nfo`	|Number format octal.															|No				|\code "{no}" -> "2136"\endcode
+`nb or nfb`	|Number format binary.															|No				|\code "{nb}" -> "10001011110"\endcode
+`nfn`		|Number format base 10. (default)												|No				|\code "{nfn}" -> "1118"\endcode
+`nf*`		|Custom number format. The highest supported base is 36.						|Yes			|\code "{nf30}" -> "178"\endcode
+`nc`		|Number formats above base 10 will have capitalized letters.					|No				|\code "{nh,nc}" -> "45E"\endcode
+`nt`		|The character code for thousand separator (and turns it on if other than 0).	|Yes			|\code "{nt32}" -> "1 118"\endcode
+`ns`		|The character for the thousand separator.										|No				|\code "{ns:}" -> "1:118"\endcode
+`n+`		|Turns on indication of the sign of the number even if the number is positive.	|No				|\code "{n+}" -> "+1118"\endcode
+`xpr`		|Allows evaluation of an expression before formatting the integer. See below.	|N/A			|\code "{xpr($/2)}" -> "559"\endcode
+
+\section Floating Point Formatting Options
+
+Option	| Description																	| Indirection	| Example (3.4456)
+------	| -----------																	| -----------	| ----------------
+`ffE`	|Use exponent format with exponent in upper case.								|No				|\code "{ffE}" with 3.4456 -> "3.4456E0"\endcode
+`ffe`	|Use exponent format with exponent in lower case.								|No				|\code "{ffe}" with 3.4456 -> "3.4456e0"\endcode
+`ffS`	|Use shortest format. If exponent, use upper case.								|No				|\code "{ffS}" with 0.0000000034456 -> "3.4456E-9"\endcode
+`ffs`	|Use shortest format. If exponent, use lower case.								|No				|\code "{ffs}" with 0.0000000034456 -> "3.4456e-9"\endcode
+`fff`	|Use fixed format. (default)													|No				|\code "{fff}" with 3.4456 -> "3.4456"\endcode
+`fdb`	|Display more digits than mantissa can fully express.							|No				|\code "{fdb}" with 3.44563333333333 -> "3.445633333333333504"\endcode
+`fds`	|Display the number of digits the mantissa can fully express. (default)			|No				|\code "{fds}" with 3.44563333333333 -> "3.44563333333333"\endcode
+`fd*`	|Specify the minimum number of digits to display.								|Yes			|\code "{fd10}" with 3.4456 -> "3.445600000"\endcode
+`fm*`	|Specify the maxmum number of digits to display									|Yes			|\code "{fm3}" with 3.4456 -> "3.45"\endcode
+`fe*`	|Specify the minimum number of decimals to display.								|Yes			|\code "{fe10}" with 3.4456 -> "3.4456000000"\endcode
+`fn*`	|Specify the maximum number of decimals to display.								|Yes			|\code "{fn3}" with 3.4456 -> "3.446"\endcode
+`fsi`	|Turn on display infinity floats. (default)										|No				|\code "{fsi}" with Inf -> "Inf"\endcode
+`fsn`	|Turn on display of 'not a number' floats. (default)							|No				|\code "{fsn}" with QNaN -> "QNaN"\endcode
+`fsd`	|Turn on display of de-normalized floats.										|No				|\code "{ffe,fsd}" with 3.4456e-323 -> "3.45845952088873e-323\#denorm"\endcode
+`fhi`	|Turn off display of infinity floats.											|No				|\code "{fhi}" with Inf -> "0.0"\endcode
+`fhn`	|Turn off display of 'not a number' floats.										|No				|\code "{fhn}" with QNaN -> "0.0"\endcode
+`fhd`	|Turn off display of de-normalized floats. (default)							|No				|\code "{ffe,fhd}" with 3.4456e-323 -> "3.45845952088873e-323"\endcode
+`fr*`	|Set display of only the fractional part of the float. The default is off.		|Yes			|\code "{fr1}" with 3.4456 -> "4456"\endcode
+`fa*`	|Set auto removal of trailing zeros. The default is on.							|Yes			|\code "{fa0}" with 3.4456 -> "3.44560000000000"\endcode
+`n+`	|Turns on indication of the sign of the number even if the number is positive.	|No				|\code "{n+}" with 3.4456 -> "+3.4456"\endcode
+`xpr`	|Allows evaluation of an expression before formatting the float. See below.		|N/A			|\code "{xpr($/2.0)}" with 3.4456 -> "1.7228"\endcode
+
+\section Expressions
+Floating point and integer numbers can be formatted as expressions. The expressions are simple constructs that can access any of the parameters in the format as well as it's own expression. All calculations are done at the accuracy and type of the formatted number. So if an integer format accesses a float parameter this parameter will be converted to a integer before any calculations are done.
+
+The expression can use parenthesis, access parameters and constants, and the following operators: Add, subtract, divide, multiply and modulus.
+Fragment	| Description
+--------	| -----------
+`(`			|Begin parenthesis
+`)`			|End parenthesis
+`+`			|Add
+`-`			|Subtract
+`*`			|Multiply
+`/`			|Divide
+`%`			|Modulus
+`5`			|Constant number
+`5.5`		|Constant floating point number (only valid while formatting a float)
+`$`			|The number we are formatting
+`$2`		|Another parameter in the format. Can be anything, even a string if it's convertible to a number.
+
+To access a parameter use $. If you specify just $ you are accessing the parameter you are currently formatting. You can specify another parameter by specifying the parameter number after $. Examples:
+
+Expression						| Description								| Results (3.4456, 5.5)
+----------						| -----------								| ---------------------
+\code"{xpr($)}"\endcode			|Just return the number we are formatting	|\code"3.4456"\endcode
+\code"{xpr($1)}"\endcode		|Access the second parameter				|\code"5.5"\endcode
+\code"{xpr($*$1)}"\endcode		|Multiply number by second parameter		|\code"18.9508"\endcode
+\code"{xpr($/$1)}"\endcode		|Divide number by second parameter			|\code"0.626472727272727"\endcode
+\code"{xpr($+$1)}"\endcode		|Add second parameter to number				|\code"8.9456"\endcode
+\code"{xpr($-$1)}"\endcode		|Subtract second parameter from number		|\code"-2.0544"\endcode
+\code"{xpr($1%$)}"\endcode		|Second parameter modulus number			|\code"2.0544"\endcode
+\code"{xpr($*3.14)}"\endcode	|Multiply number by constant '3.14'			|\code"10.819184"\endcode
+\code"{xpr(($+3)/2)}"\endcode	|Add 3 to number and then divide by 2		|\code"3.2228"\endcode
+
+*/

@@ -1,0 +1,95 @@
+// Copyright © 2015 Hansoft AB 
+// Distributed under the MIT license, see license text in LICENSE.Malterlib
+
+Import "../Core/Lib_Malterlib.MTarget"
+
+%Group "{Malterlib}/{Lib_Malterlib_String}"
+{
+	%Group String
+	{
+		%Group Include
+		{
+			Compile.Type "C++"
+			{
+				!!DocumentationEnabled true
+			}
+			%File "Include/Mib/String/^*"
+		}
+		%File "Source/^*"
+		%Group Documentation
+		{
+			%File "Documentation/*"
+		}
+	}
+}
+
+
+Property
+{
+	MalterlibLibrary_String true
+	{
+		&
+		{
+			MalterlibLibrary_String ""
+			MalterlibLibrary_All true
+		}
+	}
+	MalterlibSubLibraries "String;@(MalterlibSubLibraries)"
+	{
+		!!MalterlibLibrary_String true
+	}
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_String true
+	MalterlibIncludeRoots "@('Include'->MakeAbsolute());@(MalterlibIncludeRoots)"
+	{
+		!!MalterlibLibrary_String true
+	}
+}
+
+%Group "{Test}/{Malterlib_String}"
+{
+	Compile
+	{
+		&
+		{
+			CompileDialect C
+			MalterlibEnableThirdPartyComparisonTests true
+		}
+		SearchPath "@(Builtin.BasePath)/SDK/STLSoft/include;@(Compile.SearchPath)"
+		SearchPath "@(Builtin.BasePath)/SDK/FastFormat/include;@(Compile.SearchPath)"
+	}
+	%Group SDK
+	{
+		!!MalterlibEnableThirdPartyComparisonTests true
+		%Group FastFormat
+		{
+			%File ../../SDK/FastFormat/include/fastformat/exceptions.hpp
+			%File ../../SDK/FastFormat/include/fastformat/fastformat.h
+			%File ../../SDK/FastFormat/include/fastformat/fastformat.hpp
+			%File ../../SDK/FastFormat/include/fastformat/ff.hpp
+			%File ../../SDK/FastFormat/include/fastformat/implicit_link.h
+			%File ../../SDK/FastFormat/include/fastformat/init_codes.h
+			%File ../../SDK/FastFormat/src/api.cpp
+			%File ../../SDK/FastFormat/src/fmt_cache.cpp
+			%File ../../SDK/FastFormat/src/fmt_spec_defect_handlers.cpp
+			%File ../../SDK/FastFormat/src/init_code_strings.cpp
+			%File ../../SDK/FastFormat/src/memory_pool.cpp
+			%File ../../SDK/FastFormat/src/replacements.cpp
+			%File ../../SDK/FastFormat/src/snprintf.cpp
+
+			// Fastformat & STLsoft do not like libcpp / clang combo.
+			Compile.Disabled true
+			{
+				!PlatformFamily "Windows"
+			}			
+		}
+	}
+}
+
+Property
+{
+	!!MalterlibEnableInternalTests true
+	
+	MalterlibTests "Malterlib_String;@(MalterlibTests)"
+	MalterlibTestFiles_Malterlib_String "@('Test/*'->MakeAbsolute())"
+	MalterlibTestExtraGroups_Malterlib_String "{Test}/{Malterlib_String}"
+}

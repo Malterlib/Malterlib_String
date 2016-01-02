@@ -1,0 +1,15 @@
+﻿// Copyright © 2015 Hansoft AB 
+// Distributed under the MIT license, see license text in LICENSE.Malterlib
+
+/**	\namespace NMib::NString
+	\brief String namespace
+ */
+
+/**
+
+\page p_Malterlib_String String
+
+\subpage p_Malterlib_String_Formatting
+
+*/
+
