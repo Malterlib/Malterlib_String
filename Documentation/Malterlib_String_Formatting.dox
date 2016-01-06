@@ -41,7 +41,7 @@ You can pass several options for each formatting argument. You must however spec
 \code"{1,sz5}"\endcode		|Format from parameter 1, with the exact length of 5.
 \code"{1,sz5,sf0}"\endcode	|Format from parameter 1, with the exact length of 5, padding with zeroes.
 
-\section Common Formatting Options
+\section s_Common_Formatting_Options Common Formatting Options
 
 Option			| Description												| Indirection	| Example (`String`)
 ------			| -----------												| -----------	| ----------------
@@ -54,7 +54,7 @@ Option			| Description												| Indirection	| Example (`String`)
 `a-*`			|Makes the field left aligned with offset from the left		|Yes			|\code "{l15,a-2}" -> "  String       "\endcode
 `a+*`			|Makes the field right aligned with offset from the right	|Yes			|\code "{l15,a+2}" -> "       String  "\endcode
 
-\section String Formatting Options
+\section s_String_Formatting_Options String Formatting Options
  
 Option	| Description			| Indirection	| Example (String)
 ------	| -----------			| -----------	| ----------------
@@ -63,7 +63,7 @@ Option	| Description			| Indirection	| Example (String)
 `cc`	|Capitalize string		|No				|\code "{cc}" -> "String"\endcode
 `cd`	|Decapitalize string	|No				|\code "{cd}" -> "string"\endcode
 
-\section Integer Formatting Options
+\section s_Integer_Formatting_Options Integer Formatting Options
 
 Option		| Description																	| Indirection	| Example (1118)
 ------		| -----------																	| -----------	| --------------
@@ -78,7 +78,7 @@ Option		| Description																	| Indirection	| Example (1118)
 `n+`		|Turns on indication of the sign of the number even if the number is positive.	|No				|\code "{n+}" -> "+1118"\endcode
 `xpr`		|Allows evaluation of an expression before formatting the integer. See below.	|N/A			|\code "{xpr($/2)}" -> "559"\endcode
 
-\section Floating Point Formatting Options
+\section s_Floating_Point_Formatting_Options Floating Point Formatting Options
 
 Option	| Description																	| Indirection	| Example (3.4456)
 ------	| -----------																	| -----------	| ----------------
@@ -103,8 +103,8 @@ Option	| Description																	| Indirection	| Example (3.4456)
 `fa*`	|Set auto removal of trailing zeros. The default is on.							|Yes			|\code "{fa0}" with 3.4456 -> "3.44560000000000"\endcode
 `n+`	|Turns on indication of the sign of the number even if the number is positive.	|No				|\code "{n+}" with 3.4456 -> "+3.4456"\endcode
 `xpr`	|Allows evaluation of an expression before formatting the float. See below.		|N/A			|\code "{xpr($/2.0)}" with 3.4456 -> "1.7228"\endcode
-
-\section Expressions
+ 
+\section s_Expressions Expressions
 Floating point and integer numbers can be formatted as expressions. The expressions are simple constructs that can access any of the parameters in the format as well as it's own expression. All calculations are done at the accuracy and type of the formatted number. So if an integer format accesses a float parameter this parameter will be converted to a integer before any calculations are done.
 
 The expression can use parenthesis, access parameters and constants, and the following operators: Add, subtract, divide, multiply and modulus.
