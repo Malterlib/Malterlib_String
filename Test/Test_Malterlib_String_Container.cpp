@@ -1,8 +1,10 @@
 ﻿// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
-#ifndef DCompiler_clang
-// Fastformat and stlsoft do not like libcpp
+#ifdef DCompiler_clang
+	// Fastformat and stlsoft do not like libcpp
+	#undef DMalterlibEnableThirdPartyComparisonTests
+#endif
 
 #pragma warning(disable:4459)
 
@@ -20,6 +22,8 @@
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/algorithm/string/find.hpp>
 
+#ifdef DMalterlibEnableThirdPartyComparisonTests
+
 #define FASTFORMAT_NO_VERSION_NAG
 
 #include <fastformat/fastformat.hpp>
@@ -35,6 +39,9 @@ typedef std::wstring CFastFormatString;
 typedef std::string CFastFormatString;
 #define DFastFormatStr(d_Str) d_Str
 #endif
+
+#endif
+
 #include <Mib/Test/Test>
 #include <Mib/Test/Memory>
 
@@ -86,12 +93,14 @@ namespace
 				CMeasureType KarmaManualStaticNoAllocTime("Karma Manual");
 				CMeasureType KarmaManualStaticAllocReserveTime("Karma Manual");
 
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				CMeasureType FastFormatAllocTime("Fast Format");
 				CMeasureType FastFormatAllocReserveTime("Fast Format");
 				CMeasureType FastFormatNoAllocTime("Fast Format");
 				CMeasureType FastFormatStaticAllocReserveTime("Fast Format");
 				CMeasureType FastFormatStaticAllocTime("Fast Format");
 				CMeasureType FastFormatStaticNoAllocTime("Fast Format");
+#endif
 
 				// Test 100 times and pick the fastest
 
@@ -104,16 +113,20 @@ namespace
 				std::string KarmaReserveResult;
 				std::string KarmaManualStaticAllocResult;
 				std::string KarmaManualStaticAllocReserveResult;
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				CFastFormatString FastFormatAllocReserveResult;
 				CFastFormatString FastFormatAllocResult;
 				CFastFormatString FastFormatStaticAllocReserveResult;
 				CFastFormatString FastFormatStaticAllocResult;
+#endif
 				TCUniquePointer<ch8> KarmaCharResult = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
 				TCUniquePointer<ch8> MalterlibNoAllocResultData = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
 				TCUniquePointer<ch8> MalterlibStaticNoAllocResultData = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
 				TCUniquePointer<ch8> KarmaManualStaticNoAllocResult = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				TCUniquePointer<fastformat::ff_char_t> FastFormatStaticNoAllocResult = NMib::fg_Explicit(DMibNew fastformat::ff_char_t [NeededCharSize]);
 				TCUniquePointer<fastformat::ff_char_t> FastFormatNoAllocResult = NMib::fg_Explicit(DMibNew fastformat::ff_char_t [NeededCharSize]);
+#endif
 
 				CStrPtr MalterlibNoAllocResult;
 				MalterlibNoAllocResult.f_SetPtr(MalterlibNoAllocResultData.f_Get(), NeededCharSize);
@@ -388,6 +401,7 @@ namespace
 						MalterlibStaticAllocReserveTime.f_Stop(VectorSize);
 					}
 				};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				auto FastFormatAllocReserve = [&] ()
 				{
 					FastFormatAllocReserveResult = CFastFormatString();
@@ -527,6 +541,7 @@ namespace
 						FastFormatStaticNoAllocTime.f_Stop(VectorSize);
 					}
 				};
+#endif
 				for(int i=0;i<nTests;++i) 
 					Karma();
 				for(int i=0;i<nTests;++i) 
@@ -554,6 +569,7 @@ namespace
 				for(int i=0;i<nTests;++i) 
 					MalterlibStaticAllocReserve();
 
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				for(int i=0;i<nTests;++i) 
 					FastFormatAllocReserve();
 				for(int i=0;i<nTests;++i) 
@@ -566,6 +582,7 @@ namespace
 					FastFormatStaticAlloc();
 				for(int i=0;i<nTests;++i) 
 					FastFormatStaticNoAlloc();
+#endif
 
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaCharResult.f_Get())) (ETestFlag_NoValues);
@@ -573,12 +590,14 @@ namespace
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticAllocResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticNoAllocResult.f_Get())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticAllocReserveResult.c_str())) (ETestFlag_NoValues);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatAllocReserveResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatNoAllocResult.f_Get())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatAllocResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatStaticAllocReserveResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatStaticAllocResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(FastFormatStaticNoAllocResult.f_Get())) (ETestFlag_NoValues);
+#endif
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibAllocReserveResult)) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibNoAllocResult)) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibStaticNoAllocResult)) (ETestFlag_NoValues);
@@ -586,36 +605,48 @@ namespace
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibStaticAllocReserveResult)) (ETestFlag_NoValues);
 
 				CTestType DynamicAlloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				DynamicAlloc.f_AddReference(FastFormatAllocTime);
+#endif
 				DynamicAlloc.f_Add(MalterlibAllocTime);
 				DMibTest(DMibExpr(DynamicAlloc));
 
 				CTestType DynamicAllocReserve(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				DynamicAllocReserve.f_AddReference(FastFormatAllocReserveTime);
+#endif
 				DynamicAllocReserve.f_Add(MalterlibAllocReserveTime);
 				DMibTest(DMibExpr(DynamicAllocReserve));
 
 				CTestType DynamicNoAlloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				DynamicNoAlloc.f_AddReference(FastFormatNoAllocTime);
+#endif
 				DynamicNoAlloc.f_Add(MalterlibNoAllocTime);
 				DMibTest(DMibExpr(DynamicNoAlloc));
 
 				CTestType StaticAlloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				StaticAlloc.f_AddReference(FastFormatStaticAllocTime);
+#endif
 				StaticAlloc.f_AddReference(KarmaStaticAllocTime);
 				StaticAlloc.f_AddReference(KarmaManualStaticAllocTime);
 				StaticAlloc.f_Add(MalterlibStaticAllocTime);
 				DMibTest(DMibExpr(StaticAlloc));
 
 				CTestType StaticAllocReserve(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				StaticAllocReserve.f_AddReference(FastFormatStaticAllocReserveTime);
+#endif
 				StaticAllocReserve.f_AddReference(KarmaStaticAllocReserveTime);
 				StaticAllocReserve.f_AddReference(KarmaManualStaticAllocReserveTime);
 				StaticAllocReserve.f_Add(MalterlibStaticAllocReserveTime);
 				DMibTest(DMibExpr(StaticAllocReserve));
 
 				CTestType StaticNoAlloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 				StaticNoAlloc.f_AddReference(FastFormatStaticNoAllocTime);
+#endif
 				StaticNoAlloc.f_AddReference(KarmaStaticNoAllocTime);
 				StaticNoAlloc.f_AddReference(KarmaManualStaticNoAllocTime);
 				StaticNoAlloc.f_Add(MalterlibStaticNoAllocTime);
@@ -809,6 +840,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTime("Fast Format");
 						{
 							fastformat::ff_char_t Result[16];
@@ -826,6 +858,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
+#endif
 						CMeasureType MalterlibCStrPtrTime("Malterlib CStrPtr");
 						{
 							CCyclesMin Time;
@@ -879,7 +912,9 @@ namespace
 	#endif
 						CTestType NoAlloc(1.0);
 						NoAlloc.f_AddReference(KarmaTime);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						NoAlloc.f_AddReference(FastFormatTime);
+#endif
 	#if defined(DPlatformFamily_Windows)
 						NoAlloc.f_AddReference(ItoaTime);
 	#endif
@@ -906,6 +941,7 @@ namespace
 								MalterlibCStrInplaceTime.f_Stop(nLoops);
 							}
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTime("Fast Format");
 						{
 							CFastFormatString Result;
@@ -922,6 +958,7 @@ namespace
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
+#endif
 						CMeasureType KarmaTime("Karma");
 						{
 							using karma::int_;
@@ -979,7 +1016,9 @@ namespace
 						};
 						CTestType Alloc(1.0);
 						Alloc.f_AddReference(KarmaTime);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						Alloc.f_AddReference(FastFormatTime);
+#endif
 						Alloc.f_AddReference(StringStreamTime);
 						Alloc.f_Add(MalterlibCStrInplaceTime);
 						Alloc.f_Add(MalterlibCStrTime);
@@ -1002,6 +1041,7 @@ namespace
 								MalterlibCStrInplaceTime.f_Stop(nLoops);
 							}
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTime("Fast Format");
 						{
 							CFastFormatString Result;
@@ -1019,6 +1059,7 @@ namespace
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
+#endif
 						CMeasureType KarmaTime("Karma");
 						{
 							using karma::int_;
@@ -1079,7 +1120,9 @@ namespace
 						};
 						CTestType AllocReserve(1.0);
 						AllocReserve.f_AddReference(KarmaTime);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						AllocReserve.f_AddReference(FastFormatTime);
+#endif
 						AllocReserve.f_AddReference(StringStreamTime);
 						AllocReserve.f_Add(MalterlibCStrInplaceTime);
 						AllocReserve.f_Add(MalterlibCStrTime);
@@ -1147,6 +1190,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTimer("Fast Format");
 						{
 							CCyclesMin Time;
@@ -1165,6 +1209,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult) == DMibExpr(Result)) (ETestFlag_NoValues);
 						};
+#endif
 						CMeasureType SprintfTime("sprintf");
 						{
 							CCyclesMin Time;
@@ -1183,7 +1228,9 @@ namespace
 						};
 
 						CTestType NoAlloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						NoAlloc.f_AddReference(FastFormatTimer);
+#endif
 						NoAlloc.f_AddReference(SprintfTime);
 						NoAlloc.f_Add(MalterlibCFStrOptTime);
 						NoAlloc.f_Add(MalterlibCStrPtrOptTime);
@@ -1228,6 +1275,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTime("Fast Format");
 						{
 							CFastFormatString Result;
@@ -1244,8 +1292,11 @@ namespace
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
+#endif
 						CTestType Alloc(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						Alloc.f_AddReference(FastFormatTime);
+#endif
 						Alloc.f_Add(MalterlibOptTime);
 						Alloc.f_Add(MalterlibTime);
 						DMibTest(DMibExpr(Alloc)) (ETest_ExpectFail); // We need a CStr that has storage interally when possible
@@ -1287,6 +1338,7 @@ namespace
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						CMeasureType FastFormatTime("Fast Format");
 						{
 							CFastFormatString Result;
@@ -1304,8 +1356,11 @@ namespace
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
+#endif
 						CTestType AllocReserve(1.0);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						AllocReserve.f_AddReference(FastFormatTime);
+#endif
 						AllocReserve.f_Add(MalterlibOptTime);
 						AllocReserve.f_Add(MalterlibTime);
 						DMibTest(DMibExpr(AllocReserve));
@@ -1419,5 +1474,3 @@ namespace
 
 }
 
-
-#endif // DCompiler_clang
