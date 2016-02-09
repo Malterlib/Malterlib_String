@@ -47,14 +47,16 @@ namespace NMib
 			class COptionsStr : public COptions
 			{
 			public:
-				inline_medium COptionsStr():
-				m_bEscaped(0)
+				inline_medium COptionsStr()
+					: m_bEscaped(false)
+					, m_bRemoveEscape(false)
 				{
 					m_EscapedChars[0] = '\"';
 					m_EscapedChars[1] = '\\';
 					m_EscapedChars[2] = 0;
 				}
 				uint32 m_bEscaped:1;
+				uint32 m_bRemoveEscape:1;
 				CChar m_EscapedChars[16];
 			};
 
@@ -67,12 +69,17 @@ namespace NMib
 					{
 						switch (_Option.m_ParseTypes.m_Parse2)
 						{
-							case 'E':
+						case 'E':
 							{
 								_Options.m_bEscaped = true;
 							}
 							break;
-							case 'C':
+						case 'R':
+							{
+								_Options.m_bRemoveEscape = true;
+							}
+							break;
+						case 'C':
 							{
 								_Option.f_GetData_Str(_ArgData, _Options.m_EscapedChars, 16);
 							}
@@ -114,41 +121,91 @@ namespace NMib
 				{
 					m_pTStr->f_Clear();
 					TCStr<t_CStrTraitsIn> Data;
+					bool bInEscape = false;
 					while (*pParse)
 					{
-						if (*pParse == '\\')
+						if (bInEscape)
 						{
-							const CChar *pEscaped = Options.m_EscapedChars;
-							while (*pEscaped)
+							if (*pParse == '\\')
 							{
-								if (*pEscaped == pParse[1])
+								if (Options.m_bRemoveEscape)
+								{
+									const CChar *pEscaped = Options.m_EscapedChars;
+									while (*pEscaped)
+									{
+										if (*pEscaped == pParse[1])
+										{
+											if (pParse - pParseStart)
+												Data.f_AddStr(pParseStart, pParse - pParseStart);
+											++pParse;
+											Data.f_AddChar(*pParse);
+											++pParse;
+											pParseStart = pParse;
+											break;
+										}
+										++pEscaped;
+									}
+									if (*pEscaped)
+										continue;
+								}
+								else
+								{
+									++pParse;
+									const CChar *pEscaped = Options.m_EscapedChars;
+									while (*pEscaped)
+									{
+										if (*pEscaped == *pParse)
+										{
+											++pParse;
+											break;
+										}
+										++pEscaped;
+									}
+									continue;
+								}
+							}
+							
+							if (*pParse == Options.m_EscapedChars[0])
+							{
+								if (Options.m_bRemoveEscape)
 								{
 									if (pParse - pParseStart)
 										Data.f_AddStr(pParseStart, pParse - pParseStart);
 									++pParse;
-									Data.f_AddChar(*pParse);
+									pParseStart = pParse;
+								}
+								else
+									++pParse;
+								bInEscape = false;
+								continue;
+							}
+						}
+						else
+						{
+							if (*pParse == Options.m_EscapedChars[0])
+							{
+								if (Options.m_bRemoveEscape)
+								{
+									if (pParse - pParseStart)
+										Data.f_AddStr(pParseStart, pParse - pParseStart);
 									++pParse;
 									pParseStart = pParse;
-									break;
 								}
-								++pEscaped;
-							}
-							if (*pEscaped)
+								else
+									++pParse;
+								bInEscape = true;
 								continue;
-						}
-						if (NextLen)
-						{
-							if (fg_StrStartsWith(pParse, pStartNext, -1, NextLen))
+							}
+							if (NextLen)
 							{
-								Data.f_AddStr(pParseStart, pParse - pParseStart);
-								m_pTStr->f_Assign(Data);
-								bRet = true;
-								break;
+								if (fg_StrStartsWith(pParse, pStartNext, -1, NextLen))
+									break;
 							}
 						}
 						++pParse;
 					}
-					if (!NextLen)
+					
+					if (!bInEscape)
 					{
 						Data.f_AddStr(pParseStart, pParse - pParseStart);
 						m_pTStr->f_Assign(Data);
@@ -162,12 +219,7 @@ namespace NMib
 						while (*pParse)
 						{
 							if (fg_StrStartsWith(pParse, pStartNext, -1, NextLen))
-							{
-								m_pTStr->f_Clear();
-								m_pTStr->f_AddStr(pParseStart, pParse - pParseStart);
-								bRet = true;
 								break;
-							}
 							++pParse;
 						}
 					}
@@ -175,10 +227,10 @@ namespace NMib
 					{
 						while (*pParse)
 							++pParse;
-						m_pTStr->f_Clear();
-						m_pTStr->f_AddStr(pParseStart, pParse - pParseStart);
-						bRet = true;
 					}
+					m_pTStr->f_Clear();
+					m_pTStr->f_AddStr(pParseStart, pParse - pParseStart);
+					bRet = true;
 				}
 
 				_pString = pParse;
