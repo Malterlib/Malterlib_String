@@ -130,22 +130,55 @@ namespace NMib
 	{
 		struct CParseLocation
 		{
-			NStr::CStr m_File;
-			zmint m_Character;
-			zmint m_Line;
-			zmint m_Column;
 			bool operator ==(CParseLocation const &_Right) const;
-			
 			void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+			
+			template <typename tf_CStream>
+			void f_Feed(tf_CStream &_Stream) const
+			{
+				_Stream << m_File;
+				_Stream << m_Character;
+				_Stream << m_Line;
+				_Stream << m_Column;
+			}
+			
+			template <typename tf_CStream>
+			void f_Consume(tf_CStream &_Stream)
+			{
+				_Stream >> m_File;
+				_Stream >> m_Character;
+				_Stream >> m_Line;
+				_Stream >> m_Column;
+			}
+			
+			NStr::CStr m_File;
+			zuint32 m_Character;
+			zuint32 m_Line;
+			zuint32 m_Column;
 		};
 
 		struct CParseError
 		{
-			CStr m_Error;
-			CParseLocation m_Location;
 			bool operator ==(CParseError const &_Right) const;
 
 			void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+
+			template <typename tf_CStream>
+			void f_Feed(tf_CStream &_Stream) const
+			{
+				_Stream << m_Error;
+				_Stream << m_Location;
+			}
+
+			template <typename tf_CStream>
+			void f_Consume(tf_CStream &_Stream)
+			{
+				_Stream >> m_Error;
+				_Stream >> m_Location;
+			}
+			
+			CStr m_Error;
+			CParseLocation m_Location;
 		};
 		
 		DMibImpErrorSpecificClass(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
