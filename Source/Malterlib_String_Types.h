@@ -48,7 +48,7 @@ namespace NMib
 		class CStrImp_Dynamic_ParamsSecure
 		{
 		public:
-			typedef NMem::TAllocator_Secure<NMem::CAllocator_Heap> CAllocator;
+			typedef NMem::TCAllocator_Secure<NMem::CAllocator_Heap> CAllocator;
 			enum
 			{
 				EMaxExtraChars = 32
