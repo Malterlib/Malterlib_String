@@ -164,7 +164,6 @@ namespace NMib
 		|___________________________________________________________________________________________________|
 		\***************************************************************************************************/
 
-
 		template <typename t_CData1>
 			inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pStr)
 		{
@@ -293,7 +292,6 @@ namespace NMib
         |___________________________________________________________________________________________________|
         \***************************************************************************************************/
 
-
 		template <typename t_CData1>
 			inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pStr)
 		{
@@ -373,7 +371,7 @@ namespace NMib
 			while (*pSource && pSource < pSourceEnd && pDest < pDestEnd)
 			{
 				if (*pSource >= 'A' && *pSource <= 'Z')
-					*(pDest++) = (t_CData1)(*(pSource++) + ('a' - 'Z'));
+					*(pDest++) = (t_CData1)(*(pSource++) + ('a' - 'A'));
 				else if (*pSource >= 0xc0u && *pSource <= 0xdfu)
 					*(pDest++) = (t_CData1)(*(pSource++) + (0xe0u - 0xc0u));
 				else

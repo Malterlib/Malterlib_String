@@ -325,7 +325,7 @@ namespace NMib
 		
 
 		template <typename t_FOutFunctor>
-		bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &_OutFunctor)
+		bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
 		{
 			if (_Char >= 0x4000000)
 			{
@@ -400,7 +400,7 @@ namespace NMib
 		}
 
 		template <typename t_FOutFunctor>
-		bool fg_EncodeUTF8BOM(t_FOutFunctor &_OutFunctor)
+		bool fg_EncodeUTF8BOM(t_FOutFunctor &&_OutFunctor)
 		{
 			ch8 *pRet = _OutFunctor(3); 
 			if (pRet)
@@ -414,7 +414,7 @@ namespace NMib
 		}
 
 		template <typename t_FOutFunctor>
-		bool fg_EncodeUTF16Char(ch32 _Char, t_FOutFunctor &_OutFunctor)
+		bool fg_EncodeUTF16Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
 		{
 			if (_Char > 0xFFFF)
 			{
@@ -446,7 +446,7 @@ namespace NMib
 		}
 
 		template <typename t_FOutFunctor>
-		bool fg_EncodeUTF16BOM(t_FOutFunctor &_OutFunctor)
+		bool fg_EncodeUTF16BOM(t_FOutFunctor &&_OutFunctor)
 		{
 			ch16 *pRet = _OutFunctor(1); 
 			if (pRet)

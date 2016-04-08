@@ -45,7 +45,6 @@ namespace
 			t_CStr AlphabetX2UpperStr("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 			t_CStr AlphabetX2MixedStr("aBcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVwXyZ");
 
-
 			DMibTest(DMibExpr(fg_StrFindChar(AlphabetX2LowerStr, 'a')) == DMibExpr(0));
 			DMibTest(DMibExpr(fg_StrFindChar(AlphabetX2LowerStr, 'A')) == DMibExpr(-1));
 
@@ -86,7 +85,6 @@ namespace
 			DMibTest(DMibExpr(fg_StrFindCharReverseNoCase(AlphabetX2LowerStr, 'A', 26)) == DMibExpr(0));
 		}
 
-
 		void fp_FindCharTests()
 		{
 			DMibTestCategory("FindChar")
@@ -111,6 +109,151 @@ namespace
 					CGlobalFunctions_Tests::fsp_FindCharTestsTyped<CUStr>();
 				};
 
+			};
+		}
+
+		template <typename tf_CStr>
+		static void fsp_CaseTestsTyped()
+		{
+			tf_CStr StringLower_0_127(CStr(str_utf8("abcd")));
+			tf_CStr StringLower_0_255(CStr(str_utf8("åäöabcd")));
+			tf_CStr StringLower_0_65535(CStr(str_utf8("亜哀姐飴åäöabcd")));
+			tf_CStr StringLower_0_10ffff(CStr(str_utf8("𠀀亜哀姐飴åäöabcd")));
+			
+			tf_CStr StringUpper_0_127(CStr(str_utf8("ABCD")));
+			tf_CStr StringUpper_0_255(CStr(str_utf8("ÅÄÖABCD")));
+			tf_CStr StringUpper_0_65535(CStr(str_utf8("亜哀姐飴ÅÄÖABCD")));
+			tf_CStr StringUpper_0_10ffff(CStr(str_utf8("𠀀亜哀姐飴ÅÄÖABCD")));
+
+			tf_CStr StringCapitalized_0_127(CStr(str_utf8("Abcd")));
+			tf_CStr StringCapitalized_0_255(CStr(str_utf8("Åäöabcd")));
+			tf_CStr StringCapitalized_0_65535(CStr(str_utf8("亜哀姐飴åäöabcd")));
+			tf_CStr StringCapitalized_0_10ffff(CStr(str_utf8("𠀀亜哀姐飴åäöabcd")));
+			
+			auto fCapitalize = [](auto &_String)
+				{
+					tf_CStr String = _String;
+					fg_StrCapitalize(String);
+					return String;
+				}
+			;
+
+			auto fLowerCaseMaxLen = [](auto &_String)
+				{
+					tf_CStr Output;
+					mint Len = _String.f_GetLen();
+					fg_StrLowerCase(Output.f_GetStr(Len + 1), Len + 1, _String.f_GetStr(), Len);
+					return Output;
+				}
+			;
+
+			auto fUpperCaseMaxLen = [](auto &_String)
+				{
+					tf_CStr Output;
+					mint Len = _String.f_GetLen();
+					fg_StrUpperCase(Output.f_GetStr(Len + 1), Len + 1, _String.f_GetStr(), Len);
+					return Output;
+				}
+			;
+
+			DMibExpect(StringLower_0_127.f_LowerCase(), ==, StringLower_0_127);
+			DMibExpect(StringLower_0_255.f_LowerCase(), ==, StringLower_0_255);
+			DMibExpect(StringLower_0_65535.f_LowerCase(), ==, StringLower_0_65535);
+			DMibExpect(StringLower_0_10ffff.f_LowerCase(), ==, StringLower_0_10ffff);
+
+			DMibExpect(StringUpper_0_127.f_LowerCase(), ==, StringLower_0_127);
+			DMibExpect(StringUpper_0_255.f_LowerCase(), ==, StringLower_0_255);
+			DMibExpect(StringUpper_0_65535.f_LowerCase(), ==, StringLower_0_65535);
+			DMibExpect(StringUpper_0_10ffff.f_LowerCase(), ==, StringLower_0_10ffff);
+
+			DMibExpect(StringCapitalized_0_127.f_LowerCase(), ==, StringLower_0_127);
+			DMibExpect(StringCapitalized_0_255.f_LowerCase(), ==, StringLower_0_255);
+			DMibExpect(StringCapitalized_0_65535.f_LowerCase(), ==, StringLower_0_65535);
+			DMibExpect(StringCapitalized_0_10ffff.f_LowerCase(), ==, StringLower_0_10ffff);
+
+			
+			DMibExpect(fLowerCaseMaxLen(StringLower_0_127), ==, StringLower_0_127);
+			DMibExpect(fLowerCaseMaxLen(StringLower_0_255), ==, StringLower_0_255);
+			DMibExpect(fLowerCaseMaxLen(StringLower_0_65535), ==, StringLower_0_65535);
+			DMibExpect(fLowerCaseMaxLen(StringLower_0_10ffff), ==, StringLower_0_10ffff);
+
+			DMibExpect(fLowerCaseMaxLen(StringUpper_0_127), ==, StringLower_0_127);
+			DMibExpect(fLowerCaseMaxLen(StringUpper_0_255), ==, StringLower_0_255);
+			DMibExpect(fLowerCaseMaxLen(StringUpper_0_65535), ==, StringLower_0_65535);
+			DMibExpect(fLowerCaseMaxLen(StringUpper_0_10ffff), ==, StringLower_0_10ffff);
+
+			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_127), ==, StringLower_0_127);
+			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_255), ==, StringLower_0_255);
+			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_65535), ==, StringLower_0_65535);
+			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_10ffff), ==, StringLower_0_10ffff);
+
+			
+			DMibExpect(StringLower_0_127.f_UpperCase(), ==, StringUpper_0_127);
+			DMibExpect(StringLower_0_255.f_UpperCase(), ==, StringUpper_0_255);
+			DMibExpect(StringLower_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
+			DMibExpect(StringLower_0_10ffff.f_UpperCase(), ==, StringUpper_0_10ffff);
+
+			DMibExpect(StringUpper_0_127.f_UpperCase(), ==, StringUpper_0_127);
+			DMibExpect(StringUpper_0_255.f_UpperCase(), ==, StringUpper_0_255);
+			DMibExpect(StringUpper_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
+			DMibExpect(StringUpper_0_10ffff.f_UpperCase(), ==, StringUpper_0_10ffff);
+
+			DMibExpect(StringCapitalized_0_127.f_UpperCase(), ==, StringUpper_0_127);
+			DMibExpect(StringCapitalized_0_255.f_UpperCase(), ==, StringUpper_0_255);
+			DMibExpect(StringCapitalized_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
+			DMibExpect(StringCapitalized_0_10ffff.f_UpperCase(), ==, StringUpper_0_10ffff);
+
+			
+			DMibExpect(fUpperCaseMaxLen(StringLower_0_127), ==, StringUpper_0_127);
+			DMibExpect(fUpperCaseMaxLen(StringLower_0_255), ==, StringUpper_0_255);
+			DMibExpect(fUpperCaseMaxLen(StringLower_0_65535), ==, StringUpper_0_65535);
+			DMibExpect(fUpperCaseMaxLen(StringLower_0_10ffff), ==, StringUpper_0_10ffff);
+
+			DMibExpect(fUpperCaseMaxLen(StringUpper_0_127), ==, StringUpper_0_127);
+			DMibExpect(fUpperCaseMaxLen(StringUpper_0_255), ==, StringUpper_0_255);
+			DMibExpect(fUpperCaseMaxLen(StringUpper_0_65535), ==, StringUpper_0_65535);
+			DMibExpect(fUpperCaseMaxLen(StringUpper_0_10ffff), ==, StringUpper_0_10ffff);
+
+			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_127), ==, StringUpper_0_127);
+			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_255), ==, StringUpper_0_255);
+			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_65535), ==, StringUpper_0_65535);
+			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_10ffff), ==, StringUpper_0_10ffff);
+			
+
+			DMibExpect(fCapitalize(StringLower_0_127), ==, StringCapitalized_0_127);
+			DMibExpect(fCapitalize(StringLower_0_255), ==, StringCapitalized_0_255);
+			DMibExpect(fCapitalize(StringLower_0_65535), ==, StringCapitalized_0_65535);
+			DMibExpect(fCapitalize(StringLower_0_10ffff), ==, StringCapitalized_0_10ffff);
+
+			DMibExpect(fCapitalize(StringUpper_0_127), ==, StringUpper_0_127);
+			DMibExpect(fCapitalize(StringUpper_0_255), ==, StringUpper_0_255);
+			DMibExpect(fCapitalize(StringUpper_0_65535), ==, StringUpper_0_65535);
+			DMibExpect(fCapitalize(StringUpper_0_10ffff), ==, StringUpper_0_10ffff);
+
+			DMibExpect(fCapitalize(StringCapitalized_0_127), ==, StringCapitalized_0_127);
+			DMibExpect(fCapitalize(StringCapitalized_0_255), ==, StringCapitalized_0_255);
+			DMibExpect(fCapitalize(StringCapitalized_0_65535), ==, StringCapitalized_0_65535);
+			DMibExpect(fCapitalize(StringCapitalized_0_10ffff), ==, StringCapitalized_0_10ffff);
+		}
+		
+		void fp_CaseTests()
+		{
+			DMibTestCategory("Case")
+			{
+				DMibTestSuite("CStr")
+				{
+					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CStr>();
+				};
+
+				DMibTestSuite("CWStr")
+				{
+					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CWStr>();
+				};
+
+				DMibTestSuite("CUStr")
+				{
+					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CUStr>();
+				};
 			};
 		}
 
@@ -1340,6 +1483,7 @@ namespace
 	public:
 		void f_DoTests()
 		{
+			fp_CaseTests();
 			fp_FindCharTests();
 			fp_StrCmpNoCaseTest();
 			fp_UnicodeTests();

@@ -86,12 +86,14 @@ namespace NMib
 			template <typename t_CData1, typename t_CData2>
 				static inline_small t_CData1 *fs_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 			{
+				DMibFastCheck((sizeof(CChar) > 1 || NTraits::TCIsSame<CChar, ch8>::mc_Value && mc_Type == EStrType_UTF));
 				return fg_StrUpperCase(_pDest, _pSource, _SourceLen);
 			}
 
 			template <typename t_CData1, typename t_CData2>
 				static inline_small t_CData1 *fs_StrLowerCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 			{
+				DMibFastCheck((sizeof(CChar) > 1 || NTraits::TCIsSame<CChar, ch8>::mc_Value && mc_Type == EStrType_UTF));
 				return fg_StrLowerCase(_pDest, _pSource, _SourceLen);
 			}
 
@@ -2825,12 +2827,14 @@ EndArgSearch:
 		\************************************************************************************************/
 
 
-		template <typename t_CTCStrTraits3> 
-			inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits3> &_To)
+		template <typename t_CTCStrTraits> 
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To)
 		{
-			typename TCStrAggregate<t_CTCStrTraits3>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 			if (!pStr1)
 				return _To;
+
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 
 			fg_StrUpperCase(pStr1, _To.f_GetLen());
 			return _To;
@@ -2855,6 +2859,8 @@ EndArgSearch:
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+			static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
 			fg_StrUpperCase(_pTo, _Source.f_GetStr());
 			return _pTo;			
 		}
@@ -2862,6 +2868,8 @@ EndArgSearch:
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+			static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
 			fg_StrUpperCase(_pTo, _MaxLen, _Source.f_GetStr());
 			return _pTo;
 		}
@@ -2869,6 +2877,7 @@ EndArgSearch:
 		template <typename t_CTCStrTraits> 
 			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 			if (!pStr1)
 				return _To;
@@ -2903,6 +2912,7 @@ EndArgSearch:
 		template <typename t_CTCStrTraits> 
 			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 			if (!pStr1)
 				return _To;
@@ -2929,6 +2939,8 @@ EndArgSearch:
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+			static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
 			fg_StrLowerCase(_pTo, _Source.f_GetStr());
 			return _pTo;
 		}
@@ -2936,6 +2948,8 @@ EndArgSearch:
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+			static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
 			fg_StrLowerCase(_pTo, _Source.f_GetStr(), _MaxLen);
 			return _pTo;
 		}
@@ -2943,6 +2957,7 @@ EndArgSearch:
 		template <typename t_CTCStrTraits> 
 			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
 		{
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 			if (!pStr1)
 				return _To;
@@ -2974,10 +2989,11 @@ EndArgSearch:
 		\************************************************************************************************/
 
 
-		template <typename t_CTCStrTraits3> 
-			inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrCapitalize(TCStrAggregate<t_CTCStrTraits3> &_To)
+		template <typename t_CTCStrTraits> 
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrCapitalize(TCStrAggregate<t_CTCStrTraits> &_To)
 		{
-			typename TCStrAggregate<t_CTCStrTraits3>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+			static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 			if (!pStr1)
 				return _To;
 

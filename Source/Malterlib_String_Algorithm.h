@@ -150,7 +150,12 @@ namespace NMib
 		|___________________________________________________________________________________________________|
 		\***************************************************************************************************/
 
-
+		ch8 *fg_StrUpperCase(ch8 *_pStr);
+		ch8 *fg_StrUpperCase(ch8 *_pStr, mint _MaxLen);
+		ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource);
+		ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource, mint _SourceLen);
+		ch8 *fg_StrUpperCase(ch8 *_pDest, const ch8 *_pSource, mint _SourceLen);
+		
 		template <typename t_CData>
 			inline_large t_CData *fg_StrUpperCase(t_CData *_pStr);
 		template <typename t_CData>
@@ -171,6 +176,11 @@ namespace NMib
         |___________________________________________________________________________________________________|
         \***************************************************************************************************/
 
+		ch8 *fg_StrLowerCase(ch8 *_pStr);
+		ch8 *fg_StrLowerCase(ch8 *_pStr, mint _MaxLen);
+		ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource);
+		ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource, mint _SourceLen);
+		ch8 *fg_StrLowerCase(ch8 *_pDest, ch8 const *_pSource, mint _SourceLen);
 
 		template <typename t_CData>
 			inline_large t_CData *fg_StrLowerCase(t_CData *_pStr);
@@ -191,7 +201,8 @@ namespace NMib
 		|___________________________________________________________________________________________________|
 		\***************************************************************************************************/
 
-
+		ch8 *fg_StrCapitalize(ch8 *_pStr);
+		
 		template <typename t_CData>
 			inline_large t_CData *fg_StrCapitalize(t_CData *_pStr);
 
