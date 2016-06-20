@@ -128,7 +128,7 @@ namespace NMib
 		};
 
 		template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-		class TCStrFormatType_Int : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_Int final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 

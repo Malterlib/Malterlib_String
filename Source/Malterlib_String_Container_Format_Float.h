@@ -11,7 +11,7 @@ namespace NMib
 	{
 
 		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bint t_bDummyOptimize, typename t_CIntegerStorage>
-		class TCStrFormatType_Float : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 

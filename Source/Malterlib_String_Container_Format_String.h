@@ -16,7 +16,7 @@ namespace NMib
 		\************************************************************************************************/
 
 		template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlaying t_Type>
-		class TCStrFormatType_String : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 			static_assert(t_Type != EStrType_Ansi, "");

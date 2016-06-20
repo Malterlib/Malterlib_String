@@ -10,7 +10,7 @@ namespace NMib
 	namespace NStr
 	{
 		template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
-		class TCStrFormatType_Inline : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_Inline final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 

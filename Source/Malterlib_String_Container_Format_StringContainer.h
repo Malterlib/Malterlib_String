@@ -11,7 +11,7 @@ namespace NMib
 	{
 
 		template <typename t_CFormatter, typename t_CStrTraitsIn, bint t_bReference>
-		class TCStrFormatType_TStr : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_TStr final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 

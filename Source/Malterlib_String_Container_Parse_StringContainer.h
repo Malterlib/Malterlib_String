@@ -10,7 +10,7 @@ namespace NMib
 	namespace NStr
 	{
 		template <typename t_CParser, typename t_CStrTraitsIn>
-		class TCStrParseType_TStr : public TICStrParseType<t_CParser>
+		class TCStrParseType_TStr final : public TICStrParseType<t_CParser>
 		{
 		public:
 			virtual void f_Delete()

@@ -10,7 +10,7 @@ namespace NMib
 	namespace NStr
 	{
 		template <typename t_CFormatter, typename t_CBinaryType>
-		class TCStrFormatType_Binary : public TICStrFormatType<t_CFormatter>
+		class TCStrFormatType_Binary final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
 
