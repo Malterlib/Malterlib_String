@@ -1830,6 +1830,21 @@ EndArgSearch:
 				return true;
 			}
 
+			inline_small bint f_IsNumeric() const
+			{
+				if (f_IsEmpty())
+					return false;
+
+				const CChar *pStr = *this;
+				while (*pStr)
+				{
+					if (!fg_CharIsNumber(*pStr))
+						return false;
+					++pStr;
+				}
+				return true;
+			}
+
 			inline_small bint f_IsIdentifierStatement() const
 			{
 				const CChar *pStr = *this;
