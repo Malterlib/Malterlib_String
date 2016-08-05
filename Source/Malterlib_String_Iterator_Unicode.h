@@ -12,8 +12,8 @@ namespace NMib
 {
 	namespace NStr
 	{
-		static const ch32 g_InvalidCodepoint = TCLimitsInt<ch32>::mc_Max;
-		static const ch32 g_IncompleteCodepoint = TCLimitsInt<ch32>::mc_Max - 1;
+		static constexpr ch32 g_InvalidCodepoint = TCLimitsInt<ch32>::mc_Max;
+		static constexpr ch32 g_IncompleteCodepoint = TCLimitsInt<ch32>::mc_Max - 1;
 		
 		template <typename t_CBaseIterator, typename t_CBaseIteratorBack>
 		class TCIterator_UTF8Adaptor

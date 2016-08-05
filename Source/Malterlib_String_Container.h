@@ -336,7 +336,7 @@ namespace NMib
 			typedef TCStrAggregate<t_CTCStrTraits> CStrAggregate;
 			typedef TCStr<t_CTCStrTraits> CStr;
 			typedef t_CTCStrTraits CTStrTraits;
-			static const EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
+			static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 			typedef TICStrFormatType<TCFormat> CFomatArgType;
 
@@ -801,7 +801,7 @@ EndArgSearch:
 			typedef TCStrAggregate CAggregate;
 			typedef typename CStrTraits::CAllocator CAllocator;
 			typedef CChar CMaxChar;
-			static const EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
+			static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 			
 #ifdef DMibDebuggerHelpers
 			static mint ms_TypeDebugHelper;
