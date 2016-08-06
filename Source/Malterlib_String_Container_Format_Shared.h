@@ -309,7 +309,7 @@ namespace NMib
 		{
 		public:
 			typedef CDefaultStrFormatTypeClassifier CStrFormatTypeClassifier;
-			virtual void f_Delete() pure;
+			virtual void f_Delete() = 0;
 
 			//	virtual void
 			typedef t_CFormatter CFormatter;
@@ -329,22 +329,22 @@ namespace NMib
 			}
 
 
-			virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const pure;
+			virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const = 0;
 			
-			virtual aint f_Get_aint() const pure;
-			virtual fp32 f_Get_fp32() const pure;
-			virtual fp64 f_Get_fp64() const pure;
+			virtual aint f_Get_aint() const = 0;
+			virtual fp32 f_Get_fp32() const = 0;
+			virtual fp64 f_Get_fp64() const = 0;
 			
 			class CVisitor
 			{
 			public:
-				virtual void operator () (uint32 _Value) pure;
-				virtual void operator () (uint64 _Value) pure;
-				virtual void operator () (int32 _Value) pure;
-				virtual void operator () (int64 _Value) pure;
-				virtual void operator () (fp32 _Value) pure;
-				virtual void operator () (fp64 _Value) pure;
-				virtual void operator () (CChar const *_pValue) pure;
+				virtual void operator () (uint32 _Value) = 0;
+				virtual void operator () (uint64 _Value) = 0;
+				virtual void operator () (int32 _Value) = 0;
+				virtual void operator () (int64 _Value) = 0;
+				virtual void operator () (fp32 _Value) = 0;
+				virtual void operator () (fp64 _Value) = 0;
+				virtual void operator () (CChar const *_pValue) = 0;
 				virtual void operator () () {}
 			};
 
@@ -383,7 +383,7 @@ namespace NMib
 				virtual void operator () (fp64 _Value) {}
 			};
 
-			virtual void f_Visit(CVisitor &_Extractor) const pure;
+			virtual void f_Visit(CVisitor &_Extractor) const = 0;
 
 			class COption
 			{

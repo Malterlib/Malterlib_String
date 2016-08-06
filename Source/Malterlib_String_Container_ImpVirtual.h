@@ -15,10 +15,10 @@ namespace NMib
 		class TICStrImp_Virtual
 		{
 		public:
-			virtual void f_Destroy() pure;
-			virtual typename t_CStrTraits::CChar *f_GetStr() pure;
-			virtual aint f_CreateWritableBuffer(aint _Length, bint _bDiscard) pure;
-			virtual aint f_GetLength() pure;
+			virtual void f_Destroy() = 0;
+			virtual typename t_CStrTraits::CChar *f_GetStr() = 0;
+			virtual aint f_CreateWritableBuffer(aint _Length, bint _bDiscard) = 0;
+			virtual aint f_GetLength() = 0;
 			enum
 			{
 				mc_AllocatesMemory = true

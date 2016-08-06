@@ -27,7 +27,7 @@ namespace NMib
 		class TICStrParseType
 		{
 		public:
-			virtual void f_Delete() pure;
+			virtual void f_Delete() = 0;
 
 			typedef typename t_CParser::CStrTraits CStrTraits;
 			typedef typename CStrTraits::CChar CChar;
@@ -39,9 +39,9 @@ namespace NMib
 				return this;
 			}
 
-			virtual aint f_Get_aint() const pure;
-			virtual fp32 f_Get_fp32() const pure;
-			virtual fp64 f_Get_fp64() const pure;
+			virtual aint f_Get_aint() const = 0;
+			virtual fp32 f_Get_fp32() const = 0;
+			virtual fp64 f_Get_fp64() const = 0;
 			virtual aint f_Get_Str(CChar *_pStr, aint _MaxChars) const
 			{ 
 				if (_MaxChars > 0)
@@ -338,7 +338,7 @@ namespace NMib
 				return false;
 			}
 
-			virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const pure;
+			virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const = 0;
 
 
 		};
