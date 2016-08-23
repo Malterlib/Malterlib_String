@@ -10,7 +10,7 @@ namespace NMib
 	namespace NStr
 	{
 		template <typename t_CParser, typename t_CFloatType>
-		class TCStrParseType_Float : public TICStrParseType<t_CParser>
+		class TCStrParseType_Float final : public TICStrParseType<t_CParser>
 		{
 		private:
 			inline_small TCStrParseType_Float(const TCStrParseType_Float &_Value)
