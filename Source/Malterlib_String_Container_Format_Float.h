@@ -372,24 +372,18 @@ namespace NMib
 
 				CInteger DecimalDisplacementFloat = 0;
 				CInteger DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::EMantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();// (((CFloat::EStorageBits - 1) * 100) / 302) - 2;
-
+				
 				if (Number != CFloat::fs_0())
 				{
 					if (nDigits > 0 && NMib::fg_Convert<CInteger>(nDigits-1) < DecimalDisplacementConstFloat)
 						DecimalDisplacementConstFloat = NMib::fg_Convert<CInteger>(nDigits - 1);
 					else if (nDigits == -2)
 						DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::EStorageBits)) * CFloat::fs_Log10_2()).f_Floor() - CFloat::fs_1()).f_ToInt();// (((CFloat::EStorageBits - 1) * 100) / 302) - 2;
-
 #if 1
 					if (Number.f_IsInvalid())
-					{
 						DecimalDisplacementFloat = 0;
-					}
 					else
-					{
-						CFloat Logged = Number.f_Log10();
-						DecimalDisplacementFloat = -(Logged.f_Floor().f_ToInt());
-					}
+						DecimalDisplacementFloat = -(Number.f_Log10().f_Floor().f_ToInt());
 #elif 1
 					CFloat Temp = Number;
 					Temp.f_SetExponent(0);
@@ -405,39 +399,43 @@ namespace NMib
 #endif
 
 					if (nDecimals >= 0 && DecimalDisplacementFloat + DecimalDisplacementConstFloat > NMib::fg_Convert<CInteger>(nDecimals))
-					{
 						DecimalDisplacementConstFloat = fg_Min(DecimalDisplacementConstFloat, NMib::fg_Convert<CInteger>(nDecimals) - DecimalDisplacementFloat);
-					}
 
 					if (((Exponent < 0) || Mantissa != 0))
 					{
 						CInteger TempDisplacement = DecimalDisplacementConstFloat + DecimalDisplacementFloat;
-						
 						// Do this in two stages to be able to multiply up denormalized numbers
-						if (Number.f_IsDenormalized())
-						{
-							CInteger TempDisplacement2 = TempDisplacement >> 1;
-							CFloat FloatFormat = (Number * NMib::fg_Convert<CFloat>(TempDisplacement2).f_Exp10());
-							FloatFormat *= NMib::fg_Convert<CFloat>(TempDisplacement - TempDisplacement2).f_Exp10();
-							FormatNumber = (FloatFormat).f_ToUnsignedIntRound();
-						}
+						CFloat FloatFormat = Number;
+#if 1
+						CFloat Pow = NMib::fg_Convert<CFloat>(TempDisplacement).f_Exp10();
+						if (!Pow.f_IsInfinity())
+							FloatFormat *= Pow;
 						else
 						{
-							CFloat FloatFormat = Number;
-							if (1)
+							CInteger DisplacementPerTime = TempDisplacement / 2;
+							while (DisplacementPerTime != 0)
 							{
-								CFloat Pow = NMib::fg_Convert<CFloat>(TempDisplacement).f_Exp10();
-								FloatFormat *= Pow;
+								Pow = NMib::fg_Convert<CFloat>(DisplacementPerTime).f_Exp10();
+								if (!Pow.f_IsInfinity())
+									break;
+								DisplacementPerTime /= 2;
 							}
-							else
+							auto Zero = CInteger(0);
+							for (CInteger WholeDisplacement = TempDisplacement; WholeDisplacement > Zero;)
 							{
-								for (CInteger i = TempDisplacement; i < 0; ++i)
-									FloatFormat *= CFloat(fp32(0.1f));
-								for (CInteger i = 0; i < TempDisplacement; ++i)
-									FloatFormat *= CFloat(fp32(10.0f));
+								CInteger ThisTime = fg_Min(DisplacementPerTime, WholeDisplacement);
+								FloatFormat *= NMib::fg_Convert<CFloat>(ThisTime).f_Exp10();
+								WholeDisplacement -= ThisTime;
 							}
-							FormatNumber = (FloatFormat).f_ToUnsignedIntRound();
 						}
+#else
+						auto Zero = CInteger(0);
+						for (CInteger i = TempDisplacement; i < Zero; ++i)
+							FloatFormat *= CFloat(fp32(0.1f));
+						for (CInteger i = 0; i < TempDisplacement; ++i)
+							FloatFormat *= CFloat(fp32(10.0f));
+#endif
+						FormatNumber = (FloatFormat).f_ToUnsignedIntRound();
 					}
 				}
 				else
@@ -448,38 +446,40 @@ namespace NMib
 
 				aint DecimalDisplacementConst = NMib::fg_Convert<aint>(DecimalDisplacementConstFloat);
 				aint DecimalDisplacement = NMib::fg_Convert<aint>((DecimalDisplacementConstFloat + DecimalDisplacementFloat) - DecimalDisplacementConst);
+				
+				if (DecimalDisplacement > 10000)
+					_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Exponent;
 
 				{			
 					// Make a temporary buffer that can 
-					const CChar NumberCharAdd = '0';
-					enum {NumTempChar = ((sizeof(FormatNumber) * 8) / 3) + 6};
-					CChar TempStr[NumTempChar];
-					CChar *pStrPlace = TempStr + NumTempChar - 1;
+					static constexpr CChar c_NumberCharAdd = '0';
+					static constexpr mint c_NumTempChar = 
+						((fg_MaxConstexpr(sizeof(Exponent), sizeof(FormatNumber)) * 8) / 3) // Approximation of log10(2) * nBits 
+						+ 1 // +- Sign
+					;
+					CChar TempStr[c_NumTempChar];
+					CChar *pStrPlace = TempStr + c_NumTempChar - 1;
 
 					//	*(pStrPlace--) = 0;
 					if (FormatNumber != 0)
 					{
 						while (FormatNumber != 0)
 						{
-							CChar InterNum = NMib::fg_Convert<CChar>(FormatNumber % 10);
-							*(pStrPlace--) = NumberCharAdd + InterNum;
-
+							auto Modulu = FormatNumber % 10;
 							FormatNumber /= 10;
+							
+							CChar InterNum = NMib::fg_Convert<CChar>(Modulu);
+							*(pStrPlace--) = c_NumberCharAdd + InterNum;
 						}		
 					}
 					else
-					{
 						*(pStrPlace--) = '0';
-					}
-
 
 					aint nRemoved = 0;
 					if (bRemoveDigits && Number != CFloat::fs_0())
 					{
 						// Automaticly remove digits not needed
-
-						CChar *pZero = TempStr + NumTempChar - 1;
-
+						CChar *pZero = TempStr + c_NumTempChar - 1;
 						while (pZero != pStrPlace && *pZero == '0')
 						{
 							--pZero;
@@ -488,119 +488,244 @@ namespace NMib
 						}
 					}
 
-					aint NumberSize = aint(NumTempChar) - ((pStrPlace - TempStr) + 1) - nRemoved;
+					aint NumberSize = aint(c_NumTempChar) - ((pStrPlace - TempStr) + 1) - nRemoved;
 					aint DecimalPlacement = NumberSize - (DecimalDisplacement + DecimalDisplacementConst);
 
-					enum {RealExpontentBits = CFloat::EExponentBits > 16 ? 16 : CFloat::EExponentBits};
-					enum {NumTempChar2 = (NumTempChar+4+(((1<<(RealExpontentBits-1))*100)/301) + 20)};
-					enum {NumTempCharReal = NumTempChar2 > 1024 ? 1 : NumTempChar2};
+					static constexpr mint c_nNeededCharacters =
+						c_NumTempChar // The number
+						+ (sizeof(Exponent) * 8) / 3
+						+ 32 // Extra space
+					;
 
-
-					CChar *pAlloc = nullptr;
-					CChar TempStr2[NumTempCharReal];
-					CChar *pTemp;
-					aint nMaxDecimals = fg_Max(nDecimals, _Options.m_MinDecimals);
-					if (nMaxDecimals - (NumberSize - DecimalPlacement) > 12)
-						pAlloc = pTemp = DMibNew CChar[NumTempChar2 + (nMaxDecimals - (NumberSize - DecimalPlacement) - 12)];
-					else if (NumTempChar2 > 1024)
-						pAlloc = pTemp = DMibNew CChar[NumTempChar2];
-					else
-						pTemp = TempStr2;
-
-					CChar *pSourceStr = pStrPlace + 1;
-					CChar *pDest = pTemp;
-
+					static constexpr mint c_NumTempChar2 = c_nNeededCharacters;
+					static constexpr mint c_NumTempCharReal = c_NumTempChar2 > 1024 ? 1 : c_NumTempChar2;
 
 					if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Shortest || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ShortestLowerCase)
 					{
 						if (DecimalPlacement < 0 || DecimalPlacement > (NumberSize+3))
-						{
 							_Options.m_FloatFormat -= 2;
-						}
 					}
+					
+					mint nRealNeeded = 0;
+					{
+						if (bOptionsSign)
+							nRealNeeded += 1;
+
+						if (Number.f_IsNan())
+							nRealNeeded += 4;
+						else if (Number.f_IsInfinity())
+							nRealNeeded += 3;
+						else if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Exponent || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ExponentLowerCase)
+						{
+							nRealNeeded += NumberSize;
+							nRealNeeded += 1; // .
+							nRealNeeded += 1; // e/E
+
+							CInteger Exponent10 = DecimalPlacement - 1;
+
+							if (Exponent10 != 0)
+							{
+								nRealNeeded += ((sizeof(Exponent) * 8) / 3); // Approximation of log10(2) * nBits
+								nRealNeeded += 1; // +/- 
+							}
+							else
+								nRealNeeded += 1; // 0 
+						}
+						else
+						{
+							if (DecimalPlacement > NumberSize)
+							{
+								nRealNeeded += fg_Max(NumberSize, DecimalPlacement);
+
+								if (_Options.m_MinDecimals > 0)
+								{
+									nRealNeeded += 1; // .
+									nRealNeeded += _Options.m_MinDecimals; 
+								}
+								else if (_Options.m_MinDigits > 0)
+								{
+									if (_Options.m_MinDigits > DecimalPlacement)
+									{
+										nRealNeeded += 1; // .
+										nRealNeeded += _Options.m_MinDigits - DecimalPlacement;
+									}
+								}
+								else if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
+									nRealNeeded += 2; // .0
+							}
+							else if (DecimalPlacement < 0)
+							{
+								nRealNeeded += 1; // 0
+								if (NumberSize == 0) // Can only happen with Min decimals >= 0
+								{
+									if (_Options.m_MinDecimals > 0)
+									{
+										nRealNeeded += 1; // .
+										nRealNeeded += _Options.m_MinDecimals;
+									}
+								}
+								else
+								{
+									nRealNeeded += 1; // .
+									nRealNeeded += -DecimalPlacement;
+									nRealNeeded += NumberSize;
+
+									if (_Options.m_MinDecimals >= 0)
+									{
+										if (_Options.m_MinDecimals > (NumberSize - DecimalPlacement))
+											nRealNeeded += _Options.m_MinDecimals - (NumberSize - DecimalPlacement);
+									}
+									else if (_Options.m_MinDigits >= 0)
+									{
+										if (_Options.m_MinDigits > NumberSize)
+											nRealNeeded += _Options.m_MinDigits - NumberSize;
+									}
+								}
+							}
+							else
+							{
+								nRealNeeded += fg_Max(DecimalPlacement, 1);
+								if (_Options.m_MinDecimals > 0)
+								{
+									nRealNeeded += 1;
+									if (NumberSize > DecimalPlacement)
+										nRealNeeded += NumberSize - DecimalPlacement;
+									if (_Options.m_MinDecimals > (NumberSize - DecimalPlacement))
+										nRealNeeded += _Options.m_MinDecimals - (NumberSize - DecimalPlacement);
+								}
+								else if (_Options.m_MinDigits > 0)
+								{
+									if (NumberSize > DecimalPlacement || _Options.m_MinDigits > NumberSize)
+									{
+										nRealNeeded += 1; // .
+										if (NumberSize > DecimalPlacement)
+											nRealNeeded += NumberSize - DecimalPlacement;  
+										if (_Options.m_MinDigits > NumberSize)
+											nRealNeeded += _Options.m_MinDigits - NumberSize;  
+									}
+								}
+								else
+								{
+									if (DecimalPlacement == NumberSize)
+									{
+										 if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
+											nRealNeeded += 2; // .0  
+									}
+									else
+									{
+										nRealNeeded += 1; // .  
+										if (NumberSize > DecimalPlacement)
+											nRealNeeded += NumberSize - DecimalPlacement;
+									}
+								}
+							}
+						}
+
+						if (_Options.m_bShowDenormalized && Number.f_IsDenormalized())
+							nRealNeeded += 7; // #denorm
+					}
+						
+
+					CChar *pAlloc = nullptr;
+					CChar TempStr2[c_NumTempCharReal];
+					CChar *pDestStart;
+					mint nDest = c_NumTempCharReal;
+					if (nRealNeeded > c_NumTempCharReal)
+					{
+						nDest = nRealNeeded;
+						pAlloc = pDestStart = DMibNew CChar[nRealNeeded];
+					}
+					else
+						pDestStart = TempStr2;
+
+					auto Cleanup = g_OnScopeExit > [&]
+						{
+							if (pAlloc)
+								delete [] pAlloc;
+						}
+					;
+
+					CChar * const pDestStartConst = pDestStart;
+					
+					CChar *pSourceStr = pStrPlace + 1;
+					CChar *pDest = pDestStart;
+					CChar *pDestEnd = pDest + nDest;
+					(void)pDestEnd;
+					
+					auto fOutput = [&](CChar _Chararter) 
+						{
+							DMibFastCheck(pDest < pDestEnd);
+							*pDest = _Chararter;
+							++pDest;
+						}
+					;
 
 					if (bOptionsSign)
 					{
 						if (SubStrStart)
-						{
-							*pDest = '-';
-							++pDest;
-						}
+							fOutput('-');
 						else
-						{
-							*pDest = '+';
-							++pDest;
-						}
+							fOutput('+');
 					}
 
-					if (Number.f_IsNaN())
+					if (Number.f_IsNan())
 					{
 						if (_Options.m_bShowNaN)
 						{
-							if (Number.f_IsQNaN())
+							if (Number.f_IsQNan())
 							{
-								*pDest = 'Q';++pDest;
-								*pDest = 'N';++pDest;
-								*pDest = 'a';++pDest;
-								*pDest = 'N';++pDest;
+								fOutput('Q');
+								fOutput('N');
+								fOutput('a');
+								fOutput('N');
 							}
 							else
 							{
-								*pDest = 'S';++pDest;
-								*pDest = 'N';++pDest;
-								*pDest = 'a';++pDest;
-								*pDest = 'N';++pDest;
+								fOutput('S');
+								fOutput('N');
+								fOutput('a');
+								fOutput('N');
 							}
 						}
 						else
 						{
-							*pDest = '0';++pDest;
-							*pDest = '.';++pDest;
-							*pDest = '0';++pDest;
+							fOutput('0');
+							fOutput('.');
+							fOutput('0');
 						}
 					}
 					else if (Number.f_IsInfinity())
 					{
 						if (_Options.m_bShowInf)
 						{
-							*pDest = 'I';++pDest;
-							*pDest = 'n';++pDest;
-							*pDest = 'f';++pDest;
+							fOutput('I');
+							fOutput('n');
+							fOutput('f');
 						}
 						else
 						{
-							*pDest = '0';++pDest;
-							*pDest = '.';++pDest;
-							*pDest = '0';++pDest;
+							fOutput('0');
+							fOutput('.');
+							fOutput('0');
 						}
 					}
 					else if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Exponent || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ExponentLowerCase)
 					{
-						*pDest = pSourceStr[0];
-						++pDest;
+						fOutput(pSourceStr[0]);
 
 						if (NumberSize > 1)
 						{
-							*pDest = '.';++pDest;
+							fOutput('.');
 
 							for (aint i = 1; i < NumberSize; ++i)
-							{
-								*pDest = pSourceStr[i];
-								++pDest;
-							}
+								fOutput(pSourceStr[i]);
 							if (NumberSize == 0)
-							{
-								*pDest = '0';++pDest;
-							}
+								fOutput('0');
 						}
 						if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_ExponentLowerCase)
-						{
-							*pDest = 'e';++pDest;
-						}
+							fOutput('e');
 						else
-						{
-							*pDest = 'E';++pDest;
-						}
+							fOutput('E');
 
 						CInteger Exponent10 = DecimalPlacement - 1;
 
@@ -615,11 +740,11 @@ namespace NMib
 								Exponent10 = -Exponent10;
 							}
 
-							CChar *pStrPlace = TempStr + NumTempChar - 1;
+							CChar *pStrPlace = TempStr + c_NumTempChar - 1;
 							while (Exponent10 != 0)
 							{
 								CChar InterNum = fg_Convert<CChar>(Exponent10 % 10);
-								*(pStrPlace--) = NumberCharAdd + InterNum;
+								*(pStrPlace--) = c_NumberCharAdd + InterNum;
 
 								Exponent10 /= 10;
 							}		
@@ -632,19 +757,15 @@ namespace NMib
 									*(pStrPlace--) = '+';
 							}
 
-							aint NumberSize = NumTempChar - ((pStrPlace - TempStr) + 1);
+							aint NumberSize = c_NumTempChar - ((pStrPlace - TempStr) + 1);
 
 							CChar *pSourceStr = pStrPlace + 1;
 							for (aint i = 0; i < NumberSize; ++i)
-							{
-								*pDest = pSourceStr[i];
-								++pDest;
-							}
-
+								fOutput(pSourceStr[i]);
 						}
 						else
 						{
-							*pDest = '0'; ++pDest;
+							fOutput('0');
 						}
 					}
 					else
@@ -652,121 +773,86 @@ namespace NMib
 						if (DecimalPlacement > NumberSize)
 						{
 							for (aint i = 0; i < NumberSize; ++i)
-							{
-								*pDest = pSourceStr[i];
-								++pDest;
-							}
+								fOutput(pSourceStr[i]);
 							for (aint i = NumberSize; i < DecimalPlacement; ++i)
-							{
-								*pDest = '0';++pDest;
-							}
+								fOutput('0');
 
 							if (_Options.m_MinDecimals > 0)
 							{
-								*pDest = '.';++pDest;
+								fOutput('.');
 								for (aint i = 0; i < _Options.m_MinDecimals; ++i)
-								{
-									*pDest = '0';++pDest;
-								}
+									fOutput('0');
 							}
 							else if (_Options.m_MinDigits > 0)
 							{
 								if (_Options.m_MinDigits > DecimalPlacement)
 								{
-									*pDest = '.';++pDest;
+									fOutput('.');
 									for (aint i = DecimalPlacement; i < _Options.m_MinDigits; ++i)
-									{
-										*pDest = '0';++pDest;
-									}
+										fOutput('0');
 								}
 							}
 							else if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
 							{
-								*pDest = '.';++pDest;
-								*pDest = '0';++pDest;
+								fOutput('.');
+								fOutput('0');
 							}
 						}
 						else if (DecimalPlacement < 0)
 						{
-							*pDest = '0';++pDest;
+							fOutput('0');
 							if (NumberSize == 0) // Can only happen with Min decimals >= 0
 							{
 								if (_Options.m_MinDecimals > 0)
 								{
-									*pDest = '.';++pDest;
+									fOutput('.');
 									for (aint i = 0; i < _Options.m_MinDecimals; ++i)
-									{
-										*pDest = '0';++pDest;
-									}
+										fOutput('0');
 								}
 							}
 							else
 							{
-								*pDest = '.';++pDest;
+								fOutput('.');
 								for (aint i = DecimalPlacement; i < 0; ++i)
-								{
-									*pDest = '0';++pDest;
-								}
+									fOutput('0');
 								for (aint i = 0; i < NumberSize; ++i)
-								{
-									*pDest = pSourceStr[i];
-									++pDest;
-								}
+									fOutput(pSourceStr[i]);
 
 								if (_Options.m_MinDecimals >= 0)
 								{
 									for (aint i = NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
-									{
-										*pDest = '0';++pDest;
-									}
+										fOutput('0');
 								}
 								else if (_Options.m_MinDigits >= 0)
 								{
 									for (aint i = NumberSize; i < _Options.m_MinDigits; ++i)
-									{
-										*pDest = '0';++pDest;
-									}
+										fOutput('0');
 								}
 							}
 						}
 						else
 						{
 							for (aint i = 0; i < DecimalPlacement; ++i)
-							{
-								*pDest = pSourceStr[i];
-								++pDest;
-							}
+								fOutput(pSourceStr[i]);
 							if (DecimalPlacement == 0)
-							{
-								*pDest = '0';++pDest;
-							}
+								fOutput('0');
 							if (_Options.m_MinDecimals > 0)
 							{
-								*pDest = '.';++pDest;
+								fOutput('.');
 								for (aint i= DecimalPlacement; i < NumberSize; ++i)
-								{
-									*pDest = pSourceStr[i];
-									++pDest;
-								}
+									fOutput(pSourceStr[i]);
 								for (aint i= NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
-								{
-									*pDest = '0';++pDest;
-								}
+									fOutput('0');
 							}
 							else if (_Options.m_MinDigits> 0)
 							{
 								if (NumberSize > DecimalPlacement || _Options.m_MinDigits > NumberSize)
 								{
-									*pDest = '.';++pDest;
+									fOutput('.');
 									for (aint i= DecimalPlacement; i < NumberSize; ++i)
-									{
-										*pDest = pSourceStr[i];
-										++pDest;
-									}
+										fOutput(pSourceStr[i]);
 									for (aint i = NumberSize; i < _Options.m_MinDigits; ++i)
-									{
-										*pDest = '0';++pDest;
-									}
+										fOutput('0');
 								}
 							}
 							else
@@ -775,18 +861,15 @@ namespace NMib
 								{
 									 if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
 									 {
-										*pDest = '.';++pDest;
-										*pDest = '0';++pDest;
+										fOutput('.');
+										fOutput('0');
 									 }
 								}
 								else
 								{
-									*pDest = '.';++pDest;
+									fOutput('.');
 									for (aint i = DecimalPlacement; i < NumberSize; ++i)
-									{
-										*pDest = pSourceStr[i];
-										++pDest;
-									}
+										fOutput(pSourceStr[i]);
 								}
 							}
 						}
@@ -794,32 +877,32 @@ namespace NMib
 						if (_Options.m_bFractionOnly)
 						{
 							// Parse away fraction
-							while (*pTemp && *pTemp != '.')
-								++pTemp;
-							if (*pTemp == '.')
-								++pTemp;
+							while (*pDestStart && *pDestStart != '.')
+								++pDestStart;
+							if (*pDestStart == '.')
+								++pDestStart;
 						}
 
 					}
 
 					if (_Options.m_bShowDenormalized && Number.f_IsDenormalized())
 					{
-						*pDest = '#';++pDest;
-						*pDest = 'd';++pDest;
-						*pDest = 'e';++pDest;
-						*pDest = 'n';++pDest;
-						*pDest = 'o';++pDest;
-						*pDest = 'r';++pDest;
-						*pDest = 'm';++pDest;
+						fOutput('#');
+						fOutput('d');
+						fOutput('e');
+						fOutput('n');
+						fOutput('o');
+						fOutput('r');
+						fOutput('m');
 					}
+					mint nOutput = pDest - pDestStartConst;
+					(void)nOutput;
+					DMibFastCheck(nRealNeeded >= nOutput);
 
 					if (_Options.m_bSimpleAlign)
-						CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, pTemp, pDest-pTemp);
+						CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, pDestStart, pDest-pDestStart);
 					else
-						CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pTemp, pDest-pTemp, SubStrStart);
-
-					if (pAlloc)
-						delete [] pAlloc;
+						CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pDestStart, pDest-pDestStart, SubStrStart);
 				}
 			}
 
@@ -901,6 +984,18 @@ namespace NMib
 			static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp64 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp64>::fs_CreateFormat(_Formatter, _Data))
 			{
 				return TCStringFormatter<t_CFormatter, fp64>::fs_CreateFormat(_Formatter, reinterpret_cast<fp64 const &>(_Data));
+			}
+		};
+#endif
+#ifdef DMibPCanDo_fp80
+		template <typename t_CFormatter>
+		class TCStringFormatter<t_CFormatter, pfp80>
+		{
+		public:
+			typedef typename TCStringFormatter<t_CFormatter, fp80>::CFormatType CFormatType;
+			static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp80 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp80>::fs_CreateFormat(_Formatter, _Data))
+			{
+				return TCStringFormatter<t_CFormatter, fp80>::fs_CreateFormat(_Formatter, reinterpret_cast<fp80 const &>(_Data));
 			}
 		};
 #endif
