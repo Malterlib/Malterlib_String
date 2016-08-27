@@ -2051,6 +2051,25 @@ EndArgSearch:
 			typedef TCStrAggregate<t_CTCStrTraits> CSuper;
 			typedef typename CSuper::CFormat CFormat;
 			typedef typename CSuper::CAddStrAgrs CAddStrAgrs;
+			
+			struct CAutoDestroy
+			{
+				CAutoDestroy(TCStr *_pThis)
+					: mp_pThis(_pThis)
+				{
+				}
+				~CAutoDestroy()
+				{
+					if (mp_pThis)
+						mp_pThis->CSuper::f_Destroy();
+				}
+				void f_Clear()
+				{
+					mp_pThis = nullptr;
+				}
+			private:
+				TCStr *mp_pThis;
+			};
 
 			inline_small TCStr()
 			{
@@ -2065,48 +2084,64 @@ EndArgSearch:
 			inline_large TCStr(CFormat const &_Format)
 			{
 				CSuper::f_Construct();
+				CAutoDestroy Cleanup{this};
 				_Format.f_FormatToStr(*this);
+				Cleanup.f_Clear();
 			}
 
 			template <typename t_CStrDataType>
 			inline_large TCStr(t_CStrDataType const *_pStr)
 			{
 				CSuper::f_Construct();
+				CAutoDestroy Cleanup{this};
 				CSuper::f_SetStr(_pStr);
+				Cleanup.f_Clear();
 			}
 
 			template <typename t_CStrDataType>
 			inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
 			{
 				CSuper::f_Construct();
+				CAutoDestroy Cleanup{this};
 				CSuper::f_SetStr(_pStr, _Len);
+				Cleanup.f_Clear();
 			}
 
 			inline_small TCStr(CSuper const &_Str)
 			{
+				CAutoDestroy Cleanup{this};
 				CSuper::f_Construct(_Str);
+				Cleanup.f_Clear();
 			}
 
 			inline_small TCStr(TCStr const &_Str)
 			{
+				CAutoDestroy Cleanup{this};
 				CSuper::f_Construct((CSuper const &)_Str);
+				Cleanup.f_Clear();
 			}
 
 			inline_small TCStr(CSuper &&_Str)
 			{
+				CAutoDestroy Cleanup{this};
 				CSuper::f_Construct(fg_Move(_Str));
+				Cleanup.f_Clear();
 			}
 
 			inline_small TCStr(TCStr &&_Str)
 			{
+				CAutoDestroy Cleanup{this};
 				CSuper::f_Construct(fg_Move(_Str));
+				Cleanup.f_Clear();
 			}
 
 			template <typename t_CStrTraitsF>
 			inline_large TCStr(TCStrAggregate<t_CStrTraitsF> const &_From)
 			{		
 				CImp::f_Construct();
+				CAutoDestroy Cleanup{this};
 				CSuper::f_SetStr(_From);
+				Cleanup.f_Clear();
 			}
 
 			template <typename t_CStrTraitsF>	
