@@ -1830,6 +1830,18 @@ EndArgSearch:
 				return true;
 			}
 
+			inline_small bint f_IsAnsiAlphaNumeric() const
+			{
+				const CChar *pStr = *this;
+				while (*pStr)
+				{
+					if (!fg_CharIsAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
+						return false;
+					++pStr;
+				}
+				return true;
+			}
+
 			inline_small bint f_IsNumeric() const
 			{
 				if (f_IsEmpty())
