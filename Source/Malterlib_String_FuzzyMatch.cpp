@@ -10,16 +10,11 @@ namespace NMib
 	{
 		namespace 
 		{
-			class CFuzzyMatching
+			struct CFuzzyMatching
 			{
-			public:
-				CFuzzyMatching()
-				{
-					m_MatichID = 0;
-					m_nMatched = 0;
-				}
-				aint m_MatichID;
-				aint m_nMatched;
+				aint m_MatichID = -1;
+				aint m_nMatched = 0;
+				aint m_iSource = -1;
 			};
 			
 			template <bint tf_bNoCase, bint tf_bCheckLen, typename tf_CData1, typename tf_CData2>
@@ -117,7 +112,7 @@ namespace NMib
 			NContainer::TCVector<CFuzzyMatching> Matchings;
 			Matchings.f_SetLen(MaxLen);
 			CFuzzyMatching *pMatchings = Matchings.f_GetArray();
-			aint iMatingID = 0;
+			aint iMatchingID = -1;
 			
 			const ch8 *pParse0Start = _Str0;
 			const ch8 *pParse1Start = _Str1;
@@ -128,9 +123,9 @@ namespace NMib
 
 				mint Found;
 				aint iFind = fg_StrFindPartial<true, false>(pParse0, pParse1, 0, Found);
-				while (iFind >= 0 && Found >= 3)
+				while (iFind >= 0 && Found > 0)
 				{
-					++iMatingID;
+					++iMatchingID;
 					aint iStart = (pParse0 - pParse0Start) + iFind;
 					bint bLarger = true;
 					for (mint i = 0; i < Found; ++i)
@@ -149,22 +144,22 @@ namespace NMib
 						{
 							if (pMatchings[i].m_MatichID != MatchingID)
 								break;
-							pMatchings[i].m_MatichID = 0;
-							pMatchings[i].m_nMatched = 0;
+							pMatchings[i] = CFuzzyMatching();
 						}
 						MatchingID = pMatchings[iStart + Found - 1].m_MatichID;
 						for (aint i = iStart + Found; i < MaxLen; ++i)
 						{
 							if (pMatchings[i].m_MatichID != MatchingID)
 								break;
-							pMatchings[i].m_MatichID = 0;
-							pMatchings[i].m_nMatched = 0;
+							pMatchings[i] = CFuzzyMatching();
 						}
 						// Add Mapping
 						for (aint i = iStart; i < aint(iStart + Found); ++i)
 						{
-							pMatchings[i].m_MatichID = iMatingID;
-							pMatchings[i].m_nMatched = Found;
+							auto &Matching = pMatchings[i];
+							Matching.m_MatichID = iMatchingID;
+							Matching.m_nMatched = Found;
+							Matching.m_iSource = pParse1 - pParse1Start;
 						}
 					}
 					pParse0 += iFind + 1;
@@ -173,21 +168,75 @@ namespace NMib
 				++pParse1;
 			}
 
-			int64 Ret = 0;
 			aint nUnmatched = 0;
-			aint MaxMatch = 3;
+			aint LastMatched = -1;
+			mint nSource = _Str1.f_GetLen();
+			
+			NContainer::TCVector<CFuzzyMatching> SourceMatchings;
+			SourceMatchings.f_SetLen(nSource);
+			auto *pSourceMatchings = SourceMatchings.f_GetArray();
+			
 			for (aint i = 0; i < MaxLen; ++i)
 			{
-				if (pMatchings[i].m_nMatched == 0)
+				auto &Matching = pMatchings[i];
+				if (Matching.m_nMatched == 0)
 					++nUnmatched;
-				if (pMatchings[i].m_nMatched > MaxMatch)
-					MaxMatch = pMatchings[i].m_nMatched;
-				
+				if (Matching.m_MatichID != LastMatched && Matching.m_nMatched != 0)
+				{
+					aint iStart = Matching.m_iSource;
+					bint bLarger = true;
+					for (mint i = 0; i < Matching.m_nMatched; ++i)
+					{
+						if (aint(Matching.m_nMatched) < pSourceMatchings[iStart + i].m_nMatched)
+						{
+							bLarger = false;
+							break;
+						}
+					}
+					if (bLarger)
+					{
+						aint MatchingID = pSourceMatchings[iStart].m_MatichID;
+						for (aint i = iStart - 1; i >= 0; --i)
+						{
+							if (pSourceMatchings[i].m_MatichID != MatchingID)
+								break;
+							pSourceMatchings[i] = CFuzzyMatching();
+						}
+						MatchingID = pSourceMatchings[iStart + Matching.m_nMatched - 1].m_MatichID;
+						for (aint i = iStart + Matching.m_nMatched; i < MaxLen; ++i)
+						{
+							if (pSourceMatchings[i].m_MatichID != MatchingID)
+								break;
+							pSourceMatchings[i] = CFuzzyMatching();
+						}
+						for (aint i = iStart; i < aint(iStart + Matching.m_nMatched); ++i)
+							pSourceMatchings[i] = Matching;
+					}
+				}
+				LastMatched = Matching.m_MatichID; 
 			}
-			for (aint i = 0; i < MaxLen; ++i)
-				Ret += fg_Min(MaxLen - pMatchings[i].m_nMatched, nUnmatched);
 
-			return fp64(Ret) / fp64(MaxLen).f_Sqr() * 1.0 + (fp64(nUnmatched) / fp64(MaxLen)) * 0.0;
+			mint nUnmatchedSource = 0;
+			for (aint i = 0; i < nSource; ++i)
+			{
+				auto &Matching = pSourceMatchings[i];
+				if (Matching.m_nMatched == 0)
+					++nUnmatchedSource;
+			}
+			
+			int64 Ret0 = 0;
+			for (aint i = 0; i < MaxLen; ++i)
+				Ret0 += MaxLen - pMatchings[i].m_nMatched;
+			int64 Ret1 = 0;
+			for (aint i = 0; i < nSource; ++i)
+				Ret1 += nSource - pSourceMatchings[i].m_nMatched;
+
+			return 
+				(fp64(Ret0) / fp64(MaxLen).f_Sqr()) * 0.25 
+				+ (fp64(Ret1) / fp64(nSource).f_Sqr()) * 0.25
+				+ (fp64(nUnmatched) / fp64(MaxLen) * 0.25)
+				+ (fp64(nUnmatchedSource) / fp64(nSource) * 0.25)
+			;
 		}
 	}
 }
