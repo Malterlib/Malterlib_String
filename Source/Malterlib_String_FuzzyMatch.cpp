@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+﻿// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -170,7 +170,7 @@ namespace NMib
 
 			aint nUnmatched = 0;
 			aint LastMatched = -1;
-			mint nSource = _Str1.f_GetLen();
+			aint nSource = _Str1.f_GetLen();
 			
 			NContainer::TCVector<CFuzzyMatching> SourceMatchings;
 			SourceMatchings.f_SetLen(nSource);
@@ -185,7 +185,7 @@ namespace NMib
 				{
 					aint iStart = Matching.m_iSource;
 					bint bLarger = true;
-					for (mint i = 0; i < Matching.m_nMatched; ++i)
+					for (aint i = 0; i < Matching.m_nMatched; ++i)
 					{
 						if (aint(Matching.m_nMatched) < pSourceMatchings[iStart + i].m_nMatched)
 						{
