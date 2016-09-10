@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansof
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -16,7 +16,7 @@ namespace NMib
 				aint m_nMatched = 0;
 				aint m_iSource = -1;
 			};
-			
+
 			template <bint tf_bNoCase, bint tf_bCheckLen, typename tf_CData1, typename tf_CData2>
 			aint fg_StrFindPartial(const tf_CData1 *_pStr1, const tf_CData2 *_pStr2, mint _Len, mint &_Found)
 			{
@@ -108,12 +108,12 @@ namespace NMib
 				fg_Swap(_Str0, _Str1);
 
 			aint MaxLen = _Str0.f_GetLen();
-			
+
 			NContainer::TCVector<CFuzzyMatching> Matchings;
 			Matchings.f_SetLen(MaxLen);
 			CFuzzyMatching *pMatchings = Matchings.f_GetArray();
 			aint iMatchingID = -1;
-			
+
 			const ch8 *pParse0Start = _Str0;
 			const ch8 *pParse1Start = _Str1;
 			const ch8 *pParse1 = pParse1Start;
@@ -171,11 +171,11 @@ namespace NMib
 			aint nUnmatched = 0;
 			aint LastMatched = -1;
 			aint nSource = _Str1.f_GetLen();
-			
+
 			NContainer::TCVector<CFuzzyMatching> SourceMatchings;
 			SourceMatchings.f_SetLen(nSource);
 			auto *pSourceMatchings = SourceMatchings.f_GetArray();
-			
+
 			for (aint i = 0; i < MaxLen; ++i)
 			{
 				auto &Matching = pMatchings[i];
@@ -223,7 +223,7 @@ namespace NMib
 				if (Matching.m_nMatched == 0)
 					++nUnmatchedSource;
 			}
-			
+
 			int64 Ret0 = 0;
 			for (aint i = 0; i < MaxLen; ++i)
 				Ret0 += MaxLen - pMatchings[i].m_nMatched;
