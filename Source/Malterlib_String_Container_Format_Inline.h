@@ -80,6 +80,7 @@ namespace NMib
 				}
 			};
 			
+#ifndef DCompiler_MSVC
 			template <typename t_CData, typename t_CFormatType, typename tf_COptions>
 			inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
 				-> typename TCEnableIf
@@ -94,13 +95,16 @@ namespace NMib
 				
 				return CSuper::f_ParseOption(_Args, _Option);
 			}
+#endif
 
 			template <typename t_CData, typename t_CFormatType, typename tf_COptions>
 			inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
 				-> typename TCEnableIf
 				<
 					NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value 
+#ifndef DCompiler_MSVC
 					&& !NTraits::TCIsVoid<decltype(_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option))>::mc_Value
+#endif
 					, aint
 				>::CType 
 			{
