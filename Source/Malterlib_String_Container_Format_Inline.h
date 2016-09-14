@@ -71,7 +71,8 @@ namespace NMib
 			
 			struct CLocalOptions : public COptions
 			{
-				decltype(fs_GetFormatOptionsType(fg_GetReference<t_CToFormat>())) m_LocalOptions;
+				using COptionsType = decltype(fs_GetFormatOptionsType(fg_GetReference<t_CToFormat>())); 
+				COptionsType m_LocalOptions;
 				
 				CLocalOptions()
 					: COptions(COptionsStatic())
@@ -80,7 +81,28 @@ namespace NMib
 			};
 			
 			template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-			inline_small typename TCEnableIf<NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value, aint>::CType f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+			inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+				-> typename TCEnableIf
+				<
+					NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value
+					&& !NTraits::TCIsVoid<decltype(_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args))>::mc_Value
+					, aint
+				>::CType 
+			{
+				if (_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args))
+					return true;
+				
+				return CSuper::f_ParseOption(_Args, _Option);
+			}
+
+			template <typename t_CData, typename t_CFormatType, typename tf_COptions>
+			inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+				-> typename TCEnableIf
+				<
+					NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value 
+					&& !NTraits::TCIsVoid<decltype(_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option))>::mc_Value
+					, aint
+				>::CType 
 			{
 				if (_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option))
 					return true;
