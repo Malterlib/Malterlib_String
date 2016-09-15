@@ -2689,9 +2689,11 @@ namespace NMib
 		}
 
 		template <ch8 tf_EscapeChar, typename tf_CChar>
-		void fg_ParseEscape(const tf_CChar *&_pParse, tf_CChar _Abort)
+		bool fg_ParseEscape(const tf_CChar *&_pParse, tf_CChar _Abort)
 		{
-			auto pParse = _pParse;
+			auto *pParse = _pParse;
+			bool bRet = false;
+
 			int Mode = 0;
 			if (*pParse == '\"')
 			{
@@ -2703,7 +2705,10 @@ namespace NMib
 				if (Mode == 0)
 				{
 					if (*pParse == _Abort)
+					{
+						bRet = true;
 						break;
+					}
 					else if (*pParse == tf_EscapeChar)
 					{
 						Mode = 1;
@@ -2718,7 +2723,11 @@ namespace NMib
 						Mode = 0;
 						++pParse;
 						if (_Abort == tf_EscapeChar)
+						{
+							bRet = true;
 							break;
+						}
+
 						continue;
 					}
 					if (*pParse == '\\')
@@ -2733,6 +2742,7 @@ namespace NMib
 			}
 
 			_pParse = pParse;
+			return bRet;
 		}
 
 
