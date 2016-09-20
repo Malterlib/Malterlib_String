@@ -2135,12 +2135,14 @@ EndArgSearch:
 
 			inline_large TCStr & operator = (CSuper &&_From)
 			{		
+				DMibFastCheck(this != &_From);
 				CImp::f_Assign(fg_Move(_From));
 				return *this;
 			}
 
 			inline_large TCStr & operator = (TCStr &&_From)
-			{		
+			{	
+				DMibFastCheck(this != &_From);
 				CImp::f_Assign(fg_Move(_From));
 				return *this;
 			}
