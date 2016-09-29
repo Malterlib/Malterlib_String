@@ -109,9 +109,14 @@ namespace NMib
 
 			aint MaxLen = _Str0.f_GetLen();
 
-			NContainer::TCVector<CFuzzyMatching> Matchings;
-			Matchings.f_SetLen(MaxLen);
-			CFuzzyMatching *pMatchings = Matchings.f_GetArray();
+			NContainer::TCVector<CFuzzyMatching> MatchingsArray;
+			MatchingsArray.f_SetLen(MaxLen);
+#ifdef DMibDebug
+			auto &Matchings = MatchingsArray;
+#else
+			auto *Matchings = MatchingsArray.f_GetArray();
+#endif
+			//CFuzzyMatching *pMatchings = Matchings.f_GetArray();
 			aint iMatchingID = -1;
 
 			const ch8 *pParse0Start = _Str0;
@@ -130,7 +135,7 @@ namespace NMib
 					bint bLarger = true;
 					for (mint i = 0; i < Found; ++i)
 					{
-						if (aint(Found) < pMatchings[iStart + i].m_nMatched)
+						if (aint(Found) < Matchings[iStart + i].m_nMatched)
 						{
 							bLarger = false;
 							break;
@@ -138,25 +143,25 @@ namespace NMib
 					}
 					if (bLarger)
 					{
-						// Clear pMatchings
-						aint MatchingID = pMatchings[iStart].m_MatichID;
+						// Clear Matchings
+						aint MatchingID = Matchings[iStart].m_MatichID;
 						for (aint i = iStart - 1; i >= 0; --i)
 						{
-							if (pMatchings[i].m_MatichID != MatchingID)
+							if (Matchings[i].m_MatichID != MatchingID)
 								break;
-							pMatchings[i] = CFuzzyMatching();
+							Matchings[i] = CFuzzyMatching();
 						}
-						MatchingID = pMatchings[iStart + Found - 1].m_MatichID;
+						MatchingID = Matchings[iStart + Found - 1].m_MatichID;
 						for (aint i = iStart + Found; i < MaxLen; ++i)
 						{
-							if (pMatchings[i].m_MatichID != MatchingID)
+							if (Matchings[i].m_MatichID != MatchingID)
 								break;
-							pMatchings[i] = CFuzzyMatching();
+							Matchings[i] = CFuzzyMatching();
 						}
 						// Add Mapping
 						for (aint i = iStart; i < aint(iStart + Found); ++i)
 						{
-							auto &Matching = pMatchings[i];
+							auto &Matching = Matchings[i];
 							Matching.m_MatichID = iMatchingID;
 							Matching.m_nMatched = Found;
 							Matching.m_iSource = pParse1 - pParse1Start;
@@ -172,13 +177,18 @@ namespace NMib
 			aint LastMatched = -1;
 			aint nSource = _Str1.f_GetLen();
 
-			NContainer::TCVector<CFuzzyMatching> SourceMatchings;
-			SourceMatchings.f_SetLen(nSource);
-			auto *pSourceMatchings = SourceMatchings.f_GetArray();
+			NContainer::TCVector<CFuzzyMatching> SourceMatchingsArray;
+			SourceMatchingsArray.f_SetLen(nSource);
+#ifdef DMibDebug
+			auto &SourceMatchings = SourceMatchingsArray;
+#else
+			auto *SourceMatchings = SourceMatchingsArray.f_GetArray();
+#endif
+			//auto *pSourceMatchings = SourceMatchings.f_GetArray();
 
 			for (aint i = 0; i < MaxLen; ++i)
 			{
-				auto &Matching = pMatchings[i];
+				auto &Matching = Matchings[i];
 				if (Matching.m_nMatched == 0)
 					++nUnmatched;
 				if (Matching.m_MatichID != LastMatched && Matching.m_nMatched != 0)
@@ -187,7 +197,7 @@ namespace NMib
 					bint bLarger = true;
 					for (aint i = 0; i < Matching.m_nMatched; ++i)
 					{
-						if (aint(Matching.m_nMatched) < pSourceMatchings[iStart + i].m_nMatched)
+						if (aint(Matching.m_nMatched) < SourceMatchings[iStart + i].m_nMatched)
 						{
 							bLarger = false;
 							break;
@@ -195,22 +205,22 @@ namespace NMib
 					}
 					if (bLarger)
 					{
-						aint MatchingID = pSourceMatchings[iStart].m_MatichID;
+						aint MatchingID = SourceMatchings[iStart].m_MatichID;
 						for (aint i = iStart - 1; i >= 0; --i)
 						{
-							if (pSourceMatchings[i].m_MatichID != MatchingID)
+							if (SourceMatchings[i].m_MatichID != MatchingID)
 								break;
-							pSourceMatchings[i] = CFuzzyMatching();
+							SourceMatchings[i] = CFuzzyMatching();
 						}
-						MatchingID = pSourceMatchings[iStart + Matching.m_nMatched - 1].m_MatichID;
-						for (aint i = iStart + Matching.m_nMatched; i < MaxLen; ++i)
+						MatchingID = SourceMatchings[iStart + Matching.m_nMatched - 1].m_MatichID;
+						for (aint i = iStart + Matching.m_nMatched; i < nSource; ++i)
 						{
-							if (pSourceMatchings[i].m_MatichID != MatchingID)
+							if (SourceMatchings[i].m_MatichID != MatchingID)
 								break;
-							pSourceMatchings[i] = CFuzzyMatching();
+							SourceMatchings[i] = CFuzzyMatching();
 						}
 						for (aint i = iStart; i < aint(iStart + Matching.m_nMatched); ++i)
-							pSourceMatchings[i] = Matching;
+							SourceMatchings[i] = Matching;
 					}
 				}
 				LastMatched = Matching.m_MatichID; 
@@ -219,17 +229,17 @@ namespace NMib
 			mint nUnmatchedSource = 0;
 			for (aint i = 0; i < nSource; ++i)
 			{
-				auto &Matching = pSourceMatchings[i];
+				auto &Matching = SourceMatchings[i];
 				if (Matching.m_nMatched == 0)
 					++nUnmatchedSource;
 			}
 
 			int64 Ret0 = 0;
 			for (aint i = 0; i < MaxLen; ++i)
-				Ret0 += MaxLen - pMatchings[i].m_nMatched;
+				Ret0 += MaxLen - Matchings[i].m_nMatched;
 			int64 Ret1 = 0;
 			for (aint i = 0; i < nSource; ++i)
-				Ret1 += nSource - pSourceMatchings[i].m_nMatched;
+				Ret1 += nSource - SourceMatchings[i].m_nMatched;
 
 			return 
 				(fp64(Ret0) / fp64(MaxLen).f_Sqr()) * 0.25 
