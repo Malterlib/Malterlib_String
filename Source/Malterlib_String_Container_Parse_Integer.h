@@ -198,6 +198,8 @@ DMibStrStringParserImplementInt(uint160);
 DMibStrStringParserImplementInt(int160);
 DMibStrStringParserImplementInt(uint256);
 DMibStrStringParserImplementInt(int256);
+DMibStrStringParserImplementInt(uint320);
+DMibStrStringParserImplementInt(int320);
 DMibStrStringParserImplementInt(uint512);
 DMibStrStringParserImplementInt(int512);
 DMibStrStringParserImplementInt(uint1024);

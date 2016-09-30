@@ -868,6 +868,8 @@ DMibStrStringFormatterImplementInt(uint160);
 DMibStrStringFormatterImplementInt(int160);
 DMibStrStringFormatterImplementInt(uint256);
 DMibStrStringFormatterImplementInt(int256);
+DMibStrStringFormatterImplementInt(uint320);
+DMibStrStringFormatterImplementInt(int320);
 DMibStrStringFormatterImplementInt(uint512);
 DMibStrStringFormatterImplementInt(int512);
 DMibStrStringFormatterImplementInt(uint1024);
