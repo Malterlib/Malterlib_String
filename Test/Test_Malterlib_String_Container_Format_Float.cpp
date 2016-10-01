@@ -36,21 +36,8 @@ namespace
 
 		void f_DoTests()
 		{
-			//DMibDTrace("{} != {}", sizeof(NMib::NTraits::CFalseBySize) << sizeof(NMib::NTraits::CTrueBySize));
-			int Test = fg_TestValue(1);
-			int Test2 = TCTest<int>::ETest;
-			Test = 2;
-			Test2 = 3;
-//			NMib::NStr::CStr::CFormat::fs_GetFormatClassifier(fp32(0));
-
-/*			decltype(Test * Test2) Test3 = 0;
-			Test3;*/
-
 			DMibTestSuite("General")
 			{
-//				CStr Formatted = fg_Format("{fd1000}", 1.0 / 3.0);
-				CStr Formatted = fg_Format("{}", fp64::fs_NegSmallestDenormal());
-				DMibConOut("{}\n", Formatted);
 				DMibTest(DMibExpr(1) == DMibExpr(1)) (ETest_FailAndStop);
 			};
 		}
