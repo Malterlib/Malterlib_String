@@ -187,7 +187,7 @@ namespace NMib
 						}
 						else if ((*pParseStr) == '+')
 						{							
-							ExponentSign = -t_CReturn::fs_1();
+							ExponentSign = t_CReturn::fs_1();
 						}
 						else if (fg_CharIsWhiteSpace((*pParseStr)))
 						{
