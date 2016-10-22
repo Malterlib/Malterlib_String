@@ -1301,7 +1301,11 @@ namespace
 #endif
 						Alloc.f_Add(MalterlibOptTime);
 						Alloc.f_Add(MalterlibTime);
+#ifdef DMalterlibEnableThirdPartyComparisonTests
 						DMibTest(DMibExpr(Alloc)) (ETest_ExpectFail); // We need a CStr that has storage interally when possible
+#else
+						DMibTest(DMibExpr(Alloc));
+#endif
 					}
 					{
 						const static mint nTests = nTestsPropagate;
