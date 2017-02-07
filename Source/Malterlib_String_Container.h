@@ -2071,7 +2071,7 @@ EndArgSearch:
 				TCStr *mp_pThis;
 			};
 
-			inline_small TCStr()
+			inline_small TCStr() noexcept
 			{
 				CSuper::f_Construct();
 			}
