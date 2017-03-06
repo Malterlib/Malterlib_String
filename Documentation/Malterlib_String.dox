@@ -7,9 +7,12 @@
 
 /**
 
+\page p_Malterlib Modules
+- \subpage p_Malterlib_String
+ 
 \page p_Malterlib_String String
 
-\subpage p_Malterlib_String_Formatting
+- \subpage p_Malterlib_String_Formatting
 
 */
 
