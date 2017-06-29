@@ -306,9 +306,7 @@ namespace NMib
 		extern CWStr g_DebugOutputTemp16;
 		extern CStr g_DebugOutputTemp8;
 #endif
-
 	}
-
 }
 
 
