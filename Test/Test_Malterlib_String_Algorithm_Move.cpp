@@ -20,12 +20,12 @@ namespace
 		return str_utf8("Char𠀀Char𠀀Char");
 	}
 	template <>
-	ch16 const *fg_GetToMove<ch16>()
+	[[maybe_unused]] ch16 const *fg_GetToMove<ch16>()
 	{
 		return str_utf16("Char𠀀Char𠀀Char");
 	}
 	template <>
-	ch32 const *fg_GetToMove<ch32>()
+	[[maybe_unused]] ch32 const *fg_GetToMove<ch32>()
 	{
 		return str_utf32("Char𠀀Char𠀀Char");
 	}

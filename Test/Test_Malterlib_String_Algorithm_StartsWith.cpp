@@ -55,7 +55,7 @@ namespace
 			DMibTestCategory(_Type)
 			{
 				auto ToCompare = fg_GetToCompare<tf_CChar>(0);
-				auto ToCompare0 = fg_GetToCompare<tf_CChar>(1);
+				[[maybe_unused]] auto ToCompare0 = fg_GetToCompare<tf_CChar>(1);
 				auto ToCompare1 = fg_GetToCompare<tf_CChar>(2);
 				DMibTestCategory("Normal")
 				{
