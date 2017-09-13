@@ -902,6 +902,15 @@ EndArgSearch:
 				CImp::f_Construct(fg_Move(_Src));
 			}
 
+			template <typename ...tfp_CParams>
+			inline_small void f_Construct(tfp_CParams &&...p_Params)
+			{
+#ifdef DMibDebuggerHelpers
+				NSys::fg_Compiler_MakeActive(&ms_TypeDebugHelper);
+#endif
+				CImp::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
+			}
+			
 			inline_small void f_Assign(const TCStrAggregate &_Src)
 			{
 				CImp::f_Assign(_Src);
@@ -2098,7 +2107,13 @@ EndArgSearch:
 				Cleanup.f_Clear();
 			}
 
-			template <typename t_CStrDataType>
+			template <typename t_CStrDataType, TCEnableIfType<CSuper::mc_bInitConstStr, t_CStrDataType *> = nullptr>
+			inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
+			{
+				CSuper::f_Construct(_pStr, _Len);
+			}
+
+			template <typename t_CStrDataType, TCEnableIfType<!CSuper::mc_bInitConstStr, t_CStrDataType *> = nullptr>
 			inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
 			{
 				CSuper::f_Construct();
@@ -2107,6 +2122,12 @@ EndArgSearch:
 				Cleanup.f_Clear();
 			}
 
+			template <typename t_CStrDataType, typename ...tfp_CParams, TCEnableIfType<true, decltype(fg_GetType<CSuper>().f_Construct(fg_GetType<tfp_CParams>()...))> * = nullptr>
+			inline_large TCStr(tfp_CParams &&...p_Params)
+			{
+				CSuper::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
+			}
+			
 			inline_small TCStr(CSuper const &_Str)
 			{
 				CAutoDestroy Cleanup{this};
@@ -4235,7 +4256,9 @@ EndArgSearch:
 		template <typename t_CTCStrTraits0, typename t_CTCStrTraits1> 
 		bint operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
 		{
-			return fg_StrCmp(_Str0, _Str1) == 0;
+			if (_Str0.f_GetLen() != _Str1.f_GetLen())
+				return false;
+			return fg_StrCmp(_Str0, _Str1, _Str0.f_GetLen()) == 0;
 		}
 
 		template <typename t_CTCStrTraits0, typename t_CData> 

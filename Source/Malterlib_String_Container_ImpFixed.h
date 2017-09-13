@@ -15,6 +15,8 @@ namespace NMib
 		class TCStrImp_Fixed
 		{
 		public:
+			constexpr const static bool mc_bInitConstStr = false;
+			
 #ifndef DMibNoAggregateConstexpr
 			constexpr TCStrImp_Fixed(EAggregateInitialization _Init)
 				: m_Len{0}
@@ -138,6 +140,8 @@ namespace NMib
 		class TCStrImp_Ptr
 		{
 		public:
+			constexpr const static bool mc_bInitConstStr = true;
+
 			typedef typename t_CStrTraits::CChar CChar;
 
 			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
@@ -166,6 +170,16 @@ namespace NMib
 				m_pData = _Str.m_pData;
 				m_MaxLen = 0;
 				m_Len = _Str.m_Len;
+			}
+
+			inline_small void f_Construct(CChar *_pString, mint _Len)
+			{
+				f_SetPtr(_pString, _Len);
+			}
+
+			inline_small void f_Construct(CChar const *_pString, mint _Len)
+			{
+				f_SetConstPtr(_pString, _Len);
 			}
 
 			inline_small void f_Assign(TCStrImp_Ptr &&_Str)

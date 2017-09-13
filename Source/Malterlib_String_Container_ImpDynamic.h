@@ -13,6 +13,8 @@ namespace NMib
 		class TCStrImp_Dynamic
 		{
 		public:
+			constexpr const static bool mc_bInitConstStr = false;
+			
 			typedef typename t_CStrTraits::CChar CChar;
 			typedef typename t_CStrTraits::CParams CImpParams;
 			typedef typename CImpParams::CAllocator CAllocator;
