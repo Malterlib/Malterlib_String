@@ -941,6 +941,11 @@ EndArgSearch:
 			{				
 				return CImp::f_GetStr();
 			}
+			
+			inline_small explicit operator bool () const
+			{
+				return !f_IsEmpty();
+			}
 
 			inline_small bint f_IsEmpty () const
 			{				
