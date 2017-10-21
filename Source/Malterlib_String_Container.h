@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -440,7 +440,7 @@ namespace NMib
 				return m_nFormats;
 			}
 
-			inline_medium TCFormat(const CChar *_pFormatStr)
+			explicit inline_medium TCFormat(const CChar *_pFormatStr)
 			{
 				m_pFormatStr = _pFormatStr;
 				m_pFormats = m_plFormats;;
@@ -449,7 +449,7 @@ namespace NMib
 			}
 
 			template <typename t_CTCStrTraits2>
-			inline_medium TCFormat(TCStrAggregate<t_CTCStrTraits2> const &_Format)
+			explicit inline_medium TCFormat(TCStrAggregate<t_CTCStrTraits2> const &_Format)
 			{
 				m_pFormatStr = _Format;
 				m_pFormats = m_plFormats;
