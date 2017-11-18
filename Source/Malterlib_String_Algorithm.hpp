@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -951,7 +951,7 @@ namespace NMib
 
 			while (*pStr1)
 			{
-				if (t_bCheckLen)
+				if constexpr (t_bCheckLen)
 				{
 					if (pStr1 >= pStr1End)
 						return true;
@@ -992,7 +992,7 @@ namespace NMib
 				{
 					ch32 Data1;
 					ch32 Data2;	
-					if (t_bNoCase)
+					if constexpr (t_bNoCase)
 					{
 						Data1 = fg_CharLowerCase(*Str1Current);
 						Data2 = fg_CharLowerCase(*Str2Current);
@@ -1029,7 +1029,7 @@ namespace NMib
 
 			while (*pStr1)
 			{
-				if (t_bCheckLen)
+				if constexpr (t_bCheckLen)
 				{
 					if (pStr1 >= pStr1End)
 						return -1;
@@ -1041,7 +1041,7 @@ namespace NMib
 				{
 					CData1 Data1;
 					CData2 Data2;
-					if (t_bNoCase)
+					if constexpr (t_bNoCase)
 					{
 						Data1 = fg_CharLowerCase(*pStr1Current);
 						Data2 = fg_CharLowerCase(*pStr2Current);
@@ -1057,7 +1057,7 @@ namespace NMib
 					++pStr2Current;
 					if (!(*pStr2Current))
 						return pStr1 - pStr1Start;
-					if (t_bCheckLen)
+					if constexpr (t_bCheckLen)
 					{
 						if (pStr1Current >= pStr1End)
 							return -1;
@@ -1116,7 +1116,7 @@ namespace NMib
 			}
 			--pStr2End;
 
-			if (t_bCheckLen)
+			if constexpr (t_bCheckLen)
 			{
 				mint Len = 0;
 				// Find end
@@ -1152,7 +1152,7 @@ namespace NMib
 				{
 					CData1 Data1;
 					CData2 Data2;
-					if (t_bNoCase)
+					if constexpr (t_bNoCase)
 					{
 						Data1 = fg_CharLowerCase(*pStr1Current);
 						Data2 = fg_CharLowerCase(*pStr2Current);
@@ -1290,12 +1290,12 @@ namespace NMib
 
 			while (*pStr1 && *pStr2)
 			{
-				if (t_bCheckLen)
+				if constexpr (t_bCheckLen)
 				{
 					if (pStr1 >= pStr1End)
 						break;
 				}
-				if (t_bCheckLen2)
+				if constexpr (t_bCheckLen2)
 				{
 					if (pStr2 >= pStr2End)
 						break;
@@ -1303,7 +1303,7 @@ namespace NMib
 
 				CData1 Data1;
 				CData2 Data2;
-				if (t_bNoCase)
+				if constexpr (t_bNoCase)
 				{
 					Data1 = fg_CharLowerCase(*pStr1);
 					Data2 = fg_CharLowerCase(*pStr2);
@@ -1322,7 +1322,7 @@ namespace NMib
 
 			}
 
-			if (t_bCheckLen2)
+			if constexpr (t_bCheckLen2)
 			{
 				if (pStr2 >= pStr2End)
 					return true;
@@ -1364,6 +1364,95 @@ namespace NMib
 			inline_large bint fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 		{
 			return fg_StrStartsWith<true, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
+		}
+
+		/***************************************************************************************************\
+        |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
+        | EndsWith																							|
+        |___________________________________________________________________________________________________|
+        \***************************************************************************************************/
+
+		template <bint t_bNoCase, bint t_bCheckLen, bint t_bCheckLen2, typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+		{
+			typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+			typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+			const CData1 *pStr1Start = (const CData1 *)_pStr1;
+
+			const CData1 *pStr1;
+			if constexpr (t_bCheckLen)
+				pStr1 = pStr1Start + fg_StrLen(pStr1Start, _Len) - 1;
+			else
+				pStr1 = pStr1Start + fg_StrLen(pStr1Start) - 1;
+
+
+			const CData2 *pStr2Start = (const CData2 *)_pStr2;
+
+			const CData2 *pStr2;
+			if constexpr (t_bCheckLen2)
+				pStr2 = pStr2Start + fg_StrLen(pStr2Start, _Len2) - 1;
+			else
+				pStr2 = pStr2Start + fg_StrLen(pStr2Start) - 1;
+
+			while (pStr1 >= pStr1Start && pStr2 >= pStr2Start)
+			{
+				CData1 Data1;
+				CData2 Data2;
+				if constexpr (t_bNoCase)
+				{
+					Data1 = fg_CharLowerCase(*pStr1);
+					Data2 = fg_CharLowerCase(*pStr2);
+				}
+				else
+				{
+					Data1 = *pStr1;
+					Data2 = *pStr2;
+				}
+
+				if (Data1 != Data2)
+					return false;
+
+				--pStr1;
+				--pStr2;
+			}
+
+			return pStr2 < pStr2Start;
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+		{
+			return fg_StrEndsWith<false, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+		{
+			return fg_StrEndsWith<true, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+		{
+			return fg_StrEndsWith<false, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+		{
+			return fg_StrEndsWith<false, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+		{
+			return fg_StrEndsWith<true, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
+		}
+
+		template <typename t_CData1, typename t_CData2>
+			inline_large bint fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+		{
+			return fg_StrEndsWith<true, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
 		}
 
 		/***************************************************************************************************\

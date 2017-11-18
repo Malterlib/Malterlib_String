@@ -509,7 +509,8 @@ namespace NMib
 			{
 				m_pFormatStr = _pFormatStr;
 			}
-			TCStr<t_CTCStrTraits> f_GetStr();
+			TCStr<t_CTCStrTraits> f_GetStr() const;
+			TCStr<t_CTCStrTraits> operator ^ (mint _nCopies) const;
 
 			template <typename t_CType>
 			inline_small TCFormat &operator << (t_CType const &_Type)
@@ -1806,7 +1807,7 @@ EndArgSearch:
 			{
 				return fg_StrStartsWithNoCase(*this, _pStr2);
 			}
-			
+
 			template <typename t_CTCStrTraits2>
 				inline_small aint f_StartsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 			{
@@ -1817,6 +1818,31 @@ EndArgSearch:
 				inline_small aint f_StartsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 			{
 				return fg_StrStartsWithNoCase(*this, _Str1);
+			}
+
+
+			template <typename t_CData2>
+				inline_small aint f_EndsWith(const t_CData2 *_pStr2) const
+			{
+				return fg_StrEndsWith(*this, _pStr2);
+			}
+
+			template <typename t_CData2>
+				inline_small aint f_EndsWithNoCase(const t_CData2 *_pStr2) const
+			{
+				return fg_StrEndsWithNoCase(*this, _pStr2);
+			}
+
+			template <typename t_CTCStrTraits2>
+				inline_small aint f_EndsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			{
+				return fg_StrEndsWith(*this, _Str1);
+			}
+
+			template <typename t_CTCStrTraits2>
+				inline_small aint f_EndsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			{
+				return fg_StrEndsWithNoCase(*this, _Str1);
 			}
 
 			/***************************************************************************************************\
@@ -2035,7 +2061,20 @@ EndArgSearch:
 				*this = _Registry.f_GetThisValue();
 				return true;
 			}
-			
+
+			/***************************************************************************************************\
+			|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+			| Split/Join
+			|____________________________________________________________________________________________________
+			\***************************************************************************************************/
+
+			template <typename tf_CStrSeparator>
+			NContainer::TCVector<TCStr<t_CTCStrTraits>> f_Split(tf_CStrSeparator const &_Separator) const;
+
+			NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitLine() const;
+
+			template <typename tf_CStr, typename tf_CStrSeparator>
+			static TCStr<t_CTCStrTraits> fs_Join(NContainer::TCVector<tf_CStr> const &_Strings, tf_CStrSeparator const &_Separator = "");
 
 			/***************************************************************************************************\
 			|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
@@ -2270,7 +2309,21 @@ EndArgSearch:
 				Temp.f_AddStr(_pToAdd);
 				return Temp;
 			}
-				
+
+			TCStr operator ^ (mint _nCopies) const
+			{
+				if (!_nCopies)
+					return {};
+
+				TCStr Temp = *this;
+				--_nCopies;
+
+				for (; _nCopies; --_nCopies)
+					Temp += *this;
+
+				return Temp;
+			}
+
 			template <typename t_CType>
 			inline static typename TCEnableIf<!NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStr<t_CTCStrTraits>>::CType fs_ToStr(t_CType const& _Format)
 			{
@@ -2710,13 +2763,27 @@ EndArgSearch:
 		template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatStr[] = {'{', '}', 0};
 
 		template <typename t_CTCStrTraits>
-		TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::f_GetStr()
+		TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::f_GetStr() const
 		{
 			TCStr<t_CTCStrTraits> Temp;
 			f_FormatToStr(Temp);
 			return Temp;
 		}
 
+		template <typename t_CTCStrTraits>
+		TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::operator ^ (mint _nCopies) const
+		{
+			if (!_nCopies)
+				return {};
+
+			TCStr<t_CTCStrTraits> Temp = *this;
+			--_nCopies;
+
+			for (; _nCopies; --_nCopies)
+				Temp += *this;
+
+			return Temp;
+		}
 
 		/************************************************************************************************\
 		||||
@@ -3577,6 +3644,7 @@ EndArgSearch:
 			return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
 		}
 
+
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small aint fg_StrStartsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 		{
@@ -3594,6 +3662,7 @@ EndArgSearch:
 		{
 			return fg_StrStartsWith(_pStr1, _Str2.f_GetStr());
 		}
+
 		template <typename t_CTCStrTraits, typename t_CData2>
 			inline_small aint fg_StrStartsWithNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
 		{
@@ -3606,12 +3675,51 @@ EndArgSearch:
 			static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 			return fg_StrStartsWith(_Str1.f_GetStr(), _Str2.f_GetStr());
 		}
-		
+
 		template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
 			inline_small aint fg_StrStartsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
 		{
 			static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 			return fg_StrStartsWithNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
+		}
+
+
+		template <typename t_CTCStrTraits, typename t_CData2>
+			inline_small aint fg_StrEndsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		{
+			return fg_StrEndsWith(_Str1.f_GetStr(), _pStr2);
+		}
+
+		template <typename t_CTCStrTraits, typename t_CData2>
+			inline_small aint fg_StrEndsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		{
+			return fg_StrEndsWithNoCase(_Str1.f_GetStr(), _pStr2);
+		}
+
+		template <typename t_CTCStrTraits, typename t_CData2>
+			inline_small aint fg_StrEndsWith(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		{
+			return fg_StrEndsWith(_pStr1, _Str2.f_GetStr());
+		}
+
+		template <typename t_CTCStrTraits, typename t_CData2>
+			inline_small aint fg_StrEndsWithNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		{
+			return fg_StrEndsWithNoCase(_pStr1, _Str2.f_GetStr());
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
+			inline_small aint fg_StrEndsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		{
+			static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+			return fg_StrEndsWith(_Str1.f_GetStr(), _Str2.f_GetStr());
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
+			inline_small aint fg_StrEndsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		{
+			static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+			return fg_StrEndsWithNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
 		}
 
 		/************************************************************************************************\

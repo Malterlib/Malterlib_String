@@ -21,6 +21,73 @@ namespace NMib
 			return *this;
 		}
 
+		template <typename t_CTCStrTraits>
+		template <typename tf_CStrSeparator>
+		NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_Split(tf_CStrSeparator const &_Separator) const
+		{
+			NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
+
+			auto const *pParse = this->f_GetStr();
+			auto const *pParseEnd = pParse + this->f_GetLen();
+			mint SeparatorLen = fg_StrLen(_Separator);
+
+			while (pParse < pParseEnd)
+			{
+				auto iSplitPoint = fg_StrFind(pParse, _Separator, pParseEnd - pParse);
+				if (iSplitPoint < 0)
+				{
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+					break;
+				}
+				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+				pParse += iSplitPoint + SeparatorLen;
+			}
+
+			return Result;
+		}
+
+		template <typename t_CTCStrTraits>
+		NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitLine() const
+		{
+			NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
+
+			auto const *pParse = this->f_GetStr();
+			auto const *pParseEnd = pParse + this->f_GetLen();
+
+			while (pParse < pParseEnd)
+			{
+				auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
+				if (iSplitPoint < 0)
+				{
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+					break;
+				}
+				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+
+				pParse += iSplitPoint;
+				if (*pParse == '\r')
+					++pParse;
+				if (*pParse == '\n')
+					++pParse;
+			}
+
+			return Result;
+		}
+
+		template <typename t_CTCStrTraits>
+		template <typename tf_CStr, typename tf_CStrSeparator>
+		TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_Join(NContainer::TCVector<tf_CStr> const &_Strings, tf_CStrSeparator const &_Separator)
+		{
+			TCStr<t_CTCStrTraits> Return;
+			for (auto &Str : _Strings)
+			{
+				if (!Return.f_IsEmpty())
+					Return += _Separator;
+				Return += Str;
+			}
+			return Return;
+		}
+
 		template <typename t_TCStrTraits> 
 		template <int t_CharSize, typename tf_CStrIterator>
 		typename TCEnableIf<t_CharSize == 1, void>::CType TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
