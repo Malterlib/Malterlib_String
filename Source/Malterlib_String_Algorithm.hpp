@@ -1204,7 +1204,7 @@ namespace NMib
 		}
 
 		template <typename tf_CData1, typename tf_CData2>
-		EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern)
+		EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern)
 		{
 			const tf_CData1 *pParse = _pStr;
 			const tf_CData2 *pPattern = _pPattern;
@@ -1241,12 +1241,22 @@ namespace NMib
 			while (*pPattern == '*')
 				++pPattern;
 
-			if (*pParse == *pPattern)
+			_pStr = pParse;
+
+			if (*pParse == *pPattern && *pParse == 0)
 				return EMatchWildcardResult_WholeStringMatchedAndPatternExhausted;
-			if (!(*pParse))
+			if (*pParse == 0)
 				return EMatchWildcardResult_WholeStringMatched;
+			if (*pPattern == 0)
+				return EMatchWildcardResult_PatternExhausted;
 
 			return EMatchWildcardResult_NotMatched;
+		}
+
+		template <typename tf_CData1, typename tf_CData2>
+		EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern)
+		{
+			return fg_StrMatchWildcardParse(_pStr, _pPattern);
 		}
 
 		template <EMatchWildcardResult t_Result = EMatchWildcardResult_WholeStringMatchedAndPatternExhausted, typename tf_CStr, typename tf_CContainer>

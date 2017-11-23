@@ -298,11 +298,15 @@ namespace NMib
 		enum EMatchWildcardResult
 		{
 			EMatchWildcardResult_NotMatched = 0
-			, EMatchWildcardResult_WholeStringMatched = 1
-			, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted = 2
+			, EMatchWildcardResult_PatternExhausted =  DMibBit(0)
+			, EMatchWildcardResult_WholeStringMatched = DMibBit(1)
+			, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted = EMatchWildcardResult_WholeStringMatched | EMatchWildcardResult_PatternExhausted
 		};
 		template <typename tf_CData1, typename tf_CData2>
 		EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern);
+
+		template <typename tf_CData1, typename tf_CData2>
+		EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern);
 
 		/***************************************************************************************************\
         |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
