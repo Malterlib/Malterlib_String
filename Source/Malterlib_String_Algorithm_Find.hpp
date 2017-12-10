@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -30,9 +30,6 @@ namespace NMib
 					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
 					, NIterator::TCRange<tf_CFrontToFind, tf_CBackToFind> const &_rToFind
 				) 
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType
-#endif
 			{
 				auto rCharacters = fg_GetStringRange<tf_CTags>(_rCharacters);
 				auto rLastFoundEnd = rCharacters;
@@ -118,9 +115,6 @@ namespace NMib
 					, tf_CUnicodeTag // Same
 					, tf_CUnicodeTag
 				)
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType
-#endif
 			{
 				return fg_Private_StrFind_Algorithm<tf_CTags>(_rCharacters, _rToFind);
 			}
@@ -142,9 +136,6 @@ namespace NMib
 					, tf_CUnicodeTag // Different, need to use unicode
 					, tf_CUnicodeTagToFind
 				)
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType
-#endif
 			{
 				using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType;
 				auto rUTFCharacters = fg_RangeAdaptor_UTFDecode(_rCharacters);
@@ -161,9 +152,6 @@ namespace NMib
 		
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToFind, typename tf_CBackToFind>
 		auto fg_StrFind(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontToFind, tf_CBackToFind> const &_rToFind)
-#if !DMib_Cxx14
-			-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, TCTags<tfp_CTags...>>::CType
-#endif
 		{
 			return NPrivate::fg_Private_StrFind<TCTags<tfp_CTags...>>
 				(
@@ -184,19 +172,9 @@ namespace NMib
 			<
 				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
 				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToFind>::CType>::mc_Value
-			>::CType * DMib_EnableIfDefault
+			>::CType *
 		>
 		auto fg_StrFind(tf_CContainer &&_Container, tf_CContainerToFind &&_ContainerToFind)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NStr2::fg_StrFind<tfp_CTags...>
-				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
-					, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_ContainerToFind)
-				)
-			)
-#endif
 		{
 			return NStr2::fg_StrFind<tfp_CTags...>
 				(

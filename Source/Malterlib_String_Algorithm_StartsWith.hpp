@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -28,9 +28,6 @@ namespace NMib
 					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
 					, NIterator::TCRange<tf_CFrontStartsWith, tf_CBackStartsWith> const &_rStartsWith
 				) 
-#if !DMib_Cxx14
-				-> NIterator::TCRangeReturn<bool, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags, NIterator::CReturn_ResBack_Back>::CType>
-#endif
 			{
 				auto rCharacters = fg_GetStringRange<tf_CTags>(_rCharacters);
 				auto rCharactersOriginal = rCharacters;
@@ -71,9 +68,6 @@ namespace NMib
 					, tf_CUnicodeTag // Same
 					, tf_CUnicodeTag
 				)
-#if !DMib_Cxx14
-				-> NIterator::TCRangeReturn<bool, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags, NIterator::CReturn_ResBack_Back>::CType>
-#endif
 			{
 				return fg_Private_StrStartsWith_Algorithm<tf_CTags>(_rCharacters, _rStartsWith);
 			}
@@ -95,9 +89,6 @@ namespace NMib
 					, tf_CUnicodeTag // Different, need to use unicode
 					, tf_CUnicodeTagStartsWith
 				)
-#if !DMib_Cxx14
-				-> NIterator::TCRangeReturn<bool, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags, NIterator::CReturn_ResBack_Back>::CType>
-#endif
 			{
 				using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CFront, tf_CBack, tf_CFront, tf_CTags>::CType;
 				auto rUTFCharacters = fg_RangeAdaptor_UTFDecode(_rCharacters);
@@ -118,18 +109,6 @@ namespace NMib
 		
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontStartsWith, typename tf_CBackStartsWith>
 		auto fg_StrStartsWith(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontStartsWith, tf_CBackStartsWith> const &_rStartsWith)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NPrivate::fg_Private_StrStartsWith<TCTags<tfp_CTags...>>
-				(
-					_rCharacters
-					, _rStartsWith
-					, typename TCGetTag<typename tf_CFront::CTags, NStr::CIteratorStringEncoding_None>::CType()
-					, typename TCGetTag<typename tf_CFrontStartsWith::CTags, NStr::CIteratorStringEncoding_None>::CType()
-				)		
-			)
-#endif
 		{
 			return NPrivate::fg_Private_StrStartsWith<TCTags<tfp_CTags...>>
 				(
@@ -150,19 +129,9 @@ namespace NMib
 			<
 				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
 				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerStartsWith>::CType>::mc_Value
-			>::CType * DMib_EnableIfDefault
+			>::CType *
 		>
 		auto fg_StrStartsWith(tf_CContainer &&_Container, tf_CContainerStartsWith &&_ContainerStartsWith)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NStr2::fg_StrStartsWith<tfp_CTags...>
-				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
-					, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_ContainerStartsWith)
-				)		
-			)
-#endif
 		{
 			return NStr2::fg_StrStartsWith<tfp_CTags...>
 				(

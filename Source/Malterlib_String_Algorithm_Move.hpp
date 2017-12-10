@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -33,9 +33,6 @@ namespace NMib
 					NIterator::TCRange<tf_CFront, tf_CBack> const &_rDestination
 					, NIterator::TCRange<tf_CFrontToMove, tf_CBackToMove> const &_rSource
 				) 
-#if !DMib_Cxx14
-				-> NIterator::TCRange<tf_CFront, tf_CBack>
-#endif
 			{
 				auto rCharacters = _rDestination;
 				auto rToMove = _rSource;
@@ -63,9 +60,6 @@ namespace NMib
 					, NIterator::TCRange<tf_CFrontToMove, tf_CBackToMove> const &_rSource
 					, NIterator::CIteratorTraversal_Backward
 				)
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CBack, tf_CTags>::CType
-#endif
 			{
 				if (_rSource.f_Front() < _rDestination.f_Front())
 				{
@@ -86,9 +80,6 @@ namespace NMib
 		
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToMove, typename tf_CBackToMove>
 		auto fg_StrMove(NIterator::TCRange<tf_CFront, tf_CBack> const &_rDestination, NIterator::TCRange<tf_CFrontToMove, tf_CBackToMove> const &_rSource)
-#if !DMib_Cxx14
-			-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CBack, TCTags<tfp_CTags...>>::CType
-#endif
 		{
 			return NPrivate::fg_Private_StrMove<TCTags<tfp_CTags...>>
 				(
@@ -108,19 +99,9 @@ namespace NMib
 			<
 				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
 				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToMove>::CType>::mc_Value
-			>::CType * DMib_EnableIfDefault
+			>::CType *
 		>
 		auto fg_StrMove(tf_CContainer &&_Destination, tf_CContainerToMove &&_Source)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NStr2::fg_StrMove<tfp_CTags...>
-				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Writable>>>(_Destination)
-					, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Source)
-				)
-			)
-#endif
 		{
 			return NStr2::fg_StrMove<tfp_CTags...>
 				(
@@ -129,6 +110,5 @@ namespace NMib
 				)
 			;
 		}
-
 	}
 }

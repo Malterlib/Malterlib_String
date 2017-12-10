@@ -26,7 +26,7 @@ namespace NMib
 				mc_bNeedDelete = false
 			};
 			
-			static_assert(t_CStrTraitsIn::CStrTraits::mc_Type == t_CParser::CStrTraits::mc_Type, "");
+			static_assert(t_CStrTraitsIn::CStrTraits::mc_Type == t_CParser::CStrTraits::mc_Type);
 
 			TCStrAggregate<t_CStrTraitsIn> *m_pTStr;
 

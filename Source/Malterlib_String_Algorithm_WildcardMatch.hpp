@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -32,13 +32,6 @@ namespace NMib
 					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
 					, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
 				) 
-#if !DMib_Cxx14
-				-> NIterator::TCRangeReturn
-				<
-					EWildcardMatch
-					, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags, NIterator::CReturn_ResBack_Back>::CType
-				>
-#endif
 			{
 				auto rParse = _rCharacters;
 				auto rPattern = _rToMatch;
@@ -113,13 +106,6 @@ namespace NMib
 					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
 					, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
 				)
-#if !DMib_Cxx14
-				-> NIterator::TCRangeReturn
-				<
-					EWildcardMatch
-					, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags, NIterator::CReturn_ResBack_Back>::CType
-				>
-#endif
 			{
 				using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CFront, tf_CBack, tf_CFront, tf_CTags>::CType;
 				// We always need to use unicode to handle ? correctly
@@ -141,13 +127,6 @@ namespace NMib
 		
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToMatch, typename tf_CBackToMatch>
 		auto fg_StrWildcardMatch(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch)
-#if !DMib_Cxx14
-			-> NIterator::TCRangeReturn
-			<
-				EWildcardMatch
-				, typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, TCTags<tfp_CTags...>, NIterator::CReturn_ResBack_Back>::CType
-			>
-#endif
 		{
 			return NPrivate::fg_Private_StrWildcardMatch<TCTags<tfp_CTags...>>
 				(
@@ -166,19 +145,9 @@ namespace NMib
 			<
 				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
 				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToMatch>::CType>::mc_Value
-			>::CType * DMib_EnableIfDefault
+			>::CType *
 		>
 		auto fg_StrWildcardMatch(tf_CContainer &&_Container, tf_CContainerToMatch &&_ContainerToMatch)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NStr2::fg_StrWildcardMatch<tfp_CTags...>
-				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
-					, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_ContainerToMatch)
-				)
-			)
-#endif
 		{
 			return NStr2::fg_StrWildcardMatch<tfp_CTags...>
 				(

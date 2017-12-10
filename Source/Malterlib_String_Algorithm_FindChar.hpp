@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -17,9 +17,6 @@ namespace NMib
 		{
 			template <typename tf_CTags, typename tf_CFront, typename tf_CBack, typename tf_CChar, typename tf_CUnicodeTag>
 			auto fg_Private_StrFindChar(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, tf_CChar _Character, tf_CUnicodeTag, tf_CUnicodeTag) // Same tags, no conversion
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType
-#endif
 			{
 				typename NTraits::TCUnsigned<tf_CChar>::CType Character = _Character;
 				auto rCharacters = fg_GetStringRange<tf_CTags>(_rCharacters);
@@ -79,9 +76,6 @@ namespace NMib
 					, tf_CUnicodeTag
 					, NMib::NStr::CIteratorStringEncoding_UTF32 // Need conversion to UTF32
 				)
-#if !DMib_Cxx14
-				-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType
-#endif
 			{
 				using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, tf_CTags>::CType;
 				auto rUTFCharacters = fg_RangeAdaptor_UTFDecode(_rCharacters);
@@ -110,9 +104,6 @@ namespace NMib
 		
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CChar>
 		auto fg_StrFindChar(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, tf_CChar _Character)
-#if !DMib_Cxx14
-			-> typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CBack, tf_CFront, tf_CFront, TCTags<tfp_CTags...>>::CType
-#endif
 		{
 			return NPrivate::fg_Private_StrFindChar<TCTags<tfp_CTags...>>
 				(
@@ -132,19 +123,9 @@ namespace NMib
 			, typename TCEnableIf
 			<
 				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			>::CType * DMib_EnableIfDefault
+			>::CType *
 		>
 		auto fg_StrFindChar(tf_CContainer &_Container, tf_CChar _Character)
-#if !DMib_Cxx14
-			-> decltype
-			(
-				NStr2::fg_StrFindChar<tfp_CTags...>
-				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
-					, _Character
-				)
-			)
-#endif
 		{
 			return NStr2::fg_StrFindChar<tfp_CTags...>
 				(

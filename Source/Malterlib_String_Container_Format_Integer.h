@@ -97,7 +97,7 @@ namespace NMib
 		class TCStrFormatType_Int_OptionsStatic_Radix : public t_CParent
 		{
 			typedef typename t_CParent::CIntType CIntType;
-			static_assert(t_Radix >= 2 && t_Radix <= 36, "");
+			static_assert(t_Radix >= 2 && t_Radix <= 36);
 			enum
 			{
 				ENumBits = sizeof(CIntType) * 8,

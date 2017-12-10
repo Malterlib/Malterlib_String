@@ -810,9 +810,9 @@ EndArgSearch:
 
 			static const CChar ms_FormatStr[];
 
-			static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF, "");
-			static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF, "");
-			static_assert(sizeof(CChar) < 4 || mc_Type == EStrType_Unicode, "");
+			static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
+			static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
+			static_assert(sizeof(CChar) < 4 || mc_Type == EStrType_Unicode);
 			
 		private:
 			enum
@@ -871,7 +871,7 @@ EndArgSearch:
 
 			CUnicodeIterator f_GetUnicodeIterator() const
 			{
-				static_assert(mc_Type != EStrType_Ansi, "");
+				static_assert(mc_Type != EStrType_Ansi);
 				return CUnicodeIterator(*this);
 			}
 

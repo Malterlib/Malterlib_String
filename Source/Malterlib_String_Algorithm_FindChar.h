@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -11,7 +11,6 @@ namespace NMib
 {
 	namespace NStr2
 	{
-#if DMib_Cxx14
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CChar>
 		auto fg_StrFindChar(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, tf_CChar _Character);
 		
@@ -26,7 +25,6 @@ namespace NMib
 			>::CType * = nullptr
 		>
 		auto fg_StrFindChar(tf_CContainer &_Container, tf_CChar _Character);
-#endif
 	}
 }
 

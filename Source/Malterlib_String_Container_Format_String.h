@@ -19,7 +19,7 @@ namespace NMib
 		class TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
-			static_assert(t_Type != EStrType_Ansi, "");
+			static_assert(t_Type != EStrType_Ansi);
 
 			typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
 

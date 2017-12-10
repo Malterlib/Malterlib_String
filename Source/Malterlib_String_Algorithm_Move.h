@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -11,7 +11,6 @@ namespace NMib
 {
 	namespace NStr2
 	{
-#if DMib_Cxx14
 		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToMove, typename tf_CBackToMove>
 		auto fg_StrMove(NIterator::TCRange<tf_CFront, tf_CBack> const &_rDestination, NIterator::TCRange<tf_CFrontToMove, tf_CBackToMove> const &_rSource);
 
@@ -27,7 +26,6 @@ namespace NMib
 			>::CType * = nullptr
 		>
 		auto fg_StrMove(tf_CContainer &&_Destination, tf_CContainerToMove &&_Source);
-#endif
 	}
 }
 

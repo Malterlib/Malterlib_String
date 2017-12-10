@@ -3125,7 +3125,7 @@ namespace NMib
 			if (_Str.f_IsEmpty())
 				return CUnicodeStr();
 
-			static_assert(tf_CStr::mc_Type == NStr::EStrType_UTF, "");
+			static_assert(tf_CStr::mc_Type == NStr::EStrType_UTF);
 
 			auto iUTF = _Str.f_GetUnicodeIterator();
 			CUnicodeStr Return;
