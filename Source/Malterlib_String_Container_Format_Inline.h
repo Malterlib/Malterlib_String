@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -16,9 +16,11 @@ namespace NMib
 
 			typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
 
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrFormatType_Inline();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrFormatType_Inline();
+				return sizeof(*this);
 			}
 
 			typedef typename t_CFormatter::CTStrTraits CTStrTraits;
@@ -116,7 +118,7 @@ namespace NMib
 				return CSuper::f_ParseOption(_Args, _Option);
 			}
 
-			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const
+			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 			{
 				CLocalOptions Options;
 
@@ -202,28 +204,28 @@ namespace NMib
 				_Value.f_Format(_String, Options);
 			}
 			
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				TCStr<CTStrTraits> Temp;
 				fp_FormatInto(Temp, m_ToFormat);
 				return CTStrTraits::CStrTraits::fs_StrToInt(Temp.f_GetStr(), (aint)0);
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				TCStr<CTStrTraits> Temp;
 				fp_FormatInto(Temp, m_ToFormat);
 				return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), (fp32)0);
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				TCStr<CTStrTraits> Temp;
 				fp_FormatInto(Temp, m_ToFormat);
 				return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), (fp64)0);
 			}
 
-			virtual void f_Visit(CVisitor &_Extractor) const
+			virtual void f_Visit(CVisitor &_Extractor) const override
 			{
 				TCStr<CTStrTraits> Temp;
 				fp_FormatInto(Temp, m_ToFormat);

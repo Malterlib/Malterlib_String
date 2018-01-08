@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -23,9 +23,11 @@ namespace NMib
 
 			typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
 
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrFormatType_String();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrFormatType_String();
+				return sizeof(*this);
 			}
 
 			typedef typename t_CFormatter::CTStrTraits CTStrTraits;
@@ -113,7 +115,7 @@ namespace NMib
 				return CSuper::f_ParseOption(_Args, _Option);
 			}
 
-			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const
+			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override
 			{
 				COptionsStr Options;
 
@@ -178,7 +180,7 @@ namespace NMib
 						if (!pTempStr)
 							return;
 						fAddStr(pTempStr);
-						CTStrTraits::CStrTraits::CAllocator::f_Free(pTempStr);
+						CTStrTraits::CStrTraits::CAllocator::f_Free(pTempStr, AllocLen);
 					}
 				}
 				else
@@ -204,22 +206,22 @@ namespace NMib
 				//t_Type;
 			}
 
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				return CTStrTraits::CStrTraits::fs_StrToInt(m_pStr, (aint)0);
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				return CTStrTraits::CStrTraits::fs_StrToFloatExact(m_pStr, fp32::fs_0());
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				return CTStrTraits::CStrTraits::fs_StrToFloatExact(m_pStr, fp64::fs_0());
 			}
 
-			virtual void f_Visit(CVisitor &_Extractor) const
+			virtual void f_Visit(CVisitor &_Extractor) const override
 			{
 				if (sizeof(t_CStrDataType) == sizeof(CChar))
 				{

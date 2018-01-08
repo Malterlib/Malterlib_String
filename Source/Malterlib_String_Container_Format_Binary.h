@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -16,9 +16,11 @@ namespace NMib
 
 			typedef typename TCChooseType<NTraits::TCIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>::mc_Value, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary>::CType CStrFormatTypeClassifier;
 
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrFormatType_Binary();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrFormatType_Binary();
+				return sizeof(*this);
 			}
 
 			typedef typename t_CFormatter::CTStrTraits CTStrTraits;
@@ -61,7 +63,7 @@ namespace NMib
 
 			}
 
-			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const
+			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 			{
 				COptionsStatic Static;
 				COptions Options(Static);
@@ -81,22 +83,22 @@ namespace NMib
 				fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 			}
 
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				return 0;
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				return 0.0f;
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				return 0.0;
 			}
 
-			virtual void f_Visit(CVisitor &_Extractor) const
+			virtual void f_Visit(CVisitor &_Extractor) const override
 			{
 				_Extractor();
 			}

@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -27,7 +27,7 @@ namespace NMib
 		class TICStrParseType
 		{
 		public:
-			virtual void f_Delete() = 0;
+			virtual mint f_Delete() = 0;
 
 			typedef typename t_CParser::CStrTraits CStrTraits;
 			typedef typename CStrTraits::CChar CChar;
@@ -474,13 +474,13 @@ namespace NMib
 					mint Flags = (mint)pParseList[i] & 0x3;
 					TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((mint)pParseList[i] & (~((mint)0x3)));
 
-					if (Flags & 2)
-						pParse->f_Delete();
-
 					if (Flags & 1)
 					{
-						CStrTraits::CAllocator::f_Free(pParse);
+						mint Size = pParse->f_Delete();
+						CStrTraits::CAllocator::f_Free(pParse, Size);
 					}
+					else if (Flags & 2)
+						pParse->f_Delete();
 				}
 			}
 

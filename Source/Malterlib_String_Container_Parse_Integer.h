@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -13,9 +13,11 @@ namespace NMib
 		class TCStrParseType_Int final : public TICStrParseType<t_CParser>
 		{
 		public:
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrParseType_Int();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrParseType_Int();
+				return sizeof(*this);
 			}
 
 			typedef typename t_CParser::CStrTraits CTStrTraits;
@@ -121,7 +123,7 @@ namespace NMib
 				return CSuper::f_ParseOption(_Option, _Options, _ArgData);
 			}
 
-			virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const
+			virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const override
 			{
 				COptionsInt Options;
 #if 1
@@ -144,17 +146,17 @@ namespace NMib
 				return true;
 			}
 
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				return fg_Convert<aint>(m_Value);
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				return (fp32)fg_Convert<int32>(m_Value);
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				return (fp64)fg_Convert<int64>(m_Value);
 			}

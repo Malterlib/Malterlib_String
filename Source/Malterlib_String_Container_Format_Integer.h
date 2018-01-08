@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -134,9 +134,11 @@ namespace NMib
 
 			typedef CStrFormatTypeClassifier_Integer CStrFormatTypeClassifier;
 
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrFormatType_Int();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrFormatType_Int();
+				return sizeof(*this);
 			}
 
 			typedef typename t_CFormatter::CTStrTraits CTStrTraits;
@@ -663,7 +665,7 @@ namespace NMib
 					CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pStrPlace + 1, pStrPlaceEnd - pStrPlace, bSubStrStart);
 			}
 
-			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const
+			virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 			{
 				COptionsInt Options(f_GetOptions());
 				CType Value = f_GetValue();
@@ -689,22 +691,22 @@ namespace NMib
 				fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
 			}
 
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				return fg_Convert<aint>(f_GetValue());
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				return (fp32)fg_Convert<int32>(f_GetValue());
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				return (fp64)fg_Convert<int64>(f_GetValue());
 			}
 
-			virtual void f_Visit(CVisitor &_Extractor) const
+			virtual void f_Visit(CVisitor &_Extractor) const override
 			{
 				if (NTraits::TCIsSigned<CType>::mc_Value)
 				{

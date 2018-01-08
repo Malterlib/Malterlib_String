@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -50,9 +50,11 @@ namespace NMib
 			{
 			}
 
-			virtual void f_Delete()
+			virtual mint f_Delete() override
 			{
-				this->~TCStrFormatType_Float();
+				if constexpr (mc_bNeedDelete)
+					this->~TCStrFormatType_Float();
+				return sizeof(*this);
 			}
 
 			
@@ -906,7 +908,7 @@ namespace NMib
 				}
 			}
 
-			virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const
+			virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 			{
 				COptionsFloat Options;
 
@@ -927,22 +929,22 @@ namespace NMib
 				fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 			}
 
-			virtual aint f_Get_aint() const
+			virtual aint f_Get_aint() const override
 			{
 				return fg_Convert<aint>(m_Value.f_ToInt());
 			}
 
-			virtual fp32 f_Get_fp32() const
+			virtual fp32 f_Get_fp32() const override
 			{
 				return fp32(m_Value);
 			}
 
-			virtual fp64 f_Get_fp64() const
+			virtual fp64 f_Get_fp64() const override
 			{
 				return fp64(m_Value);
 			}
 
-			virtual void f_Visit(CVisitor &_Extractor) const
+			virtual void f_Visit(CVisitor &_Extractor) const override
 			{
 				if (sizeof(m_Value) > sizeof(fp32))
 					_Extractor(fp64(m_Value));

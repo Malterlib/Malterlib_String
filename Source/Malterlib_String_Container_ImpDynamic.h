@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -42,6 +42,7 @@ namespace NMib
 				inline_small CData();
 				inline_small CChar *f_GetData() const;
 				inline_small aint f_GetLength();
+				inline_small mint f_GetMemorySize() const;
 				inline_small void f_SetLength(mint _MemoryLen);
 				inline_small void f_RefcountIncrease();
 				inline_small void f_RefcountDecrease();
@@ -268,18 +269,20 @@ namespace NMib
 						{
 							if (m_pData->m_RefCount == 1)
 							{
+								mint CurrentSize = m_pData->f_GetMemorySize();
+
 								if (_bDiscard)
 								{
 									mint Len = fp_CalcNewSize(_Length);
 									mint OldReserved = m_pData->m_bReserved;
-									m_pData = new(CAllocator::f_ReallocDebug(m_pData, Len, 0, DMibPFile, DMibPLine)) CData();
+									m_pData = new(CAllocator::f_Realloc(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded)) CData();
 									m_pData->f_SetLength(Len);
 									m_pData->m_bReserved = OldReserved;
 								}
 								else
 								{
 									mint Len = fp_CalcNewSize(_Length);
-									m_pData = (CData *)(CAllocator::f_ResizeDebug(m_pData, Len, 0, DMibPFile, DMibPLine));
+									m_pData = (CData *)(CAllocator::f_Resize(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded));
 									m_pData->f_SetLength(Len);
 								}
 								CurLen = f_GetLength();
@@ -288,7 +291,7 @@ namespace NMib
 							{
 								aint OldLen = CurLen;
 								mint NewLen = fp_CalcNewSize(_Length);
-								CData *pNew = new(CAllocator::f_AllocDebug(NewLen, DMibPFile, DMibPLine)) CData();
+								CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 								pNew->m_StrLen = m_pData->m_StrLen;
 								pNew->m_bReserved = m_pData->m_bReserved;
 								pNew->f_SetLength(NewLen);
@@ -310,7 +313,7 @@ namespace NMib
 						else
 						{
 							mint NewLen = fp_CalcNewSize(_Length);
-							m_pData = new(CAllocator::f_AllocDebug(NewLen, DMibPFile, DMibPLine)) CData();
+							m_pData = new(CAllocator::f_Alloc(NewLen)) CData();
 							DMibFastCheck(m_pData);
 							m_pData->f_SetLength(NewLen);
 							CurLen = f_GetLength();
@@ -330,7 +333,7 @@ namespace NMib
 				else if (m_pData && m_pData->m_RefCount > 1)
 				{
 					mint NewLen = fp_CalcNewSize(_Length);
-					CData *pNew = new(CAllocator::f_AllocDebug(NewLen, DMibPFile, DMibPLine)) CData();
+					CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 					pNew->m_StrLen = m_pData->m_StrLen;
 					pNew->m_bReserved = m_pData->m_bReserved;
 					pNew->f_SetLength(NewLen);
@@ -394,12 +397,12 @@ namespace NMib
 				DMibSafeCheck(m_pData, "Must be allocated here or something is wrong");
 				if (m_pData->m_RefCount == 1)
 				{
-					m_pData = (CData *)(CAllocator::f_ResizeDebug(m_pData, _NeededSize, 0, DMibPFile, DMibPLine));
+					m_pData = (CData *)(CAllocator::f_Resize(m_pData, _NeededSize, m_pData->f_GetMemorySize()));
 					m_pData->f_SetLength(_NeededSize);
 				}
 				else
 				{
-					CData *pNewData = new(CAllocator::f_AllocDebug(_NeededSize, DMibPFile, DMibPLine)) CData();
+					CData *pNewData = new(CAllocator::f_Alloc(_NeededSize)) CData();
 					pNewData->f_SetLength(_NeededSize);
 					NMem::fg_MemCopy(pNewData->f_GetData(), m_pData->f_GetData(), _Length * sizeof(CChar));
 					m_pData->f_RefcountDecrease();

@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -36,6 +36,12 @@ namespace NMib
 			m_Len = (_MemoryLen - sizeof(*this)) / sizeof(CChar);
 		}
 
+		template <typename t_CStrTraits>
+		inline_small mint TCStrImp_Dynamic<t_CStrTraits>::CData::f_GetMemorySize() const
+		{
+			return m_Len * sizeof(CChar) + sizeof(*this);
+		}
+
 		template <typename t_CStrTraits> 
 		inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefcountIncrease()
 		{
@@ -48,7 +54,7 @@ namespace NMib
 			if (m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_Release) == 1)
 			{
 				NAtomic::fg_MemoryFence(NAtomic::EMemoryOrder_Acquire);
-				CAllocator::f_Free(this);
+				CAllocator::f_Free(this, f_GetMemorySize());
 			}
 		}
 	}

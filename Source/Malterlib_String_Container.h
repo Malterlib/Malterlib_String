@@ -471,13 +471,13 @@ namespace NMib
 					mint Flags = (mint)pFormatList[i] & 0x3;
 					TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
 
-					if (Flags & 2)
-						pFormat->f_Delete();
-
 					if (Flags & 1)
 					{
-						t_CTCStrTraits::CStrTraits::CAllocator::f_Free(pFormat);
+						mint Size = pFormat->f_Delete();
+						t_CTCStrTraits::CStrTraits::CAllocator::f_Free(pFormat, Size);
 					}
+					else if (Flags & 2)
+						pFormat->f_Delete();
 				}
 			}
 
