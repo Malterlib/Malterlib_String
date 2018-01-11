@@ -64,8 +64,8 @@ Property
 			CompileDialect C
 			MalterlibEnableThirdPartyComparisonTests true
 		}
-		SearchPath "@(Builtin.BasePath)/SDK/STLSoft/include;@(Compile.SearchPath)"
-		SearchPath "@(Builtin.BasePath)/SDK/FastFormat/include;@(Compile.SearchPath)"
+		SearchPath "@(Builtin.BasePathAbsolute)/SDK/STLSoft/include;@(Compile.SearchPath)"
+		SearchPath "@(Builtin.BasePathAbsolute)/SDK/FastFormat/include;@(Compile.SearchPath)"
 	}
 	Compile
 	{
