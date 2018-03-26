@@ -1085,9 +1085,8 @@ EndArgSearch:
 				}
 			}
 			
-			
 			template <typename t_CStrTraitsF>
-			typename TCEnableIf<t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi, void>::CType f_AddStr(const TCStrAggregate<t_CStrTraitsF> &_From)
+			typename TCEnableIf<t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && t_CStrTraitsF::CStrTraits::mc_Type != mc_Type, void>::CType f_AddStr(const TCStrAggregate<t_CStrTraitsF> &_From)
 			{
 				if (*_From.f_GetStr() != 0)
 				{
@@ -1095,6 +1094,12 @@ EndArgSearch:
 					f_AddFromUnicodeIterator(Length, _From.f_GetUnicodeIterator());
 					CImp::f_SetStrLen(Length);
 				}
+			}
+
+			template <typename t_CStrTraitsF>
+			typename TCEnableIf<t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && t_CStrTraitsF::CStrTraits::mc_Type == mc_Type, void>::CType f_AddStr(const TCStrAggregate<t_CStrTraitsF> &_From)
+			{
+				f_AddStr(_From.f_GetStr(), _From.f_GetLen());
 			}
 
 			template <typename t_CStrTraitsF>
