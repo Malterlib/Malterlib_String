@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Test/Exception>
@@ -350,12 +350,8 @@ namespace
 		void fp_UnicodeTests()
 		{
 			CStr TestStringFull(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴𠀀")));
-			CStr TestUnicode8Source(CWStr(str_utf16("abcdåäÖ")));
-			CStr TestUnicode8;
-			
-			for (auto iSource = TestUnicode8Source.f_GetUnicodeIterator(); iSource; ++iSource)
-				TestUnicode8.f_AddChar(*iSource);
-			
+			CStr TestUnicode8(CWStr(str_utf16("abcdåäÖ")));
+
 			DMibTestCategory("Unicode coding")
 			{
 				CStr TestString = TestStringFull;
