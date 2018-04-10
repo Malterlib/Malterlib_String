@@ -1901,7 +1901,7 @@ EndArgSearch:
 				const CChar *pStr = *this;
 				while (*pStr)
 				{
-					if (!fg_CharIsAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
+					if (!fg_CharIsAnsiAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
 						return false;
 					++pStr;
 				}
