@@ -6,9 +6,11 @@
 	#undef DMalterlibEnableThirdPartyComparisonTests
 #endif
 
-#ifdef DPlatformFamily_Windows
-#pragma warning(disable:4459)
+#ifdef DCompiler_MSVC
+#	pragma warning(disable:4459)
+#	pragma warning(disable:4828)
 #endif
+
 
 #include <Mib/Test/Memory>
 #include <Mib/Test/Performance>

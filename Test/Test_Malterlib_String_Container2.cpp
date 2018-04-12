@@ -4,6 +4,10 @@
 #include <Mib/Test/Exception>
 #include <Mib/String/Mixed>
 
+#ifdef DCompiler_MSVC
+#	pragma warning(disable:4828)
+#endif
+
 #if 1
 
 #include "Test_Malterlib_String_Container2.h"
