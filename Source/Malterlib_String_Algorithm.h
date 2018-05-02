@@ -322,10 +322,15 @@ namespace NMib
 		template <typename t_CData1, typename t_CData2, typename t_CData3>
 			inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace);
 		template <typename t_CData1, typename t_CData2, typename t_CData3>
+			inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace);
+
+		template <typename t_CData1, typename t_CData2, typename t_CData3>
 			inline_large t_CData1 *fg_StrReplaceChar(t_CData1 *_pStr1, t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen);
 
 		template <typename t_CData1, typename t_CData2, typename t_CData3>
 			inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen);
+		template <typename t_CData1, typename t_CData2, typename t_CData3>
+			inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen);
 		
 		/************************************************************************************************\
 		||¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯||

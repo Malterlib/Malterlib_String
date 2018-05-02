@@ -1516,6 +1516,25 @@ namespace NMib
 		}
 
 		template <typename t_CData1, typename t_CData2, typename t_CData3>
+			inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace)
+		{
+			t_CData1 *pStr1 = _pStr1;
+
+			mint LenFind = fg_StrLen(_pStrFind);
+			mint LenReplace = fg_StrLen(_pStrReplace);
+			mint Len = fg_StrLen(_pStr1);
+
+			while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
+			{
+				Len = Len - ((pStrFind + LenFind) - pStr1);
+				NMem::fg_MemMove(pStrFind + LenReplace, pStrFind + LenFind, (Len + 1) * sizeof(t_CData1));
+				NMem::fg_ObjectCopy(pStrFind, _pStrReplace, LenReplace);
+				pStr1 = pStrFind + LenReplace;
+			}
+			return _pStr1;
+		}
+
+		template <typename t_CData1, typename t_CData2, typename t_CData3>
 			inline_large t_CData1 *fg_StrReplaceChar(t_CData1 *_pStr1, t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen)
 		{
 			t_CData1 *pStr1 = _pStr1;
@@ -1553,6 +1572,40 @@ namespace NMib
 			aint Diff = LenReplace - LenFind;
 
 			while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind)))
+			{
+				if (LenLeft < Diff)
+				{
+					Len = _MaxLen - ((pStrFind + LenFind) - _pStr1);
+					NMem::fg_MemMove(pStrFind + LenReplace, pStrFind + LenFind, Len * sizeof(t_CData1));
+					_pStr1[_MaxLen]  = 0;
+					mint Len2 = fg_Min((_MaxLen - (pStrFind - _pStr1)), LenReplace);
+					NMem::fg_MemCopy(pStrFind, _pStrReplace, Len2 * sizeof(t_CData1));
+					pStr1 = pStrFind + Len2;
+				}
+				else
+				{
+					Len = Len - ((pStrFind + LenFind) - pStr1);
+					NMem::fg_MemMove(pStrFind + LenReplace, pStrFind + LenFind, (Len + 1) * sizeof(t_CData1));
+					NMem::fg_MemCopy(pStrFind, _pStrReplace, LenReplace * sizeof(t_CData1));
+					pStr1 = pStrFind + LenReplace;
+				}
+			}
+			return _pStr1;
+		}
+
+		template <typename t_CData1, typename t_CData2, typename t_CData3>
+			inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
+		{
+			t_CData1 *pStr1 = _pStr1;
+			--_MaxLen; // Null charater
+
+			mint LenFind = fg_StrLen(_pStrFind);
+			mint LenReplace = fg_StrLen(_pStrReplace);
+			mint Len = fg_StrLen(_pStr1);
+			aint LenLeft = _MaxLen - Len;
+			aint Diff = LenReplace - LenFind;
+
+			while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
 			{
 				if (LenLeft < Diff)
 				{

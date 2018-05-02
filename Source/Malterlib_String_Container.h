@@ -2493,6 +2493,41 @@ EndArgSearch:
 				return Temp;
 			}
 			
+
+			template <typename t_CData2, typename t_CData3>
+				TCStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace);
+				return Temp;
+			}
+
+			template <typename t_CTCStrTraits1, typename t_CData3>
+				TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace);
+				return Temp;
+			}
+
+
+			template <typename t_CTCStrTraits1, typename t_CData3>
+				TCStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace);
+				return Temp;
+			}
+
+			template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+				TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace);
+				return Temp;
+			}
+			
+
 			template <typename t_CData2, typename t_CData3>
 				TCStr f_ReplaceChar(t_CData2 _CharFind, t_CData3 _CharReplace) const
 			{
@@ -2500,6 +2535,7 @@ EndArgSearch:
 				fg_StrReplaceChar(Temp, _CharFind, _CharReplace);
 				return Temp;
 			}
+
 
 			template <typename t_CData2, typename t_CData3>
 				TCStr f_Replace(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
@@ -2531,6 +2567,40 @@ EndArgSearch:
 			{
 				TCStr Temp = *this;
 				fg_StrReplace(Temp, _StrFind, _StrReplace, _MaxLen);
+				return Temp;
+			}
+
+
+			template <typename t_CData2, typename t_CData3>
+				TCStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace, _MaxLen);
+				return Temp;
+			}
+
+			template <typename t_CTCStrTraits1, typename t_CData3>
+				TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
+				return Temp;
+			}
+
+
+			template <typename t_CTCStrTraits1, typename t_CData3>
+				TCStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace, _MaxLen);
+				return Temp;
+			}
+
+			template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+				TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
+			{
+				TCStr Temp = *this;
+				fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace, _MaxLen);
 				return Temp;
 			}
 			
@@ -3907,19 +3977,6 @@ EndArgSearch:
 			return fg_StrReplace(_Str1, _StrFind.f_GetStr(), _StrReplace.f_GetStr());
 		}
 
-		
-		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceChar(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace)
-		{
-			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
-			if (!pStr1)
-				return _Str1;
-
-            fg_StrReplaceChar(pStr1, _CharFind, _CharReplace);
-			return _Str1;
-		}
-
-
 		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
 			inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
 		{
@@ -3964,6 +4021,109 @@ EndArgSearch:
 			return fg_StrReplace(_Str1, _StrFind.f_GetStr(), _StrReplace.f_GetStr(), _MaxLen);
 		}
 
+
+		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
+			inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace)
+		{
+			typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+			const CChar *pStr1 = _Str1.f_GetStr();
+			mint LenFind = fg_StrLen(_pStrFind);
+			mint LenReplace = fg_StrLen(_pStrReplace);
+			mint Len = fg_StrLen(_Str1);
+			mint nReplaces = 0;
+			
+			while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
+			{
+				++nReplaces;
+				pStr1 = pStrFind + LenFind;
+			}
+
+			mint NeededSize = Len;
+			if (LenReplace > LenFind)
+				NeededSize += nReplaces * (LenReplace - LenFind);
+
+			fg_StrReplaceNoCase(_Str1.f_GetStr(NeededSize), _pStrFind, _pStrReplace);
+			_Str1.f_SetModified();
+			return _Str1;
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _StrFind.f_GetStr(), _pStrReplace);
+		}
+
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _pStrFind, _StrReplace.f_GetStr());
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _StrFind.f_GetStr(), _StrReplace.f_GetStr());
+		}
+
+		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
+			inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
+		{
+			typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+			const CChar *pStr1 = _Str1.f_GetStr();
+			mint LenFind = fg_StrLen(_pStrFind);
+			mint LenReplace = fg_StrLen(_pStrReplace);
+			mint Len = fg_StrLen(_Str1);
+			mint nReplaces = 0;
+			
+			while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
+			{
+				++nReplaces;
+				pStr1 = pStrFind + LenFind;
+			}
+
+			mint NeededSize = fg_Min((Len + nReplaces * (LenReplace - LenFind)), _MaxLen);
+			fg_StrReplaceNoCase(_Str1.f_GetStr(NeededSize), _pStrFind, _pStrReplace, _MaxLen);
+			_Str1.f_SetModified();
+			return _Str1;
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _StrFind.f_GetStr(), _pStrReplace, _MaxLen);
+		}
+
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _pStrFind, _StrReplace.f_GetStr(), _MaxLen);
+		}
+
+		template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen)
+		{
+			static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+			return fg_StrReplaceNoCase(_Str1, _StrFind.f_GetStr(), _StrReplace.f_GetStr(), _MaxLen);
+		}
+
+
+		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
+			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceChar(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace)
+		{
+			typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+			if (!pStr1)
+				return _Str1;
+
+            fg_StrReplaceChar(pStr1, _CharFind, _CharReplace);
+			return _Str1;
+		}
 		
 		template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
 			inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceChar(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen)
