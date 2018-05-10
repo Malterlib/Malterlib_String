@@ -20,6 +20,7 @@ namespace NMib
 {
 	namespace NStr
 	{
+#ifndef DCompiler_MSVC_Workaround
 		template <typename t_CRange>
 		auto fg_RangeAdaptor_UTF8Encode(t_CRange const &_Range)
 			-> decltype
@@ -31,7 +32,7 @@ namespace NMib
 				)
 			)
 		;
-		
+#endif
 	}
 }
 
