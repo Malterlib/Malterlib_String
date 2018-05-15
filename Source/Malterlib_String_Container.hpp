@@ -75,8 +75,8 @@ namespace NMib
 		}
 
 		template <typename t_CTCStrTraits>
-		template <typename tf_CStr, typename tf_CStrSeparator>
-		TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_Join(NContainer::TCVector<tf_CStr> const &_Strings, tf_CStrSeparator const &_Separator)
+		template <typename tf_CContainer, typename tf_CStrSeparator>
+		TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator)
 		{
 			TCStr<t_CTCStrTraits> Return;
 			for (auto &Str : _Strings)
