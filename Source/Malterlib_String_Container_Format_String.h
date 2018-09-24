@@ -243,13 +243,13 @@ namespace NMib
 
 		};
 		
-#define DMibStrStringFormatterImplementStr(_Type, _StrType) \
+#define DMibStrStringFormatterImplementStr(d_Type, d_StrType) \
 		template <typename t_CFormatter> \
-		class TCStringFormatter<t_CFormatter, _Type *> \
+		class TCStringFormatter<t_CFormatter, d_Type *> \
 		{ \
 		public: \
-			typedef TCStrFormatType_String<t_CFormatter, _Type, _StrType> CFormatType;\
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, _Type * const &_Data) \
+			typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
+			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, d_Type * const &_Data) \
 			{ \
 				_Formatter.template f_Alloc<CFormatType>(_Data);\
 				return typename CFormatType::CStrFormatTypeClassifier();\
@@ -272,13 +272,25 @@ namespace NMib
 
 		DMibStrStringFormatterImplementStr(const uint16, EStrType_UTF);
 
-#define DMibStrStringFormatterImplementStrArray(_Type, _StrType) \
-		template <typename t_CFormatter, aint _Size> \
-		class TCStringFormatter<t_CFormatter, _Type [_Size] > \
+#define DMibStrStringFormatterImplementStrArray(d_Type, d_StrType) \
+		template <typename t_CFormatter, aint t_Size> \
+		class TCStringFormatter<t_CFormatter, d_Type [t_Size] > \
 		{ \
 		public: \
-			typedef _Type CData[_Size];\
-			typedef TCStrFormatType_String<t_CFormatter, _Type, _StrType> CFormatType;\
+			typedef d_Type CData[t_Size];\
+			typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
+			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
+			{ \
+				_Formatter.template f_Alloc<CFormatType>(_Data);\
+				return typename CFormatType::CStrFormatTypeClassifier();\
+			} \
+		};\
+		template <typename t_CFormatter> \
+		class TCStringFormatter<t_CFormatter, d_Type [] > \
+		{ \
+		public: \
+			typedef d_Type CData[];\
+			typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
 			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 			{ \
 				_Formatter.template f_Alloc<CFormatType>(_Data);\
