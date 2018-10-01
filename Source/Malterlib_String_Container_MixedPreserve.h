@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -143,6 +143,7 @@ namespace NMib
 				fg_ConsumeLenFromStream(_Stream, Len);
 				NStr::EStrType StrType = NStr::EStrType_Ansi;
 				fg_StrDecodeLenType(Len, _Stream.f_LengthSize(), StrType);
+				fg_CheckLengthLimit(_Stream, Len);
 				uint32 Type;
 				_Stream.f_Consume(Type);
 				_Data.f_Clear();

@@ -438,6 +438,7 @@ namespace NMib
 				fg_ConsumeLenFromStream(_Stream, Len);
 				NStr::EStrType Type = NStr::EStrType_Ansi;
 				fg_StrDecodeLenType(Len, _Stream.f_LengthSize(), Type);
+				fg_CheckLengthLimit(_Stream, Len);
 
 				//NStr::TCStr<t_TCStrTraitsIn>
 
