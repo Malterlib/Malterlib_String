@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -17,7 +17,7 @@ namespace NMib
 		public:
 			virtual void f_Destroy() = 0;
 			virtual typename t_CStrTraits::CChar *f_GetStr() = 0;
-			virtual aint f_CreateWritableBuffer(aint _Length, bint _bDiscard) = 0;
+			virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard) = 0;
 			virtual aint f_GetLength() = 0;
 			enum
 			{
@@ -48,7 +48,7 @@ namespace NMib
 				return m_pStr->f_GetStr();
 			}
 
-			virtual aint f_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 				return m_pStr->f_CreateWritableBuffer(_Length, _bDiscard);
 			}
@@ -58,7 +58,7 @@ namespace NMib
 				return m_pStr->f_GetLength();
 			}
 
-			virtual bint f_FastLen()
+			virtual bool f_FastLen()
 			{
 				return m_pStr->f_FastLen();
 			}
@@ -96,7 +96,7 @@ namespace NMib
 				return m_Str.f_GetStr();
 			}
 
-			virtual aint f_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 				return m_Str.f_CreateWritableBuffer(_Length, _bDiscard);
 			}
@@ -106,7 +106,7 @@ namespace NMib
 				return m_Str.f_GetLength();
 			}
 
-			virtual bint f_FastLen()
+			virtual bool f_FastLen()
 			{
 				return m_Str.f_FastLen();
 			}

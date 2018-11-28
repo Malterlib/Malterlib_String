@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -26,7 +26,7 @@ namespace NMib
 				const t_CData *&_pStr
 				, t_CReturn _FailValue
 				, const t_CTerm *_pStrTerminators = nullptr
-				, bint _bDontFail = false
+				, bool _bDontFail = false
 				, int32 _ParseMode = EStrToIntParseMode_Base10
 				, bool *_pFailed = nullptr
 			)

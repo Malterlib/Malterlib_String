@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -34,7 +34,7 @@ namespace NMib
 		{
 		public:
 			template <typename t_CKey0, typename t_CKey1>
-			inline_small bint operator () (const t_CKey0 &_Left, const t_CKey1 &_Right) const
+			inline_small bool operator () (const t_CKey0 &_Left, const t_CKey1 &_Right) const
 			{
 				return fg_StrCmpNoCase(_Left, _Right) < 0;
 			}

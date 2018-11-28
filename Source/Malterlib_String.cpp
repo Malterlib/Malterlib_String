@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -321,13 +321,13 @@ namespace NMib
 			return _Str;
 		}
 
-		bint fg_GetExpectedUTF8SequenceLength( uch8 _Char )
+		mint fg_GetExpectedUTF8SequenceLength( uch8 _Char )
 		{
-			bint CalculatedLength = 7-fg_GetHighestBitSet((~uint32(_Char))&0xFF);
+			mint CalculatedLength = 7-fg_GetHighestBitSet((~uint32(_Char))&0xFF);
 			return CalculatedLength < 7 ? CalculatedLength : -1;
 		}
 
-		bint fg_GetRequiredUTF8SequenceLength(ch32 _Codepoint)
+		mint fg_GetRequiredUTF8SequenceLength(ch32 _Codepoint)
 		{
 
 			if (_Codepoint > 0x3FFFFFF)
@@ -343,17 +343,17 @@ namespace NMib
 			return 1;
 		}
 
-		bint fg_IsUTF16Surrogate(ch32 _Codepoint)
+		bool fg_IsUTF16Surrogate(ch32 _Codepoint)
 		{
 			return (_Codepoint >= 0xD800) && (_Codepoint <= 0xDFFF);
 		}
 
-		bint fg_IsOverlongUTF8Sequence(ch32 _Codepoint, bint _Length)
+		bool fg_IsOverlongUTF8Sequence(ch32 _Codepoint, mint _Length)
 		{
 			return _Length > fg_GetRequiredUTF8SequenceLength(_Codepoint);
 		}
 
-		bint fg_IsInvalidCodepoint(ch32 _Codepoint)
+		bool fg_IsInvalidCodepoint(ch32 _Codepoint)
 		{
 			if (_Codepoint > 0x10FFFF)
 				return true;
@@ -368,7 +368,7 @@ namespace NMib
 			return false;
 		}
 
-		bint fg_IsValidSequence(ch32 _CodePoint, bint _Length)
+		bool fg_IsValidSequence(ch32 _CodePoint, mint _Length)
 		{
 			if (fg_IsUTF16Surrogate(_CodePoint))
 				return false;
@@ -383,7 +383,7 @@ namespace NMib
 		}
 
 		template<typename tf_FProcess, typename tf_CString>
-		bint fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr)
+		bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr)
 		{
 			// BOM
 			if (_pStr[0] == 0xEF && _pStr[1] == 0xBB && _pStr[2] == 0xBF)
@@ -410,7 +410,7 @@ namespace NMib
 
 					if (ToTest & 0x40)
 					{
-						bint SequenceLengthExpected = fg_GetExpectedUTF8SequenceLength(ToTest);
+						mint SequenceLengthExpected = fg_GetExpectedUTF8SequenceLength(ToTest);
 						if (SequenceLengthExpected<2)
 						{
 							if (fg_Forward<tf_FProcess>(_fFunctor)(_pStr, 1, false))
@@ -420,7 +420,7 @@ namespace NMib
 						else
 						{
 							tf_CString *pSequenceStart = _pStr;
-							bint SequenceLengthParsed = 1;
+							mint SequenceLengthParsed = 1;
 							++_pStr;
 
 							ch32 CodePoint = ToTest & ((1 << (8-(SequenceLengthExpected+1))) - 1);
@@ -442,7 +442,7 @@ namespace NMib
 							}
 							if (SequenceLengthParsed == SequenceLengthExpected)
 							{
-								bint bValidSequence = fg_IsValidSequence(CodePoint, SequenceLengthParsed);
+								bool bValidSequence = fg_IsValidSequence(CodePoint, SequenceLengthParsed);
 								if (fg_Forward<tf_FProcess>(_fFunctor)(pSequenceStart, SequenceLengthParsed, bValidSequence))
 									return false;
 							}
@@ -473,17 +473,17 @@ namespace NMib
 			return true;
 		}
 
-		bint fg_IsValidUTF8( CStr const &_Str)
+		bool fg_IsValidUTF8( CStr const &_Str)
 		{
 			return fg_ProcessUTF8
 				(
-				[&](uch8 const *, bint, bint _bValid) -> bint
-			{
-				return !_bValid;
-			}
-			, (uch8*)_Str.f_GetStr()
+					[&](uch8 const *, mint, bool _bValid) -> bool
+					{
+						return !_bValid;
+					}
+					, (uch8*)_Str.f_GetStr()
 				)
-				;
+			;
 		}
 
 		CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar)
@@ -493,22 +493,22 @@ namespace NMib
 
 			fg_ProcessUTF8
 				(
-				[&](uch8* pStr, mint _Length, bint _bValid) -> bint
-			{
-				if (!_bValid)
-				{
-					while (_Length)
+					[&](uch8* pStr, mint _Length, bool _bValid) -> bool
 					{
-						*pStr = _ReplacementChar;
-						++pStr;
-						--_Length;
+						if (!_bValid)
+						{
+							while (_Length)
+							{
+								*pStr = _ReplacementChar;
+								++pStr;
+								--_Length;
+							}
+						}
+						return false;
 					}
-				}
-				return false;
-			}
-			, pStr
+					, pStr
 				)
-				;
+			;
 			return StringCopy;
 		}
 
@@ -522,7 +522,7 @@ namespace NMib
 
 			fg_ProcessUTF8
 				(
-					[&](uch8* _pStr, mint _Length, bint _bValid) -> bint
+					[&](uch8* _pStr, mint _Length, bool _bValid) -> bool
 					{
 						if (_bValid)
 						{

@@ -10,7 +10,7 @@ namespace NMib
 	namespace NStr
 	{
 
-		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bint t_bDummyOptimize, typename t_CIntegerStorage>
+		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>
 		class TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
 		{
 		public:
@@ -328,7 +328,7 @@ namespace NMib
 			static inline_small void fp_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFloat &_Number) 
 			{
 				CFloat Number = _Number;
-				bint bOptionsSign = _Options.m_bSign;
+				bool bOptionsSign = _Options.m_bSign;
 				aint SubStrStart = 0;
 				if (Number.f_GetSignBits() != 0)
 				{
@@ -337,7 +337,7 @@ namespace NMib
 					Number = -Number;
 				}
 
-				bint bRemoveDigits = _Options.m_bAutoRemoveDigits;
+				bool bRemoveDigits = _Options.m_bAutoRemoveDigits;
 				if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Shortest || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ShortestLowerCase)
 				{
 					if (_Options.m_MinDigits > 0)
@@ -733,8 +733,8 @@ namespace NMib
 
 						if (Exponent10 != 0)
 						{
-							bint bSigned = false;
-							bint bSign = bOptionsSign;
+							bool bSigned = false;
+							bool bSign = bOptionsSign;
 							if (Exponent10 < 0)
 							{
 								bSign = true;
@@ -953,7 +953,7 @@ namespace NMib
 			}
 		};			  
 
-		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bint t_bDummyOptimize, typename t_CIntegerStorage>
+		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>
 		class TCStringFormatter<t_CFormatter, NMib::NMath::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> >
 		{
 		public:

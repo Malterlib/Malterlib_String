@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -91,13 +91,13 @@ namespace NMib
 		template <typename t_CFormatter, typename t_CIntType, typename t_COptions = TCStrFormatType_Int_OptionsStatic<t_CIntType> >
 		class TCStrFormatType_Int;
 
-		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bint t_bDummyOptimize, typename t_CIntegerStorage>
+		template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>
 		class TCStrFormatType_Float;
 
 		template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlaying t_Type>
 		class TCStrFormatType_String;
 
-		template <typename t_CFormatter, typename t_CStrTraitsIn, bint t_bReference>
+		template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 		class TCStrFormatType_TStr;
 
 

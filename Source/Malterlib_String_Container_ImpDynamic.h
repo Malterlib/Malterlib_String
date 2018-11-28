@@ -174,7 +174,7 @@ namespace NMib
 				return Len;
 			}
 
-			static inline_small bint f_FastLen()
+			static inline_small bool f_FastLen()
 			{
 				return true;
 			}
@@ -253,7 +253,7 @@ namespace NMib
 				return OldSize;
 			}
 			
-			aint fp_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			aint fp_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 #				ifdef DMibDebug
 				{
@@ -356,7 +356,7 @@ namespace NMib
 				return CurLen;
 
 			}
-			inline aint f_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			inline aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 				aint CurLen = f_GetLength();
 				if (CurLen >= _Length && m_pData && m_pData->m_RefCount == 1)

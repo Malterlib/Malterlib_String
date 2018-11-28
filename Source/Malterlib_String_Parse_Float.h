@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -10,7 +10,7 @@ namespace NMib
 	{
 
 		template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
-			t_CReturn fg_StrToFloatParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bint _bDontFail = false, const t_CPoints *_pPoints = nullptr)
+			t_CReturn fg_StrToFloatParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bool _bDontFail = false, const t_CPoints *_pPoints = nullptr)
 		{
 			t_CReturn DestNumber = t_CReturn::fs_0();
 			t_CReturn DestDecimals = t_CReturn::fs_0();
@@ -230,7 +230,7 @@ Return:
 		}		
 
 		template <typename t_CData, typename t_CReturn, typename t_CTerm>
-			t_CReturn fg_StrToFloat(const t_CData *_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bint _bDontFail)
+			t_CReturn fg_StrToFloat(const t_CData *_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bool _bDontFail)
 		{
 			return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (const ch8 *)nullptr);
 		}		
@@ -248,7 +248,7 @@ Return:
 
 
 		template <typename t_CData, typename t_CReturn, typename t_CTerm>
-		t_CReturn fg_StrToFloatParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bint _bDontFail)
+		t_CReturn fg_StrToFloatParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CTerm *_pStrTerminators, bool _bDontFail)
 		{
 			return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (const ch8 *)nullptr);
 		}

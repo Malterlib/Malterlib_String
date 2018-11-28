@@ -13,9 +13,9 @@ namespace NMib
 		class TICStrFormatType_StaticOptions
 		{
 		public:
-			inline_small static bint f_RestrictLength()
+			inline_small static bool f_RestrictLength()
 			{
-				return 0;
+				return false;
 			}
 			inline_small static mint f_MinLength()
 			{
@@ -29,11 +29,11 @@ namespace NMib
 			{
 				return 0;
 			}
-			inline_small static bint f_LeftAlign()
+			inline_small static bool f_LeftAlign()
 			{
 				return false;
 			}
-			inline_small static bint f_SimpleAlign()
+			inline_small static bool f_SimpleAlign()
 			{
 				return true;
 			}
@@ -58,7 +58,7 @@ namespace NMib
 				return t_MinLength;
 			}
 
-			inline_small static bint f_RestrictLength()
+			inline_small static bool f_RestrictLength()
 			{
 				return true;
 			}
@@ -79,7 +79,7 @@ namespace NMib
 				return t_MaxLength;
 			}
 
-			inline_small static bint f_RestrictLength()
+			inline_small static bool f_RestrictLength()
 			{
 				return true;
 			}
@@ -247,9 +247,9 @@ namespace NMib
 			{
 			}		
 
-			inline_small static bint f_RestrictLength()
+			inline_small static bool f_RestrictLength()
 			{
-				return 1;
+				return true;
 			}
 
 			inline_small mint f_MinLength() const
@@ -264,11 +264,11 @@ namespace NMib
 			{
 				return m_Align;
 			}
-			inline_small bint f_LeftAlign() const
+			inline_small bool f_LeftAlign() const
 			{
 				return m_bLeftAlign;
 			}
-			inline_small bint f_SimpleAlign() const
+			inline_small bool f_SimpleAlign() const
 			{
 				return m_bSimpleAlign;
 			}
@@ -887,14 +887,14 @@ namespace NMib
 			};
 			
 			template <typename t_CImplementation, typename t_CData, typename t_CFormatType, typename t_COptions>
-			inline_never t_CData fpr_EvalExpression(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, const CChar *&_pParse, bint &_bError, bool _bExitAtValue) const
+			inline_never t_CData fpr_EvalExpression(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, const CChar *&_pParse, bool &_bError, bool _bExitAtValue) const
 			{
 				TCValueData<t_CData, t_CImplementation> ValueData;
 
 				const CChar *pParse = _pParse;
-				bint bLastWasValue = false;
-				bint bFirst = true;
-				bint bEndParenthesis = false;
+				bool bLastWasValue = false;
+				bool bFirst = true;
+				bool bEndParenthesis = false;
 
 				while (*pParse)
 				{
@@ -1203,7 +1203,7 @@ namespace NMib
 			inline_never void fp_EvalExpression(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, const CChar *_pParse) const
 			{
 				const CChar *pParse = _pParse;
-				bint bError = false;
+				bool bError = false;
 				fg_ParseWhiteSpace(pParse);
 				if (*pParse == '(')
 				{

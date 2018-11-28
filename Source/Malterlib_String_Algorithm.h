@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -135,10 +135,10 @@ namespace NMib
 
 
 		template <typename t_CData1>
-			inline_small bint fg_StrIsAnsi(const t_CData1 *_pStr1);
+			inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1);
 
 		template <typename t_CData1>
-			inline_small bint fg_StrIsAnsi(const t_CData1 *_pStr1, mint _MaxLen);
+			inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _MaxLen);
 
 
 		template <typename t_CStr>
@@ -445,14 +445,14 @@ namespace NMib
 			inline_medium t_CData fg_CharLowerCase(t_CData _Character);
 
 		template <typename t_CData>
-			inline_medium bint fg_CharIsWhiteSpace(const t_CData _Character);
+			inline_medium bool fg_CharIsWhiteSpace(const t_CData _Character);
 
 		template <typename t_CData>
-			inline_large bint fg_CharIsAlphabetical(const t_CData _Character);
+			inline_large bool fg_CharIsAlphabetical(const t_CData _Character);
 		template <typename t_CData>
-			inline_large bint fg_CharIsAnsiAlphabetical(const t_CData _Character);
+			inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character);
 		template <typename t_CData>
-			inline_medium bint fg_CharIsNumber(const t_CData _Character);
+			inline_medium bool fg_CharIsNumber(const t_CData _Character);
 
 		/************************************************************************************************\
 		||¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

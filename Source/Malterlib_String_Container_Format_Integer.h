@@ -35,7 +35,7 @@ namespace NMib
 			{
 			}
 
-			inline_small static bint f_StaticRadix()
+			inline_small static bool f_StaticRadix()
 			{
 				return false;
 			}
@@ -45,11 +45,11 @@ namespace NMib
 			{
 				return m_Radix;
 			}
-			inline_small bint f_NumberCaps() const
+			inline_small bool f_NumberCaps() const
 			{
 				return m_bNumberCaps;
 			}
-			inline_small bint f_Sign() const
+			inline_small bool f_Sign() const
 			{
 				return m_bSign;
 			}
@@ -74,15 +74,15 @@ namespace NMib
 			{
 				return 10;
 			}
-			inline_small static bint f_StaticRadix()
+			inline_small static bool f_StaticRadix()
 			{
 				return true;
 			}
-			inline_small static bint f_NumberCaps()
+			inline_small static bool f_NumberCaps()
 			{
 				return false;
 			}
-			inline_small static bint f_Sign()
+			inline_small static bool f_Sign()
 			{
 				return false;
 			}
@@ -121,7 +121,7 @@ namespace NMib
 			{
 				return t_Radix;
 			}
-			inline_small static bint f_StaticRadix()
+			inline_small static bool f_StaticRadix()
 			{
 				return true;
 			}
@@ -589,7 +589,7 @@ namespace NMib
 			{
 				CUnsignedType Number = _Integer;
 
-				bint bSign = _Options.f_Sign();
+				bool bSign = _Options.f_Sign();
 				aint bSubStrStart = 0;
 				if (NTraits::TCIsSigned<CType>::mc_Value)
 				{
@@ -797,7 +797,7 @@ namespace NMib
 					: TCStrFormatType_Int_OptionsStatic_Radix<16, TCStrFormatType_Int_OptionsStatic<mint>>(TCStrFormatType_Int_OptionsStatic<mint>())
 				{
 				}
-				inline_small static bint f_RestrictLength()
+				inline_small static bool f_RestrictLength()
 				{
 					return true;
 				}

@@ -24,7 +24,7 @@ namespace NMib
 			static EStrType const mc_Type = (EStrType)t_Type;
 
 			template <typename t_CData>
-				static inline_small bint fs_CharIsNumber(const t_CData _Character)
+				static inline_small bool fs_CharIsNumber(const t_CData _Character)
 			{
 				return fg_CharIsNumber(_Character);
 			}
@@ -60,7 +60,7 @@ namespace NMib
 			}
 
 			template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToIntParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr, bint _bDontFail = false, int32 _ParseMode = EStrToIntParseMode_Base10)
+			static inline_small t_CReturn fs_StrToIntParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr, bool _bDontFail = false, int32 _ParseMode = EStrToIntParseMode_Base10)
 			{
 				return fg_StrToIntParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, _ParseMode);
 			}
@@ -122,7 +122,7 @@ namespace NMib
 			}
 
 			template <typename t_CData, typename t_CReturn>
-				static inline_small t_CReturn fs_StrToFloatParse(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators, bint _bDontFail = false)
+				static inline_small t_CReturn fs_StrToFloatParse(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators, bool _bDontFail = false)
 			{
 				return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail);
 			}
@@ -276,7 +276,7 @@ namespace NMib
 				}
 			};
 
-			template <typename t_CFormatter, typename t_CData, bint t_bIsEnum = NMib::NTraits::TCIsEnum<t_CData>::mc_Value>
+			template <typename t_CFormatter, typename t_CData, bool t_bIsEnum = NMib::NTraits::TCIsEnum<t_CData>::mc_Value>
 			struct TCDetermineStringFormatter
 			{
 				typedef TCStringFormatter<t_CFormatter, t_CData> CType;
@@ -523,7 +523,7 @@ namespace NMib
 			template <typename t_CType>
 			static auto fs_GetFormatClassifier(t_CType const &_Type) -> decltype(TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*((TCFormat *)0), _Type)); // Only used compile time
 
-			template <bint t_bConcat>
+			template <bool t_bConcat>
 			static void fp_FormatArguments(const TCFormat &_Format, TCStrAggregate<t_CTCStrTraits> &_ToStr)
 			{				
 				aint CurrentStrLen;
@@ -552,7 +552,7 @@ namespace NMib
 				_ToStr.f_SetStrLen(CurrentStrLen);
 			}	
 
-			template <bint t_bConcat>
+			template <bool t_bConcat>
 			static void fp_FormatArgList(const TCFormat &_Format, const CChar *_pFormat, TCStrAggregate<t_CTCStrTraits> &_ToStr)
 			{				
 				aint CurrentStrLen;
@@ -948,7 +948,7 @@ EndArgSearch:
 				return !f_IsEmpty();
 			}
 
-			inline_small bint f_IsEmpty () const
+			inline_small bool f_IsEmpty () const
 			{				
 				return (*CImp::f_GetStr()) == 0;
 			}
@@ -1878,13 +1878,13 @@ EndArgSearch:
 			\***************************************************************************************************/
 			
 
-			inline_small bint f_IsAnsi() const
+			inline_small bool f_IsAnsi() const
 			{
 				return fg_StrIsAnsi(f_GetStr());
 			}
 
 
-			inline_small bint f_IsAlphaNumeric() const
+			inline_small bool f_IsAlphaNumeric() const
 			{
 				const CChar *pStr = *this;
 				while (*pStr)
@@ -1896,7 +1896,7 @@ EndArgSearch:
 				return true;
 			}
 
-			inline_small bint f_IsAnsiAlphaNumeric() const
+			inline_small bool f_IsAnsiAlphaNumeric() const
 			{
 				const CChar *pStr = *this;
 				while (*pStr)
@@ -1908,7 +1908,7 @@ EndArgSearch:
 				return true;
 			}
 
-			inline_small bint f_IsNumeric() const
+			inline_small bool f_IsNumeric() const
 			{
 				if (f_IsEmpty())
 					return false;
@@ -1923,7 +1923,7 @@ EndArgSearch:
 				return true;
 			}
 
-			inline_small bint f_IsIdentifierStatement() const
+			inline_small bool f_IsIdentifierStatement() const
 			{
 				const CChar *pStr = *this;
 				if (!(fg_CharIsAlphabetical(*pStr) || *pStr == '_'))
@@ -1937,7 +1937,7 @@ EndArgSearch:
 				return true;
 			}
 
-			inline_small bint f_IsAlphaNumericStatement() const
+			inline_small bool f_IsAlphaNumericStatement() const
 			{
 				const CChar *pStr = *this;
 				if (!fg_CharIsAlphabetical(*pStr))
@@ -2082,7 +2082,7 @@ EndArgSearch:
 			}
 
 			template <typename t_CRegistry>
-			bint f_ConsumeNamed(t_CRegistry const &_Registry)
+			bool f_ConsumeNamed(t_CRegistry const &_Registry)
 			{
 				*this = _Registry.f_GetThisValue();
 				return true;
@@ -4553,7 +4553,7 @@ EndArgSearch:
 
 		// Operator ==
 		template <typename t_CTCStrTraits0, typename t_CTCStrTraits1> 
-		bint operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
+		bool operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
 		{
 			if (_Str0.f_GetLen() != _Str1.f_GetLen())
 				return false;
@@ -4561,32 +4561,32 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits0, typename t_CData> 
-		bint operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
+		bool operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
 		{
 			return fg_StrCmp(_Str0, _pStr1) == 0;
 		}
 
 		template <typename t_CTCStrTraits0, typename t_CData> 
-		bint operator == (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
+		bool operator == (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
 		{
 			return fg_StrCmp(_Str0, _pStr1) == 0;
 		}
 
 		// Operator <
 		template <typename t_CTCStrTraits0, typename t_CTCStrTraits1> 
-		bint operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
+		bool operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
 		{
 			return fg_StrCmp(_Str0, _Str1) < 0;
 		}
 
 		template <typename t_CTCStrTraits0, typename t_CData> 
-		bint operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
+		bool operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
 		{
 			return fg_StrCmp(_Str0, _pStr1) < 0;
 		}
 
 		template <typename t_CTCStrTraits0, typename t_CData> 
-		bint operator < (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
+		bool operator < (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
 		{
 			return fg_StrCmp(_Str0, _pStr1) > 0;
 		}

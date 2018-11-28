@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -120,7 +120,7 @@ namespace NMib
 		CStr fg_ForceStrUTF8(const CStr &_Str);
 		CStr fg_ForceStrUTF8(const CWStr &_Str);
 		CStr fg_ForceStrUTF8(const CUStr &_Str);
-		bint fg_IsValidUTF8(CStr const &_Str);
+		bool fg_IsValidUTF8(CStr const &_Str);
 		CWStr fg_ForceStrUTF16(const CWStr &_Str);
 		CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar = '?');
 		CStr fg_ReplaceSequenceUTF8(CStr const &_Str, CStr const &_ReplacementChar = CStr("\xef\xbf\xbd"));

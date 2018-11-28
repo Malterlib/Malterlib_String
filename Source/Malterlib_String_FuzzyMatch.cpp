@@ -17,7 +17,7 @@ namespace NMib
 				aint m_iSource = -1;
 			};
 
-			template <bint tf_bNoCase, bint tf_bCheckLen, typename tf_CData1, typename tf_CData2>
+			template <bool tf_bNoCase, bool tf_bCheckLen, typename tf_CData1, typename tf_CData2>
 			aint fg_StrFindPartial(const tf_CData1 *_pStr1, const tf_CData2 *_pStr2, mint _Len, mint &_Found)
 			{
 				typedef typename NTraits::TCUnsigned<tf_CData1>::CType CData1;
@@ -132,7 +132,7 @@ namespace NMib
 				{
 					++iMatchingID;
 					aint iStart = (pParse0 - pParse0Start) + iFind;
-					bint bLarger = true;
+					bool bLarger = true;
 					for (mint i = 0; i < Found; ++i)
 					{
 						if (aint(Found) < Matchings[iStart + i].m_nMatched)
@@ -194,7 +194,7 @@ namespace NMib
 				if (Matching.m_MatichID != LastMatched && Matching.m_nMatched != 0)
 				{
 					aint iStart = Matching.m_iSource;
-					bint bLarger = true;
+					bool bLarger = true;
 					for (aint i = 0; i < Matching.m_nMatched; ++i)
 					{
 						if (aint(Matching.m_nMatched) < SourceMatchings[iStart + i].m_nMatched)

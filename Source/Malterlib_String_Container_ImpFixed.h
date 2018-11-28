@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -90,7 +90,7 @@ namespace NMib
 				return m_Len;
 			}
 
-			static inline_small bint f_FastLen()
+			static inline_small bool f_FastLen()
 			{
 				return true;
 			}
@@ -108,7 +108,7 @@ namespace NMib
 					m_Len = _Len;
 			}
 
-			inline_small aint f_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			inline_small aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 				return t_DataLen;
 			}
@@ -240,7 +240,7 @@ namespace NMib
 				return m_Len;
 			}
 
-			static inline_small bint f_FastLen()
+			static inline_small bool f_FastLen()
 			{
 				return true;
 			}
@@ -257,7 +257,7 @@ namespace NMib
 					m_Len = _Len;
 			}
 
-			inline_small aint f_CreateWritableBuffer(aint _Length, bint _bDiscard)
+			inline_small aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 			{
 				return m_MaxLen;
 			}
