@@ -1952,7 +1952,7 @@ public:
 			}
 		};
 
-		DMibIntrusiveLink(CTestClass, NMib::NIntrusive::TCAVLLink<>, m_TreeLink);
+		NMib::NIntrusive::TCAVLLink<> m_TreeLink;
 	};
 
 	bool f_AutomaticTest() 
@@ -2080,7 +2080,7 @@ public:
 		TestVector.f_Insert("Hihihi");
 
 		Iter = TestList;
-    NMib::NIntrusive::TCAVLTree<CTestClass::CLinkTraits_m_TreeLink, CTestClass::CCompare> TestTree;
+		NMib::NIntrusive::TCAVLTree<&CTestClass::m_TreeLink, CTestClass::CCompare> TestTree;
 		TestTree.f_Insert(Iter[0]);
 		TestTree.f_Insert(Iter[1]);
 		TestTree.f_Insert(Iter[2]);
