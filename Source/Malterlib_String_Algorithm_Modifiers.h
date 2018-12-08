@@ -9,133 +9,128 @@
 
 #include "Malterlib_String_Algorithm_Common.h"
 
-namespace NMib
+namespace NMib::NStr2
 {
-	namespace NStr2
+	struct CNoCaseBase
 	{
-		struct CNoCaseBase
+		void f_GetBaseHelper()
 		{
-			void f_GetBaseHelper()
-			{
-			}
-		};
-		
-		struct CNoCase : public virtual CNoCaseBase
-		{
-		};
+		}
+	};
 
-		struct CReverseBase
-		{
-			void f_GetBaseHelper()
-			{
-			}
-		};
-		
-		struct CReverse : public virtual CReverseBase
-		{
-		};
+	struct CNoCase : public virtual CNoCaseBase
+	{
+	};
 
-		struct CUnicodeBase
+	struct CReverseBase
+	{
+		void f_GetBaseHelper()
 		{
-			void f_GetBaseHelper()
-			{
-			}
-		};
-		
-		struct CUnicode : public virtual CUnicodeBase
-		{
-		};
+		}
+	};
 
-		namespace NPrivate
-		{
-			template <typename tf_CCharLeft, typename tf_CCharRight>
-			inline_always bool fg_Private_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCase)
-			{
-				return NStr::fg_CharLowerCase(_Left) == NStr::fg_CharLowerCase(_Right);
-			}
+	struct CReverse : public virtual CReverseBase
+	{
+	};
 
-			template <typename tf_CCharLeft, typename tf_CCharRight>
-			inline_always bool fg_Private_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCaseBase)
-			{
-				return _Left == _Right;
-			}
+	struct CUnicodeBase
+	{
+		void f_GetBaseHelper()
+		{
+		}
+	};
+
+	struct CUnicode : public virtual CUnicodeBase
+	{
+	};
+
+	namespace NPrivate
+	{
+		template <typename tf_CCharLeft, typename tf_CCharRight>
+		inline_always bool fg_Private_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCase)
+		{
+			return NStr::fg_CharLowerCase(_Left) == NStr::fg_CharLowerCase(_Right);
 		}
 
-		template <typename tf_CTags, typename tf_CCharLeft, typename tf_CCharRight>
-		inline_always bool fg_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right)
+		template <typename tf_CCharLeft, typename tf_CCharRight>
+		inline_always bool fg_Private_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCaseBase)
 		{
-			return NPrivate::fg_Private_CharIsSame(_Left, _Right, typename TCGetTag<tf_CTags, CNoCaseBase>::CType());
+			return _Left == _Right;
+		}
+	}
+
+	template <typename tf_CTags, typename tf_CCharLeft, typename tf_CCharRight>
+	inline_always bool fg_CharIsSame(tf_CCharLeft _Left, tf_CCharRight _Right)
+	{
+		return NPrivate::fg_Private_CharIsSame(_Left, _Right, typename TCGetTag<tf_CTags, CNoCaseBase>::CType());
+	}
+
+
+	namespace NPrivate
+	{
+		template <typename tf_CCharLeft, typename tf_CCharRight>
+		inline_always ECompare fg_Private_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCase)
+		{
+			auto Left = NStr::fg_CharLowerCase(_Left);
+			auto Right = NStr::fg_CharLowerCase(_Right);
+			if (Left > Right)
+				return ECompare_GreaterThan;
+			else if (Left < Right)
+				return ECompare_LessThan;
+			return ECompare_Equal;
 		}
 
-		
-		namespace NPrivate
+		template <typename tf_CCharLeft, typename tf_CCharRight>
+		inline_always ECompare fg_Private_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCaseBase)
 		{
-			template <typename tf_CCharLeft, typename tf_CCharRight>
-			inline_always ECompare fg_Private_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCase)
-			{
-				auto Left = NStr::fg_CharLowerCase(_Left);
-				auto Right = NStr::fg_CharLowerCase(_Right);
-				if (Left > Right)
-					return ECompare_GreaterThan;
-				else if (Left < Right)
-					return ECompare_LessThan;
-				return ECompare_Equal;
-			}
-
-			template <typename tf_CCharLeft, typename tf_CCharRight>
-			inline_always ECompare fg_Private_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right, CNoCaseBase)
-			{
-				if (_Left > _Right)
-					return ECompare_GreaterThan;
-				else if (_Left < _Right)
-					return ECompare_LessThan;
-				return ECompare_Equal;
-			}
+			if (_Left > _Right)
+				return ECompare_GreaterThan;
+			else if (_Left < _Right)
+				return ECompare_LessThan;
+			return ECompare_Equal;
 		}
+	}
 
-		template <typename tf_CTags, typename tf_CCharLeft, typename tf_CCharRight>
-		ECompare fg_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right)
+	template <typename tf_CTags, typename tf_CCharLeft, typename tf_CCharRight>
+	ECompare fg_CharCompare(tf_CCharLeft _Left, tf_CCharRight _Right)
+	{
+		return NPrivate::fg_Private_CharCompare(_Left, _Right, typename TCGetTag<tf_CTags, CNoCaseBase>::CType());
+	}
+
+	namespace NPrivate
+	{
+		struct CDummyBase
 		{
-			return NPrivate::fg_Private_CharCompare(_Left, _Right, typename TCGetTag<tf_CTags, CNoCaseBase>::CType());
-		}
-		
-		namespace NPrivate
-		{
-			struct CDummyBase
-			{
-			};
-			
-			struct CDummyDerived : public virtual CDummyBase
-			{
-			};
-			
-			template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
-			NIterator::TCRange<tf_CFront, tf_CBack> fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverseBase, CDummyBase)
-			{
-				return _rCharacters;
-			}
+		};
 
-			template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
-			auto fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverse, CDummyDerived)
-				-> decltype(NIterator::fg_RangeReverse(_rCharacters))
-			{
-				return NIterator::fg_RangeReverse(_rCharacters);
-			}
-			
-			template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
-			NIterator::TCRange<tf_CFront, tf_CBack> fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverse, CDummyBase)
-			{
-				static_assert(NTraits::TCIsVoid<tf_CTags>::mc_Value, "Range does not support reversing");
-			}
-		}
-		
+		struct CDummyDerived : public virtual CDummyBase
+		{
+		};
+
 		template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
-		auto fg_GetStringRange(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
-			-> decltype(NPrivate::fg_GetStringRangeHelper<tf_CTags>(_rCharacters, typename TCGetTag<tf_CTags, CReverseBase>::CType(), NPrivate::CDummyDerived()))
+		NIterator::TCRange<tf_CFront, tf_CBack> fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverseBase, CDummyBase)
 		{
-			return NPrivate::fg_GetStringRangeHelper<tf_CTags>(_rCharacters, typename TCGetTag<tf_CTags, CReverseBase>::CType(), NPrivate::CDummyDerived());
+			return _rCharacters;
 		}
-		
+
+		template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
+		auto fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverse, CDummyDerived)
+			-> decltype(NIterator::fg_RangeReverse(_rCharacters))
+		{
+			return NIterator::fg_RangeReverse(_rCharacters);
+		}
+
+		template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
+		NIterator::TCRange<tf_CFront, tf_CBack> fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverse, CDummyBase)
+		{
+			static_assert(NTraits::TCIsVoid<tf_CTags>::mc_Value, "Range does not support reversing");
+		}
+	}
+
+	template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
+	auto fg_GetStringRange(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
+		-> decltype(NPrivate::fg_GetStringRangeHelper<tf_CTags>(_rCharacters, typename TCGetTag<tf_CTags, CReverseBase>::CType(), NPrivate::CDummyDerived()))
+	{
+		return NPrivate::fg_GetStringRangeHelper<tf_CTags>(_rCharacters, typename TCGetTag<tf_CTags, CReverseBase>::CType(), NPrivate::CDummyDerived());
 	}
 }
-

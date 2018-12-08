@@ -1,18 +1,14 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
 
-namespace NMib
+namespace NMib::NStr2
 {
-	namespace NStr2
+	enum ECompare
 	{
-		enum ECompare
-		{
-			ECompare_LessThan = -1
-			, ECompare_Equal = 0
-			, ECompare_GreaterThan = 1
-		};
-	}
+		ECompare_LessThan = -1
+		, ECompare_Equal = 0
+		, ECompare_GreaterThan = 1
+	};
 }
-

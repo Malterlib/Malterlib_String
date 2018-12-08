@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -9,42 +9,39 @@
 #include <Mib/String/IteratorUnicode>
 #include <Mib/String/AlgorithmModifiers>
 
-namespace NMib
+namespace NMib::NStr2::NPrivate
 {
-	namespace NStr2
+	template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
+	bool fg_Private_StrIsEmpty(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
 	{
-		namespace NPrivate
-		{
-			template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
-			bool fg_Private_StrIsEmpty(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
-			{
-				return !_rCharacters;
-			}
-		}
+		return !_rCharacters;
+	}
+}
 		
-		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack>
-		bool fg_StrIsEmpty(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
-		{
-			return NPrivate::fg_Private_StrIsEmpty<TCTags<tfp_CTags...>>(_rCharacters);
-		}
+namespace NMib::NStr2
+{
+	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack>
+	bool fg_StrIsEmpty(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters)
+	{
+		return NPrivate::fg_Private_StrIsEmpty<TCTags<tfp_CTags...>>(_rCharacters);
+	}
 
-		template
+	template
+	<
+		typename ...tfp_CTags
+		, typename tf_CContainer
+		, typename TCEnableIf
 		<
-			typename ...tfp_CTags
-			, typename tf_CContainer
-			, typename TCEnableIf
-			<
-				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			>::CType *
-		>
-		bool fg_StrIsEmpty(tf_CContainer &&_Container)
-		{
-			auto rCharacters = NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>
-				(
-					fg_Forward<tf_CContainer>(_Container)
-				)
-			;
-			return NStr2::fg_StrIsEmpty<tfp_CTags...>(rCharacters);
-		}
+			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
+		>::CType *
+	>
+	bool fg_StrIsEmpty(tf_CContainer &&_Container)
+	{
+		auto rCharacters = NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>
+			(
+				fg_Forward<tf_CContainer>(_Container)
+			)
+		;
+		return NStr2::fg_StrIsEmpty<tfp_CTags...>(rCharacters);
 	}
 }

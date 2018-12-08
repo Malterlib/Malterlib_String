@@ -12,149 +12,145 @@
 #include <Mib/String/Algorithms/StartsWith>
 #include <Mib/Iterator/RangeSet>
 
-
-namespace NMib
+namespace NMib::NStr2::NPrivate
 {
-	namespace NStr2
+	template
+	<
+		typename tf_CTags
+		, typename tf_CFront
+		, typename tf_CBack
+		, typename tf_CFrontToMatch
+		, typename tf_CBackToMatch
+	>
+	auto fg_Private_StrWildcardMatch_Algorithm
+		(
+			NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
+			, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
+		)
 	{
-		namespace NPrivate
-		{
-			template 
-			<
-				typename tf_CTags
-				, typename tf_CFront
-				, typename tf_CBack
-				, typename tf_CFrontToMatch
-				, typename tf_CBackToMatch
-			>
-			auto fg_Private_StrWildcardMatch_Algorithm
-				(
-					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
-					, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
-				) 
-			{
-				auto rParse = _rCharacters;
-				auto rPattern = _rToMatch;
+		auto rParse = _rCharacters;
+		auto rPattern = _rToMatch;
 
-				while (rParse && rPattern)
+		while (rParse && rPattern)
+		{
+			if (*rPattern == '*')
+			{
+				while (*rPattern == '*')
+					++rPattern;
+				auto rMax = fg_StrFindChars(rPattern, "*?");
+				if (rMax)
 				{
-					if (*rPattern == '*')
+					auto rCompare = NIterator::fg_RangeDifferenceAB(rPattern, rMax);
+					while (rParse)
 					{
-						while (*rPattern == '*')
-							++rPattern;
-						auto rMax = fg_StrFindChars(rPattern, "*?");
-						if (rMax)
-						{
-							auto rCompare = NIterator::fg_RangeDifferenceAB(rPattern, rMax);
-							while (rParse)
-							{
-								if (NStr2::fg_StrStartsWith<tf_CTags>(rParse, rCompare))
-									break;
-								++rParse;
-							}
-						}
-						else
-						{
-							while (rParse)
-							{
-								if (NStr2::fg_StrStartsWith<tf_CTags>(rParse, rPattern))
-									break;
-								++rParse;
-							}
-						}
-					}
-					else if (*rPattern == '?')
-					{
-						++rPattern;
-						++rParse;
-					}
-					else
-					{
-						if (!fg_CharIsSame<tf_CTags>(*rPattern, *rParse))
+						if (NStr2::fg_StrStartsWith<tf_CTags>(rParse, rCompare))
 							break;
-						++rPattern;
 						++rParse;
 					}
 				}
-				while (*rPattern == '*')
-					++rPattern;
-
-				EWildcardMatch Match;
-				
-				if (!rParse && !rPattern)
-					Match = EWildcardMatch_WholeStringMatchedAndPatternExhausted;
-				else if (!rPattern)
-					Match = EWildcardMatch_PatternExhausted;
-				else if (!rParse)
-					Match = EWildcardMatch_WholeStringMatched;
 				else
-					Match = EWildcardMatch_NotMatched;
-					
-				return NIterator::fg_RangeReturn<tf_CTags, NIterator::CReturn_ResBack_Back>(_rCharacters, fg_Range(_rCharacters.f_Front(), rParse.f_Front()), Match);
+				{
+					while (rParse)
+					{
+						if (NStr2::fg_StrStartsWith<tf_CTags>(rParse, rPattern))
+							break;
+						++rParse;
+					}
+				}
 			}
-
-			template 
-			<
-				typename tf_CTags
-				, typename tf_CFront
-				, typename tf_CBack
-				, typename tf_CFrontToMatch
-				, typename tf_CBackToMatch
-			>
-			auto fg_Private_StrWildcardMatch
-				(
-					NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
-					, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
-				)
+			else if (*rPattern == '?')
 			{
-				using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CFront, tf_CBack, tf_CFront, tf_CTags>::CType;
-				// We always need to use unicode to handle ? correctly
-				auto rUTFCharacters = fg_RangeAdaptor_UTFDecode(_rCharacters);
-				auto rUTFToMatch = fg_RangeAdaptor_UTFDecode(_rToMatch);
-				auto Found = fg_Private_StrWildcardMatch_Algorithm<tf_CTags>(rUTFCharacters, rUTFToMatch);
-				return fg_RangeReturn
-					(
-						fg_Range
-						(
-							NIterator::fg_ParentIteratorOfType<typename CReturnType::CFront>(Found.m_Range.f_Front())
-							, NIterator::fg_ParentIteratorOfType<typename CReturnType::CBack>(Found.m_Range.f_Back())
-						)
-						, Found.m_Value
-					)
-				;
+				++rPattern;
+				++rParse;
+			}
+			else
+			{
+				if (!fg_CharIsSame<tf_CTags>(*rPattern, *rParse))
+					break;
+				++rPattern;
+				++rParse;
 			}
 		}
-		
-		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToMatch, typename tf_CBackToMatch>
-		auto fg_StrWildcardMatch(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch)
-		{
-			return NPrivate::fg_Private_StrWildcardMatch<TCTags<tfp_CTags...>>
-				(
-					_rCharacters
-					, _rToMatch
-				)
-			;
-		}
+		while (*rPattern == '*')
+			++rPattern;
 
-		template 
-		<
-			typename ...tfp_CTags
-			, typename tf_CContainer
-			, typename tf_CContainerToMatch
-			, typename TCEnableIf
-			<
-				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToMatch>::CType>::mc_Value
-			>::CType *
-		>
-		auto fg_StrWildcardMatch(tf_CContainer &&_Container, tf_CContainerToMatch &&_ContainerToMatch)
-		{
-			return NStr2::fg_StrWildcardMatch<tfp_CTags...>
+		EWildcardMatch Match;
+
+		if (!rParse && !rPattern)
+			Match = EWildcardMatch_WholeStringMatchedAndPatternExhausted;
+		else if (!rPattern)
+			Match = EWildcardMatch_PatternExhausted;
+		else if (!rParse)
+			Match = EWildcardMatch_WholeStringMatched;
+		else
+			Match = EWildcardMatch_NotMatched;
+
+		return NIterator::fg_RangeReturn<tf_CTags, NIterator::CReturn_ResBack_Back>(_rCharacters, fg_Range(_rCharacters.f_Front(), rParse.f_Front()), Match);
+	}
+
+	template
+	<
+		typename tf_CTags
+		, typename tf_CFront
+		, typename tf_CBack
+		, typename tf_CFrontToMatch
+		, typename tf_CBackToMatch
+	>
+	auto fg_Private_StrWildcardMatch
+		(
+			NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters
+			, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch
+		)
+	{
+		using CReturnType = typename NIterator::TCGetRangeReturnType<tf_CFront, tf_CFront, tf_CBack, tf_CFront, tf_CTags>::CType;
+		// We always need to use unicode to handle ? correctly
+		auto rUTFCharacters = fg_RangeAdaptor_UTFDecode(_rCharacters);
+		auto rUTFToMatch = fg_RangeAdaptor_UTFDecode(_rToMatch);
+		auto Found = fg_Private_StrWildcardMatch_Algorithm<tf_CTags>(rUTFCharacters, rUTFToMatch);
+		return fg_RangeReturn
+			(
+				fg_Range
 				(
-					NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
-					, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_ContainerToMatch)
+					NIterator::fg_ParentIteratorOfType<typename CReturnType::CFront>(Found.m_Range.f_Front())
+					, NIterator::fg_ParentIteratorOfType<typename CReturnType::CBack>(Found.m_Range.f_Back())
 				)
-			;
-		}
+				, Found.m_Value
+			)
+		;
+	}
+}
+		
+namespace NMib::NStr2
+{
+	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontToMatch, typename tf_CBackToMatch>
+	auto fg_StrWildcardMatch(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontToMatch, tf_CBackToMatch> const &_rToMatch)
+	{
+		return NPrivate::fg_Private_StrWildcardMatch<TCTags<tfp_CTags...>>
+			(
+				_rCharacters
+				, _rToMatch
+			)
+		;
+	}
+
+	template
+	<
+		typename ...tfp_CTags
+		, typename tf_CContainer
+		, typename tf_CContainerToMatch
+		, typename TCEnableIf
+		<
+			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
+			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToMatch>::CType>::mc_Value
+		>::CType *
+	>
+	auto fg_StrWildcardMatch(tf_CContainer &&_Container, tf_CContainerToMatch &&_ContainerToMatch)
+	{
+		return NStr2::fg_StrWildcardMatch<tfp_CTags...>
+			(
+				NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_Container)
+				, NIterator::fg_Range<NMeta::TCTypeList<TCTags<NIterator::CIteratorTraversal_Forward, NIterator::CIteratorAccess_Readable>>>(_ContainerToMatch)
+			)
+		;
 	}
 }

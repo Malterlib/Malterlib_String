@@ -7,26 +7,23 @@
 #include <Mib/Iterator/Range>
 #include <Mib/Core/Tags>
 
-namespace NMib
+namespace NMib::NStr2
 {
-	namespace NStr2
-	{
-		template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontStartsWith, typename tf_CBackStartsWith>
-		auto fg_StrEndsWith(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontStartsWith, tf_CBackStartsWith> const &_rStartsWith);
+	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack, typename tf_CFrontStartsWith, typename tf_CBackStartsWith>
+	auto fg_StrEndsWith(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, NIterator::TCRange<tf_CFrontStartsWith, tf_CBackStartsWith> const &_rStartsWith);
 
-		template 
+	template
+	<
+		typename ...tfp_CTags
+		, typename tf_CContainer
+		, typename tf_CContainerEndsWith
+		, typename TCEnableIf
 		<
-			typename ...tfp_CTags
-			, typename tf_CContainer
-			, typename tf_CContainerEndsWith
-			, typename TCEnableIf
-			<
-				!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-				|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>::CType>::mc_Value
-			>::CType * = nullptr
-		>
-		auto fg_StrEndsWith(tf_CContainer &&_Container, tf_CContainerEndsWith &&_ContainerStartsWith);
-	}
+			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
+			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>::CType>::mc_Value
+		>::CType * = nullptr
+	>
+	auto fg_StrEndsWith(tf_CContainer &&_Container, tf_CContainerEndsWith &&_ContainerStartsWith);
 }
 
 #include "Malterlib_String_Algorithm_EndsWith.hpp"

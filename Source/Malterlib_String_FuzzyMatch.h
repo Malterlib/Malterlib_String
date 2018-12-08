@@ -3,10 +3,7 @@
 
 #pragma once
 
-namespace NMib
+namespace NMib::NStr
 {
-	namespace NStr
-	{
-		fp64 fg_FuzzyMatchString(CStr _Str0, CStr _Str1);
-	}
+	fp64 fg_FuzzyMatchString(CStr _Str0, CStr _Str1);
 }

@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/Compare>
@@ -42,7 +42,7 @@ namespace
 				DMibTestSuite("ANSI")
 				{
 					ch8 OutArray[100];
-					NMem::fg_ObjectSet(OutArray + 0, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray + 0, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
 					
 					fg_StrMove(NStr::fg_NullTerminated(OutArray), NStr::fg_RawStringArray(OutArray + 4, 6));
@@ -51,7 +51,7 @@ namespace
 				DMibTestSuite("UTF8")
 				{
 					ch8 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 					
 					fg_StrMove(OutArray + 0, NStr::fg_RawStringArray(OutArray + 4, 8));
@@ -60,7 +60,7 @@ namespace
 				DMibTestSuite("UTF16")
 				{
 					ch16 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 
 					fg_StrMove(OutArray + 0, NStr::fg_RawStringArray(OutArray + 4, 6));
@@ -69,7 +69,7 @@ namespace
 				DMibTestSuite("UTF32")
 				{
 					ch32 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 					fg_StrMove(OutArray + 0, NStr::fg_RawStringArray(OutArray + 4, 5));
 					DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("𠀀CharChar𠀀Char")), ==, ECompare_Equal);
@@ -80,7 +80,7 @@ namespace
 				DMibTestSuite("ANSI")
 				{
 					ch8 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
 					
 					fg_StrMove(OutArray + 6, NStr::fg_RawStringArray(OutArray + 4, 6));
@@ -89,7 +89,7 @@ namespace
 				DMibTestSuite("UTF8")
 				{
 					ch8 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 
 					fg_StrMove(OutArray + 8, NStr::fg_RawStringArray(OutArray + 4, 8));
@@ -98,7 +98,7 @@ namespace
 				DMibTestSuite("UTF16")
 				{
 					ch16 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 
 					fg_StrMove(OutArray + 6, NStr::fg_RawStringArray(OutArray + 4, 6));
@@ -107,7 +107,7 @@ namespace
 				DMibTestSuite("UTF32")
 				{
 					ch32 OutArray[100];
-					NMem::fg_ObjectSet(OutArray, 0xff, 100);
+					NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 					auto rDestination = fg_StrCopy(OutArray, ToMove);
 					fg_StrMove(OutArray + 5, NStr::fg_RawStringArray(OutArray + 4, 5));
 					DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀𠀀CharChar")), ==, ECompare_Equal);

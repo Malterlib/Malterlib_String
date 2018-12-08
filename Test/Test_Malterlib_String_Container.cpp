@@ -59,7 +59,7 @@ using namespace NMib::NTraits;
 namespace
 {
 	using namespace NMib::NStr;
-	using namespace NMib::NPtr;
+	using namespace NMib::NStorage;
 	namespace qi = boost::spirit::qi;
 	namespace karma = boost::spirit::karma;
 	namespace ascii = boost::spirit::ascii;

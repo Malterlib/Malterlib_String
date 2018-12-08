@@ -13,22 +13,14 @@ typedef NMib::TCAutoClear<uch8> zuch8;
 typedef NMib::TCAutoClear<uch16> zuch16;
 typedef NMib::TCAutoClear<uch32> zuch32;
 
-namespace NMib
+namespace NMib::NStr
 {
-	namespace NStr
-	{
-		void fg_Debug_AccessNewLine();
-	}
+	void fg_Debug_AccessNewLine();
 
-	namespace NStr
-	{
+	extern ch8 g_lWhiteSpaceChars[];
 
-		extern ch8 g_lWhiteSpaceChars[];
-
-		template <typename t_CDataToTest, typename t_CClassToTestAgainst>
-		class TCHasFormatClass;
-		
-	}
+	template <typename t_CDataToTest, typename t_CClassToTestAgainst>
+	class TCHasFormatClass;
 }
 
 #include "Malterlib_String_Algorithm.hpp"
@@ -45,32 +37,27 @@ namespace NMib
 #include "Malterlib_String_Container_ImpDynamic.h"
 #include "Malterlib_String_Container_ImpFixed.h"
 
-namespace NMib
+namespace NMib::NStr
 {
-	namespace NStr
-	{
-
 #ifdef DMibSupportExternTemplates
-		extern template TCStr<CStrTraits_CStr>;
-		extern template TCStr<CStrTraits_CWStr>;
-		extern template TCStr<CStrTraits_CUStr>;
-		extern template TCStrAggregate< CStrTraits_CStr>;
-		extern template TCStrAggregate< CStrTraits_CWStr>;
-		extern template TCStrAggregate< CStrTraits_CUStr>;
+	extern template TCStr<CStrTraits_CStr>;
+	extern template TCStr<CStrTraits_CWStr>;
+	extern template TCStr<CStrTraits_CUStr>;
+	extern template TCStrAggregate< CStrTraits_CStr>;
+	extern template TCStrAggregate< CStrTraits_CWStr>;
+	extern template TCStrAggregate< CStrTraits_CUStr>;
 
-		extern template TCStr<CStrTraits_CStrNonTracked>;
-		extern template TCStr<CStrTraits_CWStrNonTracked>;
-		extern template TCStr<CStrTraits_CUStrNonTracked>;
-		extern template TCStrAggregate<CStrTraits_CStr>;
-		extern template TCStrAggregate<CStrTraits_CWStr>;
-		extern template TCStrAggregate<CStrTraits_CUStr>;
+	extern template TCStr<CStrTraits_CStrNonTracked>;
+	extern template TCStr<CStrTraits_CWStrNonTracked>;
+	extern template TCStr<CStrTraits_CUStrNonTracked>;
+	extern template TCStrAggregate<CStrTraits_CStr>;
+	extern template TCStrAggregate<CStrTraits_CWStr>;
+	extern template TCStrAggregate<CStrTraits_CUStr>;
 
-		extern template TCStr<CStrTraits_CStrVMem>;
-		extern template TCStr<CStrTraits_CWStrVMem>;
-		extern template TCStr<CStrTraits_CUStrVMem>;
+	extern template TCStr<CStrTraits_CStrVMem>;
+	extern template TCStr<CStrTraits_CWStrVMem>;
+	extern template TCStr<CStrTraits_CUStrVMem>;
 #endif
-
-	}
 }
 
 #include "Malterlib_String_Container_Format_String.h"
@@ -87,125 +74,112 @@ namespace NMib
 
 #include "Malterlib_String_Container_Format.h"
 
-namespace NMib
+namespace NMib::NSys::NStr
 {
-	namespace NSys
-	{
-		namespace NStr
-		{
-			void fg_SystemEncodeAnsiStr(NMib::NStr::CStr const &_In, NMib::NStr::CAnsiStr &_Out, ch8 _ErrorChar);
-			void fg_SystemDecodeAnsiStr(NMib::NStr::CAnsiStr const &_In, NMib::NStr::CStr &_Out);
-			void fg_SystemDecodeAnsiStr(ch8 const *_pIn, NMib::NStr::CStr &_Out);
-			void fg_SystemEncodeCodePageStr(NMib::NStr::CStr const &_In, NMib::NStr::CAnsiStr &_Out, uint32 _CodePage, ch8 _ErrorChar);
-			void fg_SystemDecodeCodePageStr(NMib::NStr::CAnsiStr const &_In, NMib::NStr::CStr &_Out, uint32 _CodePage);
-			void fg_SystemDecodeCodePageStr(ch8 const *_pIn, NMib::NStr::CStr &_Out, uint32 _CodePage);
-			void fg_SystemEncodeAnsiStr(NMib::NStr::CStrNonTracked const &_In, NMib::NStr::CAnsiStrNonTracked &_Out, ch8 _ErrorChar);
-			void fg_SystemDecodeAnsiStr(NMib::NStr::CAnsiStrNonTracked const &_In, NMib::NStr::CStrNonTracked &_Out);
-			void fg_SystemDecodeAnsiStr(ch8 const *_pIn, NMib::NStr::CStrNonTracked &_Out);
-			void fg_SystemEncodeCodePageStr(NMib::NStr::CStrNonTracked const &_In, NMib::NStr::CAnsiStrNonTracked &_Out, uint32 _CodePage, ch8 _ErrorChar);
-			void fg_SystemDecodeCodePageStr(NMib::NStr::CAnsiStrNonTracked const &_In, NMib::NStr::CStrNonTracked &_Out, uint32 _CodePage);
-			void fg_SystemDecodeCodePageStr(ch8 const *_pIn, NMib::NStr::CStrNonTracked &_Out, uint32 _CodePage);
-		}
-	}
+	void fg_SystemEncodeAnsiStr(NMib::NStr::CStr const &_In, NMib::NStr::CAnsiStr &_Out, ch8 _ErrorChar);
+	void fg_SystemDecodeAnsiStr(NMib::NStr::CAnsiStr const &_In, NMib::NStr::CStr &_Out);
+	void fg_SystemDecodeAnsiStr(ch8 const *_pIn, NMib::NStr::CStr &_Out);
+	void fg_SystemEncodeCodePageStr(NMib::NStr::CStr const &_In, NMib::NStr::CAnsiStr &_Out, uint32 _CodePage, ch8 _ErrorChar);
+	void fg_SystemDecodeCodePageStr(NMib::NStr::CAnsiStr const &_In, NMib::NStr::CStr &_Out, uint32 _CodePage);
+	void fg_SystemDecodeCodePageStr(ch8 const *_pIn, NMib::NStr::CStr &_Out, uint32 _CodePage);
+	void fg_SystemEncodeAnsiStr(NMib::NStr::CStrNonTracked const &_In, NMib::NStr::CAnsiStrNonTracked &_Out, ch8 _ErrorChar);
+	void fg_SystemDecodeAnsiStr(NMib::NStr::CAnsiStrNonTracked const &_In, NMib::NStr::CStrNonTracked &_Out);
+	void fg_SystemDecodeAnsiStr(ch8 const *_pIn, NMib::NStr::CStrNonTracked &_Out);
+	void fg_SystemEncodeCodePageStr(NMib::NStr::CStrNonTracked const &_In, NMib::NStr::CAnsiStrNonTracked &_Out, uint32 _CodePage, ch8 _ErrorChar);
+	void fg_SystemDecodeCodePageStr(NMib::NStr::CAnsiStrNonTracked const &_In, NMib::NStr::CStrNonTracked &_Out, uint32 _CodePage);
+	void fg_SystemDecodeCodePageStr(ch8 const *_pIn, NMib::NStr::CStrNonTracked &_Out, uint32 _CodePage);
 }
-
 
 #include "Malterlib_String_Container.hpp"
 #include "Malterlib_String_Container_ImpDynamic.hpp"
 
-namespace NMib
+namespace NMib::NStr
 {
-	namespace NStr
+	CStr fg_ForceStrUTF8(const CStr &_Str);
+	CStr fg_ForceStrUTF8(const CWStr &_Str);
+	CStr fg_ForceStrUTF8(const CUStr &_Str);
+	bool fg_IsValidUTF8(CStr const &_Str);
+	CWStr fg_ForceStrUTF16(const CWStr &_Str);
+	CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar = '?');
+	CStr fg_ReplaceSequenceUTF8(CStr const &_Str, CStr const &_ReplacementChar = CStr("\xef\xbf\xbd"));
+	CStr fg_CleanUTF8(CStr const &_Str);
+
+	inline_always CStr::CFormat operator ""_f (const char *_pStr, std::size_t _Len)
 	{
-		CStr fg_ForceStrUTF8(const CStr &_Str);
-		CStr fg_ForceStrUTF8(const CWStr &_Str);
-		CStr fg_ForceStrUTF8(const CUStr &_Str);
-		bool fg_IsValidUTF8(CStr const &_Str);
-		CWStr fg_ForceStrUTF16(const CWStr &_Str);
-		CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar = '?');
-		CStr fg_ReplaceSequenceUTF8(CStr const &_Str, CStr const &_ReplacementChar = CStr("\xef\xbf\xbd"));
-		CStr fg_CleanUTF8(CStr const &_Str);
+		return CStr::CFormat(_pStr);
 	}
-	namespace NStr
+
+	inline_always CWStr::CFormat operator "" _f (const ch16 *_pStr, std::size_t _Len)
 	{
-		inline_always CStr::CFormat operator ""_f (const char *_pStr, std::size_t _Len)
+		return CWStr::CFormat(_pStr);
+	}
+
+	inline_always CUStr::CFormat operator "" _f (const ch32 *_pStr, std::size_t _Len)
+	{
+		return CUStr::CFormat(_pStr);
+	}
+	struct CParseLocation
+	{
+		bool operator ==(CParseLocation const &_Right) const;
+		void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+
+		template <typename tf_CStream>
+		void f_Feed(tf_CStream &_Stream) const
 		{
-			return CStr::CFormat(_pStr);
+			_Stream << m_File;
+			_Stream << m_Character;
+			_Stream << m_Line;
+			_Stream << m_Column;
 		}
 
-		inline_always CWStr::CFormat operator "" _f (const ch16 *_pStr, std::size_t _Len)
+		template <typename tf_CStream>
+		void f_Consume(tf_CStream &_Stream)
 		{
-			return CWStr::CFormat(_pStr);
+			_Stream >> m_File;
+			_Stream >> m_Character;
+			_Stream >> m_Line;
+			_Stream >> m_Column;
 		}
 
-		inline_always CUStr::CFormat operator "" _f (const ch32 *_pStr, std::size_t _Len)
-		{
-			return CUStr::CFormat(_pStr);
-		}
-	}
-	namespace NStr
+		NStr::CStr m_File;
+		zuint32 m_Character;
+		zuint32 m_Line;
+		zuint32 m_Column;
+	};
+
+	struct CParseError
 	{
-		struct CParseLocation
+		bool operator ==(CParseError const &_Right) const;
+
+		void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+
+		template <typename tf_CStream>
+		void f_Feed(tf_CStream &_Stream) const
 		{
-			bool operator ==(CParseLocation const &_Right) const;
-			void f_Format(NStr::CStrAggregate &o_FormatInto) const;
-			
-			template <typename tf_CStream>
-			void f_Feed(tf_CStream &_Stream) const
-			{
-				_Stream << m_File;
-				_Stream << m_Character;
-				_Stream << m_Line;
-				_Stream << m_Column;
-			}
-			
-			template <typename tf_CStream>
-			void f_Consume(tf_CStream &_Stream)
-			{
-				_Stream >> m_File;
-				_Stream >> m_Character;
-				_Stream >> m_Line;
-				_Stream >> m_Column;
-			}
-			
-			NStr::CStr m_File;
-			zuint32 m_Character;
-			zuint32 m_Line;
-			zuint32 m_Column;
-		};
+			_Stream << m_Error;
+			_Stream << m_Location;
+		}
 
-		struct CParseError
+		template <typename tf_CStream>
+		void f_Consume(tf_CStream &_Stream)
 		{
-			bool operator ==(CParseError const &_Right) const;
+			_Stream >> m_Error;
+			_Stream >> m_Location;
+		}
 
-			void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+		CStr m_Error;
+		CParseLocation m_Location;
+	};
 
-			template <typename tf_CStream>
-			void f_Feed(tf_CStream &_Stream) const
-			{
-				_Stream << m_Error;
-				_Stream << m_Location;
-			}
+	DMibImpErrorSpecificClass(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
 
-			template <typename tf_CStream>
-			void f_Consume(tf_CStream &_Stream)
-			{
-				_Stream >> m_Error;
-				_Stream >> m_Location;
-			}
-			
-			CStr m_Error;
-			CParseLocation m_Location;
-		};
-		
-		DMibImpErrorSpecificClass(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
+#	define DMibErrorParse(d_Description, d_Specific) DMibImpErrorSpecific(NMib::NStr::CExceptionParse, d_Description, d_Specific)
 
-#		define DMibErrorParse(d_Description, d_Specific) DMibImpErrorSpecific(NMib::NStr::CExceptionParse, d_Description, d_Specific)
-
-#		ifndef DMibPNoShortCuts
-#			define DErrorParse(d_Description, d_Specific) DMibErrorParse(d_Description, d_Specific)
-#		endif
-
-	}
+#	ifndef DMibPNoShortCuts
+#		define DErrorParse(d_Description, d_Specific) DMibErrorParse(d_Description, d_Specific)
+#	endif
 }
 
+#ifndef DMibPNoShortCuts
+	using namespace NMib::NStr;
+#endif
