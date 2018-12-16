@@ -7,6 +7,7 @@
 #include "../../Core/Source/Malterlib_Core_PlatformInterface.h"
 #include <Mib/String/UnicodeConversion>
 #include <Mib/String/Algorithm>
+#include <Mib/Core/EnableIf>
 
 namespace NMib::NStr
 {
@@ -785,6 +786,12 @@ EndArgSearch:
 
 	};
 
+#ifdef DMibDebuggerHelpers
+	template <int t_Type>
+	struct TCStrAggregateTypeHelper
+	{
+	};
+#endif
 
 	template <typename t_CTCStrTraits>
 	class TCStrAggregate : public t_CTCStrTraits::CImp
@@ -801,7 +808,7 @@ EndArgSearch:
 		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 #ifdef DMibDebuggerHelpers
-		static mint ms_TypeDebugHelper;
+		static TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> fs_TypeDebugHelper();
 #endif
 
 		static const CChar ms_FormatStr[];
@@ -854,9 +861,15 @@ EndArgSearch:
 		constexpr TCStrAggregate(EAggregateInitialization _Init)
 			: t_CTCStrTraits::CImp{_Init}
 		{
+#ifdef DMibDebuggerHelpers
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
+#endif
 		}
 		TCStrAggregate()
 		{
+#ifdef DMibDebuggerHelpers
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
+#endif
 		}
 		TCStrAggregate & operator = (TCStrAggregate const &_From) = delete;
 		TCStrAggregate(TCStrAggregate const &_From) = delete;
@@ -878,7 +891,7 @@ EndArgSearch:
 		inline_small void f_Construct()
 		{
 #ifdef DMibDebuggerHelpers
-			NSys::fg_Compiler_MakeActive(&ms_TypeDebugHelper);
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
 			CImp::f_Construct();
 		}
@@ -886,7 +899,7 @@ EndArgSearch:
 		inline_small void f_Construct(const TCStrAggregate &_Src)
 		{
 #ifdef DMibDebuggerHelpers
-			NSys::fg_Compiler_MakeActive(&ms_TypeDebugHelper);
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
 			CImp::f_Construct(_Src);
 		}
@@ -894,7 +907,7 @@ EndArgSearch:
 		inline_small void f_Construct(TCStrAggregate &&_Src)
 		{
 #ifdef DMibDebuggerHelpers
-			NSys::fg_Compiler_MakeActive(&ms_TypeDebugHelper);
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
 			CImp::f_Construct(fg_Move(_Src));
 		}
@@ -903,7 +916,7 @@ EndArgSearch:
 		inline_small void f_Construct(tfp_CParams &&...p_Params)
 		{
 #ifdef DMibDebuggerHelpers
-			NSys::fg_Compiler_MakeActive(&ms_TypeDebugHelper);
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
 			CImp::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
 		}

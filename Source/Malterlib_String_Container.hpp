@@ -7,7 +7,10 @@ namespace NMib::NStr
 {
 #ifdef DMibDebuggerHelpers
 	template <typename t_CTCStrTraits>
-	mint TCStrAggregate<t_CTCStrTraits>::ms_TypeDebugHelper = TCStrAggregate<t_CTCStrTraits>::mc_Type;
+	assure_used TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStrAggregate<t_CTCStrTraits>::fs_TypeDebugHelper()
+	{
+		return {};
+	}
 #endif
 
 	CStr fg_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
