@@ -1814,7 +1814,7 @@ namespace
 					{
 						{
 							CStr A = "Result";
-							DMibTest(DMibExpr(fg_ViolatesAssert("reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value) 'You cannot assign a format to string that is used by reference as an argument.'")) == DMibLExpr( (A = CStr::CFormat("{}{}") << A << "Value")));
+							DMibTest(DMibExpr(fg_ViolatesSafeCheck("reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value) 'You cannot assign a format to string that is used by reference as an argument.'")) == DMibLExpr( (A = CStr::CFormat("{}{}") << A << "Value")));
 						}
 					};
 				};				
