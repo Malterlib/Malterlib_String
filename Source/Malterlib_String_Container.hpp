@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 #ifdef DMibDebuggerHelpers
 	template <typename t_CTCStrTraits>
-	assure_used TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStrAggregate<t_CTCStrTraits>::fs_TypeDebugHelper()
+	TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStrAggregate<t_CTCStrTraits>::fs_TypeDebugHelper()
 	{
 		return {};
 	}
