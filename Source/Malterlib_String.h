@@ -171,7 +171,7 @@ namespace NMib::NStr
 		CParseLocation m_Location;
 	};
 
-	DMibImpErrorSpecificClass(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
+	DMibImpErrorSpecificClassDefine(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
 
 #	define DMibErrorParse(d_Description, d_Specific) DMibImpErrorSpecific(NMib::NStr::CExceptionParse, d_Description, d_Specific)
 

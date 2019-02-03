@@ -7,6 +7,8 @@
 
 namespace NMib::NStr
 {
+	DMibImpErrorClassImplement(CExceptionParse);
+
 #ifdef DMibSupportExternTemplates
 	template TCStr<CStrTraits_CStr>;
 	template TCStr<CStrTraits_CWStr>;
