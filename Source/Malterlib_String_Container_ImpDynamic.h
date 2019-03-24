@@ -16,7 +16,7 @@ namespace NMib::NStr
 		typedef typename t_CStrTraits::CChar CChar;
 		typedef typename t_CStrTraits::CParams CImpParams;
 		typedef typename CImpParams::CAllocator CAllocator;
-		typedef typename CAllocator::CPtrHolder CPtrHolder;
+		
 		enum
 		{
 			EMaxExtraChars = CImpParams::EMaxExtraChars
@@ -49,7 +49,7 @@ namespace NMib::NStr
 		const static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
 		const static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
 
-		TCDynamicPtr<CPtrHolder, CData> m_pData;
+		CData *m_pData;
 
 		inline_small void f_Construct()
 		{

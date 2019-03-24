@@ -2059,10 +2059,6 @@ public:
 		TestList.f_Insert(DMibNew CTestClass("Item 2"));
 		TestList.f_Insert(DMibNew CTestClass("Item 3"));
 
-		NMib::TCDynamicPtr<NMib::CDefaultPointerHolder, CStr> TestPtr;
-
-		TestPtr = &TestVSE0;
-
 		DMibListLinkDS_Iter(CTestClass, m_Link) Iter = TestList;
 		mint Len = TestList.f_GetLen();
 		while (Iter && Len)

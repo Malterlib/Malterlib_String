@@ -22,12 +22,12 @@ namespace NMib::NStr
 	};
 
 
-	template <typename t_CTStrTraits, typename t_CPointerHolder>
+	template <typename t_CTStrTraits>
 	class TCStrImp_Virtual_PtrWrapper : public TCStrAggregate< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint> > >
 	{
 		constexpr const static bool mc_bInitConstStr = false;
 
-		TCDynamicPtr<t_CPointerHolder, TCStrAggregate< t_CTStrTraits > > m_pStr;
+		TCStrAggregate<t_CTStrTraits> *m_pStr;
 
 		enum
 		{

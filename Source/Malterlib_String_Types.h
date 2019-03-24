@@ -46,7 +46,7 @@ namespace NMib::NStr
 	class CStrImp_Dynamic_ParamsSecure
 	{
 	public:
-		typedef NMemory::TCAllocator_Secure<NMemory::CAllocator_Heap> CAllocator;
+		using CAllocator = NMemory::CAllocator_HeapSecure;
 		enum
 		{
 			EMaxExtraChars = 32
@@ -74,7 +74,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, typename t_CImpParams>
 	class TICStrImp_Virtual;
 
-	template <typename t_CTStrTraits, typename t_CPointerHolder>
+	template <typename t_CTStrTraits>
 	class TCStrImp_Virtual_PtrWrapper;
 
 	template <typename t_CTStrTraits>

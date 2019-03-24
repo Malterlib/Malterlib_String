@@ -149,9 +149,9 @@ namespace NMib::NStr
 	typedef TCStr<CStrTraits_CWStrVMem> CWStrVMem;
 	typedef TCStr<CStrTraits_CUStrVMem> CUStrVMem;
 
-	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CStr, void *> CStrVp;
-	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CWStr, void *> CWStrVp;
-	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CUStr, void *> CUStrVp;
+	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CStr> CStrVp;
+	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CWStr> CWStrVp;
+	typedef TCStrImp_Virtual_PtrWrapper<CStrTraits_CUStr> CUStrVp;
 
 	typedef TCStrImp_Virtual_TStrWrapper<CStrTraits_CStr> CStrV;
 	typedef TCStrImp_Virtual_TStrWrapper<CStrTraits_CWStr> CWStrV;
@@ -186,37 +186,37 @@ namespace NMib::NStr
 	typedef TCFStr<ch8, 16, EStrType_UTF>::CType CFStr16;
 	typedef TCFStrAggregate<ch8, 16, EStrType_UTF>::CType CFStrAggregate16;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType> CFStr16V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType, void *> CFStr16Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType> CFStr16Vp;
 
 	typedef TCFStr<ch8, 32, EStrType_UTF>::CType CFStr32;
 	typedef TCFStrAggregate<ch8, 32, EStrType_UTF>::CType CFStrAggregate32;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType > CFStr32V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType, void *> CFStr32Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType> CFStr32Vp;
 
 	typedef TCFStr<ch8, 64, EStrType_UTF>::CType CFStr64;
 	typedef TCFStrAggregate<ch8, 64, EStrType_UTF>::CType CFStrAggregate64;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 64, EStrType_UTF>::CType > CFStr64V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 64, EStrType_UTF>::CType, void *> CFStr64Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 64, EStrType_UTF>::CType> CFStr64Vp;
 
 	typedef TCFStr<ch8, 128, EStrType_UTF>::CType CFStr128;
 	typedef TCFStrAggregate<ch8, 128, EStrType_UTF>::CType CFStrAggregate128;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 128, EStrType_UTF>::CType > CFStr128V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 128, EStrType_UTF>::CType, void *> CFStr128Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 128, EStrType_UTF>::CType> CFStr128Vp;
 
 	typedef TCFStr<ch8, 256, EStrType_UTF>::CType CFStr256;
 	typedef TCFStrAggregate<ch8, 256, EStrType_UTF>::CType CFStrAggregate256;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 256, EStrType_UTF>::CType > CFStr256V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 256, EStrType_UTF>::CType, void *> CFStr256Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 256, EStrType_UTF>::CType> CFStr256Vp;
 
 	typedef TCFStr<ch8, 512, EStrType_UTF>::CType CFStr512;
 	typedef TCFStrAggregate<ch8, 512, EStrType_UTF>::CType CFStrAggregate512;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 512, EStrType_UTF>::CType > CFStr512V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 512, EStrType_UTF>::CType, void *> CFStr512Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 512, EStrType_UTF>::CType> CFStr512Vp;
 
 	typedef TCFStr<ch8, 1024, EStrType_UTF>::CType CFStr1024;
 	typedef TCFStrAggregate<ch8, 1024, EStrType_UTF>::CType CFStrAggregate1024;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 1024, EStrType_UTF>::CType > CFStr1024V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 1024, EStrType_UTF>::CType, void *> CFStr1024Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 1024, EStrType_UTF>::CType> CFStr1024Vp;
 
 	/***************************************************************************************************\
 	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
@@ -227,37 +227,37 @@ namespace NMib::NStr
 	typedef TCFStr<ch16, 16, EStrType_UTF>::CType CFWStr16;
 	typedef TCFStrAggregate<ch16, 16, EStrType_UTF>::CType CFWStrAggregate16;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType > CFWStr16V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType, void *> CFWStr16Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType> CFWStr16Vp;
 
 	typedef TCFStr<ch16, 32, EStrType_UTF>::CType CFWStr32;
 	typedef TCFStrAggregate<ch16, 32, EStrType_UTF>::CType CFWStrAggregate32;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType > CFWStr32V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType, void *> CFWStr32Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType> CFWStr32Vp;
 
 	typedef TCFStr<ch16, 64, EStrType_UTF>::CType CFWStr64;
 	typedef TCFStrAggregate<ch16, 64, EStrType_UTF>::CType CFWStrAggregate64;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 64, EStrType_UTF>::CType > CFWStr64V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 64, EStrType_UTF>::CType, void *> CFWStr64Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 64, EStrType_UTF>::CType> CFWStr64Vp;
 
 	typedef TCFStr<ch16, 128, EStrType_UTF>::CType CFWStr128;
 	typedef TCFStrAggregate<ch16, 128, EStrType_UTF>::CType CFWStrAggregate128;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 128, EStrType_UTF>::CType > CFWStr128V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 128, EStrType_UTF>::CType, void *> CFWStr128Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 128, EStrType_UTF>::CType> CFWStr128Vp;
 
 	typedef TCFStr<ch16, 256, EStrType_UTF>::CType CFWStr256;
 	typedef TCFStrAggregate<ch16, 256, EStrType_UTF>::CType CFWStrAggregate256;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 256, EStrType_UTF>::CType > CFWStr256V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 256, EStrType_UTF>::CType, void *> CFWStr256Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 256, EStrType_UTF>::CType> CFWStr256Vp;
 
 	typedef TCFStr<ch16, 512, EStrType_UTF>::CType CFWStr512;
 	typedef TCFStrAggregate<ch16, 512, EStrType_UTF>::CType CFWStrAggregate512;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 512, EStrType_UTF>::CType > CFWStr512V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 512, EStrType_UTF>::CType, void *> CFWStr512Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 512, EStrType_UTF>::CType> CFWStr512Vp;
 
 	typedef TCFStr<ch16, 1024, EStrType_UTF>::CType CFWStr1024;
 	typedef TCFStrAggregate<ch16, 1024, EStrType_UTF>::CType CFWStrAggregate1024;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 1024, EStrType_UTF>::CType > CFWStr1024V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 1024, EStrType_UTF>::CType, void *> CFWStr1024Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 1024, EStrType_UTF>::CType> CFWStr1024Vp;
 
 	/***************************************************************************************************\
 	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
@@ -268,37 +268,37 @@ namespace NMib::NStr
 	typedef TCFStr<ch32, 16, EStrType_Unicode>::CType CFUStr16;
 	typedef TCFStrAggregate<ch32, 16, EStrType_Unicode>::CType CFUStrAggregate16;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType > CFUStr16V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType, void *> CFUStr16Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType> CFUStr16Vp;
 
 	typedef TCFStr<ch32, 32, EStrType_Unicode>::CType CFUStr32;
 	typedef TCFStrAggregate<ch32, 32, EStrType_Unicode>::CType CFUStrAggregate32;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 32, EStrType_Unicode>::CType > CFUStr32V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 32, EStrType_Unicode>::CType, void *> CFUStr32Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 32, EStrType_Unicode>::CType> CFUStr32Vp;
 
 	typedef TCFStr<ch32, 64, EStrType_Unicode>::CType CFUStr64;
 	typedef TCFStrAggregate<ch32, 64, EStrType_Unicode>::CType CFUStrAggregate64;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 64, EStrType_Unicode>::CType > CFUStr64V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 64, EStrType_Unicode>::CType, void *> CFUStr64Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 64, EStrType_Unicode>::CType> CFUStr64Vp;
 
 	typedef TCFStr<ch32, 128, EStrType_Unicode>::CType CFUStr128;
 	typedef TCFStrAggregate<ch32, 128, EStrType_Unicode>::CType CFUStrAggregate128;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 128, EStrType_Unicode>::CType > CFUStr128V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 128, EStrType_Unicode>::CType, void *> CFUStr128Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 128, EStrType_Unicode>::CType> CFUStr128Vp;
 
 	typedef TCFStr<ch32, 256, EStrType_Unicode>::CType CFUStr256;
 	typedef TCFStrAggregate<ch32, 256, EStrType_Unicode>::CType CFUStrAggregate256;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 256, EStrType_Unicode>::CType > CFUStr256V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 256, EStrType_Unicode>::CType, void *> CFUStr256Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 256, EStrType_Unicode>::CType> CFUStr256Vp;
 
 	typedef TCFStr<ch32, 512, EStrType_Unicode>::CType CFUStr512;
 	typedef TCFStrAggregate<ch32, 512, EStrType_Unicode>::CType CFUStrAggregate512;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 512, EStrType_Unicode>::CType > CFUStr512V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 512, EStrType_Unicode>::CType, void *> CFUStr512Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 512, EStrType_Unicode>::CType> CFUStr512Vp;
 
 	typedef TCFStr<ch32, 1024, EStrType_Unicode>::CType CFUStr1024;
 	typedef TCFStrAggregate<ch32, 1024, EStrType_Unicode>::CType CFUStrAggregate1024;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 1024, EStrType_Unicode>::CType > CFUStr1024V;
-	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 1024, EStrType_Unicode>::CType, void *> CFUStr1024Vp;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 1024, EStrType_Unicode>::CType> CFUStr1024Vp;
 
 #ifdef DMibDebug
 	extern CWStr g_DebugOutputTemp16;
