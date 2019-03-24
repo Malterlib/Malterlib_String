@@ -71,6 +71,7 @@ Option		| Description																	| Indirection	| Example (1118)
 `no or nfo`	|Number format octal.															|No				|\code "{no}" -> "2136"\endcode
 `nb or nfb`	|Number format binary.															|No				|\code "{nb}" -> "10001011110"\endcode
 `nfn`		|Number format base 10. (default)												|No				|\code "{nfn}" -> "1118"\endcode
+`np`		|Format number as a pointer. {nfh,sj(sizeof(type)*2),sf0}						|No				|\code "{np}" -> "0000045e"\endcode
 `nf*`		|Custom number format. The highest supported base is 36.						|Yes			|\code "{nf30}" -> "178"\endcode
 `nc`		|Number formats above base 10 will have capitalized letters.					|No				|\code "{nh,nc}" -> "45E"\endcode
 `nt`		|The character code for thousand separator (and turns it on if other than 0).	|Yes			|\code "{nt32}" -> "1 118"\endcode

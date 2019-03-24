@@ -302,6 +302,11 @@ namespace NMib::NStr
 							}
 							break;
 						}
+					case 'P':
+						_Args.m_Options.m_Radix = 16;
+						_Args.m_Options.m_Fillout = '0';
+						_Args.m_Options.m_MinLength = _Args.m_Options.m_MaxLength = sizeof(t_CData) * 2;
+						break;
 					default:
 						return TICStrFormatType<t_CFormatter>::f_ParseOption(_Args, _Option);
 						break;
