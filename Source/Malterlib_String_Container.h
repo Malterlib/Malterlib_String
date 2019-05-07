@@ -2360,22 +2360,23 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		inline static typename TCEnableIf<!NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStr<t_CTCStrTraits>>::CType fs_ToStr(t_CType const& _Format)
+		inline static TCStr<t_CTCStrTraits> fs_ToStr(t_CType const &_Format)
 		{
-			TCStr<t_CTCStrTraits> Ret;
-			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
-			aint CurrentLen = 0;
-			CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
-			Ret.f_SetStrLen(CurrentLen);
-			return Ret;
-		}
-
-		template <typename t_CType>
-		static typename TCEnableIf<NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStr<t_CTCStrTraits>>::CType fs_ToStr(t_CType const& _Format)
-		{
-			TCStr<t_CTCStrTraits> Ret;
-			(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
-			return Ret;
+			if constexpr (NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value)
+			{
+				TCStr<t_CTCStrTraits> Ret;
+				(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
+				return Ret;
+			}
+			else
+			{
+				TCStr<t_CTCStrTraits> Ret;
+				typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
+				aint CurrentLen = 0;
+				CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
+				Ret.f_SetStrLen(CurrentLen);
+				return Ret;
+			}
 		}
 
 		template <typename t_CType>
