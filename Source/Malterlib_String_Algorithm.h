@@ -103,13 +103,13 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <typename t_CData>
-		inline_small t_CData *fg_StrAdd(t_CData *_pStr, aint _Add);
+	constexpr inline_small t_CData *fg_StrAdd(t_CData *_pStr, aint _Add);
 
 	// Static functions
 	template <typename t_CData>
-		inline_medium mint fg_StrLen(const t_CData *_pStr);
+	constexpr inline_medium mint fg_StrLen(const t_CData *_pStr);
 	template <typename t_CData>
-		inline_medium mint fg_StrLen(const t_CData *_pStr, mint _MaxLen);
+	constexpr inline_medium mint fg_StrLen(const t_CData *_pStr, mint _MaxLen);
 	template <typename t_CData1, typename t_CData2>
 		inline_medium t_CData1 *fg_StrCopy(t_CData1 *_pTo, const t_CData2 *_pFrom);
 
@@ -123,24 +123,24 @@ namespace NMib::NStr
 
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHashDJB2(const t_CData *_pStr);
+	constexpr inline_large uint32 fg_StrHashDJB2(const t_CData *_pStr);
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHashSDBM(const t_CData *_pStr);
+	constexpr inline_large uint32 fg_StrHashSDBM(const t_CData *_pStr);
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHash(const t_CData *_pStr);
+	constexpr inline_large uint32 fg_StrHash(const t_CData *_pStr);
 
 
 	template <typename t_CData1>
-		inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1);
+	constexpr inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1);
 
 	template <typename t_CData1>
-		inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _MaxLen);
+	constexpr inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _MaxLen);
 
 
 	template <typename t_CStr>
-	bool fg_StrIsEmpty(t_CStr const *_pStr);
+	constexpr bool fg_StrIsEmpty(t_CStr const *_pStr);
 
 	/***************************************************************************************************\
 	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
@@ -216,14 +216,15 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+
 	/************************************************************************************************\
 	||¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯||
 	|| Searching
@@ -231,67 +232,67 @@ namespace NMib::NStr
 	\************************************************************************************************/
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char);
+	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char);
+	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char);
+	constexpr inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char);
+	constexpr inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
-
-
-
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars);
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars);
-
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars);
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars);
-
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
-
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
-	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen);
 
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars);
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen);
+
+
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
 
 	// Returns first character for searched string
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2);
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
+	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen);
 
 	enum EMatchWildcardResult
 	{
@@ -301,10 +302,10 @@ namespace NMib::NStr
 		, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted = EMatchWildcardResult_WholeStringMatched | EMatchWildcardResult_PatternExhausted
 	};
 	template <typename tf_CData1, typename tf_CData2>
-	EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern);
+	constexpr EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern);
 
 	template <typename tf_CData1, typename tf_CData2>
-	EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern);
+	constexpr EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern);
 
 	/***************************************************************************************************\
 	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
@@ -438,19 +439,19 @@ namespace NMib::NStr
 
 
 	template <typename t_CData>
-		inline_medium t_CData fg_CharUpperCase(t_CData _Character);
+	constexpr inline_medium t_CData fg_CharUpperCase(t_CData _Character);
 	template <typename t_CData>
-		inline_medium t_CData fg_CharLowerCase(t_CData _Character);
+	constexpr inline_medium t_CData fg_CharLowerCase(t_CData _Character);
 
 	template <typename t_CData>
-		inline_medium bool fg_CharIsWhiteSpace(const t_CData _Character);
+	constexpr inline_medium bool fg_CharIsWhiteSpace(const t_CData _Character);
 
 	template <typename t_CData>
-		inline_large bool fg_CharIsAlphabetical(const t_CData _Character);
+	constexpr inline_large bool fg_CharIsAlphabetical(const t_CData _Character);
 	template <typename t_CData>
-		inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character);
+	constexpr inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character);
 	template <typename t_CData>
-		inline_medium bool fg_CharIsNumber(const t_CData _Character);
+	constexpr inline_medium bool fg_CharIsNumber(const t_CData _Character);
 
 	/************************************************************************************************\
 	||¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯

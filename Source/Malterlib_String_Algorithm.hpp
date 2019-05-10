@@ -15,7 +15,7 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <typename t_CData>
-		inline_small t_CData *fg_StrAdd(t_CData *_pStr, aint _Add) // Adding a negative value will null the str
+	constexpr inline_small t_CData *fg_StrAdd(t_CData *_pStr, aint _Add) // Adding a negative value will null the str
 	{
 		if (_Add < 0)
 			return nullptr;
@@ -24,7 +24,7 @@ namespace NMib::NStr
 	}
 
 
-	inline_small aint fg_StrAdd(aint _Offset, aint _Add) // Adding a negative value will null the str
+	constexpr inline_small aint fg_StrAdd(aint _Offset, aint _Add) // Adding a negative value will null the str
 	{
 		if (_Add < 0)
 			return -1;
@@ -32,12 +32,9 @@ namespace NMib::NStr
 			return _Offset + _Add;
 	}
 
-
-
-
 	// Static functions
 	template <typename t_CData>
-		inline_medium mint fg_StrLen(const t_CData *_pStr)
+	constexpr inline_medium mint fg_StrLen(const t_CData *_pStr)
 	{
 
 		const t_CData *pStr = _pStr;
@@ -51,7 +48,7 @@ namespace NMib::NStr
 
 	// Static functions
 	template <typename t_CData>
-		inline_medium mint fg_StrLen(const t_CData *_pStr, mint _MaxLen)
+	constexpr inline_medium mint fg_StrLen(const t_CData *_pStr, mint _MaxLen)
 	{
 
 		const t_CData *pStr = _pStr;
@@ -65,7 +62,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHashDJB2(const t_CData *_pStr)
+	constexpr inline_large uint32 fg_StrHashDJB2(const t_CData *_pStr)
 	{
 		uint32 Hash = 5381;
 
@@ -82,7 +79,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHashSDBM(const t_CData *_pStr)
+	constexpr inline_large uint32 fg_StrHashSDBM(const t_CData *_pStr)
 	{
 		uint32 Hash = 0;
 
@@ -99,7 +96,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_large uint32 fg_StrHash(const t_CData *_pStr)
+	constexpr inline_large uint32 fg_StrHash(const t_CData *_pStr)
 	{
 		return fg_StrHashDJB2(_pStr);
 	}
@@ -450,7 +447,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
@@ -481,7 +478,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	inline_large aint fg_StrCmpNoCaseIterator(t_CData1 &_Str1, t_CData2 &_Str2)
+	constexpr inline_large aint fg_StrCmpNoCaseIterator(t_CData1 &_Str1, t_CData2 &_Str2)
 	{
 		while (_Str1 && _Str2)
 		{
@@ -506,7 +503,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
@@ -537,7 +534,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
@@ -572,7 +569,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
@@ -612,7 +609,7 @@ namespace NMib::NStr
 	\************************************************************************************************/
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char)
+	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
@@ -629,7 +626,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char)
+	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
@@ -646,7 +643,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char)
+	constexpr inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
 		if (!(*_pStr1))
 			return -1;
@@ -674,7 +671,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char)
+	constexpr inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
 		if (!(*_pStr1))
 			return -1;
@@ -702,7 +699,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
@@ -720,7 +717,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
@@ -738,7 +735,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharReverse(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
 		if (!(*_pStr1))
 			return -1;
@@ -769,7 +766,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharReverseNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
 		if (!(*_pStr1))
 			return -1;
@@ -805,7 +802,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars)
+	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = TCLimitsInt<aint>::mc_Max;
@@ -823,7 +820,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
+	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = TCLimitsInt<aint>::mc_Max;
@@ -841,7 +838,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars)
+	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = -1;
@@ -857,7 +854,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = -1;
@@ -873,7 +870,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = TCLimitsInt<aint>::mc_Max;
@@ -891,7 +888,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = TCLimitsInt<aint>::mc_Max;
@@ -909,7 +906,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = -1;
@@ -924,7 +921,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		const t_CData2 *pChar = _pChars;
 		aint iBest = -1;
@@ -939,7 +936,7 @@ namespace NMib::NStr
 	}
 
 	template <bool t_bCheckLen, typename t_CData1>
-		inline_large bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _Len)
+	constexpr inline_large bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _Len)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
@@ -962,18 +959,18 @@ namespace NMib::NStr
 		return true;
 	}
 	template <typename t_CData1>
-		inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1)
+	constexpr inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1)
 	{
 			return fg_StrIsAnsi<0>(_pStr1, 0);
 	}
 	template <typename t_CData1>
-		inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _Len)
+	constexpr inline_small bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _Len)
 	{
 			return fg_StrIsAnsi<1>(_pStr1, _Len);
 	}
 
 	template <bool t_bNoCase, typename t_CData1, typename t_CData2>
-	inline_large aint fg_StrFindIterator(t_CData1 &_Str1, t_CData2 &_Str2)
+	constexpr inline_large aint fg_StrFindIterator(t_CData1 &_Str1, t_CData2 &_Str2)
 	{
 		typedef t_CData1 CData1;
 		typedef t_CData2 CData2;
@@ -987,8 +984,8 @@ namespace NMib::NStr
 			CData2 Str2Current = Str2;
 			while (1)
 			{
-				ch32 Data1;
-				ch32 Data2;
+				ch32 Data1 = 0;
+				ch32 Data2 = 0;
 				if constexpr (t_bNoCase)
 				{
 					Data1 = fg_CharLowerCase(*Str1Current);
@@ -1015,7 +1012,7 @@ namespace NMib::NStr
 	}
 
 	template <bool t_bNoCase, bool t_bCheckLen, typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -1069,31 +1066,31 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_small aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_small aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFind<false, false>(_pStr1, _pStr2, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_small aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFind<true, false>(_pStr1, _pStr2, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_small aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_small aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFind<false, true>(_pStr1, _pStr2, _MaxLen);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_small aint fg_StrFindNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFind<true, true>(_pStr1, _pStr2, _MaxLen);
 	}
 
 	template <bool t_bNoCase, bool t_bCheckLen, typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		if (!(*_pStr1) || !(*_pStr2))
 			return -1;
@@ -1177,31 +1174,31 @@ namespace NMib::NStr
 
 	// Returns first character for searched string
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFindReverse<false, false>(_pStr1, _pStr2, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFindReverse<true, false>(_pStr1, _pStr2, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrFindReverse<false, true>(_pStr1, _pStr2, _Len);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrFindReverse<true, true>(_pStr1, _pStr2, _Len);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern)
+	constexpr EMatchWildcardResult fg_StrMatchWildcardParse(const tf_CData1 *&_pStr, const tf_CData2 *_pPattern)
 	{
 		const tf_CData1 *pParse = _pStr;
 		const tf_CData2 *pPattern = _pPattern;
@@ -1251,7 +1248,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern)
+	constexpr EMatchWildcardResult fg_StrMatchWildcard(const tf_CData1 *_pStr, const tf_CData2 *_pPattern)
 	{
 		return fg_StrMatchWildcardParse(_pStr, _pPattern);
 	}
@@ -1269,7 +1266,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStr>
-	bool fg_StrIsEmpty(t_CStr const *_pStr)
+	constexpr bool fg_StrIsEmpty(t_CStr const *_pStr)
 	{
 		return *_pStr == 0;
 	}
@@ -1282,18 +1279,18 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <bool t_bNoCase, bool t_bCheckLen, bool t_bCheckLen2, typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		const CData1 *pStr1 = (const CData1 *)_pStr1;
-		const CData1 *pStr1End = pStr1 + _Len;
+		auto *pStr1 = _pStr1;
+		auto *pStr1End = pStr1 + _Len;
 		if (_Len == TCLimitsInt<mint>::mc_Max)
-			pStr1End = (const CData1 *)TCLimitsInt<mint>::mc_Max;
-		const CData2 *pStr2 = (const CData2 *)_pStr2;
-		const CData2 *pStr2End = pStr2 + _Len2;
+			pStr1End = (const t_CData1 *)TCLimitsInt<mint>::mc_Max;
+		auto *pStr2 = _pStr2;
+		auto *pStr2End = pStr2 + _Len2;
 		if (_Len2 == TCLimitsInt<mint>::mc_Max)
-			pStr2End = (const CData2 *)TCLimitsInt<mint>::mc_Max;
+			pStr2End = (const t_CData2 *)TCLimitsInt<mint>::mc_Max;
 
 		while (*pStr1 && *pStr2)
 		{
@@ -1308,12 +1305,12 @@ namespace NMib::NStr
 					break;
 			}
 
-			CData1 Data1;
-			CData2 Data2;
+			CData1 Data1 = 0;
+			CData2 Data2 = 0;
 			if constexpr (t_bNoCase)
 			{
-				Data1 = fg_CharLowerCase(*pStr1);
-				Data2 = fg_CharLowerCase(*pStr2);
+				Data1 = fg_CharLowerCase(CData1(*pStr1));
+				Data2 = fg_CharLowerCase(CData2(*pStr2));
 			}
 			else
 			{
@@ -1338,37 +1335,37 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrStartsWith<false, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrStartsWith<true, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrStartsWith<false, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		return fg_StrStartsWith<false, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrStartsWith<true, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrStartsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		return fg_StrStartsWith<true, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
 	}
@@ -1380,7 +1377,7 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <bool t_bNoCase, bool t_bCheckLen, bool t_bCheckLen2, typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -1427,37 +1424,37 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrEndsWith<false, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		return fg_StrEndsWith<true, false, false, t_CData1, t_CData2>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrEndsWith<false, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		return fg_StrEndsWith<false, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	constexpr inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
 		return fg_StrEndsWith<true, true, false, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
-		inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrEndsWithNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
 		return fg_StrEndsWith<true, true, true, t_CData1, t_CData2>(_pStr1, _pStr2, _Len, _Len2);
 	}
@@ -2443,7 +2440,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CData>
-		inline_medium t_CData fg_CharUpperCase(t_CData _Character)
+	constexpr inline_medium t_CData fg_CharUpperCase(t_CData _Character)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
 		CData Char = (CData) _Character;
@@ -2457,7 +2454,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_medium t_CData fg_CharLowerCase(t_CData _Character)
+	constexpr inline_medium t_CData fg_CharLowerCase(t_CData _Character)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
 		CData Char = (CData) _Character;
@@ -2471,7 +2468,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_medium bool fg_CharIsWhiteSpace(const t_CData _Character)
+	constexpr inline_medium bool fg_CharIsWhiteSpace(const t_CData _Character)
 	{
 		switch (_Character)
 		{
@@ -2485,7 +2482,7 @@ namespace NMib::NStr
 	}
 
 	template<typename t_CData>
-		inline_medium bool fg_CharIsWhiteSpaceNoLines(const t_CData _Character)
+	constexpr inline_medium bool fg_CharIsWhiteSpaceNoLines(const t_CData _Character)
 	{
 		switch (_Character)
 		{
@@ -2497,7 +2494,7 @@ namespace NMib::NStr
 	}
 
 	template<typename t_CData>
-		inline_large bool fg_CharIsAlphabetical(const t_CData _Character)
+	constexpr inline_large bool fg_CharIsAlphabetical(const t_CData _Character)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
 		CData Char = (CData) _Character;
@@ -2515,7 +2512,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character)
+	constexpr inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character)
 	{
 		if (_Character >= 'A' && _Character <= 'Z')
 			return true;
@@ -2527,7 +2524,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_medium bool fg_CharIsNumber(const t_CData _Character)
+	constexpr inline_medium bool fg_CharIsNumber(const t_CData _Character)
 	{
 		if (_Character >= '0' && _Character <= '9')
 			return true;
@@ -2536,7 +2533,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_medium bool fg_CharIsOctalNumber(const t_CData _Character)
+	constexpr inline_medium bool fg_CharIsOctalNumber(const t_CData _Character)
 	{
 		if (_Character >= '0' && _Character <= '7')
 			return true;
@@ -2545,7 +2542,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
-		inline_medium bool fg_CharIsHexNumber(const t_CData _Character)
+	constexpr inline_medium bool fg_CharIsHexNumber(const t_CData _Character)
 	{
 		if ((_Character >= '0' && _Character <= '9') ||
 			(_Character >= 'a' && _Character <= 'f') ||
@@ -2563,21 +2560,21 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <typename t_CChar>
-	static void fg_ParseWhiteSpace(const t_CChar * &_pParse)
+	constexpr static void fg_ParseWhiteSpace(const t_CChar * &_pParse)
 	{
 		while (*_pParse && NStr::fg_CharIsWhiteSpace(*_pParse))
 			++_pParse;
 	}
 
 	template <typename t_CChar>
-	static void fg_ParseWhiteSpaceNoLines(const t_CChar * &_pParse)
+	constexpr static void fg_ParseWhiteSpaceNoLines(const t_CChar * &_pParse)
 	{
 		while (*_pParse && NStr::fg_CharIsWhiteSpaceNoLines(*_pParse))
 			++_pParse;
 	}
 
 	template <typename t_CChar>
-	static void fg_ParseToEndOfLine(const t_CChar *&_pParse)
+	constexpr static void fg_ParseToEndOfLine(const t_CChar *&_pParse)
 	{
 		const t_CChar *pParse = _pParse;
 		while (*pParse)
@@ -2590,7 +2587,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	bool fg_ParseEndOfLine(const t_CChar *&_pParse)
+	constexpr bool fg_ParseEndOfLine(const t_CChar *&_pParse)
 	{
 		bool bRet = false;
 		const t_CChar *pParse = _pParse;
@@ -2611,14 +2608,14 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	static void fg_ParseWhiteSpace(t_CChar * &_pParse)
+	constexpr static void fg_ParseWhiteSpace(t_CChar * &_pParse)
 	{
 		while (*_pParse && NStr::fg_CharIsWhiteSpace(*_pParse))
 			++_pParse;
 	}
 
 	template <typename t_CChar>
-	static void fg_ParseToEndOfLine(t_CChar *&_pParse)
+	constexpr static void fg_ParseToEndOfLine(t_CChar *&_pParse)
 	{
 		t_CChar *pParse = _pParse;
 		while (*pParse)
@@ -2631,7 +2628,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	bool fg_ParseEndOfLine(t_CChar *&_pParse)
+	constexpr bool fg_ParseEndOfLine(t_CChar *&_pParse)
 	{
 		bool bRet = false;
 		t_CChar *pParse = _pParse;
@@ -2652,7 +2649,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, typename t_CSeparators>
-	void fg_ParseNonWhiteSpaceAndSeparators(const t_CChar * &_pParse, const t_CSeparators *_pSeparators)
+	constexpr void fg_ParseNonWhiteSpaceAndSeparators(const t_CChar * &_pParse, const t_CSeparators *_pSeparators)
 	{
 		const t_CChar *pParse = _pParse;
 		while (*pParse && !NStr::fg_CharIsWhiteSpace(*pParse))
@@ -2669,7 +2666,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	void fg_ParseAlpha(const t_CChar * &_pParse)
+	constexpr void fg_ParseAlpha(const t_CChar * &_pParse)
 	{
 		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
 		while (*pParse)
@@ -2689,7 +2686,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	void fg_ParseAlphaNumeric(const t_CChar * &_pParse)
+	constexpr void fg_ParseAlphaNumeric(const t_CChar * &_pParse)
 	{
 		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
 		while (*pParse)
@@ -2703,7 +2700,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, typename t_CChar1>
-	void fg_ParseAlphaNumericAndChars(const t_CChar * &_pParse, const t_CChar1 * _pChars)
+	constexpr void fg_ParseAlphaNumericAndChars(const t_CChar * &_pParse, const t_CChar1 * _pChars)
 	{
 		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
 		while (*pParse)
@@ -2725,7 +2722,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, typename t_CSeparators>
-	void fg_ParseWhiteSpaceAndSeparators(const t_CChar * &_pParse, const t_CSeparators *_pSeparators)
+	constexpr void fg_ParseWhiteSpaceAndSeparators(const t_CChar * &_pParse, const t_CSeparators *_pSeparators)
 	{
 		const t_CChar *pParse = _pParse;
 		while (*pParse)
@@ -2850,7 +2847,7 @@ namespace NMib::NStr
 	}
 
 	template <ch8 tf_EscapeChar, typename tf_CChar>
-	bool fg_ParseEscape(const tf_CChar *&_pParse, tf_CChar _Abort)
+	constexpr bool fg_ParseEscape(const tf_CChar *&_pParse, tf_CChar _Abort)
 	{
 		auto *pParse = _pParse;
 		bool bRet = false;
