@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #ifdef DCompiler_clang
@@ -66,14 +66,14 @@ namespace
 
 	class CStr_Tests : public CTest
 	{
-		template <bint t_bMemoryTests>
+		template <bool t_bMemoryTests>
 		struct TCTests
 		{
 			typedef typename TCChooseType<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure>::CType CMeasureType;
 			typedef typename TCChooseType<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance>::CType CTestType;
 
 			const static mint VectorSize = 512;
-			static CStr fs_GenerateHexList() 
+			static CStr fs_GenerateHexList()
 			{
 				typedef int32 CValue;
 				using karma::hex;
@@ -136,7 +136,7 @@ namespace
 				MalterlibNoAllocResult.f_SetPtr(MalterlibNoAllocResultData.f_Get(), NeededCharSize);
 				CStrPtr MalterlibStaticNoAllocResult;
 				MalterlibStaticNoAllocResult.f_SetPtr(MalterlibStaticNoAllocResultData.f_Get(), NeededCharSize);
-			
+
 	#ifdef DMibDebug
 				const static int nTests = 100;
 	#else
@@ -189,7 +189,7 @@ namespace
 
 						auto Iter = vec.begin();
 						auto IterEnd = vec.end();
-						*OutIter = '[';++OutIter;					
+						*OutIter = '[';++OutIter;
 						if (Iter != IterEnd)
 						{
 							karma::generate(OutIter, hex, *Iter);
@@ -215,7 +215,7 @@ namespace
 
 						auto Iter = vec.begin();
 						auto IterEnd = vec.end();
-						*OutIter = '[';++OutIter;					
+						*OutIter = '[';++OutIter;
 						if (Iter != IterEnd)
 						{
 							karma::generate(OutIter, hex, *Iter);
@@ -546,45 +546,45 @@ namespace
 					}
 				};
 #endif
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					Karma();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					KarmaChar();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					KarmaReserve();
 
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					KarmaManualStaticAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					KarmaManualStaticAllocReserve();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					KarmaManualStaticNoAlloc();
 
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibAllocReserve();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibNoAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibStaticNoAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibStaticAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					MalterlibStaticAllocReserve();
 
 #ifdef DMalterlibEnableThirdPartyComparisonTests
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatAllocReserve();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatNoAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatStaticAllocReserve();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatStaticAlloc();
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 					FastFormatStaticNoAlloc();
 #endif
 
@@ -658,7 +658,7 @@ namespace
 
 				return MalterlibAllocResult;
 			}
-			static void fs_DecodeHexList(const CStr &_HexList) 
+			static void fs_DecodeHexList(const CStr &_HexList)
 			{
 				using qi::hex;
 				typedef int32 CValue;
@@ -681,7 +681,7 @@ namespace
 				const static int nTests = 100;
 	#endif
 				// Test 100 times and pick the fastest
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 				{
 					std::string in1(_HexList.f_GetStr());
 					SpiritVector.clear();
@@ -697,7 +697,7 @@ namespace
 						SpiritTimer.f_Stop(VectorSize);
 					}
 				}
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 				{
 					std::string in1(_HexList.f_GetStr());
 					SpiritSemanticVector.clear();
@@ -713,7 +713,7 @@ namespace
 						SpiritSemanticTimer.f_Stop(VectorSize);
 					}
 				}
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 				{
 					MalterlibVector.clear();
 					{  // Timing CStr::Parse
@@ -728,11 +728,11 @@ namespace
 						{
 							pParse = Parser.f_Parse(pParse);
 							MalterlibVector.push_back(val);
-						} 
+						}
 						MalterlibTimer.f_Stop(VectorSize);
 					}
 				}
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 				{
 					ManualVector.clear();
 					{  // Timing Manual
@@ -751,7 +751,7 @@ namespace
 						ManualTimer.f_Stop(VectorSize);
 					}
 				}
-				for(int i=0;i<nTests;++i) 
+				for(int i=0;i<nTests;++i)
 				{
 					ManualHexOnlyVector.clear();
 					{  // Timing manual hex only
@@ -818,7 +818,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16InplaceTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									CFStr16::fs_ToStrInplace(MalterlibResult, i);
 								}
@@ -833,7 +833,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									ch8 *pGenerate = Result;
 									karma::generate(pGenerate, int_, i);
@@ -851,7 +851,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									fastformat::sinks::char_buffer_sink sink(Result);
 									fastformat::write(sink, i);
@@ -872,7 +872,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrPtrTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									CStrPtr::fs_ToStrInplace(Result, i);
 								}
@@ -887,7 +887,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CFStr16::fs_ToStr(i);;
 								}
@@ -904,7 +904,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								ItoaTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									_itoa(i,Result,10);
 								}
@@ -937,7 +937,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									MalterlibResult.f_Clear();
 									CStr::fs_ToStrInplace(MalterlibResult, i);
@@ -952,7 +952,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CFastFormatString();
 									fastformat::write(Result, i);
@@ -971,7 +971,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = std::string();
 									std::back_insert_iterator<std::string> iter(Result);
@@ -989,7 +989,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CStr::fs_ToStr(i);;
 								}
@@ -1006,7 +1006,7 @@ namespace
 							for(mint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Stream.str("");
 									Stream.clear();
@@ -1038,7 +1038,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									CStr::fs_ToStrInplace(MalterlibResult, i);
 								}
@@ -1053,7 +1053,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result.clear();
 									fastformat::write(Result, i);
@@ -1073,7 +1073,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result.clear();
 									std::back_insert_iterator<std::string> iter(Result);
@@ -1092,7 +1092,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CStr::fs_ToStr(i);;
 								}
@@ -1110,7 +1110,7 @@ namespace
 							for(mint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Stream.str("");
 									Stream.clear();
@@ -1150,7 +1150,7 @@ namespace
 								CFStr16::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Value = i;
 									MalterlibResult = Format;
@@ -1169,7 +1169,7 @@ namespace
 								CStrPtr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Value = i;
 									Result = Format;
@@ -1185,7 +1185,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CFStr16::CFormat("{}") << i;
 								}
@@ -1202,7 +1202,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTimer.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									fastformat::sinks::char_buffer_sink sink(Result);
 									fastformat::fmt(sink, DFastFormatStr("{0}"), i);
@@ -1221,7 +1221,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								SprintfTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									sprintf(Result,"%i",i);
 								}
@@ -1254,7 +1254,7 @@ namespace
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Value = i;
 									MalterlibResult.f_Clear();
@@ -1269,7 +1269,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
-								for (int i=0; i < nLoops; ++i) 
+								for (int i=0; i < nLoops; ++i)
 								{
 									Result.f_Clear();
 									Result = CStr::CFormat("{}") << i;
@@ -1286,7 +1286,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result = CFastFormatString();
 									fastformat::fmt(Result, DFastFormatStr("{0}"), i);
@@ -1322,7 +1322,7 @@ namespace
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Value = i;
 									MalterlibResult = Format;
@@ -1337,7 +1337,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
-								for (int i=0; i < nLoops; ++i) 
+								for (int i=0; i < nLoops; ++i)
 								{
 									Result = CStr::CFormat("{}") << i;
 								}
@@ -1354,7 +1354,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								FastFormatTime.f_Start();
-								for(int i=0;i<nLoops;++i) 
+								for(int i=0;i<nLoops;++i)
 								{
 									Result.clear();
 									fastformat::fmt(Result, DFastFormatStr("{0}"), i);
@@ -1385,7 +1385,7 @@ namespace
 			{
 				CStrVMem fmtstr = "{} {}";
 				CStrVMem::CFormat format(fmtstr);
-				DMibTest(DMibExpr((format << CStrVMem("Hello") << CStr("World")).f_GetStr()) == DMibExpr("Hello World")); 
+				DMibTest(DMibExpr((format << CStrVMem("Hello") << CStr("World")).f_GetStr()) == DMibExpr("Hello World"));
 			};
 		}
 
@@ -1432,12 +1432,12 @@ namespace
 				DMibTrace("{}\r\n", TestMS);
 				DMibTrace("{}\r\n", TestMS1);
 			}
-#endif		
+#endif
 
 			DMibTestCategory("CFormat")
 			{
 				this->f_TestCFormat();
-			};	
+			};
 			DMibTestCategory(CTestCategory("Performance") << CTestGroup("Performance"))
 			{
 				CStr_Tests::TCTests<false> Tests;
