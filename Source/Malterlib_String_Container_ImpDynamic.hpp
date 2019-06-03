@@ -11,6 +11,7 @@ namespace NMib::NStr
 		, m_Len(0)
 		, m_bReserved(0)
 		, m_StrLen(mc_InvalidStrLen)
+		, m_UserData(0)
 	{
 	}
 

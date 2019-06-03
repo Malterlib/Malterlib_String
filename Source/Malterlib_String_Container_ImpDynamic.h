@@ -33,7 +33,8 @@ namespace NMib::NStr
 			NAtomic::TCAtomic<aint> m_RefCount;
 			mint m_Len:sizeof(mint)*8-2;
 			mint m_bReserved:2;
-			mint m_StrLen;
+			mint m_StrLen:sizeof(mint)*8-2;
+			mint m_UserData:2;
 
 			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 
@@ -121,6 +122,26 @@ namespace NMib::NStr
 				NMemory::fg_ObjectSet(m_pData->f_GetData(), CChar(0), f_GetLength());
 			}
 			f_Destroy();
+		}
+
+		void f_SetUserData(uint8 _Data)
+		{
+			DMibSafeCheck(_Data < 4, "Only 2 bits available");
+			if (!m_pData)
+			{
+				f_Reserve(1);
+				*f_GetStrWritable() = 0;
+				m_pData->m_StrLen = 0;
+			}
+			m_pData->m_UserData = _Data;
+		}
+
+		uint8 f_GetUserData() const
+		{
+			if (!m_pData)
+				return 0;
+
+			return m_pData->m_UserData;
 		}
 
 		static const CChar ms_NullStr[];
