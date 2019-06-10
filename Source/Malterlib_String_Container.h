@@ -817,13 +817,6 @@ EndArgSearch:
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) < 4 || mc_Type == EStrType_Unicode);
 
-	private:
-		enum
-		{
-			EDebug_CharSize = sizeof(CChar)
-			, EDebug_Type = t_CTCStrTraits::CStrTraits::mc_Type
-		};
-
 		typedef typename TCChooseType
 			<
 				sizeof(CChar) == 1
@@ -846,6 +839,13 @@ EndArgSearch:
 				>::CType
 			>::CType CUnicodeIterator
 		;
+
+	private:
+		enum
+		{
+			EDebug_CharSize = sizeof(CChar)
+			, EDebug_Type = t_CTCStrTraits::CStrTraits::mc_Type
+		};
 
 		typedef typename TCChooseType
 			<
