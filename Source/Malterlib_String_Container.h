@@ -2359,6 +2359,11 @@ EndArgSearch:
 			}
 		}
 
+		inline static TCStr<t_CTCStrTraits> fs_ToStr(CFormat const &_Format)
+		{
+			return _Format;
+		}
+
 		template <typename t_CType>
 		static TCStr<t_CTCStrTraits> fs_ToStr(const CChar *_pFormat, t_CType const& _Format)
 		{
