@@ -221,7 +221,7 @@ namespace NMib::NStr
 
 		virtual void f_Visit(CVisitor &_Extractor) const override
 		{
-			if (sizeof(t_CStrDataType) == sizeof(CChar))
+			if constexpr (sizeof(t_CStrDataType) == sizeof(CChar))
 			{
 				_Extractor((CChar const *)m_pStr);
 			}

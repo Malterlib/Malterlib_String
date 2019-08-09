@@ -593,7 +593,7 @@ namespace NMib::NStr
 
 			bool bSign = _Options.f_Sign();
 			aint bSubStrStart = 0;
-			if (NTraits::TCIsSigned<CType>::mc_Value)
+			if constexpr (NTraits::TCIsSigned<CType>::mc_Value)
 			{
 				CType Zero = 0;
 				if (_Integer < Zero)
@@ -617,18 +617,18 @@ namespace NMib::NStr
 			{
 				if (_Options.f_ThousandSeparator())
 				{
-					if (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
+					if constexpr (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
 						fs_DoNumber_BitExactWithThousand<TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1>(_Options, Number, pStrPlace);
-					else if (t_COptions2::ERadix > 10)
+					else if constexpr (t_COptions2::ERadix > 10)
 						fs_DoNumber_Above10StaticWithThousand<t_COptions2::ERadix>(_Options, Number, pStrPlace);
 					else
 						fs_DoNumber_GeneralStaticWithThousand<t_COptions2::ERadix>(_Options, Number, pStrPlace);
 				}
 				else
 				{
-					if (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
+					if constexpr (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
 						fs_DoNumber_BitExact<TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1>(_Options, Number, pStrPlace);
-					else if (t_COptions2::ERadix > 10)
+					else if constexpr (t_COptions2::ERadix > 10)
 						fs_DoNumber_Above10Static<t_COptions2::ERadix>(_Options, Number, pStrPlace);
 					else
 						fs_DoNumber_GeneralStatic<t_COptions2::ERadix>(_Options, Number, pStrPlace);
@@ -710,16 +710,16 @@ namespace NMib::NStr
 
 		virtual void f_Visit(CVisitor &_Extractor) const override
 		{
-			if (NTraits::TCIsSigned<CType>::mc_Value)
+			if constexpr (NTraits::TCIsSigned<CType>::mc_Value)
 			{
-				if (sizeof(CType) > sizeof(int32))
+				if constexpr (sizeof(CType) > sizeof(int32))
 					_Extractor(int64(f_GetValue()));
 				else
 					_Extractor(int32(f_GetValue()));
 			}
 			else
 			{
-				if (sizeof(CType) > sizeof(uint32))
+				if constexpr (sizeof(CType) > sizeof(uint32))
 					_Extractor(uint64(f_GetValue()));
 				else
 					_Extractor(uint32(f_GetValue()));

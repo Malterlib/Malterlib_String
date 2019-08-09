@@ -39,7 +39,7 @@ namespace NMib::NStr2::NPrivate
 
 		auto iFront = NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharactersOriginal.f_Front());
 		auto iBack = NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front());
-		if (TCHasTag<tf_CTags, CReverse>::mc_Value)
+		if constexpr (TCHasTag<tf_CTags, CReverse>::mc_Value)
 		{
 			fg_Swap(iFront, iBack);
 			++iFront;

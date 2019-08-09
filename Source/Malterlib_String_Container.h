@@ -525,7 +525,7 @@ namespace NMib::NStr
 		{
 			aint CurrentStrLen;
 			aint MaxLen;
-			if (t_bConcat)
+			if constexpr (t_bConcat)
 			{
 				CurrentStrLen = _ToStr.f_GetLen();
 				MaxLen = _ToStr.f_CreateWritableBuffer(CurrentStrLen + 1, false);
@@ -554,7 +554,7 @@ namespace NMib::NStr
 		{
 			aint CurrentStrLen;
 			aint MaxLen;
-			if (t_bConcat)
+			if constexpr (t_bConcat)
 			{
 				CurrentStrLen = _ToStr.f_GetLen();
 				MaxLen = _ToStr.f_CreateWritableBuffer(CurrentStrLen + 1, false);

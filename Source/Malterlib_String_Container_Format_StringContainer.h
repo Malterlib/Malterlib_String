@@ -131,9 +131,9 @@ namespace NMib::NStr
 
 			mint TempLen = _Value.f_GetLen();
 
-			if (_Options.m_Case &&  TempLen > 0)
+			if (_Options.m_Case && TempLen > 0)
 			{
-				if (_String.mc_Type == EStrType_Unicode || _String.mc_Type == EStrType_Ansi)
+				if constexpr (TCStrAggregate<CTStrTraits>::mc_Type == EStrType_Unicode || TCStrAggregate<CTStrTraits>::mc_Type == EStrType_Ansi)
 				{
 					auto fAddStr = [&](CChar *_pTemp)
 						{
@@ -257,7 +257,7 @@ namespace NMib::NStr
 
 		virtual void f_Visit(CVisitor &_Extractor) const override
 		{
-			if (sizeof(CCharIn) == sizeof(CChar))
+			if constexpr (sizeof(CCharIn) == sizeof(CChar))
 			{
 				_Extractor((CChar const *)(m_TStr.f_GetStr()));
 			}

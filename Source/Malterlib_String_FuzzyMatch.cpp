@@ -27,7 +27,7 @@ namespace NMib::NStr
 
 			while (*pStr1)
 			{
-				if (tf_bCheckLen)
+				if constexpr (tf_bCheckLen)
 				{
 					if (pStr1 >= pStr1End)
 					{
@@ -42,7 +42,7 @@ namespace NMib::NStr
 				{
 					CData1 Data1;
 					CData2 Data2;
-					if (tf_bNoCase)
+					if constexpr (tf_bNoCase)
 					{
 						Data1 = fg_CharLowerCase(*pStr1Current);
 						Data2 = fg_CharLowerCase(*pStr2Current);
@@ -68,7 +68,7 @@ namespace NMib::NStr
 						_Found = pStr2Current - pStr2;
 						return pStr1 - pStr1Start;
 					}
-					if (tf_bCheckLen)
+					if constexpr (tf_bCheckLen)
 					{
 						if (pStr1Current >= pStr1End)
 						{

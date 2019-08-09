@@ -155,7 +155,7 @@ namespace NMib::NStr
 									break;
 
 								DestNumber <<= 4;
-								if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+								if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 									DestNumber |= Num;
 								else
 								{
@@ -181,7 +181,7 @@ namespace NMib::NStr
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 1;
-									if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+									if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 										DestNumber |= Num;
 									else
 									{
@@ -208,7 +208,7 @@ namespace NMib::NStr
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 3;
-									if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+									if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 										DestNumber |= Num;
 									else
 									{
@@ -355,7 +355,7 @@ Return:
 						break;
 
 					DestNumber <<= 4;
-					if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+					if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 						DestNumber |= Num;
 					else
 					{
@@ -421,7 +421,7 @@ Return:
 						break;
 
 					DestNumber <<= 4;
-					if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+					if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 						DestNumber |= Num;
 					else
 					{
@@ -472,7 +472,7 @@ Return:
 					break;
 
 				DestNumber <<= 4;
-				if (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+				if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
 					DestNumber |= Num;
 				else
 				{

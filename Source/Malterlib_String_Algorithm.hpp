@@ -124,7 +124,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_medium t_CData1 *fg_StrMove(t_CData1 *_pTo, const t_CData2 *_pFrom)
 	{
-		if (sizeof(t_CData1) == sizeof(t_CData2))
+		if constexpr (sizeof(t_CData1) == sizeof(t_CData2))
 		{
 			mint Len = fg_StrLen(_pFrom) + 1;
 			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(t_CData2));
@@ -139,7 +139,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrMove(t_CData1 *_pTo, const t_CData2 *_pFrom, mint _MaxLen)
 	{
-		if (sizeof(t_CData1) == sizeof(t_CData2))
+		if constexpr (sizeof(t_CData1) == sizeof(t_CData2))
 		{
 			mint Len = fg_Min(fg_StrLen(_pFrom), _MaxLen - 1);
 			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(t_CData2));
@@ -1473,7 +1473,7 @@ namespace NMib::NStr
 
 		while (*pStr1)
 		{
-			if (sizeof(t_CData1) > sizeof(t_CData2))
+			if constexpr (sizeof(t_CData1) > sizeof(t_CData2))
 			{
 				if (*pStr1 - _CharFind == 0)
 					*pStr1 = _CharReplace;
@@ -1536,7 +1536,7 @@ namespace NMib::NStr
 
 		while (*pStr1 && (pStr1End - pStr1))
 		{
-			if (sizeof(t_CData1) > sizeof(t_CData2))
+			if constexpr (sizeof(t_CData1) > sizeof(t_CData2))
 			{
 				if (*pStr1 - _CharFind == 0)
 					*pStr1 = _CharReplace;
@@ -1811,7 +1811,7 @@ namespace NMib::NStr
 
 			while (*pCharsToTrim)
 			{
-				if (sizeof(t_CData1) > sizeof(t_CData2))
+				if constexpr (sizeof(t_CData1) > sizeof(t_CData2))
 				{
 					if (*pStr1 - *pCharsToTrim == 0)
 					{
@@ -1858,7 +1858,7 @@ namespace NMib::NStr
 
 			while (*pCharsToTrim)
 			{
-				if (sizeof(t_CData1) > sizeof(t_CData2))
+				if constexpr (sizeof(t_CData1) > sizeof(t_CData2))
 				{
 					if (*pStr1 - *pCharsToTrim == 0)
 					{

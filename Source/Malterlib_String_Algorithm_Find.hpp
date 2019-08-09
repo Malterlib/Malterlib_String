@@ -62,7 +62,7 @@ namespace NMib::NStr2::NPrivate
 
 		if (bFound)
 		{
-			if (TCHasTag<tf_CTags, CReverse>::mc_Value)
+			if constexpr (TCHasTag<tf_CTags, CReverse>::mc_Value)
 				fg_Swap(rCharacters, rLastFoundEnd);
 			++rLastFoundEnd;
 			return NIterator::fg_RangeReturn<tf_CTags>
