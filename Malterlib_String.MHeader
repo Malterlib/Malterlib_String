@@ -59,46 +59,10 @@ Property
 {
 	Compile
 	{
-		&
-		{
-			CompileDialect C
-			MalterlibEnableThirdPartyComparisonTests true
-		}
-		SearchPath "@(Builtin.BasePathAbsolute)/SDK/STLSoft/include;@(Compile.SearchPath)"
-		SearchPath "@(Builtin.BasePathAbsolute)/SDK/FastFormat/include;@(Compile.SearchPath)"
-	}
-	Compile
-	{
 		!!CompileDialect C
 		PreprocessorDefines "_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;@(Compile.PreprocessorDefines)"
 		{
 			!!PlatformFamily Windows
-		}
-	}
-	%Group SDK
-	{
-		!!MalterlibEnableThirdPartyComparisonTests true
-		%Group FastFormat
-		{
-			%File ../../SDK/FastFormat/include/fastformat/exceptions.hpp
-			%File ../../SDK/FastFormat/include/fastformat/fastformat.h
-			%File ../../SDK/FastFormat/include/fastformat/fastformat.hpp
-			%File ../../SDK/FastFormat/include/fastformat/ff.hpp
-			%File ../../SDK/FastFormat/include/fastformat/implicit_link.h
-			%File ../../SDK/FastFormat/include/fastformat/init_codes.h
-			%File ../../SDK/FastFormat/src/api.cpp
-			%File ../../SDK/FastFormat/src/fmt_cache.cpp
-			%File ../../SDK/FastFormat/src/fmt_spec_defect_handlers.cpp
-			%File ../../SDK/FastFormat/src/init_code_strings.cpp
-			%File ../../SDK/FastFormat/src/memory_pool.cpp
-			%File ../../SDK/FastFormat/src/replacements.cpp
-			%File ../../SDK/FastFormat/src/snprintf.cpp
-
-			// Fastformat & STLsoft do not like libcpp / clang combo.
-			Compile.Disabled true
-			{
-				!PlatformFamily "Windows"
-			}			
 		}
 	}
 }
