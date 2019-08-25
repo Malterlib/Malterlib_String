@@ -39,25 +39,35 @@ namespace NMib::NStr
 
 namespace NMib::NStr
 {
-#ifdef DMibSupportExternTemplates
-	extern template TCStr<CStrTraits_CStr>;
-	extern template TCStr<CStrTraits_CWStr>;
-	extern template TCStr<CStrTraits_CUStr>;
-	extern template TCStrAggregate< CStrTraits_CStr>;
-	extern template TCStrAggregate< CStrTraits_CWStr>;
-	extern template TCStrAggregate< CStrTraits_CUStr>;
+	extern template class TCStr<CStrTraits_CStr>;
+	extern template class TCStr<CStrTraits_CWStr>;
+	extern template class TCStr<CStrTraits_CUStr>;
+	extern template class TCStrAggregate< CStrTraits_CStr>;
+	extern template class TCStrAggregate< CStrTraits_CWStr>;
+	extern template class TCStrAggregate< CStrTraits_CUStr>;
+	extern template class TCFormat<CStrTraits_CStr>;
+	extern template class TCFormat<CStrTraits_CWStr>;
+	extern template class TCFormat<CStrTraits_CUStr>;
 
-	extern template TCStr<CStrTraits_CStrNonTracked>;
-	extern template TCStr<CStrTraits_CWStrNonTracked>;
-	extern template TCStr<CStrTraits_CUStrNonTracked>;
-	extern template TCStrAggregate<CStrTraits_CStr>;
-	extern template TCStrAggregate<CStrTraits_CWStr>;
-	extern template TCStrAggregate<CStrTraits_CUStr>;
+	extern template class TCStr<CStrTraits_CStrNonTracked>;
+	extern template class TCStr<CStrTraits_CWStrNonTracked>;
+	extern template class TCStr<CStrTraits_CUStrNonTracked>;
+	extern template class TCStrAggregate<CStrTraits_CStrNonTracked>;
+	extern template class TCStrAggregate<CStrTraits_CWStrNonTracked>;
+	extern template class TCStrAggregate<CStrTraits_CUStrNonTracked>;
+	extern template class TCFormat<CStrTraits_CStrNonTracked>;
+	extern template class TCFormat<CStrTraits_CWStrNonTracked>;
+	extern template class TCFormat<CStrTraits_CUStrNonTracked>;
 
-	extern template TCStr<CStrTraits_CStrVMem>;
-	extern template TCStr<CStrTraits_CWStrVMem>;
-	extern template TCStr<CStrTraits_CUStrVMem>;
-#endif
+	extern template class TCStr<CStrTraits_CStrVMem>;
+	extern template class TCStr<CStrTraits_CWStrVMem>;
+	extern template class TCStr<CStrTraits_CUStrVMem>;
+	extern template class TCStrAggregate<CStrTraits_CStrVMem>;
+	extern template class TCStrAggregate<CStrTraits_CWStrVMem>;
+	extern template class TCStrAggregate<CStrTraits_CUStrVMem>;
+
+	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
+	extern template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 }
 
 #include "Malterlib_String_Container_Format_String.h"

@@ -9,25 +9,35 @@ namespace NMib::NStr
 {
 	DMibImpErrorClassImplement(CExceptionParse);
 
-#ifdef DMibSupportExternTemplates
-	template TCStr<CStrTraits_CStr>;
-	template TCStr<CStrTraits_CWStr>;
-	template TCStr<CStrTraits_CUStr>;
-	template TCStrAggregate< CStrTraits_CStr>;
-	template TCStrAggregate< CStrTraits_CWStr>;
-	template TCStrAggregate< CStrTraits_CUStr>;
+	template class TCStr<CStrTraits_CStr>;
+	template class TCStr<CStrTraits_CWStr>;
+	template class TCStr<CStrTraits_CUStr>;
+	template class TCStrAggregate<CStrTraits_CStr>;
+	template class TCStrAggregate<CStrTraits_CWStr>;
+	template class TCStrAggregate<CStrTraits_CUStr>;
+	template class TCFormat<CStrTraits_CStr>;
+	template class TCFormat<CStrTraits_CWStr>;
+	template class TCFormat<CStrTraits_CUStr>;
 
-	template TCStr<CStrTraits_CStrNonTracked>;
-	template TCStr<CStrTraits_CWStrNonTracked>;
-	template TCStr<CStrTraits_CUStrNonTracked>;
-	template TCStrAggregate<CStrTraits_CStr>;
-	template TCStrAggregate<CStrTraits_CWStr>;
-	template TCStrAggregate<CStrTraits_CUStr>;
+	template class TCStr<CStrTraits_CStrNonTracked>;
+	template class TCStr<CStrTraits_CWStrNonTracked>;
+	template class TCStr<CStrTraits_CUStrNonTracked>;
+	template class TCStrAggregate<CStrTraits_CStrNonTracked>;
+	template class TCStrAggregate<CStrTraits_CWStrNonTracked>;
+	template class TCStrAggregate<CStrTraits_CUStrNonTracked>;
+	template class TCFormat<CStrTraits_CStrNonTracked>;
+	template class TCFormat<CStrTraits_CWStrNonTracked>;
+	template class TCFormat<CStrTraits_CUStrNonTracked>;
 
-	template TCStr<CStrTraits_CStrVMem>;
-	template TCStr<CStrTraits_CWStrVMem>;
-	template TCStr<CStrTraits_CUStrVMem>;
-#endif
+	template class TCStr<CStrTraits_CStrVMem>;
+	template class TCStr<CStrTraits_CWStrVMem>;
+	template class TCStr<CStrTraits_CUStrVMem>;
+	template class TCStrAggregate<CStrTraits_CStrVMem>;
+	template class TCStrAggregate<CStrTraits_CWStrVMem>;
+	template class TCStrAggregate<CStrTraits_CUStrVMem>;
+
+	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
+	template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 
 #ifdef DMibDebug
 	CWStr g_DebugOutputTemp16;

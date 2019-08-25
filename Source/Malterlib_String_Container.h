@@ -749,19 +749,9 @@ EndArgSearch:
 			return m_pFormats;
 		}
 
-		inline_small const TICStrFormatType<TCFormat> **fp_GetFormatList() const
+		inline_small TICStrFormatType<TCFormat> const *fp_GetFormatEntry(aint _iEntry) const
 		{
-			return m_pFormats;
-		}
-
-		inline_small TICStrFormatType<TCFormat> *fp_GetFormatEntry(aint _iEntry)
-		{
-			return (TICStrFormatType<TCFormat> *)((mint)m_pFormats[_iEntry] & (~((mint)0x3)));
-		}
-
-		inline_small const TICStrFormatType<TCFormat> *fp_GetFormatEntry(aint _iEntry) const
-		{
-			return (const TICStrFormatType<TCFormat> *)((mint)m_pFormats[_iEntry] & (~((mint)0x3)));
+			return (TICStrFormatType<TCFormat> const *)((mint)m_pFormats[_iEntry] & (~((mint)0x3)));
 		}
 
 		aint m_AllocSpace[EStaticSpace];
