@@ -89,7 +89,17 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions = TCStrFormatType_Int_OptionsStatic<t_CIntType> >
 	class TCStrFormatType_Int;
 
-	template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>
+	template
+		<
+			typename t_CFormatter
+			, aint t_SignBits
+			, aint t_ExponentBits
+			, aint t_MantissaBits
+			, typename t_CImplicitFloat
+			, bool t_bDummyOptimize
+			, typename t_CIntegerStorage
+			, bool t_bReference
+		>
 	class TCStrFormatType_Float;
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlaying t_Type>

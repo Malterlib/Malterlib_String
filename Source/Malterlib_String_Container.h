@@ -192,14 +192,29 @@ namespace NMib::NStr
 		DMibTypeTraitsImplement_MemberTraits(f_Format);
 		DMibTypeTraitsImplement_MemberTraits(f_FormatParseOption);
 
+		template <typename t_CData>
+		struct TCWithoutByValue
+		{
+			using CType = t_CData;
+		};
+
+		template <typename t_CData>
+		struct TCWithoutByValue<TCByValue<t_CData>>
+		{
+			using CType = t_CData;
+		};
+
 		template
-			<
-				typename t_CFormatter
-				, typename t_CData
-				, bool t_bHasInline = TCHasMember_f_GetStringFormatType<t_CData>::mc_Value && NPrivate::TCHasMember_f_CreateStringFormatter<t_CData>::mc_Value
-				, bool t_bHasInlineFormatter = TCHasMember_f_Format<t_CData>::mc_Value
-			>
-		class TCStringFormatterHelper
+		<
+			typename t_CFormatter
+			, typename t_CData
+			, bool t_bHasInline = TCHasMember_f_GetStringFormatType<t_CData>::mc_Value && NPrivate::TCHasMember_f_CreateStringFormatter<t_CData>::mc_Value
+			, bool t_bHasInlineFormatter = TCHasMember_f_Format<typename TCWithoutByValue<t_CData>::CType>::mc_Value
+		>
+		class TCStringFormatterHelper;
+
+		template <typename t_CFormatter, typename t_CData>
+		class TCStringFormatterHelper<t_CFormatter, t_CData, false, true>
 		{
 			static t_CFormatter &fs_GetFormatter();
 			static t_CData &fs_GetData();
@@ -212,7 +227,22 @@ namespace NMib::NStr
 				_Formatter.template f_Alloc<CFormatType>(_Data);
 				return typename CFormatType::CStrFormatTypeClassifier();
 			}
+		};
 
+		template <typename t_CFormatter, typename t_CData>
+		class TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>, false, true>
+		{
+			static t_CFormatter &fs_GetFormatter();
+			static t_CData &fs_GetData();
+		public:
+
+			typedef TCStrFormatType_Inline<t_CFormatter, t_CData, false> CFormatType;
+			template <typename tf_CData>
+			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<tf_CData> const &_Data)
+			{
+				_Formatter.template f_Alloc<CFormatType>(*_Data);
+				return typename CFormatType::CStrFormatTypeClassifier();
+			}
 		};
 
 		template <typename t_CFormatter, typename t_CData>
@@ -287,10 +317,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CData>
-	class TCStringFormatterAll
+	struct TCStringFormatterAll
 	{
-
-	public:
 		typedef typename NPrivate::TCDetermineStringFormatter<t_CFormatter, t_CData>::CType CStringFormatter;
 		typedef typename CStringFormatter::CFormatType CFormatType;
 
@@ -298,7 +326,6 @@ namespace NMib::NStr
 		{
 			return CStringFormatter::fs_CreateFormat(_Formatter, _Data);
 		}
-
 	};
 
 	namespace NPrivate
@@ -337,24 +364,34 @@ namespace NMib::NStr
 
 		typedef TICStrFormatType<TCFormat> CFomatArgType;
 
-		TCFormat(TCFormat &&_Other)
+		void f_MoveFormats(TCFormat &&_Other)
 		{
-			DMibFastCheck(_Other.m_nFormats == 0);
-			DMibFastCheck(_Other.m_iCurrentAlloc == 0);
-			m_pFormatStr = _Other.m_pFormatStr;
-			m_pFormats = m_plFormats;
-			m_nFormats = 0;
-			m_iCurrentAlloc = 0;
+			TICStrFormatType<TCFormat> **pFormatList = _Other.fp_GetFormatList();
+
+			for (uaint i = 0; i < _Other.m_nFormats; ++i)
+			{
+				TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
+				pFormat->f_Move(*this);
+			}
 		}
 
-		TCFormat& operator=(TCFormat && _Other)
+		TCFormat(TCFormat &&_Other)
 		{
-			DMibFastCheck(_Other.m_nFormats == 0);
-			DMibFastCheck(_Other.m_iCurrentAlloc == 0);
 			m_pFormatStr = _Other.m_pFormatStr;
 			m_pFormats = m_plFormats;
 			m_nFormats = 0;
 			m_iCurrentAlloc = 0;
+
+			f_MoveFormats(fg_Move(_Other));
+		}
+
+		TCFormat &operator=(TCFormat &&_Other)
+		{
+			f_ClearFormats();
+
+			m_pFormatStr = _Other.m_pFormatStr;
+			f_MoveFormats(fg_Move(_Other));
+
 			return *this;
 		}
 
@@ -398,34 +435,22 @@ namespace NMib::NStr
 			return pSpace;
 		}
 
-		template <typename t_CType, typename t_CArg0>
-		inline_medium t_CType *f_Alloc(t_CArg0 &&_Arg0)
+		template <typename tf_CType, typename ...tfp_CParams>
+		inline_medium tf_CType *f_Alloc(tfp_CParams && ...p_Params)
 		{
 			mint Flags;
-			void *pSpace = f_AllocSpace(sizeof(t_CType), Flags);
-			t_CType *pNew = new(pSpace) t_CType(_Arg0);
-			Flags |= (t_CType::mc_bNeedDelete ? 2 : 0);
+			void *pSpace = f_AllocSpace(sizeof(tf_CType), Flags);
+			tf_CType *pNew = new(pSpace) tf_CType(fg_Forward<tfp_CParams>(p_Params)...);
+			Flags |= (tf_CType::mc_bNeedDelete ? 2 : 0);
 			fp_AddFormat(pNew, Flags);
 			return pNew;
 		}
 
-		template <typename t_CType, typename t_CArg0, typename t_CArg1>
-		inline_medium t_CType *f_Alloc(t_CArg0 &&_Arg0, t_CArg1 &&_Arg1)
-		{
-			mint Flags;
-			void *pSpace = f_AllocSpace(sizeof(t_CType), Flags);
-			t_CType *pNew = new(pSpace) t_CType(_Arg0, _Arg1);
-			Flags |= (t_CType::mc_bNeedDelete ? 2 : 0);
-			fp_AddFormat(pNew, Flags);
-			return pNew;
-		}
-
-		inline_medium const TICStrFormatType<TCFormat> * f_GetArg(aint _iArgument) const
+		inline_medium const TICStrFormatType<TCFormat> *f_GetArg(aint _iArgument) const
 		{
 			if (_iArgument < 0)
-			{
 				_iArgument = m_iCurrentArgument++;
-			}
+
 			if (_iArgument >= (aint)m_nFormats)
 				return nullptr;
 
@@ -459,7 +484,7 @@ namespace NMib::NStr
 			return *m_pFormatStr == 0;
 		}
 
-		~TCFormat()
+		void f_ClearFormats()
 		{
 			TICStrFormatType<TCFormat> **pFormatList = fp_GetFormatList();
 
@@ -476,6 +501,15 @@ namespace NMib::NStr
 				else if (Flags & 2)
 					pFormat->f_Delete();
 			}
+
+			m_pFormats = m_plFormats;
+			m_nFormats = 0;
+			m_iCurrentAlloc = 0;
+		}
+
+		~TCFormat()
+		{
+			f_ClearFormats();
 		}
 
 		inline_small void f_FormatToStr(TCStrAggregate<t_CTCStrTraits> &_Str) const
@@ -509,12 +543,26 @@ namespace NMib::NStr
 		TCStr<t_CTCStrTraits> f_GetStr() const;
 		TCStr<t_CTCStrTraits> operator ^ (mint _nCopies) const;
 
+		template <typename tf_CStr>
+		void f_Format(tf_CStr &o_FormatInto) const
+		{
+			o_FormatInto += *this;
+		}
+
 		template <typename t_CType>
-		inline_small TCFormat &operator << (t_CType const &_Type)
+		inline_small TCFormat &operator << (t_CType const &_Type) &
 		{
 			static_assert(!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value, "This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.");
 			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
 			return *this;
+		}
+
+		template <typename t_CType>
+		inline_small TCFormat &&operator << (t_CType const &_Type) &&
+		{
+			static_assert(!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value, "This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.");
+			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
+			return fg_Move(*this);
 		}
 
 		template <typename t_CType>
@@ -770,8 +818,8 @@ EndArgSearch:
 			return pSpace;
 		}
 
-		TCFormat(const TCFormat &_Other);
-		TCFormat& operator=(TCFormat const& _Other);
+		TCFormat(const TCFormat &_Other) = delete;
+		TCFormat& operator=(TCFormat const& _Other) = delete;
 
 
 	};

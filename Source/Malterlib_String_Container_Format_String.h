@@ -28,6 +28,11 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
+		virtual void f_Move(t_CFormatter &_Formatter) override
+		{
+			_Formatter.template f_Alloc<TCStrFormatType_String>(m_pStr, m_StrLen);
+		}
+
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 
@@ -252,6 +257,17 @@ namespace NMib::NStr
 			_Formatter.template f_Alloc<CFormatType>(_Data);\
 			return typename CFormatType::CStrFormatTypeClassifier();\
 		} \
+	};\
+	template <typename t_CFormatter> \
+	class TCStringFormatter<t_CFormatter, TCByValue<d_Type *>> \
+	{ \
+	public: \
+		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<d_Type *> const &_Data) \
+		{ \
+			_Formatter.template f_Alloc<CFormatType>(*_Data);\
+			return typename CFormatType::CStrFormatTypeClassifier();\
+		} \
 	};
 
 	DMibStrStringFormatterImplementStr(ch8, EStrType_UTF);
@@ -279,7 +295,19 @@ namespace NMib::NStr
 		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 		{ \
-			_Formatter.template f_Alloc<CFormatType>(_Data);\
+			_Formatter.template f_Alloc<CFormatType>(_Data, t_Size - 1);\
+			return typename CFormatType::CStrFormatTypeClassifier();\
+		} \
+	};\
+	template <typename t_CFormatter, aint t_Size> \
+	class TCStringFormatter<t_CFormatter, TCByValue<d_Type [t_Size]> > \
+	{ \
+	public: \
+		typedef d_Type CData[t_Size];\
+		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CData> const&_Data) \
+		{ \
+			_Formatter.template f_Alloc<CFormatType>(*_Data, t_Size - 1);\
 			return typename CFormatType::CStrFormatTypeClassifier();\
 		} \
 	};\
@@ -292,6 +320,18 @@ namespace NMib::NStr
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 		{ \
 			_Formatter.template f_Alloc<CFormatType>(_Data);\
+			return typename CFormatType::CStrFormatTypeClassifier();\
+		} \
+	}; \
+	template <typename t_CFormatter> \
+	class TCStringFormatter<t_CFormatter, TCByValue<d_Type []> > \
+	{ \
+	public: \
+		typedef d_Type CData[];\
+		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType;\
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CData> const&_Data) \
+		{ \
+			_Formatter.template f_Alloc<CFormatType>(*_Data);\
 			return typename CFormatType::CStrFormatTypeClassifier();\
 		} \
 	};

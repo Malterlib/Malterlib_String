@@ -21,6 +21,11 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
+		virtual void f_Move(t_CFormatter &_Formatter) override
+		{
+			DMibFastCheck(false); // Not supported
+		}
+
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 		typedef TICStrFormatType<t_CFormatter> CSuper;

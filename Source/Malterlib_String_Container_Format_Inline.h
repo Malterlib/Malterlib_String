@@ -21,6 +21,13 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
+		virtual void f_Move(t_CFormatter &_Formatter) override
+		{
+			DMibFastCheck(!t_bReference); // Not supported
+			if constexpr (!t_bReference)
+				_Formatter.template f_Alloc<TCStrFormatType_Inline>(fg_Move(m_ToFormat));
+		}
+
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 
@@ -34,12 +41,17 @@ namespace NMib::NStr
 
 		CStorageType m_ToFormat;
 
-		inline_small TCStrFormatType_Inline(const t_CToFormat &_ToFormat)
+		inline_small TCStrFormatType_Inline(t_CToFormat const &_ToFormat)
 			: m_ToFormat(_ToFormat)
 		{
 		}
 
-		inline_small TCStrFormatType_Inline(const t_CToFormat *_pStr)
+		inline_small TCStrFormatType_Inline(t_CToFormat &&_ToFormat)
+			: m_ToFormat(fg_Move(_ToFormat))
+		{
+		}
+
+		inline_small TCStrFormatType_Inline(t_CToFormat const *_pStr)
 			: m_ToFormat(*_pStr)
 		{
 		}

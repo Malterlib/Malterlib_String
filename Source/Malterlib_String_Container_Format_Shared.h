@@ -307,6 +307,7 @@ namespace NMib::NStr
 	public:
 		typedef CDefaultStrFormatTypeClassifier CStrFormatTypeClassifier;
 		virtual mint f_Delete() = 0;
+		virtual void f_Move(t_CFormatter &_Formatter) = 0;
 
 		//	virtual void
 		typedef t_CFormatter CFormatter;

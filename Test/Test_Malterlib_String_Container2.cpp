@@ -1708,6 +1708,46 @@ namespace
 					
 				};
 			};
+			DMibTestSuite("Recursive Format")
+			{
+				DMibExpect(CStr(CStr::CFormat("Test {} Test") << (CStr::CFormat("{}") << 55)), ==, "Test 55 Test");
+				DMibExpect(CStr(CStr::CFormat("Test {sj10} Test") << (CStr::CFormat("{}") << 55)), ==, "Test         55 Test");
+				DMibExpect(CStr(CStr::CFormat("Test {a-,sj10} Test") << (CStr::CFormat("{}") << 55)), ==, "Test 55         Test");
+			};
+			DMibTestCategory("ByValue")
+			{
+				DMibTestSuite("Move")
+				{
+					auto fMoveFormat = [](auto &&_Value) -> CStr::CFormat
+						{
+							CStr::CFormat Format("{}");
+							Format << NMib::fg_ByValue(_Value);
+							return NMib::fg_Move(Format);
+						}
+					;
+
+					DMibExpect(CStr(fMoveFormat(55)), ==, "55");
+					DMibExpect(CStr(fMoveFormat(55.5)), ==, "55.5");
+					DMibExpect(CStr(fMoveFormat("Test")), ==, "Test");
+					DMibExpect(CStr(fMoveFormat(CStr("Test"))), ==, "Test");
+
+					ch8 const *pTest = "Test";
+					DMibExpect(CStr(fMoveFormat(pTest)), ==, "Test");
+
+					struct CInlineFormat
+					{
+						void f_Format(CStrAggregate &o_String) const
+						{
+							o_String += CStr::CFormat("{} {}") << m_Integer << m_String;
+						}
+
+						uint32 m_Integer = 44;
+						CStr m_String = "Test";
+					};
+
+					DMibExpect(CStr(fMoveFormat(CInlineFormat())), ==, "44 Test");
+				};
+			};
 
 			DMibTestCategory("Expressions")
 			{
