@@ -452,6 +452,7 @@ namespace NMib::NStr
 	constexpr inline_large bool fg_CharIsAnsiAlphabetical(const t_CData _Character);
 	template <typename t_CData>
 	constexpr inline_medium bool fg_CharIsNumber(const t_CData _Character);
+	constexpr inline_medium bool fg_CharIsCombining(ch32 const _Character);
 
 	/************************************************************************************************\
 	||¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
