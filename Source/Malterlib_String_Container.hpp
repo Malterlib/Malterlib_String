@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -23,6 +23,65 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
+	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitEscaped(CChar _Separator) const
+	{
+		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
+
+		auto const *pParse = this->f_GetStr();
+		auto const *pParseEnd = pParse + this->f_GetLen();
+		auto const *pParseStart = pParse;
+
+		TCStr<t_CTCStrTraits> Next;
+
+		while (pParse < pParseEnd)
+		{
+			if (*pParse == _Separator)
+			{
+				Next.f_AddStr(pParseStart, pParse - pParseStart);
+				Result.f_Insert(fg_Move(Next));
+				++pParse;
+				pParseStart = pParse;
+				continue;
+			}
+			else if (*pParse == '\\')
+			{
+				Next.f_AddStr(pParseStart, pParse - pParseStart);
+				++pParse;
+				pParseStart = pParse;
+				if (*pParse)
+					++pParse;
+				continue;
+			}
+			else
+				++pParse;
+		}
+
+		if (pParse - pParseStart)
+			Next.f_AddStr(pParseStart, pParse - pParseStart);
+
+		Result.f_Insert(fg_Move(Next));
+
+		return Result;
+	}
+
+	template <typename t_CTCStrTraits>
+	template <typename tf_CContainer>
+	TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator)
+	{
+		CChar EscapeChars[] = {'\\', _Separator, 0};
+		TCStr<t_CTCStrTraits> Return;
+		bool bFirst = true;
+		for (auto &Str : _Strings)
+		{
+			if (!bFirst)
+				Return.f_AddChar(_Separator);
+			bFirst = false;
+			Return += Str.f_EscapeStrNoQuotes(EscapeChars);
+		}
+		return Return;
+	}
+
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrSeparator>
 	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_Split(tf_CStrSeparator const &_Separator) const
 	{
@@ -38,11 +97,13 @@ namespace NMib::NStr
 			if (iSplitPoint < 0)
 			{
 				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
-				break;
+				return Result;
 			}
 			Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
 			pParse += iSplitPoint + SeparatorLen;
 		}
+
+		Result.f_Insert();
 
 		return Result;
 	}
@@ -61,7 +122,7 @@ namespace NMib::NStr
 			if (iSplitPoint < 0)
 			{
 				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
-				break;
+				return Result;
 			}
 			Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
 
@@ -72,6 +133,8 @@ namespace NMib::NStr
 				++pParse;
 		}
 
+		Result.f_Insert();
+
 		return Result;
 	}
 
@@ -80,10 +143,12 @@ namespace NMib::NStr
 	TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator)
 	{
 		TCStr<t_CTCStrTraits> Return;
+		bool bFirst = true;
 		for (auto &Str : _Strings)
 		{
-			if (!Return.f_IsEmpty())
+			if (!bFirst)
 				Return += _Separator;
+			bFirst = false;
 			Return += Str;
 		}
 		return Return;

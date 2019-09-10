@@ -1114,8 +1114,53 @@ namespace
 					Tests.f_FormatInt();
 				};
 			};
-		}
+			DMibTestSuite("Split")
+			{
+				DMibExpect(CStr("Test;Test2;Test3").f_Split(";"), ==, (TCVector<CStr>{"Test", "Test2", "Test3"}));
+				DMibExpect(CStr(";Test2;").f_Split(";"), ==, (TCVector<CStr>{"", "Test2", ""}));
+				DMibExpect(CStr(";;").f_Split(";"), ==, (TCVector<CStr>{"", "", ""}));
+				DMibExpect(CStr(";").f_Split(";"), ==, (TCVector<CStr>{"", ""}));
+				DMibExpect(CStr("").f_Split(";"), ==, (TCVector<CStr>{""}));
 
+				DMibExpect(CStr::fs_Join(TCVector<CStr>{"Test", "Test2", "Test3"}, ";"), ==, "Test;Test2;Test3");
+				DMibExpect(CStr::fs_Join(TCVector<CStr>{"", "Test2", ""}, ";"), ==, ";Test2;");
+				DMibExpect(CStr::fs_Join(TCVector<CStr>{"", "", ""}, ";"), ==, ";;");
+				DMibExpect(CStr::fs_Join(TCVector<CStr>{"", ""}, ";"), ==, ";");
+				DMibExpect(CStr::fs_Join(TCVector<CStr>{""}, ";"), ==, "");
+			};
+			DMibTestSuite("SplitLine")
+			{
+				DMibExpect(CStr("Test\nTest2\nTest3").f_SplitLine(), ==, (TCVector<CStr>{"Test", "Test2", "Test3"}));
+				DMibExpect(CStr("\nTest2\n").f_SplitLine(), ==, (TCVector<CStr>{"", "Test2", ""}));
+				DMibExpect(CStr("\n\n").f_SplitLine(), ==, (TCVector<CStr>{"", "", ""}));
+				DMibExpect(CStr("\n").f_SplitLine(), ==, (TCVector<CStr>{"", ""}));
+				DMibExpect(CStr("").f_SplitLine(), ==, (TCVector<CStr>{""}));
+			};
+			DMibTestSuite("SplitEscaped")
+			{
+				DMibExpect(CStr("Test;Test2;Test3").f_SplitEscaped(';'), ==, (TCVector<CStr>{"Test", "Test2", "Test3"}));
+				DMibExpect(CStr(";Test2;").f_SplitEscaped(';'), ==, (TCVector<CStr>{"", "Test2", ""}));
+				DMibExpect(CStr(";;").f_SplitEscaped(';'), ==, (TCVector<CStr>{"", "", ""}));
+				DMibExpect(CStr(";").f_SplitEscaped(';'), ==, (TCVector<CStr>{"", ""}));
+				DMibExpect(CStr("").f_SplitEscaped(';'), ==, (TCVector<CStr>{""}));
+
+				DMibExpect(CStr("Te\\\\st;Te\\;st2;Test3").f_SplitEscaped(';'), ==, (TCVector<CStr>{"Te\\st", "Te;st2", "Test3"}));
+				DMibExpect(CStr("\\\\;\\;").f_SplitEscaped(';'), ==, (TCVector<CStr>{"\\", ";"}));
+				DMibExpect(CStr("\\\\").f_SplitEscaped(';'), ==, (TCVector<CStr>{"\\"}));
+				DMibExpect(CStr("\\;").f_SplitEscaped(';'), ==, (TCVector<CStr>{";"}));
+
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"Test", "Test2", "Test3"}, ';'), ==, "Test;Test2;Test3");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"", "Test2", ""}, ';'), ==, ";Test2;");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"", "", ""}, ';'), ==, ";;");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"", ""}, ';'), ==, ";");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{""}, ';'), ==, "");
+
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"Te\\st", "Te;st2", "Test3"}, ';'), ==, "Te\\\\st;Te\\;st2;Test3");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"\\", ";"}, ';'), ==, "\\\\;\\;");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{"\\"}, ';'), ==, "\\\\");
+				DMibExpect(CStr::fs_JoinEscaped(TCVector<CStr>{";"}, ';'), ==, "\\;");
+			};
+		}
 	};
 
 	DMibTestRegister(CStr_Tests, Malterlib::String::Container);

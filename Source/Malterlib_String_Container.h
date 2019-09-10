@@ -2124,10 +2124,15 @@ EndArgSearch:
 		template <typename tf_CStrSeparator>
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_Split(tf_CStrSeparator const &_Separator) const;
 
+		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitEscaped(CChar _Separator) const;
+
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitLine() const;
 
 		template <typename tf_CContainer, typename tf_CStrSeparator>
 		static TCStr<t_CTCStrTraits> fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator = "");
+
+		template <typename tf_CContainer>
+		static TCStr<t_CTCStrTraits> fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator);
 
 		/***************************************************************************************************\
 		|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
