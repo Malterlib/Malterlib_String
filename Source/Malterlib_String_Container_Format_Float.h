@@ -971,6 +971,19 @@ namespace NMib::NStr
 			else
 				_Extractor(fp32(m_Value));
 		}
+
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			auto pRight = static_cast<TCStrFormatType_Float const *>(_pRight);
+			return m_Value == pRight->m_Value;
+		}
+
+		inline static bool const ms_TypeID = false;
 	};
 
 	template <typename t_CFormatter, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>

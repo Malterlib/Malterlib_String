@@ -111,6 +111,25 @@ namespace NMib::NStr
 			_Extractor();
 		}
 
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			TCStrFormatType_Binary const *pRight = static_cast<TCStrFormatType_Binary const *>(_pRight);
+
+			if (m_Value.f_GetSize() != pRight->m_Value.f_GetSize())
+				return false;
+
+			if (NMemory::fg_MemCmp((uint8 const *)m_Value.f_GetArray(), (uint8 const *)pRight->m_Value.f_GetArray(), m_Value.f_GetSize()) != 0)
+				return false;
+
+			return true;
+		}
+
+		inline static bool const ms_TypeID = false;
 	};
 
 	template <typename t_CFormatter>

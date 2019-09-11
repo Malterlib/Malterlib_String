@@ -332,6 +332,8 @@ namespace NMib::NStr
 		virtual aint f_Get_aint() const = 0;
 		virtual fp32 f_Get_fp32() const = 0;
 		virtual fp64 f_Get_fp64() const = 0;
+		virtual void const *f_GetTypeID() const = 0;
+		virtual bool f_IsSame(void const *_pRight) const = 0;
 
 		class CVisitor
 		{

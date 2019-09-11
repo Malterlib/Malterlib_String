@@ -243,6 +243,25 @@ namespace NMib::NStr
 			}
 		}
 
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			auto pRight = static_cast<TCStrFormatType_String const *>(_pRight);
+
+			if (m_StrLen != pRight->m_StrLen)
+				return false;
+
+			if (fg_StrCmp(m_pStr, pRight->m_pStr, m_StrLen) != 0)
+				return false;
+			
+			return true;
+		}
+
+		inline static bool const ms_TypeID = false;
 	};
 
 	class CNullClass

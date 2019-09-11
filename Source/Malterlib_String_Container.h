@@ -272,7 +272,6 @@ namespace NMib::NStr
 	class TCFormat
 	{
 	public:
-
 		typedef typename t_CTCStrTraits::CStrTraits::CChar CChar;
 		typedef typename t_CTCStrTraits::CStrTraits::CAllocator CAllocator;
 		typedef TCStrAggregate<t_CTCStrTraits> CStrAggregate;
@@ -423,6 +422,32 @@ namespace NMib::NStr
 			m_pFormats = m_plFormats;
 			m_nFormats = 0;
 			m_iCurrentAlloc = 0;
+		}
+
+		bool operator == (TCFormat const &_Right) const
+		{
+			if (fg_StrCmp(m_pFormatStr, _Right.m_pFormatStr) != 0)
+				return false;
+
+			if (m_nFormats != _Right.m_nFormats)
+				return false;
+
+			TICStrFormatType<TCFormat> **pFormatList = fp_GetFormatList();
+			TICStrFormatType<TCFormat> **pFormatListRight = _Right.fp_GetFormatList();
+
+			for (uaint i = 0; i < m_nFormats; ++i)
+			{
+				TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
+				TICStrFormatType<TCFormat> *pFormatRight = (TICStrFormatType<TCFormat> *)((mint)pFormatListRight[i] & (~((mint)0x3)));
+
+				if (pFormat->f_GetTypeID() != pFormatRight->f_GetTypeID())
+					return false;
+
+				if (!pFormat->f_IsSame(pFormatRight))
+					return false;
+			}
+
+			return true;
 		}
 
 		~TCFormat()
@@ -716,7 +741,7 @@ EndArgSearch:
 		TICStrFormatType<TCFormat> *m_plFormats[EStaticFormats];
 		NContainer::TCVector<TICStrFormatType<TCFormat> *, CAllocator> m_lFormats;
 
-		inline_small TICStrFormatType<TCFormat> **fp_GetFormatList()
+		inline_small TICStrFormatType<TCFormat> **fp_GetFormatList() const
 		{
 			return m_pFormats;
 		}

@@ -286,8 +286,20 @@ namespace NMib::NStr
 				_Extractor(Temp.f_GetStr());
 			}
 		}
-	};
 
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			auto pRight = static_cast<TCStrFormatType_TStr const *>(_pRight);
+			return m_TStr == pRight->m_TStr;
+		}
+
+		inline static bool const ms_TypeID = false;
+	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
 	class TCStringFormatter<t_CFormatter, TCStrAggregate<t_CStrTraitsIn> >

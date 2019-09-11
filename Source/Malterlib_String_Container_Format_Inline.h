@@ -326,5 +326,18 @@ namespace NMib::NStr
 			fp_FormatInto(Temp, m_ToFormat);
 			_Extractor(Temp.f_GetStr());
 		}
+
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			DMibFastCheck(false); // Not supported
+			return false;
+		}
+
+		inline static bool const ms_TypeID = false;
 	};
 }

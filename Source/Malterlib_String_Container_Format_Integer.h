@@ -796,6 +796,18 @@ namespace NMib::NStr
 			}
 		}
 
+		virtual void const *f_GetTypeID() const override
+		{
+			return &ms_TypeID;
+		}
+
+		virtual bool f_IsSame(void const *_pRight) const override
+		{
+			auto pRight = static_cast<TCStrFormatType_Int const *>(_pRight);
+			return m_Storage.m_Value == pRight->m_Storage.m_Value;
+		}
+
+		inline static bool const ms_TypeID = false;
 	};
 
 	template <typename t_CFormatter, typename t_CInt0, typename t_CInt1>
