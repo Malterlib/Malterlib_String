@@ -2121,11 +2121,13 @@ EndArgSearch:
 		|____________________________________________________________________________________________________
 		\***************************************************************************************************/
 
-		template <typename tf_CStrSeparator>
+		template <bool tf_bRemoveEmpty = false, typename tf_CStrSeparator>
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_Split(tf_CStrSeparator const &_Separator) const;
 
+		template <bool tf_bRemoveEmpty = false>
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitEscaped(CChar _Separator) const;
 
+		template <bool tf_bRemoveEmpty = false>
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitLine() const;
 
 		template <typename tf_CContainer, typename tf_CStrSeparator>

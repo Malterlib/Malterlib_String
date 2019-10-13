@@ -23,6 +23,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
+	template <bool tf_bRemoveEmpty>
 	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitEscaped(CChar _Separator) const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
@@ -38,7 +39,13 @@ namespace NMib::NStr
 			if (*pParse == _Separator)
 			{
 				Next.f_AddStr(pParseStart, pParse - pParseStart);
-				Result.f_Insert(fg_Move(Next));
+				if constexpr (tf_bRemoveEmpty)
+				{
+					if (Next)
+						Result.f_Insert(fg_Move(Next));
+				}
+				else
+					Result.f_Insert(fg_Move(Next));
 				++pParse;
 				pParseStart = pParse;
 				continue;
@@ -59,7 +66,13 @@ namespace NMib::NStr
 		if (pParse - pParseStart)
 			Next.f_AddStr(pParseStart, pParse - pParseStart);
 
-		Result.f_Insert(fg_Move(Next));
+		if constexpr (tf_bRemoveEmpty)
+		{
+			if (Next)
+				Result.f_Insert(fg_Move(Next));
+		}
+		else
+			Result.f_Insert(fg_Move(Next));
 
 		return Result;
 	}
@@ -82,7 +95,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	template <typename tf_CStrSeparator>
+	template <bool tf_bRemoveEmpty, typename tf_CStrSeparator>
 	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_Split(tf_CStrSeparator const &_Separator) const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
@@ -96,19 +109,33 @@ namespace NMib::NStr
 			auto iSplitPoint = fg_StrFind(pParse, _Separator, pParseEnd - pParse);
 			if (iSplitPoint < 0)
 			{
-				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+				if constexpr (tf_bRemoveEmpty)
+				{
+					if (pParseEnd != pParse)
+						Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+				}
+				else
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
 				return Result;
 			}
-			Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+			if constexpr (tf_bRemoveEmpty)
+			{
+				if (iSplitPoint)
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+			}
+			else
+				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
 			pParse += iSplitPoint + SeparatorLen;
 		}
 
-		Result.f_Insert();
+		if constexpr (!tf_bRemoveEmpty)
+			Result.f_Insert();
 
 		return Result;
 	}
 
 	template <typename t_CTCStrTraits>
+	template <bool tf_bRemoveEmpty>
 	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitLine() const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
@@ -121,10 +148,22 @@ namespace NMib::NStr
 			auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
 			if (iSplitPoint < 0)
 			{
-				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+				if constexpr (tf_bRemoveEmpty)
+				{
+					if (pParseEnd != pParse)
+						Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
+				}
+				else
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, pParseEnd - pParse));
 				return Result;
 			}
-			Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+			if constexpr (tf_bRemoveEmpty)
+			{
+				if (iSplitPoint)
+					Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
+			}
+			else
+				Result.f_Insert(TCStr<t_CTCStrTraits>(pParse, iSplitPoint));
 
 			pParse += iSplitPoint;
 			if (*pParse == '\r')
@@ -133,7 +172,8 @@ namespace NMib::NStr
 				++pParse;
 		}
 
-		Result.f_Insert();
+		if constexpr (!tf_bRemoveEmpty)
+			Result.f_Insert();
 
 		return Result;
 	}
