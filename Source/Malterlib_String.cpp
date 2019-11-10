@@ -2,7 +2,6 @@
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
-#include <Mib/Storage/Tuple>
 #include <Mib/String/AnsiConversion>
 
 namespace NMib::NStr
@@ -560,25 +559,15 @@ namespace NMib::NStr
 			return fg_ReplaceSequenceUTF8(_CStr);
 	}
 
-	bool CParseLocation::operator ==(CParseLocation const &_Right) const
+	bool CParseError::operator == (CParseError const &_Right) const
 	{
-		return NStorage::fg_TupleReferences(m_File, m_Character, m_Line, m_Column) == NStorage::fg_TupleReferences(_Right.m_File, _Right.m_Character, _Right.m_Line, _Right.m_Column);
-	}
-	bool CParseError::operator ==(CParseError const &_Right) const
-	{
-		return NStorage::fg_TupleReferences(m_Error, m_Location) == NStorage::fg_TupleReferences(_Right.m_Error, _Right.m_Location);
+		if (m_Error != _Right.m_Error)
+			return false;
+		if (m_Location != _Right.m_Location)
+			return false;
+		return true;
 	}
 
-	void CParseLocation::f_Format(NStr::CStrAggregate &o_FormatInto) const
-	{
-		o_FormatInto
-			+= NStr::CStr::CFormat(DMibPFileLineColumnFormat " Char {}")
-			<< m_File
-			<< m_Line
-			<< m_Column
-			<< m_Character
-		;
-	}
 	void CParseError::f_Format(NStr::CStrAggregate &o_FormatInto) const
 	{
 		o_FormatInto += CStr::CFormat("{} Error '{}'") << m_Location << m_Error;

@@ -128,10 +128,13 @@ namespace NMib::NStr
 	{
 		return CUStr::CFormat(_pStr);
 	}
-	struct CParseLocation
+
+	template <typename t_CStr, bool t_bIncludeExtra>
+	struct TCParseLocation
 	{
-		bool operator ==(CParseLocation const &_Right) const;
-		void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+		bool operator ==(TCParseLocation const &_Right) const;
+		template <typename tf_CStr>
+		void f_Format(tf_CStr &o_FormatInto) const;
 
 		template <typename tf_CStream>
 		void f_Feed(tf_CStream &_Stream) const
@@ -151,11 +154,38 @@ namespace NMib::NStr
 			_Stream >> m_Column;
 		}
 
-		NStr::CStr m_File;
-		zuint32 m_Character;
-		zuint32 m_Line;
-		zuint32 m_Column;
+		t_CStr m_File;
+		uint32 m_Character = 0;
+		uint32 m_Line = 0;
+		uint32 m_Column = 0;
 	};
+
+	template <typename t_CStr>
+	struct TCParseLocation<t_CStr, false>
+	{
+		bool operator ==(TCParseLocation const &_Right) const;
+		template <typename tf_CStr>
+		void f_Format(tf_CStr &o_FormatInto) const;
+
+		template <typename tf_CStream>
+		void f_Feed(tf_CStream &_Stream) const
+		{
+			_Stream << m_File;
+			_Stream << m_Line;
+		}
+
+		template <typename tf_CStream>
+		void f_Consume(tf_CStream &_Stream)
+		{
+			_Stream >> m_File;
+			_Stream >> m_Line;
+		}
+
+		t_CStr m_File;
+		uint32 m_Line = 0;
+	};
+
+	using CParseLocation = TCParseLocation<CStr, true>;
 
 	struct CParseError
 	{
@@ -193,3 +223,5 @@ namespace NMib::NStr
 #ifndef DMibPNoShortCuts
 	using namespace NMib::NStr;
 #endif
+
+#include "Malterlib_String.hpp"
