@@ -795,32 +795,32 @@ namespace NMib::NStr
 
 		enum EFormatXprOperator
 		{
-			EFormatXprOperator_None = 0,
+			EFormatXprOperator_None = 0
 
-			EFormatXprOperator_UnaryAdd,
-			EFormatXprOperator_UnarySub,
-			EFormatXprOperator_BitwiseNot,
-			EFormatXprOperator_LogicalNot,
+			//, EFormatXprOperator_UnaryAdd
+			//, EFormatXprOperator_UnarySub
+			//, EFormatXprOperator_BitwiseNot
+			//, EFormatXprOperator_LogicalNot
 
-			EFormatXprOperator_Multiply,
-			EFormatXprOperator_Divide,
-			EFormatXprOperator_Modulus,
+			, EFormatXprOperator_Multiply
+			, EFormatXprOperator_Divide
+			, EFormatXprOperator_Modulus
 
-			EFormatXprOperator_LessThan,
-			EFormatXprOperator_GreaterThan,
-			EFormatXprOperator_Equal,
-			EFormatXprOperator_LessThanEqual,
-			EFormatXprOperator_GreaterThanEqual,
+			, EFormatXprOperator_LessThan
+			, EFormatXprOperator_GreaterThan
+			, EFormatXprOperator_Equal
+			, EFormatXprOperator_LessThanEqual
+			, EFormatXprOperator_GreaterThanEqual
 
-			EFormatXprOperator_LogicalOr,
-			EFormatXprOperator_LogicalAnd,
+			, EFormatXprOperator_LogicalOr
+			, EFormatXprOperator_LogicalAnd
 
-			EFormatXprOperator_BitwiseOr,
-			EFormatXprOperator_BitwiseAnd,
-			EFormatXprOperator_BitwiseXor,
+			, EFormatXprOperator_BitwiseOr
+			, EFormatXprOperator_BitwiseAnd
+			, EFormatXprOperator_BitwiseXor
 
-			EFormatXprOperator_Add,
-			EFormatXprOperator_Sub,
+			, EFormatXprOperator_Add
+			, EFormatXprOperator_Sub
 		};
 
 		template <typename t_CData, typename t_CImplementation>
