@@ -475,21 +475,21 @@ namespace
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
-			DMibTestCategory(_Type)
+			DMibTestSuite(_Type)
 			{
 				auto ToCopy = fg_GetToCopy<tf_CChar>();
-				DMibTestCategory("Normal")
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Normal");
 					{
+						DMibTestPath("ANSI");
 						ch8 OutArray[100];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 						auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
 						
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), "Char65Char5Char"), ==, ECompare_Equal);
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						{
 							DMibTestPath("Default");
 							ch8 OutArray[100];
@@ -546,57 +546,57 @@ namespace
 							
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						ch16 OutArray[100];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
 						
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						ch32 OutArray[100];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
-					};
-				};
-				DMibTestCategory("Too short")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Too short");
 					{
+						DMibTestPath("ANSI");
 						ch8 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
 						
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), "Char6"), ==, ECompare_Equal);
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						ch8 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
 						
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char")), ==, ECompare_Equal);
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						ch16 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
 						
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char")), ==, ECompare_Equal);
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						ch32 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀")), ==, ECompare_Equal);
-					};
-				};
+					}
+				}
 			};
 		}
 		

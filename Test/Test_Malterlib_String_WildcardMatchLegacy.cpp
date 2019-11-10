@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -52,48 +52,48 @@ namespace
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
-			DMibTestCategory(_Type)
+			DMibTestSuite(_Type)
 			{
 				auto ToWildcardMatch0 = fg_GetToWildcardMatch<tf_CChar>(0);
 				auto ToWildcardMatch1 = fg_GetToWildcardMatch<tf_CChar>(1);
 				auto ToWildcardMatch2 = fg_GetToWildcardMatch<tf_CChar>(2);
-				DMibTestCategory("Normal")
 				{
+					DMibTestPath("Normal");
 					if constexpr (sizeof(tf_CChar) == 1)
 					{
-						DMibTestSuite("ANSI")
 						{
+							DMibTestPath("ANSI");
 							DMibExpect(fg_StrMatchWildcard("Char5Char5Char", "?????Ch*5*ar"), ==, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted);
 							DMibExpect(fg_StrMatchWildcard("Char5Char5Char", "?????Ch*5*ar1"), ==, EMatchWildcardResult_WholeStringMatched);
 							DMibExpect(fg_StrMatchWildcard("Char5Char5Char1", "?????Ch*5*ar"), ==, EMatchWildcardResult_PatternExhausted);
 							DMibExpect(fg_StrMatchWildcard("Char5Char5Char13", "?????Ch*5*ar?2"), ==, EMatchWildcardResult_NotMatched);
-						};
-						DMibTestSuite("UTF8")
+						}
 						{
+							DMibTestPath("UTF8");
 							DMibExpect(fg_StrMatchWildcard(str_utf8("CharcCharcChar"), ToWildcardMatch0), ==, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted);
 							DMibExpect(fg_StrMatchWildcard(str_utf8("CharcCharcChar"), ToWildcardMatch1), ==, EMatchWildcardResult_WholeStringMatched);
 							DMibExpect(fg_StrMatchWildcard(str_utf8("CharcCharcChar1"), ToWildcardMatch2), ==, EMatchWildcardResult_PatternExhausted);
-						};
+						}
 					}
 					if constexpr (sizeof(tf_CChar) == 2)
 					{
-						DMibTestSuite("UTF16")
 						{
+							DMibTestPath("UTF16");
 							DMibExpect(fg_StrMatchWildcard(str_utf16("CharȼCharȼChar"), ToWildcardMatch0), ==, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted);
 							DMibExpect(fg_StrMatchWildcard(str_utf16("CharȼCharȼChar"), ToWildcardMatch1), ==, EMatchWildcardResult_WholeStringMatched);
 							DMibExpect(fg_StrMatchWildcard(str_utf16("CharȼCharȼChar1"), ToWildcardMatch2), ==, EMatchWildcardResult_PatternExhausted);
-						};
+						}
 					}
 					if constexpr (sizeof(tf_CChar) == 4)
 					{
-						DMibTestSuite("UTF32")
 						{
+							DMibTestPath("UTF32");
 							DMibExpect(fg_StrMatchWildcard(str_utf32("Char𠀀Char𠀀Char"), ToWildcardMatch0), ==, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted);
 							DMibExpect(fg_StrMatchWildcard(str_utf32("Char𠀀Char𠀀Char"), ToWildcardMatch1), ==, EMatchWildcardResult_WholeStringMatched);
 							DMibExpect(fg_StrMatchWildcard(str_utf32("Char𠀀Char𠀀Char1"), ToWildcardMatch2), ==, EMatchWildcardResult_PatternExhausted);
-						};
+						}
 					}
-				};
+				}
 			};
 		}
 		void f_DoTests()

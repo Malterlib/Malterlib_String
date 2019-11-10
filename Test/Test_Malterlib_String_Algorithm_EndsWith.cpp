@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/EndsWith>
@@ -52,102 +52,102 @@ namespace
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
-			DMibTestCategory(_Type)
+			DMibTestSuite(_Type)
 			{
 				auto ToCompare = fg_GetToCompare<tf_CChar>(0);
 				[[maybe_unused]] auto ToCompare0 = fg_GetToCompare<tf_CChar>(1);
 				auto ToCompare1 = fg_GetToCompare<tf_CChar>(2);
-				DMibTestCategory("Normal")
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Normal");
 					{
+						DMibTestPath("ANSI");
 						DMibExpectFalse(fg_StrEndsWith("Char5Char5Char", "Char5Char5Char1"));
 						DMibExpectTrue(fg_StrEndsWith("55Char5Char5Char", "Char5Char5Char"));
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpectFalse(fg_StrEndsWith(str_utf8("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith(str_utf8("55Char𠀀Char𠀀Char"), ToCompare));
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpectFalse(fg_StrEndsWith(str_utf16("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith(str_utf16("55Char𠀀Char𠀀Char"), ToCompare));
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpectFalse(fg_StrEndsWith(str_utf32("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith(str_utf32("55Char𠀀Char𠀀Char"), ToCompare));
-					};
-				};
-				DMibTestCategory("NoCase")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("NoCase");
 					{
+						DMibTestPath("ANSI");
 						DMibExpectFalse(fg_StrEndsWith<CNoCase>("char5Char5Char", "Char5Char5Char1"));
 						DMibExpectTrue(fg_StrEndsWith<CNoCase>("55char5Char5Char", "Char5Char5Char"));
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpectFalse(fg_StrEndsWith<CNoCase>(str_utf8("char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CNoCase>(str_utf8("55char𠀀Char𠀀Char"), ToCompare));
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpectFalse(fg_StrEndsWith<CNoCase>(str_utf16("char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CNoCase>(str_utf16("55char𠀀Char𠀀Char"), ToCompare));
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpectFalse(fg_StrEndsWith<CNoCase>(str_utf32("char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CNoCase>(str_utf32("55char𠀀Char𠀀Char"), ToCompare));
-					};
-				};
-				DMibTestCategory("Reverse")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Reverse");
 					{
+						DMibTestPath("ANSI");
 						DMibExpectFalse(fg_StrEndsWith<CReverse>("Char5Char5Char", "Char5Char5Char1"));
 						DMibExpectTrue(fg_StrEndsWith<CReverse>("Char5Char5Char1", "Char5Char5Char"));
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpectFalse(fg_StrEndsWith<CReverse>(str_utf8("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CReverse>(str_utf8("Char𠀀Char𠀀Char1"), ToCompare));
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpectFalse(fg_StrEndsWith<CReverse>(str_utf16("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CReverse>(str_utf16("Char𠀀Char𠀀Char1"), ToCompare));
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpectFalse(fg_StrEndsWith<CReverse>(str_utf32("Char𠀀Char𠀀Char"), ToCompare1));
 						DMibExpectTrue(fg_StrEndsWith<CReverse>(str_utf32("Char𠀀Char𠀀Char1"), ToCompare));
-					};
-				};
-				DMibTestCategory("ReverseNoCase")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("ReverseNoCase");
 					{
+						DMibTestPath("ANSI");
 						DMibExpectFalse((fg_StrEndsWith<CReverse, CNoCase>("char5Char5Char", "Char5Char5Char1")));
 						DMibExpectTrue((fg_StrEndsWith<CReverse, CNoCase>("char5Char5Char11", "Char5Char5Char")));
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpectFalse((fg_StrEndsWith<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char"), ToCompare1)));
 						DMibExpectTrue((fg_StrEndsWith<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char1"), ToCompare)));
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpectFalse((fg_StrEndsWith<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char"), ToCompare1)));
 						DMibExpectTrue((fg_StrEndsWith<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char1"), ToCompare)));
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpectFalse((fg_StrEndsWith<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char"), ToCompare1)));
 						DMibExpectTrue((fg_StrEndsWith<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char1"), ToCompare)));
-					};
+					}
 				};
 			};
 		}

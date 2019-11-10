@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/IsAnsi>
@@ -13,27 +13,27 @@ namespace
 	public:
 		void f_DoTests()
 		{
-			DMibTestCategory("Normal")
+			DMibTestSuite("Normal")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					DMibExpectTrue(fg_StrIsAnsi(fg_Const("Char5Char5Char")));
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					DMibExpectTrue(fg_StrIsAnsi(fg_Const(str_utf8("Char5Char5Char"))));
 					DMibExpectFalse(fg_StrIsAnsi(fg_Const(str_utf8("Char𠀀Char𠀀Char"))));
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					DMibExpectTrue(fg_StrIsAnsi(fg_Const(str_utf16("Char5Char5Char"))));
 					DMibExpectFalse(fg_StrIsAnsi(fg_Const(str_utf16("Char𠀀Char𠀀Char"))));
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					DMibExpectTrue(fg_StrIsAnsi(fg_Const(str_utf32("Char5Char5Char"))));
 					DMibExpectFalse(fg_StrIsAnsi(fg_Const(str_utf32("Char𠀀Char𠀀Char"))));
-				};
+				}
 			};
 		}
 	};

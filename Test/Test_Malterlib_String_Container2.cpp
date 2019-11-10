@@ -91,28 +91,24 @@ namespace
 
 		void fp_FindCharTests()
 		{
-			DMibTestCategory("FindChar")
+			DMibTestSuite("FindChar")
 			{
-				DMibTestSuite("CMStrDeprecated")
 				{
+					DMibTestPath("CMStrDeprecated");
 					CGlobalFunctions_Tests::fsp_FindCharTestsTyped<CMStrDeprecated>();
-				};
-
-				DMibTestSuite("CStr")
+				}
 				{
+					DMibTestPath("CStr");
 					CGlobalFunctions_Tests::fsp_FindCharTestsTyped<CStr>();
-				};
-
-				DMibTestSuite("CWStr")
+				}
 				{
+					DMibTestPath("CWStr");
 					CGlobalFunctions_Tests::fsp_FindCharTestsTyped<CWStr>();
-				};
-
-				DMibTestSuite("CUStr")
+				}
 				{
+					DMibTestPath("CUStr");
 					CGlobalFunctions_Tests::fsp_FindCharTestsTyped<CUStr>();
-				};
-
+				}
 			};
 		}
 
@@ -242,22 +238,20 @@ namespace
 		
 		void fp_CaseTests()
 		{
-			DMibTestCategory("Case")
+			DMibTestSuite("Case")
 			{
-				DMibTestSuite("CStr")
 				{
+					DMibTestPath("CStr");
 					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CStr>();
-				};
-
-				DMibTestSuite("CWStr")
+				}
 				{
+					DMibTestPath("CWStr");
 					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CWStr>();
-				};
-
-				DMibTestSuite("CUStr")
+				}
 				{
+					DMibTestPath("CUStr");
 					CGlobalFunctions_Tests::fsp_CaseTestsTyped<CUStr>();
-				};
+				}
 			};
 		}
 
@@ -356,11 +350,11 @@ namespace
 			CStr TestStringFull(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴𠀀")));
 			CStr TestUnicode8(CWStr(str_utf16("abcdåäÖ")));
 
-			DMibTestCategory("Unicode coding")
+			DMibTestSuite("Unicode coding")
 			{
 				CStr TestString = TestStringFull;
-				DMibTestSuite("UTF8")
 				{
+					DMibTestPath("UTF8");
 					CStr TestConvert = TestString;
 					CUStr UTF32;
 
@@ -408,9 +402,9 @@ namespace
 						CStr Encoded = Out;
 						DMibTest(DMibExpr(Encoded) == DMibExpr(TestString));
 					}
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					CWStr TestConvert = TestString;
 					CUStr UTF32;
 
@@ -461,12 +455,12 @@ namespace
 					}
 				};
 			};
-			DMibTestCategory("Up conversion")
+			DMibTestSuite("Up conversion")
 			{
-				DMibTestCategory("ch8")
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("ch8");
 					{
+						DMibTestPath("ANSI");
 						CAnsiStr TestString(gc_AnsiTestString);
 						CStr TestConvert = TestString;
 						CStr MixedFrom = TestString;
@@ -474,9 +468,9 @@ namespace
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
 
-					};
-					DMibTestSuite("ANSI not tracked")
+					}
 					{
+						DMibTestPath("ANSI not tracked");
 						CAnsiStrNonTracked TestString(gc_AnsiTestString);
 						CStrNonTracked TestConvert = TestString;
 						CStr MixedFrom = TestString;
@@ -484,9 +478,9 @@ namespace
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
 
-					};
-					DMibTestSuite("Unicode")
+					}
 					{
+						DMibTestPath("Unicode");
 						CStr TestString(TestUnicode8);
 						CStr TestConvert = TestString;
 						CStr MixedFrom = TestString;
@@ -494,88 +488,85 @@ namespace
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
 
-					};
-					DMibTestSuite("Unicode not tracked")
+					}
 					{
+						DMibTestPath("Unicode not tracked");
 						CStrNonTracked TestString(TestUnicode8);
 						CStrNonTracked TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
-					};
-				};
-				DMibTestCategory("ch16")
+					}
+				}
 				{
-					DMibTestSuite("Unicode")
+					DMibTestPath("ch16");
 					{
+						DMibTestPath("Unicode");
 						CWStr TestString(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 						CWStr TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
-					};
-					DMibTestSuite("Unicode not tracked")
+					}
 					{
-						CWStrNonTracked TestString(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
+						DMibTestPath("Unicode not tracked");
+ 						CWStrNonTracked TestString(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 						CWStrNonTracked TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
-					};
-				};
+					}
+				}
 			};
 			
-			DMibTestCategory("Type conversion")
+			DMibTestSuite("Type conversion")
 			{
-				DMibTestCategory("From ch8")
 				{
-					DMibTestCategory("ANSI")
+					DMibTestPath("From ch8");
 					{
+						DMibTestPath("ANSI");
 						CAnsiStr TestFrom(gc_AnsiTestString);
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo(gc_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-					DMibTestCategory("Unicode")
+							}
+						}
+					}
 					{
+						DMibTestPath("Unicode");
 						CStr TestFrom(TestUnicode8);
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo(gc_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("Unicode")
+							}
 							{
+								DMibTestPath("Unicode");
 								CStr TestTo(TestUnicode8);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
@@ -583,392 +574,391 @@ namespace
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
 							};
-						};
-						DMibTestCategory("To ch16")
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch16");
 							{
+								DMibTestPath("Unicode");
 								CWStr TestTo(str_utf16("abcd\xc6\xc5\xd6\xe6\xe5\xf6亜哀姐飴"));
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CWStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch32")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch32");
 							{
+								DMibTestPath("Unicode");
 								CUStr TestTo(TestStringFull);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-					DMibTestCategory("UTF")
+							}
+						}
+					}
 					{
+						DMibTestPath("UTF");
 						CStr TestFrom(TestStringFull);
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo(gc_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("Unicode")
+							}
 							{
+								DMibTestPath("Unicode");
 								CStr TestTo(TestUnicode8);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch16")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch16");
 							{
+								DMibTestPath("Unicode");
 								CWStr TestTo(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CWStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch32")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch32");
 							{
+								DMibTestPath("Unicode");
 								CUStr TestTo(TestStringFull);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-				};
-				DMibTestCategory("ch16")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("Unicode")
+					DMibTestPath("ch16");
 					{
+						DMibTestPath("Unicode");
 						CWStr TestFrom(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo("abcdÅÄÖåöä");
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("Unicode")
+							}
 							{
+								DMibTestPath("Unicode");
 								CStr TestTo(TestUnicode8);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch16")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch16");
 							{
+								DMibTestPath("Unicode");
 								CWStr TestTo(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CWStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch32")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch32");
 							{
+								DMibTestPath("Unicode");
 								CUStr TestTo(TestStringFull);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-					DMibTestCategory("UTF")
+							}
+						}
+					}
 					{
+						DMibTestPath("UTF");
 						CWStr TestFrom(TestStringFull);
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo("abcdÅÄÖåöä");
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("Unicode")
+							}
 							{
+								DMibTestPath("Unicode");
 								CStr TestTo(TestUnicode8);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch16")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch16");
 							{
+								DMibTestPath("Unicode");
 								CWStr TestTo(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CWStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch32")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch32");
 							{
+								DMibTestPath("Unicode");
 								CUStr TestTo(TestStringFull);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-				};
-				DMibTestCategory("ch32")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("UTF")
+					DMibTestPath("ch32");
 					{
+						DMibTestPath("UTF");
 						CUStr TestFrom(TestStringFull);
-						DMibTestCategory("To ch8")
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To ch8");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo("abcdÅÄÖåöä");
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("Unicode")
+							}
 							{
+								DMibTestPath("Unicode");
 								CStr TestTo(TestUnicode8);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch16")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch16");
 							{
+								DMibTestPath("Unicode");
 								CWStr TestTo(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-							DMibTestSuite("UTF")
+							}
 							{
+								DMibTestPath("UTF");
 								CWStr TestTo = TestStringFull;
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-						DMibTestCategory("To ch32")
+							}
+						}
 						{
-							DMibTestSuite("Unicode")
+							DMibTestPath("To ch32");
 							{
+								DMibTestPath("Unicode");
 								CUStr TestTo(TestStringFull);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
 								CStr MixedResult = TestResult;
 								DMibTest(DMibExpr(MixedResult) == DMibExpr(ReferenceResult));
-							};
-						};
-					};
-				};
-
-
+							}
+						}
+					}
+				}
 			};
-			DMibTestCategory("ANSI conversion")
+
+			DMibTestSuite("ANSI conversion")
 			{
-				DMibTestCategory("From ch8")
 				{
-					DMibTestCategory("ANSI")
+					DMibTestPath("From ch8");
 					{
-						DMibTestCategory("To CStr")
+						DMibTestPath("ANSI");
 						{
-							DMibTestSuite("UTF")
+							DMibTestPath("To CStr");
 							{
+								DMibTestPath("UTF");
 								CStr TestTo;
 								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
 								CStr FromResult(gc_AnsiTestStringUTF);
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
-							};
-						};
-						DMibTestCategory("To CStrNonTracked")
+							}
+						}
 						{
-							DMibTestSuite("UTF")
+							DMibTestPath("To CStrNonTracked");
 							{
+								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
 								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
 								CStr TestFrom(gc_AnsiTestStringUTF);
 								DMibTest(DMibExpr(TestFrom) == DMibExpr(TestTo));
-							};
-						};
-					};
-				};
-				DMibTestCategory("From CStr")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("ANSI")
+					DMibTestPath("From CStr");
 					{
-						DMibTestCategory("To CStr")
+						DMibTestPath("ANSI");
 						{
-							DMibTestSuite("UTF")
+							DMibTestPath("To CStr");
 							{
+								DMibTestPath("UTF");
 								CStr TestTo;
 								CAnsiStr TestFrom(gc_AnsiTestString);
 								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CMStrDeprecated FromResult = CMStrDeprecated(TestFrom);
 								CMStrDeprecated ToResult = CMStrDeprecated(TestTo);
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
-							};
-						};
-					};
-				};
-				DMibTestCategory("From CStrNonTracked")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("ANSI")
+					DMibTestPath("From CStrNonTracked");
 					{
-						DMibTestCategory("To CStrNonTracked")
+						DMibTestPath("ANSI");
 						{
-							DMibTestSuite("UTF")
+							DMibTestPath("To CStrNonTracked");
 							{
+								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
 								CAnsiStrNonTracked TestFrom(gc_AnsiTestString);
 								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CStr ToResult = TestTo;
 								CStr FromResult = TestFrom;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
-							};
-						};
-					};
-				};
-				DMibTestCategory("From CStr")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("UTF")
+					DMibTestPath("From CStr");
 					{
-						DMibTestCategory("To CStr")
+						DMibTestPath("UTF");
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To CStr");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo;
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä")));
 								CStr TestFrom = TestString;
@@ -977,9 +967,9 @@ namespace
 								CStr FromResult = TestFrom;
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
-							};
-							DMibTestSuite("ANSI - non translatable")
+							}
 							{
+								DMibTestPath("ANSI - non translatable");
 								CAnsiStr TestTo;
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴")));
 								CStr TestFrom = TestString;
@@ -987,18 +977,18 @@ namespace
 								CStr FromResultWithError(CWStr(str_utf16("abcdÅÄÖåöä????")));
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResultWithError) == DMibExpr(ToResult));
-							};
-						};
-					};
-				};
-				DMibTestCategory("From CStrNonTracked")
+							}
+						}
+					}
+				}
 				{
-					DMibTestCategory("UTF")
+					DMibTestPath("From CStrNonTracked");
 					{
-						DMibTestCategory("To CStrNonTracked")
+						DMibTestPath("UTF");
 						{
-							DMibTestSuite("ANSI")
+							DMibTestPath("To CStrNonTracked");
 							{
+								DMibTestPath("ANSI");
 								CAnsiStr TestTo;
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä")));
 								CStrNonTracked TestFrom = TestString;
@@ -1006,10 +996,10 @@ namespace
 								CStr FromResult = TestFrom;
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
-							};
-						};
-						DMibTestSuite("ANSI - non translatable")
+							}
+						}
 						{
+							DMibTestPath("ANSI - non translatable");
 							CAnsiStr TestTo;
 							CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴")));
 							CStrNonTracked TestFrom = TestString;
@@ -1017,19 +1007,17 @@ namespace
 							CStr FromResultWithError(CWStr(str_utf16("abcdÅÄÖåöä????")));
 							CStr ToResult = TestTo;
 							DMibTest(DMibExpr(FromResultWithError) == DMibExpr(ToResult));
-						};
-					};
-				};
-
-
+						}
+					}
+				}
 			};
 
-			DMibTestCategory("Validation")
+			DMibTestSuite("Validation")
 			{
-				DMibTestCategory("Valid UTF8")
 				{
-					DMibTestSuite("Boundaries")
+					DMibTestPath("Valid UTF8");
 					{
+						DMibTestPath("Boundaries");
 						// Byte order mark
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("\0xef\0xbb\0xbfx"))));
 						// First possible sequences
@@ -1050,33 +1038,29 @@ namespace
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbdx"))));	// ReplacementChar character
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"))));	// Non-character codepoint
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x90\x80\x80x"))));  // Beyond U-10FFFF
-					};
-
-					DMibTestSuite("Invalid Bytes")
+					}
 					{
+						DMibTestPath("Invalid Bytes");
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\x80\xbfx"))));	// Unexpected continuation bytes
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfe\xfe\xff\xffx"))));	// Impossible bytes
-					};
-
-					DMibTestSuite("Lonely start characters")
+					}
 					{
+						DMibTestPath("Lonely start characters");
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xc0x\xdfx"))));	// Lonely start characters from 2-byte sequence
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0x\xefx"))));	// Lonely start characters from 3-byte sequence
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0x\xf7x"))));	// Lonely start characters from 4-byte sequence
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8x\xfbx"))));	// Lonely start characters from 5-byte sequence
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfcx\xfdx"))));	// Lonely start characters from 6-byte sequence
-					};
-
-					DMibTestSuite("Last character missing")
+					}
 					{
+						DMibTestPath("Last character missing");
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0\x80x"))));	// 3-byte sequence with last byte missing
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0\x80\x80x"))));	// 4-byte sequence with last byte missing
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x80\x80\x80x"))));	// 5-byte sequence with last byte missing
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x80\x80\x80\x80x"))));	// 6-byte sequence with last byte missing
-					};
-
-					DMibTestSuite("Overlong sequences")
+					}
 					{
+						DMibTestPath("Overlong sequences");
 						// Overlong ASCII
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xc0\xafx"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0\x80\xafx"))));
@@ -1095,10 +1079,9 @@ namespace
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0\x80\x80\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x80\x80\x80\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x80\x80\x80\x80\x80x"))));
-					};
-
-					DMibTestSuite("Illegal code positions")
+					}
 					{
+						DMibTestPath("Illegal code positions");
 						// Single UTF-16 Surrogates
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xa0\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xad\xbfx"))));
@@ -1119,13 +1102,12 @@ namespace
 						// Invalid code positions 
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbex"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));
-					};	
-				};
-
-				DMibTestCategory("Replace characters UTF8")
+					}
+				}
 				{
-					DMibTestSuite("Boundaries")
+					DMibTestPath("Replace characters UTF8");
 					{
+						DMibTestPath("Boundaries");
 						// Byte order mark
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("\0xef\0xbb\0xbfx"))) == DMibExpr(CStr("\0xef\0xbb\0xbfx")));
 						// First possible sequences
@@ -1146,33 +1128,29 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(CStr("x\xef\xbf\xbdx")));	// ReplacementChar character
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x????x")));	//Non-character codepoint
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(CStr("x????x")));
-					};
-					
-					DMibTestSuite("Invalid Bytes")
+					}
 					{
+						DMibTestPath("Invalid Bytes");
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\x80\xbfx"))) == DMibExpr("x??x"));	// Unexpected continuation bytes
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr("x????x"));	// Impossible bytes
-					};
-
-					DMibTestSuite("Lonely start characters")
+					}
 					{
+						DMibTestPath("Lonely start characters");
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xc0\xdfx"))) == DMibExpr("x??x"));	// Lonely start characters from 2-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\xefx"))) == DMibExpr("x??x"));	// Lonely start characters from 3-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\xf7x"))) == DMibExpr("x??x"));	// Lonely start characters from 4-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\xfbx"))) == DMibExpr("x??x"));	// Lonely start characters from 5-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\xfdx"))) == DMibExpr("x??x"));	// Lonely start characters from 6-byte sequence
-					};
-
-					DMibTestSuite("Last character missing")
+					}
 					{
+						DMibTestPath("Last character missing");
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\x80x"))) == DMibExpr("x??x"));	// 3-byte sequence with last byte missing
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr("x???x"));	// 4-byte sequence with last byte missing
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr("x????x"));	// 5-byte sequence with last byte missing
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr("x?????x"));	// 6-byte sequence with last byte missing
-					};
-
-					DMibTestSuite("Overlong sequences")
+					}
 					{
+						DMibTestPath("Overlong sequences");
 						// Overlong ASCII
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xc0\xafx"))) == DMibExpr("x??x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\x80\xafx"))) == DMibExpr("x???x"));
@@ -1191,10 +1169,9 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\x80\x80\x80x"))) == DMibExpr("x????x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x80\x80\x80\x80x"))) == DMibExpr("x?????x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x80\x80\x80\x80\x80x"))) == DMibExpr("x??????x"));
-					};
-
-					DMibTestSuite("Illegal code positions")
+					}
 					{
+						DMibTestPath("Illegal code positions");
 						// Single UTF-16 Surrogates
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xa0\x80x"))) == DMibExpr("x???x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xad\xbfx"))) == DMibExpr("x???x"));
@@ -1215,17 +1192,15 @@ namespace
 						// Invalid code positions 
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr("x???x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr("x???x"));
-					};			  
-				};
-
-				DMibTestCategory("Replace sequence UTF8")
+					}
+				}
 				{
+					DMibTestPath("Replace sequence UTF8");
 					CStr ReplacementChar("x\xef\xbf\xbdx");
 					CStr DoubleReplacementChar("x\xef\xbf\xbd\xef\xbf\xbdx");
 					CStr QuadReplacementChar("x\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbdx");
-
-					DMibTestSuite("Boundaries")
 					{
+						DMibTestPath("Boundaries");
 						// Byte order mark
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("\0xef\0xbb\0xbfx"))) == DMibExpr(CStr("\0xef\0xbb\0xbfx")));
 						// First possible sequences
@@ -1246,33 +1221,29 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(ReplacementChar));	// ReplacementChar character
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(ReplacementChar));	// Non-character codepoint
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(ReplacementChar));
-					};
-
-					DMibTestSuite("Invalid Bytes")
+					}
 					{
+						DMibTestPath("Invalid Bytes");
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\x80\xbfx"))) == DMibExpr(DoubleReplacementChar));	// Unexpected continuation bytes
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr(QuadReplacementChar));	// Impossible bytes
-					};
-
-					DMibTestSuite("Lonely start characters")
+					}
 					{
+						DMibTestPath("Lonely start characters");
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xc0\xdfx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 2-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\xefx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 3-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\xf7x"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 4-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\xfbx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 5-byte sequence
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\xfdx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 6-byte sequence
-					};
-
-					DMibTestSuite("Last character missing")
+					}
 					{
+						DMibTestPath("Last character missing");
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\x80x"))) == DMibExpr(ReplacementChar));	// 3-byte sequence last byte missing
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr(ReplacementChar));	// 4-byte sequence last byte missing
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr(ReplacementChar));	// 5-byte sequence last byte missing
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar));	// 6-byte sequence last byte missing
-					};
-
-					DMibTestSuite("Overlong sequences")
+					}
 					{
+						DMibTestPath("Overlong sequences");
 						// Overlong ASCII
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xc0\xafx"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\x80\xafx"))) == DMibExpr(ReplacementChar));
@@ -1291,10 +1262,9 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\x80\x80\x80x"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x80\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar));
-					};
-
-					DMibTestSuite("Illegal code positions")
+					}
 					{
+						DMibTestPath("Illegal code positions");
 						// Single UTF-16 Surrogates
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xa0\x80x"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xad\xbfx"))) == DMibExpr(ReplacementChar));
@@ -1315,25 +1285,23 @@ namespace
 						// Invalid code positions 
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(ReplacementChar));
-					};			  
-				};
-
-				DMibTestCategory("Conditional replacement")
+					}
+				}
 				{
-					DMibTestSuite("String replacement")
+					DMibTestPath("Conditional replacement");
 					{
+						DMibTestPath("String replacement");
 						CStr InvalidData("x\xed\xa0\x80x");
 						CStr ValidData("x\xf0\x90\x80\x80x");
 
 						DMibTest(DMibExpr(fg_CleanUTF8(ValidData).m_pData) == DMibExpr(ValidData.m_pData));
 						DMibTest(DMibExpr(fg_CleanUTF8(InvalidData).m_pData) != DMibExpr(InvalidData.m_pData));
-					};
-				};
-
-				DMibTestCategory("CStrIteratorUTF8")
+					}
+				}
 				{
-					DMibTestSuite("Valid string")
+					DMibTestPath("CStrIteratorUTF8");
 					{
+						DMibTestPath("Valid string");
 						CStr ValidString("abc\xc3\xa5\xc3\xa4\xc3\xb6\n");
 						auto iUTF = ValidString.f_GetUnicodeIterator();
 
@@ -1356,9 +1324,9 @@ namespace
 						fl_CheckCharacter(246);
 						fl_CheckCharacter('\n');
 						fl_CheckCharacter('\0');
-					};
-					DMibTestSuite("Incomplete string")
+					}
 					{
+						DMibTestPath("Incomplete string");
 						CStr IncompleteString("a\xc3");
 						auto iUTF = IncompleteString.f_GetUnicodeIterator();
 
@@ -1382,9 +1350,9 @@ namespace
 
 						fl_CheckCharacter(false);
 						fl_CheckCharacter(true);
-					};
-					DMibTestSuite("Invalid string")
+					}
 					{
+						DMibTestPath("Invalid string");
 						CStr InvalidString("a\xc3" "b");
 						auto iUTF = InvalidString.f_GetUnicodeIterator();
 
@@ -1409,34 +1377,33 @@ namespace
 						fl_CheckCharacter(false);
 						fl_CheckCharacter(true);
 						fl_CheckCharacter(false);
-					};
-				};
-
-				DMibTestCategory("fg_StrSanitizeOneLine")
+					}
+				}
 				{
-					DMibTestSuite("Horizontal whitespaces")
+					DMibTestPath("fg_StrSanitizeOneLine");
 					{
+						DMibTestPath("Horizontal whitespaces");
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\tx"))) == DMibExpr("x\tx")); // Horizontal Tab
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x x"))) == DMibExpr("x x")); //	Space
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\xC2\xA0x"))) == DMibExpr("x\xC2\xA0x")); //	no-break space
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\xE2\x80\x80x"))) == DMibExpr("x\xE2\x80\x80x")); // en quad
-					};
-					DMibTestSuite("Vertical whitespaces")
+					}
 					{
+						DMibTestPath("Vertical whitespaces");
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\nx"))) == DMibExpr("x x")); // Line feed
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\rx"))) == DMibExpr("x x")); // Carriage return
 						DMibTest(DMibExpr(fg_StrSanitizeOneLine(CStr("x\xE2\x80\xA9x"))) == DMibExpr("x x")); // Paragraph Separator
-					};
-				};
+					}
+				}
 			};
 		}
 		
 		void fp_SeparatorTests()
 		{
-			DMibTestCategory("StrSep")
+			DMibTestSuite("StrSep")
 			{
-				DMibTestSuite("GetStrSep")
 				{
+					DMibTestPath("GetStrSep");
 					CStr Str1 = "One,Two, Three , Four";
 					
 					 DMibTest( DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
@@ -1444,10 +1411,9 @@ namespace
 					 DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
 					 DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
  					 DMibTest( DMibExpr((bool)Str1.f_IsEmpty()) );
-				};
-
-				DMibTestSuite("GetStrSepEscaped")
+				}
 				{
+					DMibTestPath("GetStrSepEscaped");
 					{
 						CStr Str1 = "One,Two, Three , Four";
 					
@@ -1667,10 +1633,10 @@ namespace
 				DMibTest(DMibExpr(CStr::fs_ToStr(Data)) == DMibExpr("ffeebb00"));
 			};
 
-			DMibTestCategory("Escaping")
+			DMibTestSuite("Escaping")
 			{
-				DMibTestSuite("Bash")
 				{
+					DMibTestPath("Bash");
 					CWStr TestStringSQStart(str_utf16("abcdÅÄÖåöä '亜哀姐飴'"));
 					CWStr TestStringSQEnd(str_utf16("'abcdÅÄÖåöä '\\''亜哀姐飴'\\'''"));
 
@@ -1706,7 +1672,7 @@ namespace
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(CStr("\"Bam\" \"Bam\""))) == DMibExpr(CStr("\"\\\"Bam\\\" \\\"Bam\\\"\"")));
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(TestStringDQStart)) == DMibExpr(TestStringDQEnd));
 					
-				};
+				}
 			};
 			DMibTestSuite("Recursive Format")
 			{
@@ -1714,10 +1680,10 @@ namespace
 				DMibExpect(CStr(CStr::CFormat("Test {sj10} Test") << (CStr::CFormat("{}") << 55)), ==, "Test         55 Test");
 				DMibExpect(CStr(CStr::CFormat("Test {a-,sj10} Test") << (CStr::CFormat("{}") << 55)), ==, "Test 55         Test");
 			};
-			DMibTestCategory("ByValue")
+			DMibTestSuite("ByValue")
 			{
-				DMibTestSuite("Move")
 				{
+					DMibTestPath("Move");
 					auto fMoveFormat = [](auto &&_Value) -> CStr::CFormat
 						{
 							CStr::CFormat Format("{}");
@@ -1746,13 +1712,12 @@ namespace
 					};
 
 					DMibExpect(CStr(fMoveFormat(CInlineFormat())), ==, "44 Test");
-				};
+				}
 			};
-
-			DMibTestCategory("Expressions")
+			DMibTestSuite("Expressions")
 			{
-				DMibTestSuite("Logical operators")
 				{
+					DMibTestPath("Logical operators");
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<3)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<2)}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3<2)}") << 0)) == DMibExpr("0"));
@@ -1776,30 +1741,26 @@ namespace
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!(3>2))}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!!(3>2))}") << 0)) == DMibExpr("1"));
 					
-				};
-				
-				DMibTestSuite("Bitwise operators")
+				}
 				{
+					DMibTestPath("Bitwise operators");
 					DMibTest(DMibExpr(CStr(CStr::CFormat("0b{xpr(0b0010 | 0b0101),nfb,sj4,sf0}") << 0)) == DMibExpr("0b0111"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("0b{xpr(0b0011 & 0b0101),nfb,sj4,sf0}") << 0)) == DMibExpr("0b0001"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("0b{xpr(0b0011 ^ 0b0101),nfb,sj4,sf0}") << 0)) == DMibExpr("0b0110"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("0b{xpr(~(0b0011 ^ 0b0101)),nfb,sj8,sf0}") << uint8(0))) == DMibExpr("0b11111001"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("0b{xpr(~0b0011),nfb,sj8,sf0}") << uint8(0))) == DMibExpr("0b11111100"));
-				};
-				
-				DMibTestCategory("Integer")
+				}
 				{
-
-					DMibTestSuite("Argument lookup")
+					DMibTestPath("Integer");
 					{
+						DMibTestPath("Argument lookup");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2)}") << 4)) == DMibExpr("2"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($0/2)}") << 4)) == DMibExpr("2"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/2)}") << 4 << 8)) == DMibExpr("4"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/$0)}") << 4 << 8)) == DMibExpr("2"));
-					};
-
-					DMibTestSuite("Errors")
+					}
 					{
+						DMibTestPath("Errors");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(5 ! 5)}") << 4)) == DMibExpr("| Value without operator |0"));
 						
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/2.0)}") << 4)) == DMibExpr("| Argument out of range |0"));
@@ -1825,14 +1786,13 @@ namespace
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($ ($))}") << 4)) == DMibExpr("| Value without operator |0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) ($))}") << 4)) == DMibExpr("| Value without operator |0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) $)}") << 4)) == DMibExpr("| Value without operator |0"));
-					};
-					DMibTestSuite("Whitespace")
-					{
+					}
+ 					{
+						DMibTestPath("Whitespace");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr ( $ / 2 * (2 * 2 ) ) }") << 4)) == DMibExpr("8"));
-					};
-
-					DMibTestSuite("Operators")
+					}
 					{
+						DMibTestPath("Operators");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+2)}") << 4)) == DMibExpr("6"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($-2)}") << 4)) == DMibExpr("2"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($*2)}") << 4)) == DMibExpr("8"));
@@ -1840,38 +1800,34 @@ namespace
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($%2)}") << 3)) == DMibExpr("1"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(-$)}") << 4)) == DMibExpr("-4"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+-2)}") << 4)) == DMibExpr("2"));
-					};
-
-					DMibTestSuite("Complex")
+					}
 					{
+						DMibTestPath("Complex");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2+($1*2))}") << 4 << 3.0)) == DMibExpr("8"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2+($1*2)-($1*1))}") << 4 << 3.0)) == DMibExpr("5"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2+$1*2-$1*1)}") << 4 << 3.0)) == DMibExpr("5"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2+$1/2%1-$1*1)}") << 4 << 3.0)) == DMibExpr("-1"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+($+($+($+1))))}") << 4)) == DMibExpr("17"));
-					};
-					DMibTestSuite("FoundInWild")
+					}
 					{
+						DMibTestPath("FoundInWild");
 						{
 							CStr A = "Result";
 							DMibTest(DMibExpr(fg_ViolatesSafeCheck("reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value) 'You cannot assign a format to string that is used by reference as an argument.'")) == DMibLExpr( (A = CStr::CFormat("{}{}") << A << "Value")));
 						}
-					};
-				};				
-				
-				DMibTestCategory("Float")
+					}
+				}
 				{
-
-					DMibTestSuite("Argument lookup")
+					DMibTestPath("Float");
 					{
+						DMibTestPath("Argument lookup");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2.0)}") << 4.0)) == DMibExpr("2.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($0/2.0)}") << 4.0)) == DMibExpr("2.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/2.0)}") << 4.0 << 8.0)) == DMibExpr("4.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/$0)}") << 4.0 << 8.0)) == DMibExpr("2.0"));
-					};
-
-					DMibTestSuite("Errors")
+					}
 					{
+						DMibTestPath("Errors");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/2.0)}") << 4.0)) == DMibExpr("| Argument out of range |0.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr()}") << 4.0)) == DMibExpr("| Empty expression |0.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(}") << 4.0)) == DMibExpr("| Unrecognized operator } |0.0"));
@@ -1894,14 +1850,13 @@ namespace
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($ ($))}") << 4.0)) == DMibExpr("| Value without operator |0.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) ($))}") << 4.0)) == DMibExpr("| Value without operator |0.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) $)}") << 4.0)) == DMibExpr("| Value without operator |0.0"));
-					};
-					DMibTestSuite("Whitespace")
+					}
 					{
+						DMibTestPath("Whitespace");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr ( $ / 2.0 * (2.0 * 2.0 ) ) }") << 4.0)) == DMibExpr("8.0"));
-					};
-
-					DMibTestSuite("Operators")
+					}
 					{
+						DMibTestPath("Operators");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+2.0)}") << 4.0)) == DMibExpr("6.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($-2.0)}") << 4.0)) == DMibExpr("2.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($*2.0)}") << 4.0)) == DMibExpr("8.0"));
@@ -1909,22 +1864,16 @@ namespace
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($%2.0)}") << 4.5)) == DMibExpr("0.5"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(-$)}") << 4.0)) == DMibExpr("-4.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+-2.0)}") << 4.0)) == DMibExpr("2.0"));
-					};
-
-					DMibTestSuite("Complex")
+					}
 					{
+						DMibTestPath("Complex");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2.0+($1*2.0))}") << 4.0 << 3)) == DMibExpr("8.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2.0+($1*2.0)-($1*0.5))}") << 4.0 << 3)) == DMibExpr("6.5"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2.0+$1*2.0-$1*0.5)}") << 4.0 << 3)) == DMibExpr("6.5"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($/2.0+$1/2.0%1.0-$1*0.5)}") << 4.0 << 3)) == DMibExpr("1.0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($+($+($+($+1))))}") << 4.0)) == DMibExpr("17.0"));
-					};
-
-
-				};
-
-
-
+					}
+				}
 			};
 		}
 	};

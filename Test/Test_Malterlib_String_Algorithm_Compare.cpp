@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/Compare>
@@ -52,219 +52,219 @@ namespace
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
-			DMibTestCategory(_Type)
+			DMibTestSuite(_Type)
 			{
 				auto ToCompare = fg_GetToCompare<tf_CChar>(0);
 				auto ToCompare0 = fg_GetToCompare<tf_CChar>(1);
 				auto ToCompare1 = fg_GetToCompare<tf_CChar>(2);
-				DMibTestCategory("Normal")
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Normal");
 					{
+						DMibTestPath("ANSI");
 						DMibExpect(fg_StrCompare("Char5Char5Char", "Char5Char5Char1"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare("Char5Char5Char1", "Char5Char5Char"), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare("Char5Char5Char0", "Char5Char5Char1"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare("Char5Char5Char1", "Char5Char5Char0"), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = "Char65Char5Char";
 							DMibExpect(fg_StrCompare(pArray, "Char65Char5Char"), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpect(fg_StrCompare(str_utf8("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf8("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare(str_utf8("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf8("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							DMibExpect(fg_StrCompare(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpect(fg_StrCompare(str_utf16("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf16("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare(str_utf16("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf16("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf16("Char𠀀Char𠀀Char");
 
 							DMibExpect(fg_StrCompare(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpect(fg_StrCompare(str_utf32("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf32("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare(str_utf32("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare(str_utf32("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf32("Char𠀀Char𠀀Char");
 
 							DMibExpect(fg_StrCompare(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-				};
-				DMibTestCategory("NoCase")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("NoCase");
 					{
+						DMibTestPath("ANSI");
 						DMibExpect(fg_StrCompare<CNoCase>("char5Char5Char", "Char5Char5Char1"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>("char5Char5Char1", "Char5Char5Char"), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CNoCase>("char5Char5Char0", "Char5Char5Char1"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>("char5Char5Char1", "Char5Char5Char0"), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = "char65Char5Char";
 							DMibExpect(fg_StrCompare<CNoCase>(pArray, "Char65Char5Char"), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf8("char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf8("char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf8("char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf8("char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf8("char𠀀Char𠀀Char");
 							DMibExpect(fg_StrCompare<CNoCase>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf16("char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf16("char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf16("char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf16("char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf16("char𠀀Char𠀀Char");
 							DMibExpect(fg_StrCompare<CNoCase>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf32("char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf32("char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf32("char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CNoCase>(str_utf32("char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf32("char𠀀Char𠀀Char");
 							DMibExpect(fg_StrCompare<CNoCase>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-				};
-				DMibTestCategory("Reverse")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("Reverse");
 					{
+						DMibTestPath("ANSI");
 						DMibExpect(fg_StrCompare<CReverse>("Char5Char5Char", "Char5Char5Char1"), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CReverse>("Char5Char5Char1", "Char5Char5Char"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>("Char5Char5Char0", "Char5Char5Char1"), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>("Char5Char5Char1", "Char5Char5Char0"), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = "Char65Char5Char";
 							DMibExpect(fg_StrCompare<CReverse>(pArray, "Char65Char5Char"), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpect(fg_StrCompare<CReverse>(str_utf8("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf8("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf8("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf8("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							DMibExpect(fg_StrCompare<CReverse>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpect(fg_StrCompare<CReverse>(str_utf16("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf16("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf16("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf16("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf16("Char𠀀Char𠀀Char");
 
 							DMibExpect(fg_StrCompare<CReverse>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpect(fg_StrCompare<CReverse>(str_utf32("Char𠀀Char𠀀Char"), ToCompare1), ==, ECompare_GreaterThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf32("Char𠀀Char𠀀Char1"), ToCompare), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf32("Char𠀀Char𠀀Char0"), ToCompare1), ==, ECompare_LessThan);
 						DMibExpect(fg_StrCompare<CReverse>(str_utf32("Char𠀀Char𠀀Char1"), ToCompare0), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf32("Char𠀀Char𠀀Char");
 
 							DMibExpect(fg_StrCompare<CReverse>(pArray, ToCompare), ==, ECompare_Equal);
 						}
-					};
-				};
-				DMibTestCategory("ReverseNoCase")
+					}
+				}
 				{
-					DMibTestSuite("ANSI")
+					DMibTestPath("ReverseNoCase");
 					{
+						DMibTestPath("ANSI");
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>("char5Char5Char", "Char5Char5Char1")), ==, ECompare_GreaterThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>("char5Char5Char1", "Char5Char5Char")), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>("char5Char5Char0", "Char5Char5Char1")), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>("char5Char5Char1", "Char5Char5Char0")), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = "char65Char5Char";
 							DMibExpect((fg_StrCompare<CReverse, CNoCase>(pArray, "Char65Char5Char")), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF8")
+					}
 					{
+						DMibTestPath("UTF8");
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char"), ToCompare1)), ==, ECompare_GreaterThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char1"), ToCompare)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char0"), ToCompare1)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf8("char𠀀Char𠀀Char1"), ToCompare0)), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf8("char𠀀Char𠀀Char");
 							DMibExpect((fg_StrCompare<CReverse, CNoCase>(pArray, ToCompare)), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF16")
+					}
 					{
+						DMibTestPath("UTF16");
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char"), ToCompare1)), ==, ECompare_GreaterThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char1"), ToCompare)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char0"), ToCompare1)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf16("char𠀀Char𠀀Char1"), ToCompare0)), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf16("char𠀀Char𠀀Char");
 							DMibExpect((fg_StrCompare<CReverse, CNoCase>(pArray, ToCompare)), ==, ECompare_Equal);
 						}
-					};
-					DMibTestSuite("UTF32")
+					}
 					{
+						DMibTestPath("UTF32");
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char"), ToCompare1)), ==, ECompare_GreaterThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char1"), ToCompare)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char0"), ToCompare1)), ==, ECompare_LessThan);
 						DMibExpect((fg_StrCompare<CReverse, CNoCase>(str_utf32("char𠀀Char𠀀Char1"), ToCompare0)), ==, ECompare_GreaterThan);
-						
+
 						{
 							auto pArray = str_utf32("char𠀀Char𠀀Char");
 							DMibExpect((fg_StrCompare<CReverse, CNoCase>(pArray, ToCompare)), ==, ECompare_Equal);
 						}
-					};
-				};
+					}
+				}
 			};
 		}
 		void f_DoTests()

@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/HashMurmur3>
@@ -48,31 +48,31 @@ namespace
 				DMibExpect(fg_StrHashMurmur3(NStr::fg_RangeAdaptor_UTFDecode(fg_Range("The quick brown fox jumps over the lazy dog")), 0x9747b28c), ==, 0x2fa826cd);
 			};
 			
-			DMibTestCategory("Normal")
+			DMibTestSuite("Normal")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					DMibExpect(fg_StrHashMurmur3("The quick brown fox jumps over the lazy dog", 0x9747b28c), ==, 0x2fa826cd);
 					DMibExpect(fg_StrHashMurmur3("Char5Char5Char"), ==, 0x75e539cb);
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					DMibExpect(fg_StrHashMurmur3(str_utf8("The quick brown fox jumps over the lazy dog"), 0x9747b28c), ==, 0x2fa826cd);
 					DMibExpect(fg_StrHashMurmur3(str_utf8("Char5Char5Char")), ==, 0x75e539cb);
 					DMibExpect(fg_StrHashMurmur3(str_utf8("Char𠀀Char𠀀Char")), ==, 0xa133d447);
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					DMibExpect(fg_StrHashMurmur3(str_utf16("The quick brown fox jumps over the lazy dog"), 0x9747b28c), ==, 0x2fa826cd);
 					DMibExpect(fg_StrHashMurmur3(str_utf16("Char5Char5Char")), ==, 0x75e539cb);
 					DMibExpect(fg_StrHashMurmur3(str_utf16("Char𠀀Char𠀀Char")), ==, 0xa133d447);
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					DMibExpect(fg_StrHashMurmur3(str_utf32("The quick brown fox jumps over the lazy dog"), 0x9747b28c), ==, 0x2fa826cd);
 					DMibExpect(fg_StrHashMurmur3(str_utf32("Char5Char5Char")), ==, 0x75e539cb);
 					DMibExpect(fg_StrHashMurmur3(str_utf32("Char𠀀Char𠀀Char")), ==, 0xa133d447);
-				};
+				}
 			};
 		}
 	};

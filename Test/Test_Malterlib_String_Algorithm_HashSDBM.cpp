@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/HashSDBM>
@@ -13,27 +13,27 @@ namespace
 	public:
 		void f_DoTests()
 		{
-			DMibTestCategory("Normal")
+			DMibTestSuite("Normal")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					DMibExpect(fg_StrHashSDBM("Char5Char5Char"), ==, 1661838710);
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					DMibExpect(fg_StrHashSDBM(str_utf8("Char5Char5Char")), ==, 1661838710);
 					DMibExpect(fg_StrHashSDBM(str_utf8("Char𠀀Char𠀀Char")), ==, 3265238914);
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					DMibExpect(fg_StrHashSDBM(str_utf16("Char5Char5Char")), ==, 1661838710);
 					DMibExpect(fg_StrHashSDBM(str_utf16("Char𠀀Char𠀀Char")), ==, 3265238914);
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					DMibExpect(fg_StrHashSDBM(str_utf32("Char5Char5Char")), ==, 1661838710);
 					DMibExpect(fg_StrHashSDBM(str_utf32("Char𠀀Char𠀀Char")), ==, 3265238914);
-				};
+				}
 			};
 		}
 	};

@@ -1,4 +1,4 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/FindChar>
@@ -19,10 +19,10 @@ namespace
 		{
 			ch32 CharacterToFind = 0x00020000; // ch32(str_utf32('𠀀'))
 			ch32 CharacterToNotFind = 0x00020001; // ch32(str_utf32('𠀁'))
-			DMibTestCategory("Normal")
+			DMibTestSuite("Normal")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					auto rFound = fg_StrFindChar(fg_Const("Char5Char5Char"), '6');
 					DMibExpectFalse(rFound);
 					
@@ -32,9 +32,9 @@ namespace
 
 						DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
 					}
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					{
 						auto rFound = fg_StrFindChar(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
@@ -151,9 +151,9 @@ namespace
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray);
 						}
 					}
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					auto rFound = fg_StrFindChar(fg_Const(str_utf16("Char𠀀Char𠀀Char")), CharacterToNotFind);
 					DMibExpectFalse(rFound);
 					
@@ -163,9 +163,9 @@ namespace
 
 						DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
 					}
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					auto rFound = fg_StrFindChar(fg_Const(str_utf32("Char𠀀Char𠀀Char")), CharacterToNotFind);
 					DMibExpectFalse(rFound);
 					
@@ -175,99 +175,99 @@ namespace
 
 						DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
 					}
-				};
+				}
 			};
-			DMibTestCategory("NoCase")
+			DMibTestSuite("NoCase")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					auto pArray = "CharECharEChar";
 					auto rFound = fg_StrFindChar<CNoCase>(pArray, 'e');
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					auto pArray = str_utf8("Char𠀀E𠀀Char");
 					auto rFound = fg_StrFindChar<CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 8);
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					auto pArray = str_utf16("Char𠀀E𠀀Char");
 					auto rFound = fg_StrFindChar<CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 6);
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					auto pArray = str_utf32("Char𠀀E𠀀Char");
 					auto rFound = fg_StrFindChar<CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 5);
-				};
+				}
 			};
-			DMibTestCategory("Reverse")
-			{
-				DMibTestSuite("ANSI")
+			DMibTestSuite("Reverse")
+ 			{
 				{
+					DMibTestPath("ANSI");
 					auto pArray = "Char5Char5Char";
 					auto rFound = fg_StrFindChar<CReverse>(pArray, '5');
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 9);
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					auto pArray = str_utf8("Char𠀀Char𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse>(pArray, CharacterToFind);
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 12);
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					auto pArray = str_utf16("Char𠀀Char𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse>(pArray, CharacterToFind);
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 10);
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					auto pArray = str_utf32("Char𠀀Char𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse>(pArray, CharacterToFind);
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 9);
-				};
+				}
 			};
-			DMibTestCategory("ReverseNoCase")
+			DMibTestSuite("ReverseNoCase")
 			{
-				DMibTestSuite("ANSI")
 				{
+					DMibTestPath("ANSI");
 					auto pArray = "CharECharEChar";
 					auto rFound = fg_StrFindChar<CReverse, CNoCase>(pArray, 'e');
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 9);
-				};
-				DMibTestSuite("UTF8")
+				}
 				{
+					DMibTestPath("UTF8");
 					auto pArray = str_utf8("CharE𠀀CharE𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse, CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 13);
-				};
-				DMibTestSuite("UTF16")
+				}
 				{
+					DMibTestPath("UTF16");
 					auto pArray = str_utf16("CharE𠀀CharE𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse, CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 11);
-				};
-				DMibTestSuite("UTF32")
+				}
 				{
+					DMibTestPath("UTF32");
 					auto pArray = str_utf32("CharE𠀀CharE𠀀Char");
 					auto rFound = fg_StrFindChar<CReverse, CNoCase>(pArray, ch32('e'));
 
 					DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 10);
-				};
+				}
 			};
 		}
 	};
