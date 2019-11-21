@@ -844,6 +844,7 @@ EndArgSearch:
 		typedef typename CStrTraits::CAllocator CAllocator;
 		typedef CChar CMaxChar;
 		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
+		using CDynamicStr = TCStr<t_CTCStrTraits>;
 
 #ifdef DMibDebuggerHelpers
 		static TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> fs_TypeDebugHelper();
@@ -2122,26 +2123,25 @@ EndArgSearch:
 		\***************************************************************************************************/
 
 		template <bool tf_bRemoveEmpty = false, typename tf_CStrSeparator>
-		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_Split(tf_CStrSeparator const &_Separator) const;
+		NContainer::TCVector<CDynamicStr> f_Split(tf_CStrSeparator const &_Separator) const;
 
 		template <bool tf_bRemoveEmpty = false>
-		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitEscaped(CChar _Separator) const;
+		NContainer::TCVector<CDynamicStr> f_SplitEscaped(CChar _Separator) const;
 
 		template <bool tf_bRemoveEmpty = false>
-		NContainer::TCVector<TCStr<t_CTCStrTraits>> f_SplitLine() const;
+		NContainer::TCVector<CDynamicStr> f_SplitLine() const;
 
 		template <typename tf_CContainer, typename tf_CStrSeparator>
-		static TCStr<t_CTCStrTraits> fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator = "");
+		static CDynamicStr fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator = "");
 
 		template <typename tf_CContainer>
-		static TCStr<t_CTCStrTraits> fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator);
+		static CDynamicStr fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator);
 
 		/***************************************************************************************************\
 		|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 		| Concat
 		|____________________________________________________________________________________________________
 		\***************************************************************************************************/
-
 
 		template <typename t_CStrTraitsF>
 		inline_large TCStrAggregate & operator += (const TCStrAggregate<t_CStrTraitsF> &_Str);
@@ -2151,6 +2151,458 @@ EndArgSearch:
 		inline_large TCStrAggregate & operator += (const t_CStrDataType *_pToAdd);
 		inline_large TCStrAggregate & operator += (CFormat const &_Format);
 		inline_large TCStrAggregate & operator += (ch32 _ToAdd);
+
+		/************************************************************************************************\
+		||||
+		|| Upper case
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		CDynamicStr f_UpperCase() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrUpperCase(Temp);
+			return Temp;
+		}
+
+		CDynamicStr f_UpperCase(mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrUpperCase(Temp, _MaxLen);
+			return Temp;
+		}
+
+		/************************************************************************************************\
+		||||
+		|| Lower case
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		CDynamicStr f_LowerCase() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrLowerCase(Temp);
+			return Temp;
+		}
+
+		CDynamicStr f_LowerCase(mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrLowerCase(Temp, _MaxLen);
+			return Temp;
+		}
+
+		/************************************************************************************************\
+		||||
+		|| Tab
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		CDynamicStr f_Untabify(mint _TabLength) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrUntabify(Temp, _TabLength);
+			return Temp;
+		}
+
+		/************************************************************************************************\
+		||||
+		|| Replace
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_Replace(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _pStrFind, _pStrReplace);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _StrFind, _pStrReplace);
+			return Temp;
+		}
+
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _pStrFind, _StrReplace);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _StrFind, _StrReplace);
+			return Temp;
+		}
+
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace);
+			return Temp;
+		}
+
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace);
+			return Temp;
+		}
+
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_ReplaceChar(t_CData2 _CharFind, t_CData3 _CharReplace) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceChar(Temp, _CharFind, _CharReplace);
+			return Temp;
+		}
+
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_Replace(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _pStrFind, _pStrReplace, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _StrFind, _pStrReplace, _MaxLen);
+			return Temp;
+		}
+
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _pStrFind, _StrReplace, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplace(Temp, _StrFind, _StrReplace, _MaxLen);
+			return Temp;
+		}
+
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
+			return Temp;
+		}
+
+
+		template <typename t_CTCStrTraits1, typename t_CData3>
+			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
+			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CData2, typename t_CData3>
+			CDynamicStr f_ReplaceChar(t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReplaceChar(Temp, _CharFind, _CharReplace, _MaxLen);
+			return Temp;
+		}
+
+
+		/************************************************************************************************\
+		||||
+		|| Insert
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		template <typename t_CData3>
+			CDynamicStr f_Insert(aint _StartChar, const t_CData3 *_pStrInsert) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrInsert(Temp, _StartChar, _pStrInsert);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits2>
+			CDynamicStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrInsert(Temp, _StartChar, _StrInsert);
+			return Temp;
+		}
+
+		template <typename t_CData3>
+			CDynamicStr f_Insert(aint _StartChar, const t_CData3 *_pStrInsert, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrInsert(Temp, _StartChar, _pStrInsert, _MaxLen);
+			return Temp;
+		}
+
+		template <typename t_CTCStrTraits2>
+			CDynamicStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert, mint _MaxLen) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrInsert(Temp, _StartChar, _StrInsert, _MaxLen);
+			return Temp;
+		}
+
+		CDynamicStr f_EscapeStr() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStr(Temp, *this);
+			return Temp;
+		}
+
+		template <typename t_CEscapeChar>
+		CDynamicStr f_EscapeStr(const t_CEscapeChar *_pEscapeChars) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStr(Temp, *this, _pEscapeChars);
+			return Temp;
+		}
+
+		template <typename t_CEscapeChar, typename t_CReplaceChars>
+		CDynamicStr f_EscapeStr(const t_CEscapeChar *_pEscapeChars, const t_CReplaceChars *_pReplaceChars) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStr(Temp, *this, _pEscapeChars, _pReplaceChars);
+			return Temp;
+		}
+
+		CDynamicStr f_EscapeStrNoQuotes() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStrNoQuotes(Temp, *this);
+			return Temp;
+		}
+
+		template <typename t_CEscapeChar>
+		CDynamicStr f_EscapeStrNoQuotes(const t_CEscapeChar *_pEscapeChars) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStrNoQuotes(Temp, *this, _pEscapeChars);
+			return Temp;
+		}
+
+		template <typename t_CEscapeChar, typename t_CReplaceChars>
+		CDynamicStr f_EscapeStrNoQuotes(const t_CEscapeChar *_pEscapeChars, const t_CReplaceChars *_pReplaceChars) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrEscapeStrNoQuotes(Temp, *this, _pEscapeChars, _pReplaceChars);
+			return Temp;
+		}
+
+
+		/***************************************************************************************************\
+		||
+		| Shortening
+		|___________________________________________________________________________________________________|
+		\***************************************************************************************************/
+
+		CDynamicStr f_Delete(aint _StartChar, mint _nChars) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrDelete(Temp, _StartChar, _nChars);
+			return Temp;
+		}
+
+		CDynamicStr f_Left(mint _nChars) const
+		{
+			CDynamicStr Temp;
+			mint Length = this->f_GetLen();
+			mint nChars = fg_Min(_nChars, Length);
+			if (nChars == Length)
+				return *this;
+			Temp.f_AddStr(this->f_GetStr(), nChars);
+			return Temp;
+		}
+
+		CDynamicStr f_Extract(aint _StartChar, mint _nChars) const
+		{
+			if (_StartChar < 0)
+				return *this;
+			CDynamicStr Temp;
+			mint Length = this->f_GetLen();
+			if (_StartChar == 0 && _nChars == Length)
+				return *this;
+			mint Start = fg_Min(mint(_StartChar), Length);
+			mint nChars = fg_Min(Length - Start, _nChars);
+			Temp.f_AddStr(this->f_GetStr() + Start, nChars);
+			return Temp;
+		}
+
+		CDynamicStr f_Extract(aint _StartChar) const
+		{
+			if (_StartChar <= 0)
+				return *this;
+			CDynamicStr Temp;
+			mint Length = this->f_GetLen();
+			mint Start = fg_Min(mint(_StartChar), Length);
+			Temp.f_AddStr(this->f_GetStr() + Start, Length - Start);
+			return Temp;
+		}
+
+		/*
+		CDynamicStr f_Slice(aint _iStart, aint _iEnd) const
+
+			Returns the substring from unit _iStart -> _iEnd
+			(Not including unit _iEnd)
+
+			If _Start or _End is < 0 they are used as offsets from the end of the string.
+
+			(ala Python slice)
+		*/
+		CDynamicStr f_Slice(aint _iStart, aint _iEnd) const
+		{
+			mint Length = this->f_GetLen();
+			mint Start;
+			mint End;
+
+			// Find first & last unit in slice
+			if (_iStart < 0)
+				Start = Length + _iStart;
+			else
+				Start = _iStart;
+
+			if (_iEnd < 0)
+				End = Length + _iEnd;
+			else
+				End = _iEnd;
+
+			if (End > Length)
+				End = Length;
+
+			// No units in slice
+			if (Start > End)
+				return CDynamicStr();
+
+			// Slice is whole string
+			if (Start == 0 && End == Length)
+				return *this;
+
+			CDynamicStr Temp;
+			mint nChars = End - Start;
+			Temp.f_AddStr(this->f_GetStr() + Start, nChars);
+			return Temp;
+		}
+
+
+		CDynamicStr f_Reverse() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrReverse(Temp);
+			return Temp;
+		}
+
+		CDynamicStr f_Right(mint _nChars) const
+		{
+			CDynamicStr Temp;
+			mint Length = this->f_GetLen();
+			mint nChars = fg_Min(Length, _nChars);
+			Temp.f_AddStr(this->f_GetStr() + (Length - nChars), nChars);
+			return Temp;
+		}
+
+		template <typename t_CData2>
+		CDynamicStr f_TrimLeft(const t_CData2 *_pCharsToTrim) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrimLeft(Temp, _pCharsToTrim);
+			return Temp;
+		}
+
+		CDynamicStr f_TrimLeft() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrimLeft(Temp);
+			return Temp;
+		}
+
+		template <typename t_CData2>
+		CDynamicStr f_TrimRight(const t_CData2 *_pCharsToTrim) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrimRight(Temp, _pCharsToTrim);
+			return Temp;
+		}
+
+		CDynamicStr f_TrimRight() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrimRight(Temp);
+			return Temp;
+		}
+
+		template <typename t_CData2>
+		CDynamicStr f_Trim(const t_CData2 *_pCharsToTrim) const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrim(Temp, _pCharsToTrim);
+			return Temp;
+		}
+
+		CDynamicStr f_Trim() const
+		{
+			CDynamicStr Temp = *this;
+			fg_StrTrim(Temp);
+			return Temp;
+		}
 	};
 
 	template <typename t_CTCStrTraits>
@@ -2385,17 +2837,17 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		inline static TCStr<t_CTCStrTraits> fs_ToStr(t_CType const &_Format)
+		inline static TCStr fs_ToStr(t_CType const &_Format)
 		{
 			if constexpr (NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value)
 			{
-				TCStr<t_CTCStrTraits> Ret;
+				TCStr Ret;
 				(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
 				return Ret;
 			}
 			else
 			{
-				TCStr<t_CTCStrTraits> Ret;
+				TCStr Ret;
 				typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
 				aint CurrentLen = 0;
 				CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
@@ -2404,15 +2856,15 @@ EndArgSearch:
 			}
 		}
 
-		inline static TCStr<t_CTCStrTraits> fs_ToStr(CFormat const &_Format)
+		inline static TCStr fs_ToStr(CFormat const &_Format)
 		{
 			return _Format;
 		}
 
 		template <typename t_CType>
-		static TCStr<t_CTCStrTraits> fs_ToStr(const CChar *_pFormat, t_CType const& _Format)
+		static TCStr fs_ToStr(const CChar *_pFormat, t_CType const& _Format)
 		{
-			return (typename TCStr<t_CTCStrTraits>::CFormat(_pFormat) << _Format).f_GetStr();
+			return (CFormat(_pFormat) << _Format).f_GetStr();
 		}
 
 		template <typename t_CStrDataType>
@@ -2440,460 +2892,6 @@ EndArgSearch:
 		}
 
 		static TCStr fs_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
-
-		/************************************************************************************************\
-		||||
-		|| Upper case
-		||______________________________________________________________________________________________||
-		\************************************************************************************************/
-
-		TCStr f_UpperCase() const
-		{
-			TCStr Temp = *this;
-			fg_StrUpperCase(Temp);
-			return Temp;
-		}
-
-		TCStr f_UpperCase(mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrUpperCase(Temp, _MaxLen);
-			return Temp;
-		}
-
-		/************************************************************************************************\
-		||||
-		|| Lower case
-		||______________________________________________________________________________________________||
-		\************************************************************************************************/
-
-		TCStr f_LowerCase() const
-		{
-			TCStr Temp = *this;
-			fg_StrLowerCase(Temp);
-			return Temp;
-		}
-
-		TCStr f_LowerCase(mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrLowerCase(Temp, _MaxLen);
-			return Temp;
-		}
-
-		/************************************************************************************************\
-		||||
-		|| Tab
-		||______________________________________________________________________________________________||
-		\************************************************************************************************/
-
-		TCStr f_Untabify(mint _TabLength) const
-		{
-			TCStr Temp = *this;
-			fg_StrUntabify(Temp, _TabLength);
-			return Temp;
-		}
-
-		/************************************************************************************************\
-		||||
-		|| Replace
-		||______________________________________________________________________________________________||
-		\************************************************************************************************/
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_Replace(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _pStrFind, _pStrReplace);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _StrFind, _pStrReplace);
-			return Temp;
-		}
-
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _pStrFind, _StrReplace);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			TCStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _StrFind, _StrReplace);
-			return Temp;
-		}
-
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace);
-			return Temp;
-		}
-
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace);
-			return Temp;
-		}
-
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_ReplaceChar(t_CData2 _CharFind, t_CData3 _CharReplace) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceChar(Temp, _CharFind, _CharReplace);
-			return Temp;
-		}
-
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_Replace(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _pStrFind, _pStrReplace, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _StrFind, _pStrReplace, _MaxLen);
-			return Temp;
-		}
-
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _pStrFind, _StrReplace, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			TCStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplace(Temp, _StrFind, _StrReplace, _MaxLen);
-			return Temp;
-		}
-
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_ReplaceNoCase(const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
-			return Temp;
-		}
-
-
-		template <typename t_CTCStrTraits1, typename t_CData3>
-			TCStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			TCStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CData2, typename t_CData3>
-			TCStr f_ReplaceChar(t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrReplaceChar(Temp, _CharFind, _CharReplace, _MaxLen);
-			return Temp;
-		}
-
-
-		/************************************************************************************************\
-		||||
-		|| Insert
-		||______________________________________________________________________________________________||
-		\************************************************************************************************/
-
-		template <typename t_CData3>
-			TCStr f_Insert(aint _StartChar, const t_CData3 *_pStrInsert) const
-		{
-			TCStr Temp = *this;
-			fg_StrInsert(Temp, _StartChar, _pStrInsert);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits2>
-			TCStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert) const
-		{
-			TCStr Temp = *this;
-			fg_StrInsert(Temp, _StartChar, _StrInsert);
-			return Temp;
-		}
-
-		template <typename t_CData3>
-			TCStr f_Insert(aint _StartChar, const t_CData3 *_pStrInsert, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrInsert(Temp, _StartChar, _pStrInsert, _MaxLen);
-			return Temp;
-		}
-
-		template <typename t_CTCStrTraits2>
-			TCStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert, mint _MaxLen) const
-		{
-			TCStr Temp = *this;
-			fg_StrInsert(Temp, _StartChar, _StrInsert, _MaxLen);
-			return Temp;
-		}
-
-		TCStr f_EscapeStr() const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStr(Temp, *this);
-			return Temp;
-		}
-
-		template <typename t_CEscapeChar>
-		TCStr f_EscapeStr(const t_CEscapeChar *_pEscapeChars) const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStr(Temp, *this, _pEscapeChars);
-			return Temp;
-		}
-
-		template <typename t_CEscapeChar, typename t_CReplaceChars>
-		TCStr f_EscapeStr(const t_CEscapeChar *_pEscapeChars, const t_CReplaceChars *_pReplaceChars) const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStr(Temp, *this, _pEscapeChars, _pReplaceChars);
-			return Temp;
-		}
-
-		TCStr f_EscapeStrNoQuotes() const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStrNoQuotes(Temp, *this);
-			return Temp;
-		}
-
-		template <typename t_CEscapeChar>
-		TCStr f_EscapeStrNoQuotes(const t_CEscapeChar *_pEscapeChars) const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStrNoQuotes(Temp, *this, _pEscapeChars);
-			return Temp;
-		}
-
-		template <typename t_CEscapeChar, typename t_CReplaceChars>
-		TCStr f_EscapeStrNoQuotes(const t_CEscapeChar *_pEscapeChars, const t_CReplaceChars *_pReplaceChars) const
-		{
-			TCStr Temp = *this;
-			fg_StrEscapeStrNoQuotes(Temp, *this, _pEscapeChars, _pReplaceChars);
-			return Temp;
-		}
-
-
-		/***************************************************************************************************\
-		||
-		| Shortening
-		|___________________________________________________________________________________________________|
-		\***************************************************************************************************/
-
-		TCStr f_Delete(aint _StartChar, mint _nChars) const
-		{
-			TCStr Temp = *this;
-			fg_StrDelete(Temp, _StartChar, _nChars);
-			return Temp;
-		}
-
-		TCStr f_Left(mint _nChars) const
-		{
-			TCStr Temp;
-			mint Length = this->f_GetLen();
-			mint nChars = fg_Min(_nChars, Length);
-			if (nChars == Length)
-				return *this;
-			Temp.f_AddStr(this->f_GetStr(), nChars);
-			return Temp;
-		}
-
-		TCStr f_Extract(aint _StartChar, mint _nChars) const
-		{
-			if (_StartChar < 0)
-				return *this;
-			TCStr Temp;
-			mint Length = this->f_GetLen();
-			if (_StartChar == 0 && _nChars == Length)
-				return *this;
-			mint Start = fg_Min(mint(_StartChar), Length);
-			mint nChars = fg_Min(Length - Start, _nChars);
-			Temp.f_AddStr(this->f_GetStr() + Start, nChars);
-			return Temp;
-		}
-
-		TCStr f_Extract(aint _StartChar) const
-		{
-			if (_StartChar <= 0)
-				return *this;
-			TCStr Temp;
-			mint Length = this->f_GetLen();
-			mint Start = fg_Min(mint(_StartChar), Length);
-			Temp.f_AddStr(this->f_GetStr() + Start, Length - Start);
-			return Temp;
-		}
-
-		/*
-		TCStr f_Slice(aint _iStart, aint _iEnd) const
-
-			Returns the substring from unit _iStart -> _iEnd
-			(Not including unit _iEnd)
-
-			If _Start or _End is < 0 they are used as offsets from the end of the string.
-
-			(ala Python slice)
-		*/
-		TCStr f_Slice(aint _iStart, aint _iEnd) const
-		{
-			mint Length = this->f_GetLen();
-			mint Start;
-			mint End;
-
-			// Find first & last unit in slice
-			if (_iStart < 0)
-				Start = Length + _iStart;
-			else
-				Start = _iStart;
-
-			if (_iEnd < 0)
-				End = Length + _iEnd;
-			else
-				End = _iEnd;
-
-			if (End > Length)
-				End = Length;
-
-			// No units in slice
-			if (Start > End)
-				return TCStr();
-
-			// Slice is whole string
-			if (Start == 0 && End == Length)
-				return *this;
-
-			TCStr Temp;
-			mint nChars = End - Start;
-			Temp.f_AddStr(this->f_GetStr() + Start, nChars);
-			return Temp;
-		}
-
-
-		TCStr f_Reverse() const
-		{
-			TCStr Temp = *this;
-			fg_StrReverse(Temp);
-			return Temp;
-		}
-
-		TCStr f_Right(mint _nChars) const
-		{
-			TCStr Temp;
-			mint Length = this->f_GetLen();
-			mint nChars = fg_Min(Length, _nChars);
-			Temp.f_AddStr(this->f_GetStr() + (Length - nChars), nChars);
-			return Temp;
-		}
-
-		template <typename t_CData2>
-		TCStr f_TrimLeft(const t_CData2 *_pCharsToTrim) const
-		{
-			TCStr Temp = *this;
-			fg_StrTrimLeft(Temp, _pCharsToTrim);
-			return Temp;
-		}
-
-		TCStr f_TrimLeft() const
-		{
-			TCStr Temp = *this;
-			fg_StrTrimLeft(Temp);
-			return Temp;
-		}
-
-		template <typename t_CData2>
-		TCStr f_TrimRight(const t_CData2 *_pCharsToTrim) const
-		{
-			TCStr Temp = *this;
-			fg_StrTrimRight(Temp, _pCharsToTrim);
-			return Temp;
-		}
-
-		TCStr f_TrimRight() const
-		{
-			TCStr Temp = *this;
-			fg_StrTrimRight(Temp);
-			return Temp;
-		}
-
-		template <typename t_CData2>
-		TCStr f_Trim(const t_CData2 *_pCharsToTrim) const
-		{
-			TCStr Temp = *this;
-			fg_StrTrim(Temp, _pCharsToTrim);
-			return Temp;
-		}
-
-		TCStr f_Trim() const
-		{
-			TCStr Temp = *this;
-			fg_StrTrim(Temp);
-			return Temp;
-		}
-
-
 	};
 
 	template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatStr[] = {'{', '}', 0};

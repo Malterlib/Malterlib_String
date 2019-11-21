@@ -609,7 +609,7 @@ namespace NMib::NStr
 	\************************************************************************************************/
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char)
+	constexpr inline_large aint  fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
