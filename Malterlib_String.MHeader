@@ -15,9 +15,9 @@ Property
 
 %Group "{Malterlib}/{Lib_Malterlib_String}"
 {
-	%Group String
+	%Group "String"
 	{
-		%Group Include
+		%Group "Include"
 		{
 			Compile.Type "C++"
 			{
@@ -26,7 +26,7 @@ Property
 			%File "Include/Mib/String/^*"
 		}
 		%File "Source/^*"
-		%Group Documentation
+		%Group "Documentation"
 		{
 			%File "Documentation/*"
 		}
@@ -59,10 +59,10 @@ Property
 {
 	Compile
 	{
-		!!CompileDialect C
+		!!CompileDialect "C"
 		PreprocessorDefines "_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;@(Compile.PreprocessorDefines)"
 		{
-			!!PlatformFamily Windows
+			!!PlatformFamily "Windows"
 		}
 	}
 }
