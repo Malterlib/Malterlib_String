@@ -135,24 +135,11 @@ namespace NMib::NStr
 		bool operator ==(TCParseLocation const &_Right) const;
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
-
 		template <typename tf_CStream>
-		void f_Feed(tf_CStream &_Stream) const
-		{
-			_Stream << m_File;
-			_Stream << m_Character;
-			_Stream << m_Line;
-			_Stream << m_Column;
-		}
-
+		void f_Feed(tf_CStream &_Stream) const;
 		template <typename tf_CStream>
-		void f_Consume(tf_CStream &_Stream)
-		{
-			_Stream >> m_File;
-			_Stream >> m_Character;
-			_Stream >> m_Line;
-			_Stream >> m_Column;
-		}
+		void f_Consume(tf_CStream &_Stream);
+		bool f_IsValid() const;
 
 		t_CStr m_File;
 		uint32 m_Character = 0;
@@ -166,20 +153,11 @@ namespace NMib::NStr
 		bool operator ==(TCParseLocation const &_Right) const;
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
-
 		template <typename tf_CStream>
-		void f_Feed(tf_CStream &_Stream) const
-		{
-			_Stream << m_File;
-			_Stream << m_Line;
-		}
-
+		void f_Feed(tf_CStream &_Stream) const;
 		template <typename tf_CStream>
-		void f_Consume(tf_CStream &_Stream)
-		{
-			_Stream >> m_File;
-			_Stream >> m_Line;
-		}
+		void f_Consume(tf_CStream &_Stream);
+		bool f_IsValid() const;
 
 		t_CStr m_File;
 		uint32 m_Line = 0;
