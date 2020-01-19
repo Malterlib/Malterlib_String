@@ -2603,6 +2603,22 @@ EndArgSearch:
 			fg_StrTrim(Temp);
 			return Temp;
 		}
+
+		template <typename tf_CStr>
+		CDynamicStr f_RemovePrefix(tf_CStr const &_ToFind) const
+		{
+			if (!f_StartsWith(_ToFind))
+				return *this;
+			return f_Extract(fg_StrLen(_ToFind));
+		}
+
+		template <typename tf_CStr>
+		CDynamicStr f_RemoveSuffix(tf_CStr const &_ToFind) const
+		{
+			if (!f_EndsWith(_ToFind))
+				return *this;
+			return f_Left(f_GetLen() - fg_StrLen(_ToFind));
+		}
 	};
 
 	template <typename t_CTCStrTraits>
