@@ -851,6 +851,7 @@ EndArgSearch:
 #endif
 
 		static const CChar ms_FormatStr[];
+		static const CChar ms_FormatConcatStr[];
 
 		static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
@@ -2116,6 +2117,14 @@ EndArgSearch:
 			return fg_StrHashSDBM(CImp::f_GetStr());
 		}
 
+		CDynamicStr f_Indent(ch8 const *_pIdent) const
+		{
+			CDynamicStr Return;
+			for (auto &Line : f_SplitLine())
+				fg_AddStrSep(Return, CFormat(ms_FormatConcatStr) << _pIdent << Line, "\n");
+			return Return;
+		}
+
 		/***************************************************************************************************\
 		|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 		| Split/Join
@@ -2911,6 +2920,9 @@ EndArgSearch:
 	};
 
 	template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatStr[] = {'{', '}', 0};
+
+	template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatConcatStr[] = {'{', '}', '{', '}', 0};
+
 
 	template <typename t_CTCStrTraits>
 	TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::f_GetStr() const
