@@ -2117,11 +2117,37 @@ EndArgSearch:
 			return fg_StrHashSDBM(CImp::f_GetStr());
 		}
 
-		CDynamicStr f_Indent(ch8 const *_pIdent) const
+		CDynamicStr f_Indent(ch8 const *_pIndent) const
 		{
+			auto const *pParse = this->f_GetStr();
+			auto const *pParseEnd = pParse + this->f_GetLen();
+
 			CDynamicStr Return;
-			for (auto &Line : f_SplitLine())
-				fg_AddStrSep(Return, CFormat(ms_FormatConcatStr) << _pIdent << Line, "\n");
+
+			while (pParse < pParseEnd)
+			{
+				auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
+				if (iSplitPoint < 0)
+				{
+					Return.f_AddStr(_pIndent);
+					Return.f_AddStr(pParse, pParseEnd - pParse);
+					return Return;
+				}
+
+				auto pParseStart = pParse;
+
+				pParse += iSplitPoint;
+
+				if (*pParse == '\r')
+					++pParse;
+
+				if (*pParse == '\n')
+					++pParse;
+
+				Return.f_AddStr(_pIndent);
+				Return.f_AddStr(pParseStart, pParse - pParseStart);
+			}
+
 			return Return;
 		}
 
