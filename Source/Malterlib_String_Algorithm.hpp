@@ -804,135 +804,108 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = TCLimitsInt<aint>::mc_Max;
+		const t_CData1 *pChar = _pStr1;
 		while (*pChar)
 		{
-			aint iRet = fg_StrFindChar(_pStr1, *pChar);
-			if (iRet >= 0 && iRet < iBest)
-				iBest = iRet;
+			if (fg_StrFindChar(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
 			++pChar;
 		}
-		if (iBest != TCLimitsInt<aint>::mc_Max)
-			return iBest;
-		else
-			return -1;
+		return -1;
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = TCLimitsInt<aint>::mc_Max;
+		const t_CData1 *pChar = _pStr1;
 		while (*pChar)
 		{
-			aint iRet = fg_StrFindCharNoCase(_pStr1, *pChar);
-			if (iRet >= 0 && iRet < iBest)
-				iBest = iRet;
+			if (fg_StrFindCharNoCase(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
 			++pChar;
 		}
-		if (iBest != TCLimitsInt<aint>::mc_Max)
-			return iBest;
-		else
-			return -1;
+		return -1;
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = -1;
-		while (*pChar)
+		const t_CData1 *pChar = _pStr1 + fg_StrLen(_pStr1) - 1;
+		while (pChar >= _pStr1)
 		{
-			aint iRet = fg_StrFindCharReverse(_pStr1, *pChar);
-			if (iRet >= 0 && iRet > iBest)
-				iBest = iRet;
-			++pChar;
+			if (fg_StrFindChar(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
+			--pChar;
 		}
-		return iBest;
+		return -1;
 	}
-
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = -1;
+		const t_CData1 *pChar = _pStr1 + fg_StrLen(_pStr1) - 1;
 		while (*pChar)
 		{
-			aint iRet = fg_StrFindCharReverseNoCase(_pStr1, *pChar);
-			if (iRet >= 0 && iRet > iBest)
-				iBest = iRet;
+			if (fg_StrFindCharNoCase(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
 			++pChar;
 		}
-		return iBest;
+		return -1;
 	}
 
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindChars(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = TCLimitsInt<aint>::mc_Max;
-		while (*pChar)
+		const t_CData1 *pChar = _pStr1;
+		const t_CData1 *pCharEnd = _pStr1 + _MaxLen;
+		while (*pChar && pChar < pCharEnd)
 		{
-			aint iRet = fg_StrFindChar(_pStr1, *pChar, _MaxLen);
-			if (iRet >= 0 && iRet < iBest)
-				iBest = iRet;
+			if (fg_StrFindChar(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
 			++pChar;
 		}
-		if (iBest != TCLimitsInt<aint>::mc_Max)
-			return iBest;
-		else
-			return -1;
+		return -1;
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = TCLimitsInt<aint>::mc_Max;
-		while (*pChar)
+		const t_CData1 *pChar = _pStr1;
+		const t_CData1 *pCharEnd = _pStr1 + _MaxLen;
+		while (*pChar && pChar < pCharEnd)
 		{
-			aint iRet = fg_StrFindCharNoCase(_pStr1, *pChar, _MaxLen);
-			if (iRet >= 0 && iRet < iBest)
-				iBest = iRet;
+			if (fg_StrFindCharNoCase(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
 			++pChar;
 		}
-		if (iBest != TCLimitsInt<aint>::mc_Max)
-			return iBest;
-		else
-			return -1;
+		return -1;
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverse(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = -1;
-		while (*pChar)
+		const t_CData1 *pChar = _pStr1 + fg_StrLen(_pStr1, _MaxLen) - 1;
+		while (pChar >= _pStr1)
 		{
-			aint iRet = fg_StrFindCharReverse(_pStr1, *pChar, _MaxLen);
-			if (iRet >= 0 && iRet > iBest)
-				iBest = iRet;
-			++pChar;
+			if (fg_StrFindChar(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
+			--pChar;
 		}
-		return iBest;
+		return -1;
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pChars, mint _MaxLen)
 	{
-		const t_CData2 *pChar = _pChars;
-		aint iBest = -1;
-		while (*pChar)
+		const t_CData1 *pChar = _pStr1 + fg_StrLen(_pStr1, _MaxLen) - 1;
+		while (pChar >= _pStr1)
 		{
-			aint iRet = fg_StrFindCharReverseNoCase(_pStr1, *pChar, _MaxLen);
-			if (iRet >= 0 && iRet > iBest)
-				iBest = iRet;
-			++pChar;
+			if (fg_StrFindCharNoCase(_pChars, *pChar) >= 0)
+				return pChar - _pStr1;
+			--pChar;
 		}
-		return iBest;
+		return -1;
 	}
 
 	template <bool t_bCheckLen, typename t_CData1>
