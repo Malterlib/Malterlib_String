@@ -51,7 +51,7 @@ namespace NMib::NStr
 		template <typename t_COptions2>
 		inline_small static void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Value)
 		{
-			uint8 OutValue;
+			uint8 OutValue = 0;
 			auto Temp = fg_FormatMaxLength<2>(fg_FormatMinLength<2>(fg_FormatFillOut<'0'>(fg_FormatIntFormat<16>(OutValue))));
 			typedef typename TCStringFormatter<t_CFormatter, decltype(Temp)>::CFormatType CFormatType;
 
