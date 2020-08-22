@@ -72,7 +72,7 @@ namespace NMib::NStr
 				if ((ToTest & 0xC0) == 0xC0)
 				{
 					++iParse;
-					smint nChars = 7-fg_GetHighestBitSet((~uint32(ToTest))&0xFF);
+					smint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(ToTest)) & 0xFF) | 1);
 					DestChar = ToTest & ((1 << (8-(nChars+1))) - 1);
 					--nChars;
 					while (iParse != mp_iBack && (*iParse & 0xC0) == 0x80)

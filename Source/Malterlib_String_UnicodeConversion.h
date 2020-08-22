@@ -100,8 +100,8 @@ namespace NMib::NStr
 					if ((ToTest & 0xC0) == 0xC0)
 					{
 						++pParse;
-						mint nChars = 7-fg_GetHighestBitSet((~uint32(ToTest))&0xFF);
-						DestChar = ToTest & ((1 << (8-(nChars+1))) - 1);
+						mint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(ToTest)) & 0xFF) | 1u);
+						DestChar = ToTest & ((1 << (8 - (nChars + 1))) - 1);
 						--nChars;
 						while (*pParse && nChars && (*pParse & 0xC0) == 0x80)
 						{

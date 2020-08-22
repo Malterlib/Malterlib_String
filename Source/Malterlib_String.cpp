@@ -329,10 +329,10 @@ namespace NMib::NStr
 		return _Str;
 	}
 
-	mint fg_GetExpectedUTF8SequenceLength( uch8 _Char )
+	mint fg_GetExpectedUTF8SequenceLength(uch8 _Char)
 	{
-		mint CalculatedLength = 7-fg_GetHighestBitSet((~uint32(_Char))&0xFF);
-		return CalculatedLength < 7 ? CalculatedLength : -1;
+		DMibFastCheck((_Char & 0xC0) == 0xC0);
+		return 7 - fg_GetHighestBitSetNoZero(((~uint32(_Char)) & 0xFF) | 1u);
 	}
 
 	mint fg_GetRequiredUTF8SequenceLength(ch32 _Codepoint)

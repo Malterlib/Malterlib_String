@@ -62,7 +62,8 @@ namespace NMib::NStr2::NPrivate
 		if ((*rCharacters & 0xC0) == 0xC0)
 		{
 			++nUTF;
-			smint nChars = 7-fg_GetHighestBitSet((~uint32(*rCharacters))&0xFF);
+			
+			smint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(*rCharacters)) & 0xFF) | 1u);
 
 			if (nChars != nUTF) // Unfinished codepoint
 				_rCharacters = rCharacters;
