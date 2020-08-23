@@ -1252,18 +1252,23 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	template <bool t_bNoCase, bool t_bCheckLen, bool t_bCheckLen2, typename t_CData1, typename t_CData2>
-	constexpr inline_large bool fg_StrStartsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
+	constexpr inline_large bool fg_StrStartsWith(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _Len, mint _Len2)
 	{
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
 		auto *pStr1 = _pStr1;
-		auto *pStr1End = pStr1 + _Len;
+		t_CData1 const *pStr1End;
 		if (_Len == TCLimitsInt<mint>::mc_Max)
-			pStr1End = (const t_CData1 *)TCLimitsInt<mint>::mc_Max;
+			pStr1End = (t_CData1 const *)TCLimitsInt<mint>::mc_Max;
+		else
+			pStr1End = pStr1 + _Len;
+
 		auto *pStr2 = _pStr2;
-		auto *pStr2End = pStr2 + _Len2;
+		t_CData2 const *pStr2End;
 		if (_Len2 == TCLimitsInt<mint>::mc_Max)
 			pStr2End = (const t_CData2 *)TCLimitsInt<mint>::mc_Max;
+		else
+			pStr2End = pStr2 + _Len2;
 
 		while (*pStr1 && *pStr2)
 		{

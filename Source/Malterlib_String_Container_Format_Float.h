@@ -384,19 +384,19 @@ namespace NMib::NStr
 				nDecimals = _Options.m_MinDecimals;
 
 			CInteger DecimalDisplacementFloat = 0;
-			CInteger DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
+			CInteger DecimalDisplacementConstFloat = 0;
 
-			if (Number != CFloat::fs_0())
+			if (!Number.f_IsInvalid() && Number != CFloat::fs_0())
 			{
 				if (nDigits > 0 && NMib::fg_Convert<CInteger>(nDigits-1) < DecimalDisplacementConstFloat)
 					DecimalDisplacementConstFloat = NMib::fg_Convert<CInteger>(nDigits - 1);
 				else if (nDigits == -2)
 					DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_StorageBits)) * CFloat::fs_Log10_2()).f_Floor() - CFloat::fs_1()).f_ToInt();// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
-#if 1
-				if (Number.f_IsInvalid())
-					DecimalDisplacementFloat = 0;
 				else
-					DecimalDisplacementFloat = -(Number.f_Log10().f_Floor().f_ToInt());
+					DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
+
+#if 1
+				DecimalDisplacementFloat = -(Number.f_Log10().f_Floor().f_ToInt());
 #elif 1
 				CFloat Temp = Number;
 				Temp.f_SetExponent(0);
@@ -450,11 +450,6 @@ namespace NMib::NStr
 #endif
 					FormatNumber = (FloatFormat).f_ToUnsignedIntRound();
 				}
-			}
-			else
-			{
-				DecimalDisplacementFloat = 0;
-				DecimalDisplacementConstFloat = 0;
 			}
 
 			aint DecimalDisplacementConst = NMib::fg_Convert<aint>(DecimalDisplacementConstFloat);

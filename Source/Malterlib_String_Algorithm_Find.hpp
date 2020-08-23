@@ -28,6 +28,7 @@ namespace NMib::NStr2::NPrivate
 		)
 	{
 		auto rCharacters = fg_GetStringRange<tf_CTags>(_rCharacters);
+		auto rOriginalCharacters = rCharacters;
 		auto rLastFoundEnd = rCharacters;
 		auto rToFind = fg_GetStringRange<tf_CTags>(_rToFind);
 		bool bFound = false;
@@ -39,7 +40,7 @@ namespace NMib::NStr2::NPrivate
 			rLastFoundEnd = NAlgorithm::fg_ForEachAbortable
 				(
 					rCharacters
-					, [&](decltype(*rCharacters) _Value)
+					, [&](auto &&_Value)
 					{
 						if (!fg_CharIsSame<tf_CTags>(_Value, *rToFindCurrent))
 							return false;
@@ -78,20 +79,41 @@ namespace NMib::NStr2::NPrivate
 		}
 		else
 		{
-			return NIterator::fg_RangeReturn<tf_CTags>
-				(
-					fg_Range
+			if constexpr (TCHasTag<tf_CTags, CReverse>::mc_Value)
+			{
+				--rOriginalCharacters;
+				return NIterator::fg_RangeReturn<tf_CTags>
 					(
-						NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
-						, _rCharacters.f_Back()
+						fg_Range
+						(
+							NIterator::fg_ParentIteratorOfType<tf_CFront>(rOriginalCharacters.f_Front())
+							, _rCharacters.f_Back()
+						)
+						, fg_Range
+						(
+							NIterator::fg_ParentIteratorOfType<tf_CFront>(rOriginalCharacters.f_Front())
+							, NIterator::fg_ParentIteratorOfType<tf_CFront>(rOriginalCharacters.f_Front())
+						)
 					)
-					, fg_Range
+				;
+			}
+			else
+			{
+				return NIterator::fg_RangeReturn<tf_CTags>
 					(
-						NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
-						, NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
+						fg_Range
+						(
+							NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
+							, _rCharacters.f_Back()
+						)
+						, fg_Range
+						(
+							NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
+							, NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
+						)
 					)
-				)
-			;
+				;
+			}
 		}
 	}
 

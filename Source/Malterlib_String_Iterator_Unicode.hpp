@@ -45,10 +45,21 @@ namespace NMib::NStr
 		if (iParse != mp_iFront)
 		{
 			--iParse;
+			if (iParse == mp_iFront)
+			{
+				this->mp_iNext = this->mp_iCurrent = iParse;
+				return 0;
+			}
+
 			uch8 ToTest = *iParse;
-			while (iParse != mp_iFront && (ToTest & 0xC0) == 0x80)
+			while ((ToTest & 0xC0) == 0x80)
 			{
 				--iParse;
+				if (iParse == mp_iFront)
+				{
+					this->mp_iNext = this->mp_iCurrent = iParse;
+					return 0;
+				}
 				ToTest = *iParse;
 			}
 		}
@@ -201,10 +212,20 @@ namespace NMib::NStr
 		if (iParse != mp_iFront)
 		{
 			--iParse;
+			if (iParse == mp_iFront)
+			{
+				this->mp_iNext = this->mp_iCurrent = iParse;
+				return 0;
+			}
 			uch16 ToTest = *iParse;
 			if (iParse != mp_iFront && (ToTest & 0xFC00) == 0xDC00)
 			{
 				--iParse;
+				if (iParse == mp_iFront)
+				{
+					this->mp_iNext = this->mp_iCurrent = iParse;
+					return 0;
+				}
 				ToTest = *iParse;
 				if ((ToTest & 0xFC00) != 0xD800)
 					++iParse; // Not valid, undo

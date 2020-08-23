@@ -9,17 +9,12 @@ namespace NMib::NStr2::NPrivate
 	//-----------------------------------------------------------------------------
 	// Block read - if your platform needs to do endian-swapping or can only
 	// handle aligned reads, do the conversion here
-	static inline_always uint32 fg_GetBlock32 ( const uint32 * _pPointer)
+	static inline_always uint32 fg_GetBlock32(const uint32 *_pPointer)
 	{
-		#ifdef DMibPAlignedDataAccess
-			uint32 Value;
-			NMib::NMemory::fg_MemCopy(&Value, _pPointer, 4);
-			return NMib::fg_ByteSwapLE(Value);
-		#else
-			return NMib::fg_ByteSwapLE(*_pPointer);
-		#endif
+		uint32 Value;
+		NMib::NMemory::fg_MemCopy(&Value, _pPointer, 4);
+		return NMib::fg_ByteSwapLE(Value);
 	}
-
 
 	//-----------------------------------------------------------------------------
 	// Finalization mix - force all bits of a hash block to avalanche
@@ -36,13 +31,13 @@ namespace NMib::NStr2::NPrivate
 
 	static inline_always uint32 fg_MergeLength(mint _Length)
 	{
-#				if DMibPPtrBits == 64
+#		if DMibPPtrBits == 64
 			uint32 Length = (uint32(_Length) & 0xffffffff) ^ (uint32(_Length >> 32) & 0xffffffff);
-#				elif DMibPPtrBits == 32
+#		elif DMibPPtrBits == 32
 			uint32 Length = _Length;
-#				else
-#					error "Implement this"
-#				endif
+#		else
+#			error "Implement this"
+#		endif
 
 		return Length;
 	}
@@ -148,7 +143,7 @@ namespace NMib::NStr2::NPrivate
 
 				Hash ^= Temp;
 			}
-		};
+		}
 
 		//----------
 		// Finalization

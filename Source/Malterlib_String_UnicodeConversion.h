@@ -103,15 +103,16 @@ namespace NMib::NStr
 						mint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(ToTest)) & 0xFF) | 1u);
 						DestChar = ToTest & ((1 << (8 - (nChars + 1))) - 1);
 						--nChars;
-						while (*pParse && nChars && (*pParse & 0xC0) == 0x80)
+						while (pParse < m_pEnd && *pParse && nChars && (*pParse & 0xC0) == 0x80)
 						{
 							DestChar = (DestChar << 6) | ((*pParse) & 0x3F);
 							++pParse;
 							--nChars;
 						}
+
 						if (nChars)
 						{
-							if (!*pParse)
+							if (pParse >= m_pEnd || !*pParse)
 								m_bWholeCodePoint = false;
 							else
 							{

@@ -198,7 +198,7 @@ namespace NMib::NStr
 						}
 						if (NextLen)
 						{
-							if (fg_StrStartsWith(pParse, pStartNext, -1, NextLen))
+							if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<mint>::mc_Max, NextLen))
 								break;
 						}
 					}
@@ -218,7 +218,7 @@ namespace NMib::NStr
 				{
 					while (*pParse)
 					{
-						if (fg_StrStartsWith(pParse, pStartNext, -1, NextLen))
+						if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<mint>::mc_Max, NextLen))
 							break;
 						++pParse;
 					}

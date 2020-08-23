@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Test/Exception>
@@ -20,7 +20,7 @@ namespace NMib
 {
 	namespace NStr
 	{
-		
+
 
 	}
 }
@@ -119,7 +119,7 @@ namespace
 			tf_CStr StringLower_0_255(CStr(str_utf8("åäöabcd")));
 			tf_CStr StringLower_0_65535(CStr(str_utf8("亜哀姐飴åäöabcd")));
 			tf_CStr StringLower_0_10ffff(CStr(str_utf8("𠀀亜哀姐飴åäöabcd")));
-			
+
 			tf_CStr StringUpper_0_127(CStr(str_utf8("ABCD")));
 			tf_CStr StringUpper_0_255(CStr(str_utf8("ÅÄÖABCD")));
 			tf_CStr StringUpper_0_65535(CStr(str_utf8("亜哀姐飴ÅÄÖABCD")));
@@ -129,7 +129,7 @@ namespace
 			tf_CStr StringCapitalized_0_255(CStr(str_utf8("Åäöabcd")));
 			tf_CStr StringCapitalized_0_65535(CStr(str_utf8("亜哀姐飴åäöabcd")));
 			tf_CStr StringCapitalized_0_10ffff(CStr(str_utf8("𠀀亜哀姐飴åäöabcd")));
-			
+
 			auto fCapitalize = [](auto &_String)
 				{
 					tf_CStr String = _String;
@@ -171,7 +171,7 @@ namespace
 			DMibExpect(StringCapitalized_0_65535.f_LowerCase(), ==, StringLower_0_65535);
 			DMibExpect(StringCapitalized_0_10ffff.f_LowerCase(), ==, StringLower_0_10ffff);
 
-			
+
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_127), ==, StringLower_0_127);
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_255), ==, StringLower_0_255);
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_65535), ==, StringLower_0_65535);
@@ -187,7 +187,7 @@ namespace
 			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_65535), ==, StringLower_0_65535);
 			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_10ffff), ==, StringLower_0_10ffff);
 
-			
+
 			DMibExpect(StringLower_0_127.f_UpperCase(), ==, StringUpper_0_127);
 			DMibExpect(StringLower_0_255.f_UpperCase(), ==, StringUpper_0_255);
 			DMibExpect(StringLower_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
@@ -203,7 +203,7 @@ namespace
 			DMibExpect(StringCapitalized_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
 			DMibExpect(StringCapitalized_0_10ffff.f_UpperCase(), ==, StringUpper_0_10ffff);
 
-			
+
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_127), ==, StringUpper_0_127);
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_255), ==, StringUpper_0_255);
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_65535), ==, StringUpper_0_65535);
@@ -218,7 +218,7 @@ namespace
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_255), ==, StringUpper_0_255);
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_65535), ==, StringUpper_0_65535);
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_10ffff), ==, StringUpper_0_10ffff);
-			
+
 
 			DMibExpect(fCapitalize(StringLower_0_127), ==, StringCapitalized_0_127);
 			DMibExpect(fCapitalize(StringLower_0_255), ==, StringCapitalized_0_255);
@@ -235,7 +235,7 @@ namespace
 			DMibExpect(fCapitalize(StringCapitalized_0_65535), ==, StringCapitalized_0_65535);
 			DMibExpect(fCapitalize(StringCapitalized_0_10ffff), ==, StringCapitalized_0_10ffff);
 		}
-		
+
 		void fp_CaseTests()
 		{
 			DMibTestSuite("Case")
@@ -260,7 +260,7 @@ namespace
 			DMibTestSuite("StrCmpNoCase")
 			{
 
-				CStr UniqueStrings[] = 
+				CStr UniqueStrings[] =
 				{
 					"Hello", "ch8 Hello",
 					"Hell", "ch8 Hell",
@@ -387,7 +387,7 @@ namespace
 								return pOut;
 							}
 						;
-					
+
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
@@ -437,7 +437,7 @@ namespace
 								return pOut;
 							}
 						;
-					
+
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
@@ -521,7 +521,7 @@ namespace
 					}
 				}
 			};
-			
+
 			DMibTestSuite("Type conversion")
 			{
 				{
@@ -1099,7 +1099,7 @@ namespace
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xae\x80\xed\xbf\xbfx"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))));
-						// Invalid code positions 
+						// Invalid code positions
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbex"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));
 					}
@@ -1189,7 +1189,7 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xae\x80\xed\xbf\xbfx"))) == DMibExpr("x??????x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))) == DMibExpr("x??????x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))) == DMibExpr("x??????x"));
-						// Invalid code positions 
+						// Invalid code positions
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr("x???x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr("x???x"));
 					}
@@ -1282,7 +1282,7 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xae\x80\xed\xbf\xbfx"))) == DMibExpr(DoubleReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))) == DMibExpr(DoubleReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))) == DMibExpr(DoubleReplacementChar));
-						// Invalid code positions 
+						// Invalid code positions
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(ReplacementChar));
 					}
@@ -1305,7 +1305,7 @@ namespace
 						CStr ValidString("abc\xc3\xa5\xc3\xa4\xc3\xb6\n");
 						auto iUTF = ValidString.f_GetUnicodeIterator();
 
-						auto fl_CheckCharacter =
+						auto fCheckCharacter =
 							[&](ch32 _Char)
 							{
 								DMibTestPath(CStr::CFormat("{}") << _Char);
@@ -1316,21 +1316,21 @@ namespace
 							}
 						;
 
-						fl_CheckCharacter('a');
-						fl_CheckCharacter('b');
-						fl_CheckCharacter('c');
-						fl_CheckCharacter(229);
-						fl_CheckCharacter(228);
-						fl_CheckCharacter(246);
-						fl_CheckCharacter('\n');
-						fl_CheckCharacter('\0');
+						fCheckCharacter('a');
+						fCheckCharacter('b');
+						fCheckCharacter('c');
+						fCheckCharacter(229);
+						fCheckCharacter(228);
+						fCheckCharacter(246);
+						fCheckCharacter('\n');
+						fCheckCharacter('\0');
 					}
 					{
 						DMibTestPath("Incomplete string");
 						CStr IncompleteString("a\xc3");
 						auto iUTF = IncompleteString.f_GetUnicodeIterator();
 
-						auto fl_CheckCharacter =
+						auto fCheckCharacter =
 							[&](bool _bExpectFail)
 							{
 								DMibTestPath(CStr::CFormat("{}") << *iUTF);
@@ -1348,15 +1348,46 @@ namespace
 							}
 						;
 
-						fl_CheckCharacter(false);
-						fl_CheckCharacter(true);
+						fCheckCharacter(false);
+						fCheckCharacter(true);
+
+						DMibExpectFalse(fg_IsValidUTF8(CStr("a\xc3")));
+					}
+					{
+						DMibTestPath("Incomplete string stack");
+						ch8 Temp[2];
+						Temp[0] = 'a';
+						Temp[1] = '\xc3';
+
+						CStrIteratorUTF8 iUTF(Temp, 2);
+
+						auto fCheckCharacter =
+							[&](bool _bExpectFail)
+							{
+								DMibTestPath(CStr::CFormat("{}") << *iUTF);
+								if (_bExpectFail)
+								{
+									DMibTest(DMibExpr(!iUTF.f_IsWholeCodePoint()));
+									DMibTest(DMibExpr(!iUTF.f_IsBroken()));
+								}
+								else
+								{
+									DMibTest(DMibExpr(iUTF.f_IsWholeCodePoint()));
+									DMibTest(DMibExpr(!iUTF.f_IsBroken()));
+								}
+								++iUTF;
+							}
+						;
+
+						fCheckCharacter(false);
+						fCheckCharacter(true);
 					}
 					{
 						DMibTestPath("Invalid string");
 						CStr InvalidString("a\xc3" "b");
 						auto iUTF = InvalidString.f_GetUnicodeIterator();
 
-						auto fl_CheckCharacter =
+						auto fCheckCharacter =
 							[&](bool _bExpectFail)
 						{
 							DMibTestPath(CStr::CFormat("{}") << *iUTF);
@@ -1374,9 +1405,9 @@ namespace
 						}
 						;
 
-						fl_CheckCharacter(false);
-						fl_CheckCharacter(true);
-						fl_CheckCharacter(false);
+						fCheckCharacter(false);
+						fCheckCharacter(true);
+						fCheckCharacter(false);
 					}
 				}
 				{
@@ -1397,7 +1428,7 @@ namespace
 				}
 			};
 		}
-		
+
 		void fp_SeparatorTests()
 		{
 			DMibTestSuite("StrSep")
@@ -1405,7 +1436,7 @@ namespace
 				{
 					DMibTestPath("GetStrSep");
 					CStr Str1 = "One,Two, Three , Four";
-					
+
 					 DMibTest( DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
 					 DMibTest( DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
 					 DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
@@ -1416,7 +1447,7 @@ namespace
 					DMibTestPath("GetStrSepEscaped");
 					{
 						CStr Str1 = "One,Two, Three , Four";
-					
+
 						DMibTest( DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
 						DMibTest( DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
 						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
@@ -1425,7 +1456,7 @@ namespace
 					}
 					{
 						CStr Str2 = "'One,Two', Three , Four";
-					
+
 						DMibTest( DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
 						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
 						DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
@@ -1433,7 +1464,7 @@ namespace
 					}
 					{
 						CStr Str3 = "Zero,'One,Two', Three , Four";
-					
+
 						DMibTest( DMibExpr(CStr("Zero")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
 						DMibTest( DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
 						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
@@ -1445,7 +1476,7 @@ namespace
 
 			};
 		}
-		
+
 	public:
 		void f_DoTests()
 		{
@@ -1456,7 +1487,7 @@ namespace
 			fp_SeparatorTests();
 			fp_FindTests();
 		}
-		
+
 	};
 
 	 DMibTestRegister(CGlobalFunctions_Tests, Malterlib::String::Container);
@@ -1469,7 +1500,7 @@ namespace
 		{
 #if 0
 			DMibDTrace("'{sl*} {} {}'\n", 1 << 2 << 3 << 4);
-			
+
 			DMibDTrace("{{l10} -> '{l10}'\n", "String");
 			DMibDTrace("{{m5} -> '{m5}'\n", "String");
 			DMibDTrace("{{sz5} -> '{sz5}'\n", "String");
@@ -1483,7 +1514,7 @@ namespace
 			DMibDTrace("{{cl} -> '{cl}'\n", "String");
 			DMibDTrace("{{cc} -> '{cc}'\n", "String");
 			DMibDTrace("{{cd} -> '{cd}'\n", "String");
-			
+
 			DMibDTrace("{{nh} -> '{nh}'\n", 0x45E);
 			DMibDTrace("{{no} -> '{no}'\n", 0x45E);
 			DMibDTrace("{{nb} -> '{nb}'\n", 0x45E);
@@ -1513,10 +1544,10 @@ namespace
 			DMibDTrace("{{fhn} with {0} -> '{0,fhn}'\n", fp64::fs_QNan());
 			DMibDTrace("{{ffe,fhd} with {0,ffe} -> '{0,ffe,fhd}'\n", 3.4456e-323);
 			DMibDTrace("{{fr1} with {0} -> '{0,fr1}'\n", 3.4456);
-			DMibDTrace("{{fa0} with {0} -> '{0,fa0}'\n", 3.4456);			
-			DMibDTrace("{{n+} with {0} -> '{0,n+}'\n", 3.4456);			
-			DMibDTrace("{{xpr($/2.0)} with {0} -> '{0,xpr($/2.0)}'\n", 3.4456);			
-			
+			DMibDTrace("{{fa0} with {0} -> '{0,fa0}'\n", 3.4456);
+			DMibDTrace("{{n+} with {0} -> '{0,n+}'\n", 3.4456);
+			DMibDTrace("{{xpr($/2.0)} with {0} -> '{0,xpr($/2.0)}'\n", 3.4456);
+
 			DMibDTrace("{xpr($)}\n", 3.4456 << 5.5);
 			DMibDTrace("{xpr($1)}\n", 3.4456 << 5.5);
 			DMibDTrace("{xpr($*$1)}\n", 3.4456 << 5.5);
@@ -1526,8 +1557,8 @@ namespace
 			DMibDTrace("{xpr($1%$)}\n", 3.4456 << 5.5);
 			DMibDTrace("{xpr($*3.14)}\n", 3.4456 << 5.5);
 			DMibDTrace("{xpr(($+3)/2)}\n", 3.4456 << 5.5);
-#endif		
-			
+#endif
+
 			DMibTestSuite("CFormat Visitor")
 			{
 				class CTesting
@@ -1649,7 +1680,7 @@ namespace
 					DMibTest(DMibExpr(fg_StrEscapeBashQuotesNeeded(CStr("'Bam' 'Bam'"))) == DMibExpr(true));
 					DMibTest(DMibExpr(fg_StrEscapeBashQuotesNeeded(CStr("\\"))) == DMibExpr(true));
 					DMibTest(DMibExpr(fg_StrEscapeBashQuotesNeeded(TestStringSQStart)) == DMibExpr(true));
-					
+
 					DMibTest(DMibExpr(fg_StrEscapeBashSingleQuotes(CStr("Fred"))) == DMibExpr(CStr("'Fred'")));
 					DMibTest(DMibExpr(fg_StrEscapeBashSingleQuotes(CStr("Bam Bam"))) == DMibExpr(CStr("'Bam Bam'")));
 					DMibTest(DMibExpr(fg_StrEscapeBashSingleQuotes(CStr("Fred's"))) == DMibExpr(CStr("'Fred'\\''s'")));
@@ -1671,7 +1702,7 @@ namespace
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(CStr("\"Fred\""))) == DMibExpr(CStr("\"\\\"Fred\\\"\"")));
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(CStr("\"Bam\" \"Bam\""))) == DMibExpr(CStr("\"\\\"Bam\\\" \\\"Bam\\\"\"")));
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(TestStringDQStart)) == DMibExpr(TestStringDQEnd));
-					
+
 				}
 			};
 			DMibTestSuite("Recursive Format")
@@ -1721,26 +1752,26 @@ namespace
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<3)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<2)}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3<2)}") << 0)) == DMibExpr("0"));
-					
+
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<=3)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2<=2)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3<=2)}") << 0)) == DMibExpr("0"));
-					
+
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3>2)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2>2)}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2>3)}") << 0)) == DMibExpr("0"));
-					
+
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3>=2)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2>=2)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2>=3)}") << 0)) == DMibExpr("0"));
-					
+
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3==3)}") << 0)) == DMibExpr("1"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(2==3)}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(3==2)}") << 0)) == DMibExpr("0"));
-					
+
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!(3>2))}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!!(3>2))}") << 0)) == DMibExpr("1"));
-					
+
 				}
 				{
 					DMibTestPath("Bitwise operators");
@@ -1762,7 +1793,7 @@ namespace
 					{
 						DMibTestPath("Errors");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(5 ! 5)}") << 4)) == DMibExpr("| Value without operator |0"));
-						
+
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr($1/2.0)}") << 4)) == DMibExpr("| Argument out of range |0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr()}") << 4)) == DMibExpr("| Empty expression |0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(}") << 4)) == DMibExpr("| Unrecognized operator } |0"));
@@ -1944,7 +1975,7 @@ public:
 		NMib::NIntrusive::TCAVLLink<> m_TreeLink;
 	};
 
-	bool f_AutomaticTest() 
+	bool f_AutomaticTest()
 	{
 		return true;
 	}
@@ -2053,7 +2084,7 @@ public:
 		while (Iter && Len)
 		{
 			--Len;
-			
+
 			++Iter;
 		}
 
@@ -2125,7 +2156,7 @@ public:
 
 		(CStr::CParse("{}-{}-{}") >> ParseStr0 >> ParseStr1 >> ParseStr2).f_Parse("Temp-Test-Testar");
 
-		
+
 
 
 		if (1)
@@ -2154,7 +2185,7 @@ public:
 				delete pTemp;
 				return "fg_StrReplace max len test failed";
 			}
-			
+
 			fg_StrDelete(pTemp, 40, 4);
 
 			fg_StrInsert(pTemp, 5, "<|||||||||||||||||||||||||||>");
@@ -2216,7 +2247,7 @@ public:
 				return "fg_StrReplace max len test failed";
 			}
 
-			
+
 			fg_StrDelete(Test1, 40, 4);
 
 
@@ -2292,7 +2323,7 @@ public:
 			{
 				return "fg_StrReplace max len test failed";
 			}
-			
+
 			fg_StrDelete(Test1, 40, 4);
 
 			fg_StrInsert(Test1, 5, "<|||||||||||||||||||||||||||>");
@@ -2382,12 +2413,12 @@ public:
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStr TestFormI) << Numberhaha).f_FormatToStr(TestString);
 					}
-					
+
 				}
 			}
 	//		double test = fp64(TestFormats) / Timer.f_GetTime();
@@ -2402,17 +2433,17 @@ public:
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStr TestFormI) << Numberhaha).f_FormatToStr(TestString);
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CStr::CFormat      = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CStr::CFormat", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
-			
+
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
@@ -2420,14 +2451,14 @@ public:
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStr2 TestFormI2) << Numberhaha).f_FormatToStr(TestString);
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CFWStr256::CFormat = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CFWStr256::CFormat", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
 
@@ -2443,10 +2474,10 @@ public:
 					{
 						(TestType::CFormat(TestStr2 TestFormI2) << Numberhaha).f_FormatToStr(TestString);
 					}
-					
+
 				}
 			}
-			
+
 			DMibTrace("Performance for CWStr::CFormat     = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CWStr::CFormat", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
 		}
@@ -2460,12 +2491,12 @@ public:
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStrMany TestFormManyI) << TestArgsManyI2).f_FormatToStr(TestString);
 					}
-					
+
 				}
 			}
 	//		double test = fp64(TestFormats) / Timer.f_GetTime();
@@ -2480,17 +2511,17 @@ public:
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStrMany TestFormManyI) << TestArgsManyI2).f_FormatToStr(TestString);
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CStr::CFormat (Many args)      = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CStr::CFormat (Many args)", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
-			
+
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
@@ -2498,14 +2529,14 @@ public:
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
-					
+
 					for (aint i = 0; i < TestFormats; ++i)
 					{
 						(TestType::CFormat(TestStrMany2 TestFormManyI2) << TestArgsManyI2).f_FormatToStr(TestString);
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CFWStr256::CFormat (Many args) = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CFWStr256::CFormat (Many args)", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
 			Timer.f_Reset();
@@ -2520,10 +2551,10 @@ public:
 					{
 						(TestType::CFormat(TestStrMany2 TestFormManyI2) << TestArgsManyI2).f_FormatToStr(TestString);
 					}
-					
+
 				}
 			}
-			
+
 			DMibTrace("Performance for CWStr::CFormat (Many args)     = {0} formats per second\n", fp64(TestFormats) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CWStr::CFormat (Many args)", CStr::CFormat("{ns }") << (fp64(TestFormats) / Timer.f_GetTime()).f_ToInt());
 		}
@@ -2565,10 +2596,10 @@ public:
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CStr (+=)      = {0} adds per second\n", fp64(TestAdds) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CStr (+=)", CStr::CFormat("{ns }") << (fp64(TestAdds) / Timer.f_GetTime()).f_ToInt());
-			
+
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTestAdds; ++j)
 			{
@@ -2583,7 +2614,7 @@ public:
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CWStr1024 (+=) = {0} adds per second\n", fp64(nTests1024) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CWStr1024 (+=)", CStr::CFormat("{ns }") << (fp64(nTests1024) / Timer.f_GetTime()).f_ToInt());
 			Timer.f_Reset();
@@ -2600,7 +2631,7 @@ public:
 					}
 				}
 			}
-			
+
 			DMibTrace("Performance for CWStr (+=)     = {0} adds per second\n", fp64(TestAdds) / Timer.f_GetTime());
 			_Interface.f_ReportPerformanceResult("CWStr (+=)", CStr::CFormat("{ns }") << (fp64(TestAdds) / Timer.f_GetTime()).f_ToInt());
 		}
@@ -2612,15 +2643,15 @@ public:
 		CStr Str1 = Mixed;
 		CWStr Str2 = Mixed;
 		CUStr Str3 = Mixed;
-		
+
 		Str1 = Mixed;
 		Str2 = Mixed;
 		Str3 = Mixed;
 
 		return "";
-		
+
 	}
-		
+
 };
 
 DMibRuntimeClass(CMalterlibTest, CTestStr);
