@@ -53,13 +53,13 @@ namespace NMib::NStr
 		};
 	};
 
-	using CStrTypeUnderlaying = int32;
+	using CStrTypeUnderlying = int32;
 	enum EStrType : int32;
 
 	template <typename t_CStrTraits>
 	class TCStrImp_Dynamic;
 
-	template <typename t_CChar, CStrTypeUnderlaying t_Type, typename t_CParams>
+	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	class TCStrTraits;
 
 	template <typename t_CStrTraits, typename t_CImplementation>
@@ -102,7 +102,7 @@ namespace NMib::NStr
 		>
 	class TCStrFormatType_Float;
 
-	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlaying t_Type>
+	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	class TCStrFormatType_String;
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>

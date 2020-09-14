@@ -7,7 +7,7 @@
 
 namespace NMib::NStr
 {
-	using CStrTypeUnderlaying = int32;
+	using CStrTypeUnderlying = int32;
 
 	enum EStrType : int32
 	{
@@ -25,16 +25,16 @@ namespace NMib::NStr
 	};
 
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_Type, template <typename> class t_TImpl, typename t_CParams>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type, template <typename> class t_TImpl, typename t_CParams>
 	struct TCStrTraits_Eval
 	{
 		typedef TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, t_CParams>, t_TImpl<TCStrTraits<t_CCharType , t_Type, t_CParams>>> CType;
 	};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_DesiredType, CStrTypeUnderlaying t_Type, class t_CImpl, typename t_CParams>
+	template <typename t_CCharType, CStrTypeUnderlying t_DesiredType, CStrTypeUnderlying t_Type, class t_CImpl, typename t_CParams>
 	struct TCStrTraits_ReplaceParams;
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_DesiredType, CStrTypeUnderlaying t_Type, template <typename> class t_TImpl, typename t_CParams, typename t_CCharType2, typename t_CParams2>
+	template <typename t_CCharType, CStrTypeUnderlying t_DesiredType, CStrTypeUnderlying t_Type, template <typename> class t_TImpl, typename t_CParams, typename t_CCharType2, typename t_CParams2>
 	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TImpl<TCStrTraits<t_CCharType2, t_Type, t_CParams2>>, t_CParams>
 	{
 		typedef TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>>> CType;
@@ -54,19 +54,19 @@ namespace NMib::NStr
 	class CStrTraits_CWStrSecure : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
 	class CStrTraits_CUStrSecure : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type>
 	struct TCStrTraits_ReplaceParams<ch32, EStrType_Unicode, t_Type, TCStrImp_Dynamic<TCStrTraits<t_CCharType, t_Type, CStrImp_Dynamic_ParamsDeflauts>>, CStrImp_Dynamic_ParamsDeflauts>
 	{
 		typedef CStrTraits_CUStr CType;
 	};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type>
 	struct TCStrTraits_ReplaceParams<ch32, EStrType_Unicode, t_Type, TCStrImp_Dynamic<TCStrTraits<t_CCharType, t_Type, CStrImp_Dynamic_ParamsNonTracked>>, CStrImp_Dynamic_ParamsNonTracked>
 	{
 		typedef CStrTraits_CUStrNonTracked CType;
 	};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type>
 	struct TCStrTraits_ReplaceParams<ch32, EStrType_Unicode, t_Type, TCStrImp_Dynamic<TCStrTraits<t_CCharType, t_Type, CStrImp_Dynamic_ParamsSecure>>, CStrImp_Dynamic_ParamsSecure>
 	{
 		typedef CStrTraits_CUStrSecure CType;
@@ -104,7 +104,7 @@ namespace NMib::NStr
 		typedef NMemory::CDefaultAllocator CAllocator;
 	};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type>
 	struct TCStrTraitsPtr
 	{
 		typedef TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Ptr<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>>> CType;
@@ -158,19 +158,19 @@ namespace NMib::NStr
 	typedef TCStrImp_Virtual_TStrWrapper<CStrTraits_CUStr> CUStrV;
 
 
-	template <typename t_CCharType, aint t_NumChar, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, aint t_NumChar, CStrTypeUnderlying t_Type>
 	struct TCFStr
 	{
 		typedef TCStr<TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Fixed<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, t_NumChar>>> CType;
 	};
 
-	template <typename t_CCharType, aint t_NumChar, CStrTypeUnderlaying t_Type>
+	template <typename t_CCharType, aint t_NumChar, CStrTypeUnderlying t_Type>
 	struct TCFStrAggregate
 	{
 		typedef TCStrAggregate<TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Fixed<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, t_NumChar>>> CType;
 	};
 
-	template <typename t_CCharType, CStrTypeUnderlaying t_DesiredType, CStrTypeUnderlaying t_Type, template <typename, aint t_DataLen> class t_TImpl, typename t_CParams, typename t_CCharType2, typename t_CParams2, aint t_DataLen>
+	template <typename t_CCharType, CStrTypeUnderlying t_DesiredType, CStrTypeUnderlying t_Type, template <typename, aint t_DataLen> class t_TImpl, typename t_CParams, typename t_CCharType2, typename t_CParams2, aint t_DataLen>
 	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TImpl<TCStrTraits<t_CCharType2, t_Type, t_CParams2>, t_DataLen>, t_CParams>
 	{
 		typedef TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_DataLen>> CType;

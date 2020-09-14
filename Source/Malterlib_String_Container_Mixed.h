@@ -5,7 +5,7 @@
 
 #include <Mib/Core/Core>
 
-DMibDeprecatedSupressStart;
+DMibDeprecatedSuppressStart;
 
 namespace NMib::NStr
 {
@@ -235,4 +235,4 @@ namespace NMib::NStream
 
 DMibTypeID(NMib::NStr::CMStrDeprecated, DMibCurrentTypeID + 27);
 
-DMibDeprecatedSupressStop;
+DMibDeprecatedSuppressStop;

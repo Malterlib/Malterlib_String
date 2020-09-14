@@ -13,7 +13,7 @@ namespace NMib::NStr
 	||______________________________________________________________________________________________||
 	\************************************************************************************************/
 
-	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlaying t_Type>
+	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	class TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
@@ -137,7 +137,7 @@ namespace NMib::NStr
 			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 		}
 
-		template <CStrTypeUnderlaying tf_DestinationType, CStrTypeUnderlaying tf_SourceType, typename t_COptions>
+		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
 		static inline_small typename TCEnableIf<tf_DestinationType == tf_SourceType, void>::CType fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
 		{
 			if (_Options.m_Case)
@@ -195,7 +195,7 @@ namespace NMib::NStr
 			}
 		}
 
-		template <CStrTypeUnderlaying tf_DestinationType, CStrTypeUnderlaying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
+		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
 		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen)
 		{
 			TCStr<CTStrTraits> Converted;

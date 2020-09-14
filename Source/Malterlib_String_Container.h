@@ -11,7 +11,7 @@
 
 namespace NMib::NStr
 {
-	template <typename t_CChar, CStrTypeUnderlaying t_Type, typename t_CParams>
+	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	class TCStrTraits
 	{
 	public:

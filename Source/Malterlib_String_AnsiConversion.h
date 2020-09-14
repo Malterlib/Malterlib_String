@@ -7,7 +7,7 @@
 
 namespace NMib::NStr
 {
-	using CCharacterEncodingUnderlaying = int32;
+	using CCharacterEncodingUnderlying = int32;
 	enum ECharacterEncoding : int32
 	{
 		ECharacterEncoding_Unicode,
@@ -16,7 +16,7 @@ namespace NMib::NStr
 		ECharacterEncoding_Windows_1252,
 	};
 
-	template <CCharacterEncodingUnderlaying t_CharacterEncoding>
+	template <CCharacterEncodingUnderlying t_CharacterEncoding>
 	class TCCharEncodingConverter
 	{
 		public:
@@ -46,7 +46,7 @@ namespace NMib::NStr
 	};
 
 
-	template <CCharacterEncodingUnderlaying _Encoding>
+	template <CCharacterEncodingUnderlying _Encoding>
 	CStr fg_DecodeCharacterEncoding(const ch8 *_pStr, const CAnsiStr *_pCStr = nullptr)
 	{
 		const uch8 *pStr = (const uch8 *)_pStr;
@@ -66,13 +66,13 @@ namespace NMib::NStr
 		}
 	}
 
-	template <CCharacterEncodingUnderlaying _Encoding>
+	template <CCharacterEncodingUnderlying _Encoding>
 	CStr fg_DecodeCharacterEncoding(const CAnsiStr &_CStr)
 	{
 		return fg_DecodeCharacterEncoding<_Encoding>(_CStr, &_CStr);
 	}
 
-	template <CCharacterEncodingUnderlaying _Encoding>
+	template <CCharacterEncodingUnderlying _Encoding>
 	CStrNonTracked fg_DecodeCharacterEncodingNonTracked(const ch8 *_pStr, const CAnsiStrNonTracked *_pCStr = nullptr)
 	{
 		const uch8 *pStr = (const uch8 *)_pStr;
@@ -92,7 +92,7 @@ namespace NMib::NStr
 		}
 	}
 
-	template <CCharacterEncodingUnderlaying _Encoding>
+	template <CCharacterEncodingUnderlying _Encoding>
 	CStrNonTracked fg_DecodeCharacterEncodingNonTracked(const CAnsiStrNonTracked &_CStr)
 	{
 		return fg_DecodeCharacterEncodingNonTracked<_Encoding>(_CStr, &_CStr);

@@ -7,7 +7,7 @@
 
 namespace NMib::NStr
 {
-	DMibDeprecatedSupressStart;
+	DMibDeprecatedSuppressStart;
 
 	class CMStrPreserve : public CMStrDeprecated
 	{
@@ -51,7 +51,7 @@ namespace NMib::NStr
 		}
 	};
 
-	DMibDeprecatedSupressStop;
+	DMibDeprecatedSuppressStop;
 }
 
 namespace NMib::NStream
