@@ -50,10 +50,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefcountDecrease()
 	{
-		if (m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_Release) == 1)
-		{
-			NAtomic::fg_MemoryFence(NAtomic::EMemoryOrder_Acquire);
+		if (m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_AcquireRelease) == 1)
 			CAllocator::f_Free(this, f_GetMemorySize());
-		}
 	}
 }
