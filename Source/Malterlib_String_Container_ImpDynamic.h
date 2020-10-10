@@ -17,13 +17,12 @@ namespace NMib::NStr
 		typedef typename t_CStrTraits::CParams CImpParams;
 		typedef typename CImpParams::CAllocator CAllocator;
 
-#ifndef DMibNoAggregateConstexpr
 		TCStrImp_Dynamic() = default;
 		constexpr TCStrImp_Dynamic(EAggregateInitialization _Init)
 			: m_pData(nullptr)
 		{
 		}
-#endif
+
 		enum
 		{
 			EMaxExtraChars = CImpParams::EMaxExtraChars

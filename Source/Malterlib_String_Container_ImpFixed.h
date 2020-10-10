@@ -13,7 +13,6 @@ namespace NMib::NStr
 	public:
 		constexpr const static bool mc_bInitConstStr = false;
 
-#ifndef DMibNoAggregateConstexpr
 		constexpr TCStrImp_Fixed(EAggregateInitialization _Init)
 			: m_Len{0}
 			, m_lData{}
@@ -22,7 +21,7 @@ namespace NMib::NStr
 		TCStrImp_Fixed()
 		{
 		}
-#endif
+
 		typedef typename t_CStrTraits::CChar CChar;
 
 		const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;

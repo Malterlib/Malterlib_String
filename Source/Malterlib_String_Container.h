@@ -897,7 +897,6 @@ EndArgSearch:
 
 	public:
 
-#ifndef DMibNoAggregateConstexpr
 		constexpr TCStrAggregate(EAggregateInitialization _Init)
 			: t_CTCStrTraits::CImp{_Init}
 		{
@@ -915,8 +914,6 @@ EndArgSearch:
 		TCStrAggregate(TCStrAggregate const &_From) = delete;
 		TCStrAggregate & operator = (TCStrAggregate &&_From) = delete;
 		TCStrAggregate(TCStrAggregate &&_From) = delete;
-
-#endif
 
 		CUnicodeIterator f_GetUnicodeIterator() const
 		{
