@@ -6,7 +6,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 Property
 {
 	!!MalterlibEnableInternalTests true
-	MalterlibBoostModules "algorithm;spirit;config;phoenix;predef;proto;core;mpl;type_traits;utility;fusion;typeof;range;@(MalterlibBoostModules)"
+	MalterlibBoostModules "algorithm;spirit;config;phoenix;endian;predef;proto;core;mpl;type_traits;utility;fusion;typeof;range;@(MalterlibBoostModules)"
 	MalterlibBoostModules "iterator;detail;concept_check;foreach;variant;@(MalterlibBoostModules)"
 	MalterlibBoostModules "type_index;container_hash;math;functional;integer;regex;throw_exception;@(MalterlibBoostModules)"
 	MalterlibBoostModules "optional;function_types;array;smart_ptr;iostreams;lexical_cast;numeric_conversion;@(MalterlibBoostModules)"
