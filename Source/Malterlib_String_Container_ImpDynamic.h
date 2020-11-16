@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -36,15 +36,15 @@ namespace NMib::NStr
 		class CData
 		{
 		public:
-			NAtomic::TCAtomic<aint> m_RefCount;
-			mint m_Len:sizeof(mint)*8-2;
-			mint m_bReserved:2;
-			mint m_StrLen:sizeof(mint)*8-2;
-			mint m_UserData:2;
+			NAtomic::TCAtomic<aint> m_RefCount = 1;
+			mint m_Len:sizeof(mint)*8-2 = 0;
+			mint m_bReserved:2 = 0;
+			mint m_StrLen:sizeof(mint)*8-2 = mc_InvalidStrLen;
+			mint m_UserData:2 = 0;
 
 			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 
-			inline_small CData();
+			inline_small constexpr CData() = default;
 			inline_small CChar *f_GetData() const;
 			inline_small aint f_GetLength();
 			inline_small mint f_GetMemorySize() const;
@@ -156,7 +156,7 @@ namespace NMib::NStr
 		{
 			if (m_pData)
 			{
-				DMibSafeCheck(m_pData->m_RefCount == 1, "Must own str");
+				DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must own str");
 				return m_pData->f_GetData();
 			}
 			else
@@ -174,7 +174,7 @@ namespace NMib::NStr
 		inline_small aint f_GetRefcount() const
 		{
 			if (m_pData)
-				return m_pData->m_RefCount;
+				return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
 			else
 				return 0;
 		}
@@ -234,14 +234,14 @@ namespace NMib::NStr
 
 			if (NewLen != CurLen)
 			{
-				DMibSafeCheck(!m_pData || m_pData->m_RefCount == 1, "Must be no other having access to this data");
+				DMibSafeCheck(!m_pData || m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must be no other having access to this data");
 				f_TrimSize(NewLen);
 			}
 		}
 
 		inline_small void f_MakeUnique()
 		{
-			if (m_pData && m_pData->m_RefCount > 1)
+			if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
 			{
 				f_CreateWritableBuffer(f_GetStrLen()+1, false);
 			}
@@ -292,7 +292,7 @@ namespace NMib::NStr
 				{
 					if (m_pData)
 					{
-						if (m_pData->m_RefCount == 1)
+						if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 						{
 							mint CurrentSize = m_pData->f_GetMemorySize();
 
@@ -355,7 +355,7 @@ namespace NMib::NStr
 					}
 				}
 			}
-			else if (m_pData && m_pData->m_RefCount > 1)
+			else if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
 			{
 				mint NewLen = fp_CalcNewSize(_Length);
 				CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
@@ -384,7 +384,7 @@ namespace NMib::NStr
 		inline aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 		{
 			aint CurLen = f_GetLength();
-			if (CurLen >= _Length && m_pData && m_pData->m_RefCount == 1)
+			if (CurLen >= _Length && m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 				return CurLen;
 
 			return fp_CreateWritableBuffer(_Length, _bDiscard);
@@ -399,10 +399,8 @@ namespace NMib::NStr
 			}
 			else
 			{
-				if (m_pData && m_pData->m_RefCount > 1)
-				{
+				if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 					m_pData->m_bReserved = false;
-				}
 			}
 		}
 
@@ -420,7 +418,7 @@ namespace NMib::NStr
 			}
 
 			DMibSafeCheck(m_pData, "Must be allocated here or something is wrong");
-			if (m_pData->m_RefCount == 1)
+			if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 			{
 				m_pData = (CData *)(CAllocator::f_Resize(m_pData, _NeededSize, m_pData->f_GetMemorySize()));
 				m_pData->f_SetLength(_NeededSize);

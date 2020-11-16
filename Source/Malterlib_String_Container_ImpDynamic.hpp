@@ -6,16 +6,6 @@
 namespace NMib::NStr
 {
 	template <typename t_CStrTraits>
-	TCStrImp_Dynamic<t_CStrTraits>::CData::CData()
-		: m_RefCount(1)
-		, m_Len(0)
-		, m_bReserved(0)
-		, m_StrLen(mc_InvalidStrLen)
-		, m_UserData(0)
-	{
-	}
-
-	template <typename t_CStrTraits>
 	inline_small auto TCStrImp_Dynamic<t_CStrTraits>::CData::f_GetData() const -> CChar *
 	{
 		return (CChar *)(this+1);
@@ -44,7 +34,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefcountIncrease()
 	{
-		m_RefCount.f_FetchAdd(1, NAtomic::EMemoryOrder_Relaxed);
+		m_RefCount.f_FetchAdd(1, NAtomic::EMemoryOrder_Release);
 	}
 
 	template <typename t_CStrTraits>
