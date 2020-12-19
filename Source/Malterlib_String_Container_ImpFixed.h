@@ -119,13 +119,6 @@ namespace NMib::NStr
 			f_Destroy();
 		}
 
-		void f_SafeClear()
-		{
-			NMemory::fg_ObjectSet(m_lData, CChar(0), t_DataLen);
-			f_Destroy();
-		}
-
-
 		// Interface
 		//=================================
 	};
@@ -268,12 +261,6 @@ namespace NMib::NStr
 
 		inline_small void f_Clear()
 		{
-			f_Destroy();
-		}
-
-		void f_SafeClear()
-		{
-			NMemory::fg_ObjectSet(m_pData, CChar(0), m_MaxLen);
 			f_Destroy();
 		}
 

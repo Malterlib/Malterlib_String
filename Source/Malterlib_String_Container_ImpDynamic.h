@@ -121,15 +121,6 @@ namespace NMib::NStr
 			f_Destroy();
 		}
 
-		void f_SafeClear()
-		{
-			if (m_pData)
-			{
-				NMemory::fg_ObjectSet(m_pData->f_GetData(), CChar(0), f_GetLength());
-			}
-			f_Destroy();
-		}
-
 		void f_SetUserData(uint8 _Data)
 		{
 			DMibSafeCheck(_Data < 4, "Only 2 bits available");

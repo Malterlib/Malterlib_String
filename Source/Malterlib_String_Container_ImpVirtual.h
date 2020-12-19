@@ -63,11 +63,6 @@ namespace NMib::NStr
 		{
 			return m_pStr->f_Clear();
 		}
-
-		virtual void f_SafeClear()
-		{
-			return m_pStr->f_SafeClear();
-		}
 	};
 
 	template <typename t_CTStrTraits>
@@ -111,11 +106,5 @@ namespace NMib::NStr
 		{
 			return m_Str.f_Clear();
 		}
-
-		virtual void f_SafeClear()
-		{
-			return m_Str.f_SafeClear();
-		}
-
 	};
 }
