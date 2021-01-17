@@ -13,7 +13,6 @@ namespace NMib::NStr
 		EStrToIntParseMode_Base10 = 10,
 		EStrToIntParseMode_Binary = 8,
 		EStrToIntParseMode_Octal = 2,
-
 	};
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
@@ -27,7 +26,8 @@ namespace NMib::NStr
 			, bool *_pFailed = nullptr
 		)
 	{
-		t_CReturn DestNumber = 0;
+		using CNumber = typename TCChooseType<NTraits::TCIsSame<t_CReturn, bool>::mc_Value, uint8, t_CReturn>::CType;
+		CNumber DestNumber = 0;
 		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
 		typedef typename NTraits::TCUnsigned<t_CTerm>::CType CTerm;
 		const CData *pParseStr = (const CData *)_pStr;
