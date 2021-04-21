@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CStr, bool t_bIncludeExtra>
-	bool TCParseLocation<t_CStr, t_bIncludeExtra>::operator ==(TCParseLocation const &_Right) const
+	bool TCParseLocation<t_CStr, t_bIncludeExtra>::operator == (TCParseLocation const &_Right) const
 	{
 		if (m_File != _Right.m_File)
 			return false;
@@ -17,6 +17,32 @@ namespace NMib::NStr
 		if (m_Column != _Right.m_Column)
 			return false;
 		return true;
+	}
+
+	template <typename t_CStr, bool t_bIncludeExtra>
+	bool TCParseLocation<t_CStr, t_bIncludeExtra>::operator < (TCParseLocation const &_Right) const
+	{
+		if (m_File < _Right.m_File)
+			return true;
+		else if (m_File > _Right.m_File)
+			return false;
+
+		if (m_Character < _Right.m_Character)
+			return true;
+		else if (m_Character > _Right.m_Character)
+			return false;
+
+		if (m_Line < _Right.m_Line)
+			return true;
+		else if (m_Line > _Right.m_Line)
+			return false;
+
+		if (m_Column < _Right.m_Column)
+			return true;
+		else if (m_Column > _Right.m_Column)
+			return false;
+
+		return false;
 	}
 
 	template <typename t_CStr, bool t_bIncludeExtra>

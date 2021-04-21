@@ -132,7 +132,9 @@ namespace NMib::NStr
 	template <typename t_CStr, bool t_bIncludeExtra>
 	struct TCParseLocation
 	{
-		bool operator ==(TCParseLocation const &_Right) const;
+		bool operator == (TCParseLocation const &_Right) const;
+		bool operator < (TCParseLocation const &_Right) const;
+
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
 		template <typename tf_CStream>
@@ -150,7 +152,9 @@ namespace NMib::NStr
 	template <typename t_CStr>
 	struct TCParseLocation<t_CStr, false>
 	{
-		bool operator ==(TCParseLocation const &_Right) const;
+		bool operator == (TCParseLocation const &_Right) const;
+		bool operator < (TCParseLocation const &_Right) const;
+
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
 		template <typename tf_CStream>
