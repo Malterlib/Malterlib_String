@@ -2459,6 +2459,17 @@ namespace NMib::NStr
 		return false;
 	}
 
+	template <typename t_CData>
+	constexpr inline_medium bool fg_CharIsNewLine(const t_CData _Character)
+	{
+		switch (_Character)
+		{
+		case 10 : return true;
+		case 13 : return true;
+		}
+		return false;
+	}
+
 	template<typename t_CData>
 	constexpr inline_medium bool fg_CharIsWhiteSpaceNoLines(const t_CData _Character)
 	{
