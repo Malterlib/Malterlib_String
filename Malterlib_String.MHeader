@@ -6,11 +6,43 @@ Import "../Core/Lib_Malterlib.MTarget"
 Property
 {
 	!!MalterlibEnableInternalTests true
-	MalterlibBoostModules "algorithm;spirit;config;phoenix;endian;predef;proto;core;mpl;type_traits;utility;fusion;typeof;range;@(MalterlibBoostModules)"
-	MalterlibBoostModules "iterator;detail;concept_check;foreach;variant;@(MalterlibBoostModules)"
-	MalterlibBoostModules "type_index;container_hash;math;functional;integer;regex;throw_exception;@(MalterlibBoostModules)"
-	MalterlibBoostModules "optional;function_types;array;smart_ptr;iostreams;lexical_cast;numeric_conversion;@(MalterlibBoostModules)"
-	MalterlibBoostModules "container;@(MalterlibBoostModules)"
+
+	MalterlibBoostModules =+ [
+		"algorithm"
+		, "spirit"
+		, "config"
+		, "phoenix"
+		, "predef"
+		, "proto"
+		, "core"
+		, "endian"
+		, "mpl"
+		, "type_traits"
+		, "utility"
+		, "fusion"
+		, "typeof"
+		, "range"
+		, "iterator"
+		, "detail"
+		, "concept_check"
+		, "foreach"
+		, "variant"
+		, "type_index"
+		, "container_hash"
+		, "math"
+		, "functional"
+		, "integer"
+		, "regex"
+		, "throw_exception"
+		, "optional"
+		, "function_types"
+		, "array"
+		, "smart_ptr"
+		, "iostreams"
+		, "lexical_cast"
+		, "numeric_conversion"
+		, "container"
+	]
 }
 
 %Group "{Malterlib}/{Lib_Malterlib_String}"
@@ -36,20 +68,13 @@ Property
 
 Property
 {
-	MalterlibLibrary_String true
-	{
-		&
-		{
-			MalterlibLibrary_String ""
-			MalterlibLibrary_All true
-		}
-	}
-	MalterlibSubLibraries "String;@(MalterlibSubLibraries)"
+	MalterlibLibrary_String define bool = MalterlibLibrary_All
+	MalterlibSubLibraries =+ "String"
 	{
 		!!MalterlibLibrary_String true
 	}
-//	MalterlibSubLibrarySeparate_Lib_Malterlib_String true
-	MalterlibIncludeRoots "@('Include'->MakeAbsolute());@(MalterlibIncludeRoots)"
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_String define bool = true
+	MalterlibIncludeRoots =+ "Include"->MakeAbsolute()
 	{
 		!!MalterlibLibrary_String true
 	}
@@ -60,7 +85,7 @@ Property
 	Compile
 	{
 		!!CompileDialect "C"
-		PreprocessorDefines "_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;@(Compile.PreprocessorDefines)"
+		PreprocessorDefines =+ "_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING"
 		{
 			!!PlatformFamily "Windows"
 		}
@@ -71,7 +96,7 @@ Property
 {
 	!!MalterlibEnableInternalTests true
 	
-	MalterlibTests "Malterlib_String;@(MalterlibTests)"
-	MalterlibTestFiles_Malterlib_String "@('Test/*'->MakeAbsolute())"
-	MalterlibTestExtraGroups_Malterlib_String "{Test}/{Malterlib_String}"
+	MalterlibTests =+ "Malterlib_String"
+	MalterlibTestFiles_Malterlib_String define [type(CEntity)] = ["Test/*"->MakeAbsolute()]
+	MalterlibTestExtraGroups_Malterlib_String define [string] = ["{Test}/{Malterlib_String}"]
 }
