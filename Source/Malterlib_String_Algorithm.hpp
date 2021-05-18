@@ -1258,17 +1258,23 @@ namespace NMib::NStr
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
 		auto *pStr1 = _pStr1;
 		t_CData1 const *pStr1End;
-		if (_Len == TCLimitsInt<mint>::mc_Max)
-			pStr1End = (t_CData1 const *)TCLimitsInt<mint>::mc_Max;
-		else
-			pStr1End = pStr1 + _Len;
+		if constexpr (t_bCheckLen)
+		{
+			if (_Len == TCLimitsInt<mint>::mc_Max)
+				pStr1End = (t_CData1 const *)TCLimitsInt<mint>::mc_Max;
+			else
+				pStr1End = pStr1 + _Len;
+		}
 
 		auto *pStr2 = _pStr2;
 		t_CData2 const *pStr2End;
-		if (_Len2 == TCLimitsInt<mint>::mc_Max)
-			pStr2End = (const t_CData2 *)TCLimitsInt<mint>::mc_Max;
-		else
-			pStr2End = pStr2 + _Len2;
+		if constexpr (t_bCheckLen2)
+		{
+			if (_Len2 == TCLimitsInt<mint>::mc_Max)
+				pStr2End = (const t_CData2 *)TCLimitsInt<mint>::mc_Max;
+			else
+				pStr2End = pStr2 + _Len2;
+		}
 
 		while (*pStr1 && *pStr2)
 		{
