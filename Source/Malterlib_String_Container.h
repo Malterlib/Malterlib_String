@@ -8,6 +8,7 @@
 #include <Mib/String/UnicodeConversion>
 #include <Mib/String/Algorithm>
 #include <Mib/Core/EnableIf>
+#include <compare>
 
 namespace NMib::NStr
 {
@@ -4678,6 +4679,25 @@ EndArgSearch:
 	bool operator < (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
 	{
 		return fg_StrCmp(_Str0, _pStr1) > 0;
+	}
+
+	// Operator <=>
+	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1>
+	std::strong_ordering operator <=> (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
+	{
+		return fg_StrCmp(_Str0, _Str1) <=> 0;
+	}
+
+	template <typename t_CTCStrTraits0, typename t_CData>
+	std::strong_ordering operator <=> (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
+	{
+		return fg_StrCmp(_Str0, _pStr1) <=> 0;
+	}
+
+	template <typename t_CTCStrTraits0, typename t_CData>
+	std::strong_ordering operator <=> (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
+	{
+		return fg_StrCmp(_Str0, _pStr1) <=> 0;
 	}
 
 	/************************************************************************************************\
