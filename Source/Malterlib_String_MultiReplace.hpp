@@ -26,20 +26,18 @@ namespace NMib::NStr
 	}
 
 	template <bool t_bCaseSensitive>
-	void TCMultiReplace<t_bCaseSensitive>::f_Prepare()
+	TCMultiReplace<t_bCaseSensitive>::TCMultiReplace(CStringMap &&_StringMap)
 	{
-		if (m_Replace.f_IsEmpty())
-			return;
-
-		m_SearchList.f_Clear();
+		mp_Replace = fg_Move(_StringMap);
+		mp_SearchList.f_Clear();
 		{
 			CStr const *pLast = nullptr;
 			NContainer::TCLinkedList<NContainer::TCLinkedList<CStr const *> *> ToAdd;
 			NContainer::TCLinkedList<CStr const *> AddResults;
-			for (auto &Replace : m_Replace)
+			for (auto &Replace : mp_Replace)
 			{
-				auto &Key = m_Replace.fs_GetKey(Replace);
-				if (pLast && fs_StartsWith(m_Replace.fs_GetKey(*pLast), Key))
+				auto &Key = _StringMap.fs_GetKey(Replace);
+				if (pLast && fs_StartsWith(_StringMap.fs_GetKey(*pLast), Key))
 					;
 				else
 				{
@@ -55,7 +53,7 @@ namespace NMib::NStr
 				}
 
 				AddResults.f_Insert(&Replace);
-				auto &SearchListEntry = m_SearchList[Key];
+				auto &SearchListEntry = mp_SearchList[Key];
 				ToAdd.f_Insert(&SearchListEntry);
 			}
 
@@ -65,57 +63,75 @@ namespace NMib::NStr
 					pAddTo->f_Insert(fg_Move(AddResults));
 			}
 		}
-		m_bPrepared = true;
+		mp_pSearchListFirst = mp_SearchList.f_FindSmallest();
+		mp_bPrepared = true;
+	}
+
+	template <bool t_bCaseSensitive>
+	bool TCMultiReplace<t_bCaseSensitive>::f_IsEmpty() const
+	{
+		return mp_SearchList.f_IsEmpty();
+	}
+
+	template <bool t_bCaseSensitive>
+	bool TCMultiReplace<t_bCaseSensitive>::f_StringMatches(ch8 const *_pString)
+	{
+		return f_StringMatches(_pString, [](CStr const &_ToFind, CStr const &_FoundEntry) { return true; });
+	} 
+
+	template <bool t_bCaseSensitive>
+	template <typename tf_FCheckFound>
+	bool TCMultiReplace<t_bCaseSensitive>::f_StringMatches(ch8 const *_pString, tf_FCheckFound &&_fCheckFound)
+	{
+		auto iFound = mp_SearchList.f_GetIterator_LargestLessThanEqual(_pString);
+
+		NContainer::TCLinkedList<CStr const *> const *pFoundEntries = nullptr;
+		if (!iFound)
+			pFoundEntries = mp_pSearchListFirst;
+		else if (!fs_StartsWith(_pString, iFound.f_GetKey()))
+		{
+			++iFound;
+			pFoundEntries = iFound;
+		}
+		else
+			pFoundEntries = iFound;
+
+		if (!pFoundEntries)
+			return false;
+
+		for (auto &pFoundEntry : *pFoundEntries)
+		{
+			auto &ToFind = mp_Replace.fs_GetKey(*pFoundEntry);
+
+			if (fs_StartsWith(_pString, ToFind))
+			{
+				if (_fCheckFound(ToFind, *pFoundEntry))
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	template <bool t_bCaseSensitive>
 	template <typename tf_FOnReplace>
 	CStr TCMultiReplace<t_bCaseSensitive>::f_Replace(CStr const &_String, tf_FOnReplace &&_fOnReplace)
 	{
-		if (!m_bPrepared)
-			f_Prepare();
-
-		if (m_Replace.f_IsEmpty())
+		if (mp_SearchList.f_IsEmpty())
 			return _String;
-
-		auto pFirst = m_SearchList.f_FindSmallest();
 
 		CStr NewContents;
 		ch8 const *pParse = _String.f_GetStr();
+		auto fReplace = [&](auto &&_ToFind, auto &&_FoundEntry) -> bool
+			{
+				return _fOnReplace(NewContents, pParse, _ToFind, _FoundEntry);
+			}
+		;
+
 		while (*pParse)
 		{
-			auto iFound = m_SearchList.f_GetIterator_LargestLessThanEqual(pParse);
-
-			NContainer::TCLinkedList<CStr const *> const *pFoundEntries = nullptr;
-			if (!iFound)
-				pFoundEntries = pFirst;
-			else if (!fs_StartsWith(pParse, iFound.f_GetKey()))
-			{
-				++iFound;
-				pFoundEntries = iFound;
-			}
-			else
-				pFoundEntries = iFound;
-
-			if (pFoundEntries)
-			{
-				bool bShouldContinue = false;
-				for (auto &pFoundEntry : *pFoundEntries)
-				{
-					auto &ToFind = m_Replace.fs_GetKey(*pFoundEntry);
-
-					if (fs_StartsWith(pParse, ToFind))
-					{
-						if (_fOnReplace(NewContents, pParse, ToFind, *pFoundEntry))
-						{
-							bShouldContinue = true;
-							break;
-						}
-					}
-				}
-				if (bShouldContinue)
-					continue;
-			}
+			if (f_StringMatches(pParse, fReplace))
+				continue;
 
 			NewContents.f_AddChar(*pParse);
 			++pParse;

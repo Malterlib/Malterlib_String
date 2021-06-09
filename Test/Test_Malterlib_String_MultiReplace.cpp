@@ -17,13 +17,13 @@ namespace
 		template <bool tf_bCaseSensitive>
 		void fp_DoTests()
 		{
-			TCMultiReplace<tf_bCaseSensitive> MultiReplace;
-
-			MultiReplace.m_Replace = 
-				{
-					{"C:\\\\Program Files\\\\Go\\\\bin\\\\", ""}
-					, {"C:/Program Files/Go/bin/", ""}
-				}
+			TCMultiReplace<tf_bCaseSensitive> MultiReplace
+				(
+					{
+						{"C:\\\\Program Files\\\\Go\\\\bin\\\\", ""}
+						, {"C:/Program Files/Go/bin/", ""}
+					}
+				)
 			;
 
 			CStr TestString = R"--(
