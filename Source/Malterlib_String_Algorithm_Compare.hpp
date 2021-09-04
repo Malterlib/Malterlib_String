@@ -31,7 +31,7 @@ namespace NMib::NStr2::NPrivate
 		while (rCharacters && rToCompare)
 		{
 			ECompare Compare = fg_CharCompare<tf_CTags>(*rCharacters, *rToCompare);
-			if (unlikely(Compare != ECompare_Equal))
+			if (Compare != ECompare_Equal) [[unlikely]]
 				return Compare;
 			++rCharacters;
 			++rToCompare;
