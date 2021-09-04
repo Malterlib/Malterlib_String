@@ -559,15 +559,6 @@ namespace NMib::NStr
 			return fg_ReplaceSequenceUTF8(_CStr);
 	}
 
-	bool CParseError::operator == (CParseError const &_Right) const
-	{
-		if (m_Error != _Right.m_Error)
-			return false;
-		if (m_Location != _Right.m_Location)
-			return false;
-		return true;
-	}
-
 	void CParseError::f_Format(NStr::CStrAggregate &o_FormatInto) const
 	{
 		o_FormatInto += CStr::CFormat("{} Error '{}'") << m_Location << m_Error;

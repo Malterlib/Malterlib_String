@@ -8,7 +8,6 @@
 #include <Mib/String/UnicodeConversion>
 #include <Mib/String/Algorithm>
 #include <Mib/Core/EnableIf>
-#include <compare>
 
 namespace NMib::NStr
 {
@@ -2652,6 +2651,56 @@ EndArgSearch:
 				return *this;
 			return f_Left(f_GetLen() - fg_StrLen(_ToFind));
 		}
+
+		/************************************************************************************************\
+		||||
+		|| Operators
+		||______________________________________________________________________________________________||
+		\************************************************************************************************/
+
+		// Operator +
+		template <typename tf_CCharData>
+		friend CDynamicStr operator + (const tf_CCharData *_pToAdd, const TCStrAggregate &_Second)
+		{
+			CDynamicStr Temp;
+			Temp.f_SetStr(_pToAdd);
+			Temp.f_AddStr(_Second);
+			return Temp;
+		}
+
+		// Operator !
+		bool operator ! ()
+		{
+			return this->f_IsEmpty();
+		}
+
+		// Operator ==
+		template <typename tf_CTCStrTraits>
+		bool operator == (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
+		{
+			if (f_GetLen() != _Right.f_GetLen())
+				return false;
+			return fg_StrCmp(*this, _Right, f_GetLen()) == 0;
+		}
+
+		template <typename tf_CData>
+		bool operator == (tf_CData const *_pRight) const
+		{
+			return fg_StrCmp(*this, _pRight) == 0;
+		}
+
+		// Operator <=>
+		template <typename tf_CTCStrTraits>
+		COrdering_Weak operator <=> (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
+		{
+			return fg_StrCmp(*this, _Right) <=> 0;
+		}
+
+		template <typename tf_CData>
+		COrdering_Weak operator <=> (tf_CData const *_pRight) const
+		{
+			return fg_StrCmp(*this, _pRight) <=> 0;
+		}
 	};
 
 	template <typename t_CTCStrTraits>
@@ -4616,88 +4665,6 @@ EndArgSearch:
 		fg_StrEscapeStrNoQuotes(pDest, pSource, _pEscapedChars, _pReplaceChars, Max);
 		_StrDest.f_SetStrLen(-1);
 		return _StrDest;
-	}
-
-	/************************************************************************************************\
-	||||
-	|| Operators
-	||______________________________________________________________________________________________||
-	\************************************************************************************************/
-
-	// Operator +
-	template <typename t_CTCStrTraits, typename t_CCharData>
-		TCStr<t_CTCStrTraits> operator + (const t_CCharData *_pToAdd, const TCStrAggregate<t_CTCStrTraits> &_Second)
-	{
-		TCStr<t_CTCStrTraits> Temp;
-		Temp.f_SetStr(_pToAdd);
-		Temp.f_AddStr(_Second);
-		return Temp;
-	}
-
-	// Operator !
-	template <typename t_CTCStrTraits0>
-	bool operator ! (const TCStrAggregate<t_CTCStrTraits0> &_Str0)
-	{
-		return _Str0.f_IsEmpty();
-	}
-
-	// Operator ==
-	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1>
-	bool operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
-	{
-		if (_Str0.f_GetLen() != _Str1.f_GetLen())
-			return false;
-		return fg_StrCmp(_Str0, _Str1, _Str0.f_GetLen()) == 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	bool operator == (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
-	{
-		return fg_StrCmp(_Str0, _pStr1) == 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	bool operator == (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
-	{
-		return fg_StrCmp(_Str0, _pStr1) == 0;
-	}
-
-	// Operator <
-	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1>
-	bool operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
-	{
-		return fg_StrCmp(_Str0, _Str1) < 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	bool operator < (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
-	{
-		return fg_StrCmp(_Str0, _pStr1) < 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	bool operator < (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
-	{
-		return fg_StrCmp(_Str0, _pStr1) > 0;
-	}
-
-	// Operator <=>
-	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1>
-	std::strong_ordering operator <=> (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const TCStrAggregate<t_CTCStrTraits1> &_Str1)
-	{
-		return fg_StrCmp(_Str0, _Str1) <=> 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	std::strong_ordering operator <=> (const TCStrAggregate<t_CTCStrTraits0> &_Str0, const t_CData *_pStr1)
-	{
-		return fg_StrCmp(_Str0, _pStr1) <=> 0;
-	}
-
-	template <typename t_CTCStrTraits0, typename t_CData>
-	std::strong_ordering operator <=> (const t_CData *_pStr1, const TCStrAggregate<t_CTCStrTraits0> &_Str0)
-	{
-		return fg_StrCmp(_Str0, _pStr1) <=> 0;
 	}
 
 	/************************************************************************************************\
