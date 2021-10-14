@@ -2114,7 +2114,7 @@ EndArgSearch:
 			return fg_StrHashSDBM(CImp::f_GetStr());
 		}
 
-		CDynamicStr f_Indent(ch8 const *_pIndent) const
+		CDynamicStr f_Indent(ch8 const *_pIndent, bool _bIndentFirst = true) const
 		{
 			auto const *pParse = this->f_GetStr();
 			auto const *pParseEnd = pParse + this->f_GetLen();
@@ -2126,6 +2126,9 @@ EndArgSearch:
 				auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
 				if (iSplitPoint < 0)
 				{
+					if (Return.f_IsEmpty() && !_bIndentFirst)
+						return *this;
+
 					Return.f_AddStr(_pIndent);
 					Return.f_AddStr(pParse, pParseEnd - pParse);
 					return Return;
@@ -2141,7 +2144,8 @@ EndArgSearch:
 				if (*pParse == '\n')
 					++pParse;
 
-				Return.f_AddStr(_pIndent);
+				if (_bIndentFirst || !Return.f_IsEmpty())
+					Return.f_AddStr(_pIndent);
 				Return.f_AddStr(pParseStart, pParse - pParseStart);
 			}
 
