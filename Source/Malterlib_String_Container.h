@@ -551,16 +551,22 @@ namespace NMib::NStr
 
 		template <typename t_CType>
 		inline_small TCFormat &operator << (t_CType const &_Type) &
+			requires
+			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
+				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+			)
 		{
-			static_assert(!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value, "This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.");
 			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
 			return *this;
 		}
 
 		template <typename t_CType>
 		inline_small TCFormat &&operator << (t_CType const &_Type) &&
+			requires
+			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
+				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+			)
 		{
-			static_assert(!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value, "This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.");
 			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
 			return fg_Move(*this);
 		}
@@ -916,8 +922,8 @@ EndArgSearch:
 		TCStrAggregate(TCStrAggregate &&_From) = delete;
 
 		CUnicodeIterator f_GetUnicodeIterator() const
+			requires (mc_Type != EStrType_Ansi)
 		{
-			static_assert(mc_Type != EStrType_Ansi);
 			return CUnicodeIterator(*this);
 		}
 
