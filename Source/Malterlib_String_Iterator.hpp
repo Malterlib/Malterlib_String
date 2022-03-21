@@ -140,7 +140,7 @@ namespace NMib::NStr
 	}
 	*/
 
-
+#ifndef DDocumentation_Doxygen
 	template <typename t_CIteratorImp>
 	auto TCNullTerminatedBackIteratorAdaptor<NIterator::TCIterator<t_CIteratorImp>>::fp_Base() const -> TCNullTerminatedBackIteratorAdaptor const &
 	{
@@ -164,6 +164,7 @@ namespace NMib::NStr
 	{
 		return *this;
 	}
+#endif
 
 
 	template <typename tf_CLeft, typename tf_CIteratorImp>
