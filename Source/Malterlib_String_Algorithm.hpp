@@ -2519,6 +2519,16 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData>
+	constexpr inline_large bool fg_CharIsLowerCaseAnsiAlphabetical(const t_CData _Character)
+	{
+		if (_Character >= 'a' && _Character <= 'z')
+			return true;
+
+		return false;
+
+	}
+
+	template <typename t_CData>
 	constexpr inline_medium bool fg_CharIsNumber(const t_CData _Character)
 	{
 		if (_Character >= '0' && _Character <= '9')
