@@ -549,7 +549,7 @@ namespace NMib::NStream
 			//NStr::TCStr<t_TCStrTraitsIn>
 
 			typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar *pStr = _Data.f_GetStr(Len + 1);
-			auto Cleanup = g_OnScopeExit > [&]
+			auto Cleanup = g_OnScopeExit / [&]
 				{
 					_Data.f_Clear();
 				}

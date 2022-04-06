@@ -655,7 +655,7 @@ namespace NMib::NStr
 				else
 					pDestStart = TempStr2;
 
-				auto Cleanup = g_OnScopeExit > [&]
+				auto Cleanup = g_OnScopeExit / [&]
 					{
 						if (pAlloc)
 							delete [] pAlloc;
