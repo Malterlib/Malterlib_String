@@ -1238,6 +1238,18 @@ namespace NMib::NStr
 		return false;
 	}
 
+	template <EMatchWildcardResult t_Result = EMatchWildcardResult_WholeStringMatchedAndPatternExhausted, typename tf_CStr, typename tf_CContainer>
+	bool fg_StrMatchesAnyWildcardInContainer(tf_CStr const &_String, tf_CContainer const &_Container)
+	{
+		for (auto iWildcard = _Container.f_GetIterator(); iWildcard; ++iWildcard)
+		{
+			if (fg_StrMatchWildcard(_String.f_GetStr(), iWildcard->f_GetStr()) == t_Result)
+				return true;
+		}
+
+		return false;
+	}
+
 	template <typename t_CStr>
 	constexpr bool fg_StrIsEmpty(t_CStr const *_pStr)
 	{
