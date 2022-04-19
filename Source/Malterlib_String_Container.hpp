@@ -535,7 +535,8 @@ namespace NMib::NStream
 			uint64 LenStream = Len;
 			fg_StrEncodeLenType(LenStream, _Stream.f_LengthSize(), _Data.mc_Type);
 			fg_FeedLenToStream(_Stream, LenStream);
-			_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
+			if (Len != 0)
+				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
 		}
 
 		static void fs_Consume(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> &_Data)
@@ -555,7 +556,8 @@ namespace NMib::NStream
 				}
 			;
 
-			_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
+			if (Len != 0)
+				_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
 			Cleanup.f_Clear();
 			pStr[Len] = 0;
 			_Data.f_SetStrLen(Len);

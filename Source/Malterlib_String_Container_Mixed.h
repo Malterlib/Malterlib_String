@@ -139,7 +139,8 @@ namespace NMib::NStream
 			NStr::EStrType StrType = NStr::EStrType_Undefined;
 			fg_StrEncodeLenType(LenStream, _Stream.f_LengthSize(), StrType);
 			fg_FeedLenToStream(_Stream, LenStream);
-			_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(ch8));
+			if (Len != 0)
+				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(ch8));
 		}
 
 		static void fs_Consume(t_CStream &_Stream, NStr::CMStrDeprecated &_Data)
@@ -166,7 +167,8 @@ namespace NMib::NStream
 				{
 					NStr::CStr NewStr;
 					ch8 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch8));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch8));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					switch (StrType)
@@ -193,7 +195,8 @@ namespace NMib::NStream
 				{
 					NStr::CWStr NewStr;
 					ch16 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch16));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch16));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					switch (StrType)
@@ -216,7 +219,8 @@ namespace NMib::NStream
 				{
 					NStr::CUStr NewStr;
 					ch32 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch32));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch32));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					_Data = NewStr;

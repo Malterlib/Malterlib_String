@@ -81,13 +81,17 @@ namespace NMib::NStream
 							NStr::CStr Unicode;
 							for (auto iUnicode = _Data.f_GetUnicodeIterator(); iUnicode; ++iUnicode)
 								Unicode.f_AddChar(*iUnicode);
-							_Stream.f_FeedBytes(Unicode.f_GetStr(), Unicode.f_GetLen() * sizeof(ch8));
+
+							mint UnicodeLen = Unicode.f_GetLen();
+							if (UnicodeLen != 0)
+								_Stream.f_FeedBytes(Unicode.f_GetStr(), UnicodeLen * sizeof(ch8));
 						}
 						break;
 					case NStr::EStrType_UTF:
 					default:
 						{
-							_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(ch8));
+							if (Len != 0)
+								_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(ch8));
 						}
 						break;
 					}
@@ -104,14 +108,19 @@ namespace NMib::NStream
 							NStr::CWStr Unicode;
 							for (auto iUnicode = String.f_GetUnicodeIterator(); iUnicode; ++iUnicode)
 								Unicode.f_AddChar(*iUnicode);
-							_Stream.f_FeedBytes(Unicode.f_GetStr(), Unicode.f_GetLen() * sizeof(ch16));
+
+							mint UnicodeLen = Unicode.f_GetLen();
+							if (UnicodeLen != 0)
+								_Stream.f_FeedBytes(Unicode.f_GetStr(), UnicodeLen * sizeof(ch16));
 						}
 						break;
 					case NStr::EStrType_UTF:
 					default:
 						{
 							NStr::CWStr String = _Data;
-							_Stream.f_FeedBytes(String.f_GetStr(), String.f_GetLen() * sizeof(ch16));
+							mint StringLen = String.f_GetLen();
+							if (StringLen != 0)
+								_Stream.f_FeedBytes(String.f_GetStr(), StringLen * sizeof(ch16));
 						}
 						break;
 					}
@@ -125,7 +134,9 @@ namespace NMib::NStream
 					default:
 						{
 							NStr::CUStr String = _Data;
-							_Stream.f_FeedBytes(String.f_GetStr(), String.f_GetLen() * sizeof(ch32));
+							mint StringLen = String.f_GetLen();
+							if (StringLen != 0)
+								_Stream.f_FeedBytes(String.f_GetStr(), StringLen * sizeof(ch32));
 						}
 						break;
 					}
@@ -154,7 +165,8 @@ namespace NMib::NStream
 				{
 					NStr::CStr NewStr;
 					ch8 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch8));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch8));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					switch (StrType)
@@ -181,7 +193,8 @@ namespace NMib::NStream
 				{
 					NStr::CWStr NewStr;
 					ch16 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch16));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch16));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					switch (StrType)
@@ -204,7 +217,8 @@ namespace NMib::NStream
 				{
 					NStr::CUStr NewStr;
 					ch32 *pStr = NewStr.f_GetStr(Len + 1);
-					_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch32));
+					if (Len != 0)
+						_Stream.f_ConsumeBytes(pStr, Len * sizeof(ch32));
 					pStr[Len] = 0;
 					NewStr.f_SetStrLen(Len);
 					_Data = NewStr;
