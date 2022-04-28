@@ -49,8 +49,8 @@ namespace NMib::NStr
 			inline_small aint f_GetLength();
 			inline_small mint f_GetMemorySize() const;
 			inline_small void f_SetLength(mint _MemoryLen);
-			inline_small void f_RefcountIncrease();
-			inline_small void f_RefcountDecrease();
+			inline_small void f_RefCountIncrease();
+			inline_small void f_RefCountDecrease();
 		};
 
 		const static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
@@ -69,7 +69,7 @@ namespace NMib::NStr
 
 			if (m_pData)
 			{
-				m_pData->f_RefcountIncrease();
+				m_pData->f_RefCountIncrease();
 			}
 		}
 
@@ -83,12 +83,12 @@ namespace NMib::NStr
 		{
 			if (_From.m_pData)
 			{
-				_From.m_pData->f_RefcountIncrease();
+				_From.m_pData->f_RefCountIncrease();
 			}
 
 			if (m_pData)
 			{
-				m_pData->f_RefcountDecrease();
+				m_pData->f_RefCountDecrease();
 			}
 
 			m_pData = _From.m_pData;
@@ -98,7 +98,7 @@ namespace NMib::NStr
 		{
 			if (m_pData)
 			{
-				m_pData->f_RefcountDecrease();
+				m_pData->f_RefCountDecrease();
 			}
 
 			m_pData = _From.m_pData;
@@ -111,7 +111,7 @@ namespace NMib::NStr
 		inline_medium void f_Destroy()
 		{
 			if (m_pData)
-				m_pData->f_RefcountDecrease();
+				m_pData->f_RefCountDecrease();
 
 			m_pData = nullptr;
 		}
@@ -162,7 +162,7 @@ namespace NMib::NStr
 				return ms_NullStr;
 		}
 
-		inline_small aint f_GetRefcount() const
+		inline_small aint f_GetRefCount() const
 		{
 			if (m_pData)
 				return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
@@ -273,7 +273,7 @@ namespace NMib::NStr
 		{
 #				ifdef DMibDebug
 			{
-				f_GetRefcount(); // Make sure GetRef() gets linked in in debug build
+				f_GetRefCount(); // Make sure GetRef() gets linked in in debug build
 			}
 #				endif
 			aint CurLen = f_GetLength();
@@ -323,7 +323,7 @@ namespace NMib::NStr
 
 								NMemory::fg_MemCopy(m_pData->f_GetData(), pOld->f_GetData(), CopyLen * sizeof(CChar));
 							}
-							pOld->f_RefcountDecrease();
+							pOld->f_RefCountDecrease();
 						}
 					}
 					else
@@ -340,7 +340,7 @@ namespace NMib::NStr
 				{
 					if (m_pData)
 					{
-						m_pData->f_RefcountDecrease();
+						m_pData->f_RefCountDecrease();
 						m_pData = nullptr;
 						CurLen = f_GetLength();
 					}
@@ -366,7 +366,7 @@ namespace NMib::NStr
 						CopyLen = fg_Min(CurLen, (aint)pNew->m_StrLen + 1);
 					NMemory::fg_MemCopy(m_pData->f_GetData(), pOld->f_GetData(), CopyLen * sizeof(CChar));
 				}
-				pOld->f_RefcountDecrease();
+				pOld->f_RefCountDecrease();
 			}
 
 			return CurLen;
@@ -402,7 +402,7 @@ namespace NMib::NStr
 			{
 				if (m_pData)
 				{
-					m_pData->f_RefcountDecrease();
+					m_pData->f_RefCountDecrease();
 					m_pData = nullptr;
 				}
 				return;
@@ -419,7 +419,7 @@ namespace NMib::NStr
 				CData *pNewData = new(CAllocator::f_Alloc(_NeededSize)) CData();
 				pNewData->f_SetLength(_NeededSize);
 				NMemory::fg_MemCopy(pNewData->f_GetData(), m_pData->f_GetData(), _Length * sizeof(CChar));
-				m_pData->f_RefcountDecrease();
+				m_pData->f_RefCountDecrease();
 				m_pData = pNewData;
 			}
 		}
