@@ -82,6 +82,15 @@ Property
 
 %Group "{Test}/{Malterlib_String}"
 {
+	Target.CxxLanguage "C++20" // Workaround Boost Spirit issue
+	{
+		&
+		{
+			LanguageFamily "Native"
+			GeneratorFamily "Xcode"
+		}
+	}
+	
 	Compile
 	{
 		!!CompileDialect "C"
