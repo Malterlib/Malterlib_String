@@ -352,20 +352,88 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	typename TCEnableIf<t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi, void>::CType TCStrAggregate<t_TCStrTraits>::f_AddStr(const TCStrAggregate<t_CStrTraitsF> &_From)
+	void TCStrAggregate<t_TCStrTraits>::f_AddStr(TCStrAggregate<t_CStrTraitsF> const &_From)
 	{
-		CTempStr Temp;
-		NSys::NStr::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
-		f_AddStr(Temp);
+		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
+		{
+			CTempStr Temp;
+			NSys::NStr::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
+			f_AddStr(Temp);
+		}
+		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
+		{
+			aint Length = f_GetLen();
+			CAddStrAgrs Args(Length, _From.f_GetLen());
+			fp_AddStrLengthAware(Args, _From.f_GetStr());
+			CImp::f_SetStrLen(Length);
+		}
+		else if constexpr
+			(
+				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			)
+		{
+			f_AddStr(_From.f_GetStr(), _From.f_GetLen());
+		}
+		else if constexpr
+			(
+				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			)
+		{
+			if (*_From.f_GetStr() != 0)
+			{
+				aint Length = f_GetLen();
+				f_AddFromUnicodeIterator(Length, _From.f_GetUnicodeIterator());
+				CImp::f_SetStrLen(Length);
+			}
+		}
+		else
+		{
+			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
+		}
 	}
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	typename TCEnableIf<t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi, void>::CType TCStrAggregate<t_TCStrTraits>::f_SetStr(const TCStrAggregate<t_CStrTraitsF> &_From)
+	void TCStrAggregate<t_TCStrTraits>::f_SetStr(TCStrAggregate<t_CStrTraitsF> const &_From)
 	{
-		CTempStr Temp;
-		NSys::NStr::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
-		f_SetStr(Temp);
+		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
+		{
+			CTempStr Temp;
+			NSys::NStr::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
+			f_SetStr(Temp);
+		}
+		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
+		{
+			aint Length = 0;
+			CAddStrAgrs Args(Length, _From.f_GetLen());
+			fp_AddStrLengthAware(Args, _From.f_GetStr());
+			CImp::f_SetStrLen(Length);
+		}
+		else if constexpr
+			(
+				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			)
+		{
+			f_SetStr(_From.f_GetStr(), _From.f_GetLen());
+		}
+		else if constexpr
+			(
+				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			)
+		{
+			if (*_From.f_GetStr() != 0)
+			{
+				aint Length = 0;
+				f_AddFromUnicodeIterator(Length, _From.f_GetUnicodeIterator());
+				CImp::f_SetStrLen(Length);
+			}
+			else
+				this->f_Clear();
+		}
+		else
+		{
+			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
+		}
 	}
 
 	template <typename t_TCStrTraits>
