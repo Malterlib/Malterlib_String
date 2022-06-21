@@ -837,6 +837,9 @@ EndArgSearch:
 	};
 #endif
 
+	template <typename t_CString>
+	struct TCStringAppender;
+
 	template <typename t_CTCStrTraits>
 	class TCStrAggregate : public t_CTCStrTraits::CImp
 	{
@@ -1092,7 +1095,7 @@ EndArgSearch:
 			CImp::f_SetStrLen(Length);
 		}
 
-
+		using CAppender = TCStringAppender<TCStrAggregate>;
 
 		template <typename t_CStrDataType>
 		void f_AddStr(t_CStrDataType *_pStr)
