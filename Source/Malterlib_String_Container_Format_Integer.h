@@ -693,6 +693,10 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
+		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, t_COptions &_Options)
+		{
+			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		}
 
 		template <typename t_COption2, typename t_CIntType2>
 		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCValueWithOptions<t_COption2, t_CIntType2> &_Value)

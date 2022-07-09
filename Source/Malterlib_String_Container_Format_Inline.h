@@ -141,10 +141,16 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, m_ToFormat);
 
 		}
+
 		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value)
 		{
 			CLocalOptions Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		}
+
+		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value, CLocalOptions &_Options)
+		{
+			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}
 
 		template <typename tf_COptions, typename tf_CToFormat>

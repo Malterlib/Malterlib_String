@@ -86,6 +86,11 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
+		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, COptionsStatic &_Options)
+		{
+			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		}
+
 		virtual aint f_Get_aint() const override
 		{
 			return 0;

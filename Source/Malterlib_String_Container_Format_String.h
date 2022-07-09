@@ -137,6 +137,11 @@ namespace NMib::NStr
 			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 		}
 
+		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue, COptionsStr &_Options)
+		{
+			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, _Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
+		}
+
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
 		static inline_small typename TCEnableIf<tf_DestinationType == tf_SourceType, void>::CType fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
 		{

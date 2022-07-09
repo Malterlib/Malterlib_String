@@ -944,6 +944,11 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
+		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CFloat &_Value, COptionsFloat &_Options)
+		{
+			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		}
+
 		virtual aint f_Get_aint() const override
 		{
 			return fg_Convert<aint>(m_Value.f_ToInt());

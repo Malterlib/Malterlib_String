@@ -130,10 +130,16 @@ namespace NMib::NStr
 			}
 			fp_AddToStr(_String, _CurrentStrLen, Options, m_TStr);
 		}
+
 		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStrAggregate<t_CStrTraitsIn> &_Value)
 		{
 			COptionsStr Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		}
+
+		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStrAggregate<t_CStrTraitsIn> &_Value, COptionsStr &_Options)
+		{
+			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}
 
 		template <typename t_COptions>
