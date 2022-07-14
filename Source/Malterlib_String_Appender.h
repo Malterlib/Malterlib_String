@@ -10,16 +10,41 @@ namespace NMib::NStr
 	template <typename t_CString>
 	struct TCStringAppender
 	{
+		using CString = t_CString;
+
 		TCStringAppender(t_CString &_String);
 		~TCStringAppender();
 
+		struct CCommitted
+		{
+			t_CString &m_String;
+
+			CCommitted(TCStringAppender &_Appender);
+			~CCommitted();
+			void f_Abort();
+		private:
+			TCStringAppender *mp_pAppender;
+		};
+
 		void operator += (typename t_CString::CUnsignedChar _Character);
 
-		void f_Reset();
-		void f_Commit();
+		template <typename tf_CChar, mint tf_ArrayLength>
+		void operator += (tf_CChar const (&_Array)[tf_ArrayLength]);
+
+		void operator += (t_CString const &_String);
+
+		template <typename tf_CStrTraits>
+		void operator += (NStr::TCStr<tf_CStrTraits> const &_String);
+
+		void f_AddString(typename t_CString::CChar const *_pString, mint _Len);
+
+		CCommitted f_Commit();
 		mint f_GetStrLen() const;
 
 	private:
+		void fp_Reset();
+		void fp_Commit();
+
 		t_CString &mp_String;
 		mint mp_StrLen;
 		mint mp_MaxLen;
