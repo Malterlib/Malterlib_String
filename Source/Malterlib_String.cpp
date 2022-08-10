@@ -563,4 +563,27 @@ namespace NMib::NStr
 	{
 		o_FormatInto += CStr::CFormat("{} Error '{}'") << m_Location << m_Error;
 	}
+
+	NStr::CStr CParseError::fs_ToString(NContainer::TCVector<CParseError> const &_Errors)
+	{
+		NStr::CStr ErrorString;
+
+		for (auto &Error : _Errors)
+		{
+			CStr Indent;
+			for (mint i = 0; i < Error.m_IndentDepth; ++i)
+				Indent += DMibPFileLineFormatIndent;
+			if (Error.f_IsSeparator())
+			{
+				if (Error.m_Error)
+					fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}--- {} ---") << Indent << Error.m_Error, "\n");
+				else
+					fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}----------") << Indent << Error.m_Error, "\n");
+			}
+			else
+				fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}{} {}") << Indent << Error.m_Location << Error.m_Error.f_Indent(Indent, false), "\n");
+		}
+
+		return ErrorString;
+	}
 }

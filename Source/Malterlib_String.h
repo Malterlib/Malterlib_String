@@ -174,21 +174,33 @@ namespace NMib::NStr
 		void f_Format(NStr::CStrAggregate &o_FormatInto) const;
 
 		template <typename tf_CStream>
-		void f_Feed(tf_CStream &_Stream) const
+		void f_Stream(tf_CStream &_Stream) const
 		{
-			_Stream << m_Error;
-			_Stream << m_Location;
+			_Stream % m_Error;
+			_Stream % m_Location;
+			_Stream % m_IndentDepth;
+			_Stream % m_bSeparator;
 		}
 
-		template <typename tf_CStream>
-		void f_Consume(tf_CStream &_Stream)
+		bool f_IsSeparator() const
 		{
-			_Stream >> m_Error;
-			_Stream >> m_Location;
+			return m_bSeparator;
 		}
 
-		CStr m_Error;
+		CParseError &f_SetSeparator(CStr const &_Separator)
+		{
+			m_bSeparator = true;
+			m_Error = _Separator;
+
+			return *this;
+		}
+
+		static NStr::CStr fs_ToString(NContainer::TCVector<CParseError> const &_Errors);
+
+		NStr::CStr m_Error;
 		CParseLocation m_Location;
+		uint32 m_IndentDepth = 0;
+		bool m_bSeparator = false;
 	};
 
 	DMibImpErrorSpecificClassDefine(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
