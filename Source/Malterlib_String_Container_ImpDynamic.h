@@ -58,7 +58,7 @@ namespace NMib::NStr
 
 		CData *m_pData;
 
-		inline_small void f_Construct()
+		inline_small constexpr void f_Construct()
 		{
 			m_pData = nullptr;
 		}

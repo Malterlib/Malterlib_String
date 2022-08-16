@@ -913,7 +913,7 @@ EndArgSearch:
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
 		}
-		TCStrAggregate()
+		constexpr TCStrAggregate()
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
@@ -934,7 +934,7 @@ EndArgSearch:
 		{
 			CImp::f_Destroy();
 		}
-		inline_small void f_Construct()
+		inline_small constexpr void f_Construct()
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
@@ -2683,7 +2683,7 @@ EndArgSearch:
 			TCStr *mp_pThis;
 		};
 
-		inline_small TCStr() noexcept
+		inline_small constexpr TCStr() noexcept
 		{
 			CSuper::f_Construct();
 		}

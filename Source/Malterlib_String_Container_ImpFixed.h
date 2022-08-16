@@ -18,7 +18,7 @@ namespace NMib::NStr
 			, m_lData{}
 		{
 		}
-		TCStrImp_Fixed()
+		constexpr TCStrImp_Fixed()
 		{
 		}
 
@@ -35,7 +35,7 @@ namespace NMib::NStr
 		mint m_Len;
 		CChar m_lData[t_DataLen];
 
-		inline_small void f_Construct()
+		inline_small constexpr void f_Construct()
 		{
 			m_lData[0] = 0;
 			m_Len = 0;
