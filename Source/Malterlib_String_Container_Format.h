@@ -32,9 +32,9 @@ namespace NMib::NStr
 	{
 	public:
 		template <typename t_CKey0, typename t_CKey1>
-		inline_small bool operator () (const t_CKey0 &_Left, const t_CKey1 &_Right) const
+		inline_small COrdering_Weak operator () (const t_CKey0 &_Left, const t_CKey1 &_Right) const
 		{
-			return fg_StrCmpNoCase(_Left, _Right) < 0;
+			return fg_StrCmpNoCase(_Left, _Right) <=> 0;
 		}
 	};
 

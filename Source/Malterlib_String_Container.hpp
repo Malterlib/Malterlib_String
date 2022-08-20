@@ -526,9 +526,9 @@ namespace NMib::NStr
 	{
 	public:
 		template <typename tf_CLeft, typename tf_CRight>
-		bool operator()(const tf_CLeft &_Left, const tf_CRight &_Right) const
+		COrdering_Weak operator()(const tf_CLeft &_Left, const tf_CRight &_Right) const
 		{
-			return fg_StrCmpNoCase(_Left, _Right) < 0;
+			return fg_StrCmpNoCase(_Left, _Right) <=> 0;
 		}
 	};
 }

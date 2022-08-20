@@ -12,7 +12,7 @@ namespace NMib::NStr
 		{
 		public:
 			template <typename tf_CLeft, typename tf_CRight>
-			inline_small bool operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
+			inline_small COrdering_Weak operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
 		};
 
 		using CStringMap = NContainer::TCMap<CStr, CStr, CSort_Reverse>;
