@@ -2629,27 +2629,32 @@ EndArgSearch:
 		{
 			if (f_GetLen() != _Right.f_GetLen())
 				return false;
+
 			return fg_StrCmp(*this, _Right, f_GetLen()) == 0;
 		}
 
 		template <typename tf_CData>
 		bool operator == (tf_CData const *_pRight) const
 		{
-			return fg_StrCmp(*this, _pRight) == 0;
+			return fg_StrCmp(this->f_GetStr(), _pRight) == 0;
 		}
 
 		// Operator <=>
 		template <typename tf_CTCStrTraits>
 		COrdering_Weak operator <=> (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
 		{
-			return fg_StrCmp(*this, _Right) <=> 0;
+			return fg_StrCmp(this->f_GetStr(), _Right.f_GetStr()) <=> 0;
 		}
 
 		template <typename tf_CData>
 		COrdering_Weak operator <=> (tf_CData const *_pRight) const
 		{
-			return fg_StrCmp(*this, _pRight) <=> 0;
+			return fg_StrCmp(this->f_GetStr(), _pRight) <=> 0;
 		}
+	};
+
+	struct CStrInitGeneral
+	{
 	};
 
 	template <typename t_CTCStrTraits>

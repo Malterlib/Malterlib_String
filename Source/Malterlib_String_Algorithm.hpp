@@ -447,9 +447,8 @@ namespace NMib::NStr
 
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -474,6 +473,18 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	{
+		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		{
+			if (_pStr1 == _pStr2)
+				return 0;
+		}
+
+		return fg_StrCmpImpl(_pStr1, _pStr2);
 	}
 
 	template <typename t_CData1, typename t_CData2>
@@ -502,7 +513,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCaseImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
@@ -533,11 +544,20 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _MaxLen)
+	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		if (_MaxLen == 0)
-			return 0;
+		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		{
+			if (_pStr1 == _pStr2)
+				return 0;
+		}
 
+		return fg_StrCmpNoCaseImpl(_pStr1, _pStr2);
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpImpl(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _MaxLen)
+	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -570,11 +590,23 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _MaxLen)
 	{
 		if (_MaxLen == 0)
 			return 0;
 
+		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		{
+			if (_pStr1 == _pStr2)
+				return 0;
+		}
+
+		return fg_StrCmpImpl(_pStr1, _pStr2, _MaxLen);
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCaseImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	{
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -604,6 +636,21 @@ namespace NMib::NStr
 
 		return 0;
 
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	{
+		if (_MaxLen == 0)
+			return 0;
+
+		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		{
+			if (_pStr1 == _pStr2)
+				return 0;
+		}
+
+		return fg_StrCmpNoCaseImpl(_pStr1, _pStr2, _MaxLen);
 	}
 
 	/************************************************************************************************\
