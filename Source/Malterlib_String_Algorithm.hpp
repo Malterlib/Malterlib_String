@@ -474,7 +474,6 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
-
 	}
 
 	template <typename t_CData1, typename t_CData2>
@@ -534,8 +533,11 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1, typename t_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _MaxLen)
 	{
+		if (_MaxLen == 0)
+			return 0;
+
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -565,12 +567,14 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
-
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
+		if (_MaxLen == 0)
+			return 0;
+
 		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
 		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
 		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
@@ -1187,7 +1191,7 @@ namespace NMib::NStr
 					Max = NStr::fg_StrLen(pPattern);
 				while (*pParse)
 				{
-					if (NStr::fg_StrCmp(pParse, pPattern, Max) == 0)
+					if (Max && NStr::fg_StrCmp(pParse, pPattern, Max) == 0)
 						break;
 					++pParse;
 				}
