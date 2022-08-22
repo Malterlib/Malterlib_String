@@ -33,16 +33,12 @@ namespace NMib::NStr
 			mc_AllocatesMemory = true
 		};
 
-		class CData
+		struct CData
 		{
-		public:
-			NAtomic::TCAtomic<aint> m_RefCount = 1;
-			mint m_Len:sizeof(mint)*8-2 = 0;
-			mint m_bReserved:2 = 0;
-			mint m_StrLen:sizeof(mint)*8-2 = mc_InvalidStrLen;
-			mint m_UserData:2 = 0;
-
-			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
+			constexpr CData(mint _RefCount)
+				: m_RefCount{_RefCount}
+			{
+			}
 
 			inline_small constexpr CData() = default;
 			inline_small CChar *f_GetData() const;
@@ -51,6 +47,15 @@ namespace NMib::NStr
 			inline_small void f_SetLength(mint _MemoryLen);
 			inline_small void f_RefCountIncrease();
 			inline_small void f_RefCountDecrease();
+
+			NAtomic::TCAtomicAggregate<mint> m_RefCount{1};
+			mint m_Len:sizeof(mint)*8-2 = 0;
+			mint m_bReserved:1 = 0;
+			mint m_bConstant:1 = 0;
+			mint m_StrLen:sizeof(mint)*8-2 = mc_InvalidStrLen;
+			mint m_UserData:2 = 0;
+
+			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 		};
 
 		const static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
@@ -63,14 +68,20 @@ namespace NMib::NStr
 			m_pData = nullptr;
 		}
 
-		inline_medium void f_Construct(const TCStrImp_Dynamic &_From)
+		inline_medium constexpr void f_Construct(const TCStrImp_Dynamic &_From)
 		{
 			m_pData = _From.m_pData;
 
-			if (m_pData)
+			if (!std::is_constant_evaluated())
 			{
-				m_pData->f_RefCountIncrease();
+				if (m_pData)
+					m_pData->f_RefCountIncrease();
 			}
+		}
+
+		constexpr void f_Construct(CData const &_Data)
+		{
+			m_pData = const_cast<CData *>(&_Data);
 		}
 
 		inline_medium void f_Construct(TCStrImp_Dynamic &&_From)
@@ -82,14 +93,10 @@ namespace NMib::NStr
 		inline_medium void f_Assign(const TCStrImp_Dynamic &_From)
 		{
 			if (_From.m_pData)
-			{
 				_From.m_pData->f_RefCountIncrease();
-			}
 
 			if (m_pData)
-			{
 				m_pData->f_RefCountDecrease();
-			}
 
 			m_pData = _From.m_pData;
 		}
@@ -97,9 +104,7 @@ namespace NMib::NStr
 		inline_medium void f_Assign(TCStrImp_Dynamic &&_From)
 		{
 			if (m_pData)
-			{
 				m_pData->f_RefCountDecrease();
-			}
 
 			m_pData = _From.m_pData;
 			_From.m_pData = nullptr;
@@ -108,12 +113,17 @@ namespace NMib::NStr
 		//=================================
 		// Interface
 
-		inline_medium void f_Destroy()
+		constexpr inline_medium void f_Destroy()
 		{
-			if (m_pData)
-				m_pData->f_RefCountDecrease();
+			if (std::is_constant_evaluated())
+				return;
+			else
+			{
+				if (m_pData)
+					m_pData->f_RefCountDecrease();
 
-			m_pData = nullptr;
+				m_pData = nullptr;
+			}
 		}
 
 		inline_small void f_Clear()
@@ -124,7 +134,7 @@ namespace NMib::NStr
 		void f_SetUserData(uint8 _Data)
 		{
 			DMibSafeCheck(_Data < 4, "Only 2 bits available");
-			if (!m_pData)
+			if (!m_pData || m_pData->m_bConstant)
 			{
 				f_Reserve(1);
 				*f_GetStrWritable() = 0;
@@ -154,7 +164,7 @@ namespace NMib::NStr
 				return (CChar *)ms_NullStr; // Return a const value if string is empty this will make application crash if it writes to this data
 		}
 
-		inline_small const CChar *f_GetStr() const
+		constexpr inline_small const CChar *f_GetStr() const
 		{
 			if (m_pData)
 				return m_pData->f_GetData();
@@ -162,7 +172,7 @@ namespace NMib::NStr
 				return ms_NullStr;
 		}
 
-		inline_small aint f_GetRefCount() const
+		inline_small mint f_GetRefCount() const
 		{
 			if (m_pData)
 				return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
@@ -170,7 +180,7 @@ namespace NMib::NStr
 				return 0;
 		}
 
-		inline_small aint f_GetLength() const
+		constexpr inline_small aint f_GetLength() const
 		{
 			if (m_pData)
 				return m_pData->f_GetLength();
@@ -178,7 +188,7 @@ namespace NMib::NStr
 				return 0;
 		}
 
-		inline_medium aint f_GetStrLen() const
+		constexpr inline_medium aint f_GetStrLen() const
 		{
 			if (!m_pData)
 				return 0;
@@ -190,7 +200,7 @@ namespace NMib::NStr
 			return Len;
 		}
 
-		static inline_small bool f_FastLen()
+		constexpr static inline_small bool f_FastLen()
 		{
 			return true;
 		}
@@ -449,4 +459,48 @@ namespace NMib::NStr
 
 	template <typename t_CStrTraits> const typename t_CStrTraits::CChar TCStrImp_Dynamic<t_CStrTraits>::ms_NullStr[] = {0};
 
+	template <mint t_nChars>
+	struct TCStrConstData : public TCStrImp_Dynamic<CStr::CTraits::CStrTraits>::CData
+	{
+		constexpr TCStrConstData(ch8 const (&_String)[t_nChars], uint8 _UserData = 0)
+			: TCStrImp_Dynamic<CStr::CTraits::CStrTraits>::CData(TCLimitsInt<mint>::mc_Max)
+		{
+			for (mint i = 0; i < t_nChars; ++i)
+				m_Data[i] = _String[i];
+
+			m_Len = t_nChars;
+			m_StrLen = t_nChars - 1;
+			m_UserData = _UserData;
+			m_bConstant = true;
+		}
+
+		inline_always constexpr TCStrConstData &f_SetUserData(uint8 _UserData)
+		{
+			m_UserData = _UserData;
+
+			return *this;
+		}
+
+		static constexpr mint mc_nChars = t_nChars;
+		ch8 m_Data[t_nChars];
+	};
+
+	template <mint t_nChars>
+	struct TCStrConstDataAndStr
+	{
+		constexpr operator NStr::CStr const &() const
+		{
+			return m_Str;
+		}
+
+#ifdef DCompiler_MSVC_Workaround
+		TCStrConstData<t_nChars> const m_StrData;
+#else
+		TCStrConstData<t_nChars> const &m_StrData;
+#endif
+		CStr const m_Str{CStrInitGeneral(), m_StrData};
+	};
+
+	template <TCStrConstData t_Data>
+	constexpr TCStrConstDataAndStr<decltype(t_Data)::mc_nChars> gc_Str{t_Data};
 }

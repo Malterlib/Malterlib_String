@@ -930,7 +930,7 @@ EndArgSearch:
 			return CUnicodeIterator(*this);
 		}
 
-		inline_small void f_Destroy()
+		constexpr inline_small void f_Destroy()
 		{
 			CImp::f_Destroy();
 		}
@@ -942,7 +942,7 @@ EndArgSearch:
 			CImp::f_Construct();
 		}
 
-		inline_small void f_Construct(const TCStrAggregate &_Src)
+		constexpr inline_small void f_Construct(const TCStrAggregate &_Src)
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
@@ -950,7 +950,7 @@ EndArgSearch:
 			CImp::f_Construct(_Src);
 		}
 
-		inline_small void f_Construct(TCStrAggregate &&_Src)
+		constexpr inline_small void f_Construct(TCStrAggregate &&_Src)
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
@@ -959,7 +959,7 @@ EndArgSearch:
 		}
 
 		template <typename ...tfp_CParams>
-		inline_small void f_Construct(tfp_CParams &&...p_Params)
+		inline_small constexpr void f_Construct(tfp_CParams &&...p_Params)
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
@@ -2044,17 +2044,17 @@ EndArgSearch:
 			return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), _FailValue, _pStrTerminators);
 		}
 
-		uint32 f_Hash() const
+		constexpr uint32 f_Hash() const
 		{
 			return fg_StrHash(CImp::f_GetStr());
 		}
 
-		uint32 f_HashDJB2() const
+		constexpr uint32 f_HashDJB2() const
 		{
 			return fg_StrHashDJB2(CImp::f_GetStr());
 		}
 
-		uint32 f_HashSDBM() const
+		constexpr uint32 f_HashSDBM() const
 		{
 			return fg_StrHashSDBM(CImp::f_GetStr());
 		}
@@ -2693,7 +2693,7 @@ EndArgSearch:
 			CSuper::f_Construct();
 		}
 
-		inline_small ~TCStr()
+		constexpr inline_small ~TCStr()
 		{
 			CSuper::f_Destroy();
 		}
@@ -2730,8 +2730,8 @@ EndArgSearch:
 			Cleanup.f_Clear();
 		}
 
-		template <typename t_CStrDataType, typename ...tfp_CParams, TCEnableIfType<true, decltype(fg_GetType<CSuper>().f_Construct(fg_GetType<tfp_CParams>()...))> * = nullptr>
-		inline_large TCStr(tfp_CParams &&...p_Params)
+		template <typename ...tfp_CParams, TCEnableIfType<true, decltype(fg_GetType<CSuper>().f_Construct(fg_GetType<tfp_CParams>()...))> * = nullptr>
+		constexpr inline_large TCStr(CStrInitGeneral, tfp_CParams &&...p_Params)
 		{
 			CSuper::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
 		}
@@ -2743,18 +2743,28 @@ EndArgSearch:
 			Cleanup.f_Clear();
 		}
 
-		inline_small TCStr(TCStr const &_Str)
+		constexpr inline_small TCStr(TCStr const &_Str)
 		{
-			CAutoDestroy Cleanup{this};
-			CSuper::f_Construct((CSuper const &)_Str);
-			Cleanup.f_Clear();
+			if (std::is_constant_evaluated())
+				CSuper::f_Construct((CSuper const &)_Str);
+			else
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_Construct((CSuper const &)_Str);
+				Cleanup.f_Clear();
+			}
 		}
 
-		inline_small TCStr(CSuper &&_Str)
+		constexpr inline_small TCStr(CSuper &&_Str)
 		{
-			CAutoDestroy Cleanup{this};
-			CSuper::f_Construct(fg_Move(_Str));
-			Cleanup.f_Clear();
+			if (std::is_constant_evaluated())
+				CSuper::f_Construct(fg_Move(_Str));
+			else
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_Construct(fg_Move(_Str));
+				Cleanup.f_Clear();
+			}
 		}
 
 		inline_small TCStr(TCStr &&_Str)

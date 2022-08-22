@@ -34,12 +34,18 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefCountIncrease()
 	{
+		if (m_bConstant)
+			return;
+
 		m_RefCount.f_FetchAdd(1, NAtomic::EMemoryOrder_Release);
 	}
 
 	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefCountDecrease()
 	{
+		if (m_bConstant)
+			return;
+
 		if (m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_AcquireRelease) == 1)
 			CAllocator::f_Free(this, f_GetMemorySize());
 	}
