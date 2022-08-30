@@ -339,7 +339,11 @@ namespace NMib::NStr
 	template <typename t_CStrTraitsF>
 	inline_large TCStrAggregate<t_TCStrTraits> & TCStrAggregate<t_TCStrTraits>::operator += (const TCStrAggregate<t_CStrTraitsF> &_Str)
 	{
-		f_AddStr(_Str);
+		if (f_IsEmpty())
+			f_SetStr(_Str);
+		else
+			f_AddStr(_Str);
+
 		return *this;
 	}
 

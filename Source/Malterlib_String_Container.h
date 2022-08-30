@@ -2838,13 +2838,21 @@ EndArgSearch:
 		template <typename t_CStrTraitsF>
 			inline_large TCStr & operator += (const TCStrAggregate<t_CStrTraitsF> &_Str)
 		{
-			CSuper::f_AddStr(_Str);
+			if (this->f_IsEmpty())
+				*this = _Str;
+			else
+				CSuper::f_AddStr(_Str);
+
 			return *this;
 		}
 		template <typename t_CStrTraitsF>
 		inline_large TCStr & operator += (const TCStr<t_CStrTraitsF> &_Str)
 		{
-			CSuper::f_AddStr(_Str);
+			if (this->f_IsEmpty())
+				*this = _Str;
+			else
+				CSuper::f_AddStr(_Str);
+
 			return *this;
 		}
 
@@ -2871,6 +2879,11 @@ EndArgSearch:
 		template <typename t_CStrTraitsF>
 			TCStr operator + (const TCStrAggregate<t_CStrTraitsF> &_Str)  const
 		{
+			if (this->f_IsEmpty())
+				return _Str;
+			else if (_Str.f_IsEmpty())
+				return *this;
+
 			TCStr Temp = *this;
 			Temp.f_AddStr(_Str);
 			return Temp;
