@@ -68,6 +68,16 @@ namespace NMib::NStr
 			m_pData = nullptr;
 		}
 
+		inline_always bool f_IsSameWeak(const TCStrImp_Dynamic &_Right) const
+		{
+			return m_pData == _Right.m_pData;
+		}
+
+		inline_always bool f_IsConstant() const
+		{
+			return m_pData && m_pData->m_bConstant;
+		}
+
 		inline_medium constexpr void f_Construct(const TCStrImp_Dynamic &_From)
 		{
 			m_pData = _From.m_pData;
