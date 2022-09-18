@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 	template <bool t_bCaseSensitive>
 	template <typename tf_CLeft, typename tf_CRight>
-	inline_small COrdering_Weak TCMultiReplace<t_bCaseSensitive>::CSort_Reverse::operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const
+	inline_small auto TCMultiReplace<t_bCaseSensitive>::CSort_Reverse::operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const -> COrdering
 	{
 		if constexpr (t_bCaseSensitive)
 			return fg_StrCmp(_Right, _Left) <=> 0;

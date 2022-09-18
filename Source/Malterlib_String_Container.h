@@ -2641,13 +2641,13 @@ EndArgSearch:
 
 		// Operator <=>
 		template <typename tf_CTCStrTraits>
-		COrdering_Weak operator <=> (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
+		COrdering_Strong operator <=> (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
 		{
 			return fg_StrCmp(this->f_GetStr(), _Right.f_GetStr()) <=> 0;
 		}
 
 		template <typename tf_CData>
-		COrdering_Weak operator <=> (tf_CData const *_pRight) const
+		COrdering_Strong operator <=> (tf_CData const *_pRight) const
 		{
 			return fg_StrCmp(this->f_GetStr(), _pRight) <=> 0;
 		}

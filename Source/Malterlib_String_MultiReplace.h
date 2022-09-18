@@ -8,11 +8,12 @@ namespace NMib::NStr
 	template <bool t_bCaseSensitive>
 	struct TCMultiReplace
 	{
+		using COrdering = typename TCChooseType<t_bCaseSensitive, COrdering_Strong, COrdering_Weak>::CType;
 		class CSort_Reverse
 		{
 		public:
 			template <typename tf_CLeft, typename tf_CRight>
-			inline_small COrdering_Weak operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
+			inline_small COrdering operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
 		};
 
 		using CStringMap = NContainer::TCMap<CStr, CStr, CSort_Reverse>;
