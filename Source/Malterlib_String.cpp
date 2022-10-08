@@ -581,7 +581,12 @@ namespace NMib::NStr
 					fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}----------") << Indent << Error.m_Error, "\n");
 			}
 			else
-				fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}{} {}") << Indent << Error.m_Location << Error.m_Error.f_Indent(Indent, false), "\n");
+			{
+				if (Error.m_Location.f_IsValid())
+					fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}{} {}") << Indent << Error.m_Location << Error.m_Error.f_Indent(Indent, false), "\n");
+				else
+					fg_AddStrSep(ErrorString, NStr::CStr::CFormat("{}{}") << Indent << Error.m_Error.f_Indent(Indent, false), "\n");
+			}
 		}
 
 		return ErrorString;
