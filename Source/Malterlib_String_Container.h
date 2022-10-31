@@ -1365,6 +1365,11 @@ EndArgSearch:
 		class CParse : public TCStrParse<CStrTraits>
 		{
 		public:
+			TCStrParse<CStrTraits> &f_ByPointer()
+			{
+				return *this;
+			}
+
 			inline_medium CParse(const typename TCStrAggregate<t_CTCStrTraits>::CChar *_pParseStr) : TCStrParse<CStrTraits>(_pParseStr)
 			{
 			}
