@@ -69,12 +69,12 @@ Property
 
 Property
 {
-	MalterlibLibrary_String define bool = MalterlibLibrary_All
+	MalterlibLibrary_String: bool = MalterlibLibrary_All
 	MalterlibSubLibraries =+ "String"
 	{
 		!!MalterlibLibrary_String true
 	}
-//	MalterlibSubLibrarySeparate_Lib_Malterlib_String define bool = true
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_String: bool = true
 	MalterlibIncludeRoots =+ "Include"->MakeAbsolute()
 	{
 		!!MalterlibLibrary_String true
@@ -107,6 +107,6 @@ Property
 	!!MalterlibEnableInternalTests true
 	
 	MalterlibTests =+ "Malterlib_String"
-	MalterlibTestFiles_Malterlib_String define [type(CEntity)] = ["Test/*"->MakeAbsolute()]
-	MalterlibTestExtraGroups_Malterlib_String define [string] = ["{Test}/{Malterlib_String}"]
+	MalterlibTestFiles_Malterlib_String: [type(CEntity)] = ["Test/*"->MakeAbsolute()]
+	MalterlibTestExtraGroups_Malterlib_String: [string] = ["{Test}/{Malterlib_String}"]
 }
