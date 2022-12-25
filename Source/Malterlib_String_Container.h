@@ -2094,6 +2094,9 @@ EndArgSearch:
 				Return.f_AddStr(pParseStart, pParse - pParseStart);
 			}
 
+			if (_bIndentFirst || !Return.f_IsEmpty())
+				Return.f_AddStr(_pIndent);
+
 			return Return;
 		}
 
