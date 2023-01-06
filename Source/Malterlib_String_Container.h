@@ -4054,16 +4054,23 @@ EndArgSearch:
 	{
 		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
 		const CChar *pStr1 = _Str1.f_GetStr();
+		const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
+
+		if (!pStrFind)
+			return _Str1;
+
 		mint LenFind = fg_StrLen(_pStrFind);
-		mint LenReplace = fg_StrLen(_pStrReplace);
-		mint Len = fg_StrLen(_Str1);
 		mint nReplaces = 0;
 
-		while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind)))
+		while (pStrFind)
 		{
 			++nReplaces;
 			pStr1 = pStrFind + LenFind;
+			pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
 		}
+
+		mint Len = fg_StrLen(_Str1);
+		mint LenReplace = fg_StrLen(_pStrReplace);
 
 		mint NeededSize = Len;
 		if (LenReplace > LenFind)
@@ -4101,16 +4108,23 @@ EndArgSearch:
 	{
 		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
 		const CChar *pStr1 = _Str1.f_GetStr();
+		const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
+
+		if (!pStrFind)
+			return _Str1;
+
 		mint LenFind = fg_StrLen(_pStrFind);
-		mint LenReplace = fg_StrLen(_pStrReplace);
-		mint Len = fg_StrLen(_Str1);
 		mint nReplaces = 0;
 
-		while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind)))
+		while (pStrFind)
 		{
 			++nReplaces;
 			pStr1 = pStrFind + LenFind;
+			pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
 		}
+
+		mint Len = fg_StrLen(_Str1);
+		mint LenReplace = fg_StrLen(_pStrReplace);
 
 		mint NeededSize = fg_Min((Len + nReplaces * (LenReplace - LenFind)), _MaxLen);
 		fg_StrReplace(_Str1.f_GetStr(NeededSize), _pStrFind, _pStrReplace, _MaxLen);
@@ -4146,16 +4160,23 @@ EndArgSearch:
 	{
 		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
 		const CChar *pStr1 = _Str1.f_GetStr();
+		const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
+
+		if (!pStrFind)
+			return _Str1;
+
 		mint LenFind = fg_StrLen(_pStrFind);
-		mint LenReplace = fg_StrLen(_pStrReplace);
-		mint Len = fg_StrLen(_Str1);
 		mint nReplaces = 0;
 
-		while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
+		while (pStrFind)
 		{
 			++nReplaces;
 			pStr1 = pStrFind + LenFind;
+			pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
 		}
+
+		mint LenReplace = fg_StrLen(_pStrReplace);
+		mint Len = fg_StrLen(_Str1);
 
 		mint NeededSize = Len;
 		if (LenReplace > LenFind)
@@ -4193,16 +4214,23 @@ EndArgSearch:
 	{
 		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
 		const CChar *pStr1 = _Str1.f_GetStr();
+		const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
+
+		if (!pStrFind)
+			return _Str1;
+
 		mint LenFind = fg_StrLen(_pStrFind);
-		mint LenReplace = fg_StrLen(_pStrReplace);
-		mint Len = fg_StrLen(_Str1);
 		mint nReplaces = 0;
 
-		while (const CChar *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
+		while (pStrFind)
 		{
 			++nReplaces;
 			pStr1 = pStrFind + LenFind;
+			pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
 		}
+
+		mint LenReplace = fg_StrLen(_pStrReplace);
+		mint Len = fg_StrLen(_Str1);
 
 		mint NeededSize = fg_Min((Len + nReplaces * (LenReplace - LenFind)), _MaxLen);
 		fg_StrReplaceNoCase(_Str1.f_GetStr(NeededSize), _pStrFind, _pStrReplace, _MaxLen);
