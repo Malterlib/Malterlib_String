@@ -29,6 +29,7 @@ Property
 		, "variant"
 		, "type_index"
 		, "container_hash"
+		, "describe"
 		, "math"
 		, "functional"
 		, "integer"
