@@ -132,7 +132,7 @@ namespace NMib::NStream
 	class TCBinaryStreamTypeReference<t_CStream, NStr::CMStrDeprecated>
 	{
 	public:
-		static void fs_Feed(t_CStream &_Stream, NStr::CMStrDeprecated const &_Data)
+		static constexpr void fs_Feed(t_CStream &_Stream, NStr::CMStrDeprecated const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();
 			uint64 LenStream = Len;
@@ -143,7 +143,7 @@ namespace NMib::NStream
 				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(ch8));
 		}
 
-		static void fs_Consume(t_CStream &_Stream, NStr::CMStrDeprecated &_Data)
+		static constexpr void fs_Consume(t_CStream &_Stream, NStr::CMStrDeprecated &_Data)
 		{
 			uint64 Len;
 			fg_ConsumeLenFromStream(_Stream, Len);

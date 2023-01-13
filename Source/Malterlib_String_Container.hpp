@@ -601,7 +601,7 @@ namespace NMib::NStream
 	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStrAggregate<t_TCStrTraitsIn> >
 	{
 	public:
-		static void fs_Feed(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> const &_Data)
+		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();
 			uint64 LenStream = Len;
@@ -611,7 +611,7 @@ namespace NMib::NStream
 				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
 		}
 
-		static void fs_Consume(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> &_Data)
+		static constexpr void fs_Consume(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> &_Data)
 		{
 			uint64 Len;
 			fg_ConsumeLenFromStream(_Stream, Len);

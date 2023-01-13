@@ -145,7 +145,7 @@ namespace NMib::NStream
 			}
 		}
 
-		static void fs_Consume(t_CStream &_Stream, NStr::CMStrPreserve &_Data)
+		static constexpr void fs_Consume(t_CStream &_Stream, NStr::CMStrPreserve &_Data)
 		{
 			uint64 Len;
 			fg_ConsumeLenFromStream(_Stream, Len);
