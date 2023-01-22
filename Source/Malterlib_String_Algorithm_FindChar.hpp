@@ -43,13 +43,13 @@ namespace NMib::NStr2::NPrivate
 				(
 					fg_Range
 					(
-						NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
-						, _rCharacters.f_Back()
+						_rCharacters.f_Front().f_Invalid()
+						, _rCharacters.f_Back().f_Invalid()
 					)
 					, fg_Range
 					(
-						NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
-						, NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front())
+						NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front().f_Invalid())
+						, NIterator::fg_ParentIteratorOfType<tf_CFront>(rCharacters.f_Front().f_Invalid())
 					)
 				)
 			;

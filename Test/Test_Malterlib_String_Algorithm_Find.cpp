@@ -117,7 +117,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResFront>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char")), ==, ECompare_Equal);
@@ -135,7 +135,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("𠀀C")), ==, ECompare_Equal);
@@ -153,7 +153,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResBack_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("har𠀀Char")), ==, ECompare_Equal);
@@ -170,7 +170,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("𠀀Char𠀀Char")), ==, ECompare_Equal);
@@ -187,7 +187,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char𠀀C")), ==, ECompare_Equal);
@@ -205,7 +205,7 @@ namespace
 								auto pArray = str_utf8("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
@@ -237,7 +237,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResFront>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("Char")), ==, ECompare_Equal);
@@ -255,7 +255,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("𠀀C")), ==, ECompare_Equal);
@@ -273,7 +273,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResBack_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("har𠀀Char")), ==, ECompare_Equal);
@@ -290,7 +290,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("𠀀Char𠀀Char")), ==, ECompare_Equal);
@@ -307,7 +307,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("Char𠀀C")), ==, ECompare_Equal);
@@ -325,7 +325,7 @@ namespace
 								auto pArray = str_utf16("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf16("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
@@ -357,7 +357,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResFront>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("Char")), ==, ECompare_Equal);
@@ -375,7 +375,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("𠀀C")), ==, ECompare_Equal);
@@ -393,7 +393,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResBack_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("har𠀀Char")), ==, ECompare_Equal);
@@ -410,7 +410,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_ResFront_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("𠀀Char𠀀Char")), ==, ECompare_Equal);
@@ -427,7 +427,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_ResBack>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("Char𠀀C")), ==, ECompare_Equal);
@@ -445,7 +445,7 @@ namespace
 								auto pArray = str_utf32("Char𠀀Char𠀀Char");
 								auto rFound = fg_StrFind<CReturn_Front_Back>(pArray, ToFind);
 
-								ch8 Data[32];
+								ch8 Data[32] = {0};
 								fg_StrCopy(Data, rFound);
 								
 								DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf32("Char𠀀Char𠀀Char")), ==, ECompare_Equal);

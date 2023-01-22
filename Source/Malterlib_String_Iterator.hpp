@@ -84,7 +84,7 @@ namespace NMib::NStr
 	template <typename tf_CLeft>
 	inline_always bool operator == (tf_CLeft const *_pLeft, CNullTerminatedBackIterator const &_Right)
 	{
-		return *_pLeft == 0;
+		return !_pLeft || *_pLeft == 0;
 	}
 
 	template <typename t_CContainer>

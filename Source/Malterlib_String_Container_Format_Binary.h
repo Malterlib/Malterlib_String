@@ -60,7 +60,7 @@ namespace NMib::NStr
 
 			for (mint i = 0; i < nBytes; ++i)
 			{
-				OutValue = pValue[i];
+				NMemory::fg_MemCopy(&OutValue, pValue + i, 1);
 				CFormatType::fs_AddToStrStatic(_String, _CurrentStrLen, Temp);
 			}
 

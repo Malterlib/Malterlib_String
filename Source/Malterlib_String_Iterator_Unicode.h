@@ -37,6 +37,11 @@ namespace NMib::NStr
 		bool f_IsBroken() const;
 		bool f_IsComplete() const;
 
+		TCIterator_UTF8Adaptor f_Invalid() const
+		{
+			return TCIterator_UTF8Adaptor(this->mp_iCurrent.f_Invalid(), this->mp_iBack.f_Invalid());
+		}
+
 	public:
 		void fp_StepForward();
 		ch32 fp_GetValue() const;
@@ -79,6 +84,11 @@ namespace NMib::NStr
 		;
 
 		TCIterator_UTF8AdaptorWithBackward(t_CBaseIterator const &_iCurrent, t_CBaseIteratorFront const &_iFront, t_CBaseIteratorBack const &_iBack);
+
+		TCIterator_UTF8AdaptorWithBackward f_Invalid() const
+		{
+			return TCIterator_UTF8AdaptorWithBackward(this->mp_iCurrent.f_Invalid(), mp_iFront.f_Invalid(), this->mp_iBack.f_Invalid());
+		}
 	public:
 		void fp_StepBackward();
 		ch32 fp_Prev();
@@ -113,6 +123,11 @@ namespace NMib::NStr
 
 		bool f_IsBroken() const;
 		bool f_IsComplete() const;
+
+		TCIterator_UTF16Adaptor f_Invalid() const
+		{
+			return TCIterator_UTF16Adaptor(this->mp_iCurrent.f_Invalid(), this->mp_iBack.f_Invalid());
+		}
 
 	public:
 		void fp_StepForward();
@@ -151,6 +166,11 @@ namespace NMib::NStr
 			>
 			CTags
 		;
+
+		TCIterator_UTF16AdaptorWithBackward f_Invalid() const
+		{
+			return TCIterator_UTF16AdaptorWithBackward(this->mp_iCurrent.f_Invalid(), mp_iFront.f_Invalid(), this->mp_iBack.f_Invalid());
+		}
 
 		TCIterator_UTF16AdaptorWithBackward(t_CBaseIterator const &_iCurrent, t_CBaseIteratorFront const &_iFront, t_CBaseIteratorBack const &_iBack);
 	public:

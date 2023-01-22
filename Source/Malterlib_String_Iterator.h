@@ -55,6 +55,11 @@ namespace NMib::NStr
 			CTags
 		;
 
+		CNullTerminatedBackIterator f_Invalid() const
+		{
+			return {};
+		}
+
 		CNullTerminatedBackIterator const &fp_Base() const;
 		void fp_ParentIterator() const;
 	};

@@ -406,6 +406,7 @@ namespace NMib::NStr
 			if (_Len)
 			{
 				f_CreateWritableBuffer(_Len+1, false);
+				DMibFastCheck(m_pData);
 				m_pData->m_bReserved = true;
 			}
 			else

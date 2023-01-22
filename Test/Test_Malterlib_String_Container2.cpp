@@ -1558,7 +1558,6 @@ namespace
 			DMibDTrace("{xpr($*3.14)}\n", 3.4456 << 5.5);
 			DMibDTrace("{xpr(($+3)/2)}\n", 3.4456 << 5.5);
 #endif
-
 			DMibTestSuite("CFormat Visitor")
 			{
 				class CTesting
@@ -1715,7 +1714,7 @@ namespace
 			{
 				{
 					DMibTestPath("Move");
-					auto fMoveFormat = [](auto &&_Value) -> CStr::CFormat
+					auto fMoveFormat = [](auto _Value) -> CStr::CFormat
 						{
 							CStr::CFormat Format("{}");
 							Format << NMib::fg_ByValue(_Value);

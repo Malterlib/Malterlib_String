@@ -26,10 +26,9 @@ namespace NMib::NStr
 			_Stream.f_ConsumeBytes(pStr, StrSize << 2);
 			pStr[StrSize] = 0; // Null terminate
 			NewStr.f_SetStrLen(StrSize);
-			pStr = NewStr.f_GetStrUniqueWritable();
 
 #ifdef DMibPLittleEndian
-			ch32 *pStrTemp = pStr;
+			ch32 *pStrTemp = NewStr.f_GetStrUniqueWritable();
 			while (*pStrTemp)
 			{
 				*pStrTemp = fg_ByteSwap(*pStrTemp);
@@ -50,10 +49,9 @@ namespace NMib::NStr
 			_Stream.f_ConsumeBytes(pStr, StrSize << 2);
 			pStr[StrSize] = 0; // Null terminate
 			NewStr.f_SetStrLen(StrSize);
-			pStr = NewStr.f_GetStrUniqueWritable();
 
 #ifndef DMibPLittleEndian
-			ch32 *pStrTemp = pStr;
+			ch32 *pStrTemp = NewStr.f_GetStrUniqueWritable();
 			while (*pStrTemp)
 			{
 				*pStrTemp = fg_ByteSwap(*pStrTemp);

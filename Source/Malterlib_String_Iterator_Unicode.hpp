@@ -198,10 +198,13 @@ namespace NMib::NStr
 	template <typename t_CBaseIterator, typename t_CBaseIteratorBack>
 	void TCIterator_UTF16Adaptor<t_CBaseIterator, t_CBaseIteratorBack>::fp_ParseBOM()
 	{
-		if (*mp_iCurrent == 0xFFFE)
+		if (mp_iCurrent != mp_iBack)
 		{
-			++mp_iCurrent;
-			mp_iNext = mp_iCurrent;
+			if (*mp_iCurrent == 0xFFFE)
+			{
+				++mp_iCurrent;
+				mp_iNext = mp_iCurrent;
+			}
 		}
 	}
 
