@@ -82,7 +82,7 @@ namespace NMib::NStr
 		{
 			m_pData = _From.m_pData;
 
-			if (!std::is_constant_evaluated())
+			if_not_consteval
 			{
 				if (m_pData)
 					m_pData->f_RefCountIncrease();
@@ -125,8 +125,10 @@ namespace NMib::NStr
 
 		constexpr inline_medium void f_Destroy()
 		{
-			if (std::is_constant_evaluated())
+			if_consteval
+			{
 				return;
+			}
 			else
 			{
 				if (m_pData)

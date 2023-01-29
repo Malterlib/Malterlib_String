@@ -2742,8 +2742,10 @@ EndArgSearch:
 
 		constexpr inline_small TCStr(TCStr const &_Str)
 		{
-			if (std::is_constant_evaluated())
+			if_consteval
+			{
 				CSuper::f_Construct((CSuper const &)_Str);
+			}
 			else
 			{
 				CAutoDestroy Cleanup{this};
@@ -2754,8 +2756,10 @@ EndArgSearch:
 
 		constexpr inline_small TCStr(CSuper &&_Str)
 		{
-			if (std::is_constant_evaluated())
+			if_consteval
+			{
 				CSuper::f_Construct(fg_Move(_Str));
+			}
 			else
 			{
 				CAutoDestroy Cleanup{this};
