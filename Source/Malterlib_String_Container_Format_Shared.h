@@ -244,9 +244,9 @@ namespace NMib::NStr
 		{
 		}
 
-		inline_small static bool f_RestrictLength()
+		inline_small bool f_RestrictLength() const
 		{
-			return true;
+			return m_MinLength != 0 || m_MaxLength != TCLimitsInt<mint>::mc_Max;
 		}
 
 		inline_small mint f_MinLength() const
