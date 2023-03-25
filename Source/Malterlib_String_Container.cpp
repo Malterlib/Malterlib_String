@@ -37,7 +37,7 @@ namespace NMib::NStr
 #endif
 			return NewStr;
 		}
-		// FF FE 00 00 	UTF-32, little-endian
+		// FF FE 00 00	UTF-32, little-endian
 		else if (Size >= 4 && Signature[0] == 0xFF && Signature[1] == 0xFE && Signature[2] == 0x00 && Signature[3] == 0x00)
 		{
 			// UTF-32 encoding
@@ -60,7 +60,7 @@ namespace NMib::NStr
 #endif
 			return NewStr;
 		}
-		// EF BB BF 	UTF-8
+		// EF BB BF	UTF-8
 		else if (Size >= 3 && Signature[0] == 0xEF && Signature[1] == 0xBB && Signature[2] == 0xBF)
 		{
 			// UTF-8 encoding
@@ -73,7 +73,7 @@ namespace NMib::NStr
 			NewStr.f_SetStrLen(StrSize);
 			return NewStr;
 		}
-		// FE FF 		UTF-16, big-endian
+		// FE FF		UTF-16, big-endian
 		else if (Size >= 2 && ((Signature[0] == 0xFF && Signature[1] == 0xFE) || (Signature[0] == 0xFE && Signature[1] == 0xFF)))
 		{
 			// UTF-16 encoding

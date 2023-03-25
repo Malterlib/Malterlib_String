@@ -210,7 +210,7 @@ namespace
 #ifndef DMibClangAnalyzerWorkaround
 			// This is broken.
 			DMibTestSuite("Reverse")
- 			{
+			{
 				{
 					DMibTestPath("ANSI NotFound");
 					auto pArray = "Char5Char5Char";

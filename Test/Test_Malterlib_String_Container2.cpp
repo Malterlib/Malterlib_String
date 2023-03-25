@@ -512,7 +512,7 @@ namespace
 					}
 					{
 						DMibTestPath("Unicode not tracked");
- 						CWStrNonTracked TestString(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
+						CWStrNonTracked TestString(str_utf16("abcdÅÄÖåöä亜哀姐飴"));
 						CWStrNonTracked TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
@@ -1437,39 +1437,39 @@ namespace
 					DMibTestPath("GetStrSep");
 					CStr Str1 = "One,Two, Three , Four";
 
-					 DMibTest( DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
-					 DMibTest( DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
-					 DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
-					 DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSep(Str1, ",")) );
- 					 DMibTest( DMibExpr((bool)Str1.f_IsEmpty()) );
+					DMibTest(DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSep(Str1, ",")));
+					DMibTest(DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSep(Str1, ",")));
+					DMibTest(DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSep(Str1, ",")));
+					DMibTest(DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSep(Str1, ",")));
+					DMibTest(DMibExpr((bool)Str1.f_IsEmpty()));
 				}
 				{
 					DMibTestPath("GetStrSepEscaped");
 					{
 						CStr Str1 = "One,Two, Three , Four";
 
-						DMibTest( DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
-						DMibTest( DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
-						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
-						DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")) );
-						DMibTest( DMibExpr(true) == DMibExpr((bool)Str1.f_IsEmpty()) );
+						DMibTest(DMibExpr(CStr("One")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")));
+						DMibTest(DMibExpr(CStr("Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")));
+						DMibTest(DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")));
+						DMibTest(DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str1, ",")));
+						DMibTest(DMibExpr(true) == DMibExpr((bool)Str1.f_IsEmpty()));
 					}
 					{
 						CStr Str2 = "'One,Two', Three , Four";
 
-						DMibTest( DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
-						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
-						DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")) );
-						DMibTest( DMibExpr(true) == DMibExpr((bool)Str2.f_IsEmpty()) );
+						DMibTest(DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")));
+						DMibTest(DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")));
+						DMibTest(DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str2, ",")));
+						DMibTest(DMibExpr(true) == DMibExpr((bool)Str2.f_IsEmpty()));
 					}
 					{
 						CStr Str3 = "Zero,'One,Two', Three , Four";
 
-						DMibTest( DMibExpr(CStr("Zero")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
-						DMibTest( DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
-						DMibTest( DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
-						DMibTest( DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")) );
-						DMibTest( DMibExpr(true) == DMibExpr((bool)Str3.f_IsEmpty()) );
+						DMibTest(DMibExpr(CStr("Zero")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")));
+						DMibTest(DMibExpr(CStr("One,Two")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")));
+						DMibTest(DMibExpr(CStr("Three")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")));
+						DMibTest(DMibExpr(CStr("Four")) == DMibExpr(fg_GetStrSepEscaped<'\''>(Str3, ",")));
+						DMibTest(DMibExpr(true) == DMibExpr((bool)Str3.f_IsEmpty()));
 					}
 				};
 
@@ -1817,7 +1817,7 @@ namespace
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) ($))}") << 4)) == DMibExpr("| Value without operator |0"));
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr(($) $)}") << 4)) == DMibExpr("| Value without operator |0"));
 					}
- 					{
+					{
 						DMibTestPath("Whitespace");
 						DMibTest(DMibExpr(CStr(CStr::CFormat("{0,xpr ( $ / 2 * (2 * 2 ) ) }") << 4)) == DMibExpr("8"));
 					}

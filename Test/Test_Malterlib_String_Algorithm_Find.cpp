@@ -494,7 +494,7 @@ namespace
 
 						DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 9);
 					}
- 					{
+					{
 						DMibTestPath("UTF8");
 						auto pArray = str_utf8("Char𠀀Char𠀀Char");
 						auto rFound = fg_StrFind<CReverse>(pArray, ToFind);
