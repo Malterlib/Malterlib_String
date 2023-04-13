@@ -11,15 +11,19 @@ namespace NMib::NStr
 	class TCStrFormatType_Int_Options : public TICStrFormatType<t_CFormatter>::COptions
 	{
 	public:
+		using CIntType = t_CIntType;
+
 		enum
 		{
 			ERadix = 10,
 			ENumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3)
 		};
 
-		uint32 m_Radix:30;
+		uint32 m_Radix:29;
 		uint32 m_bNumberCaps:1;
 		uint32 m_bSign:1;
+		uint32 m_bBoolean:1;
+
 		typename TICStrFormatType<t_CFormatter>::CChar m_ThousandSeparator;
 
 		template <typename t_Initializer>
@@ -28,29 +32,37 @@ namespace NMib::NStr
 			, m_Radix(_Init.template f_Radix<uint32>())
 			, m_bNumberCaps(_Init.f_NumberCaps())
 			, m_bSign(_Init.f_Sign())
+			, m_bBoolean(_Init.f_Boolean())
 			, m_ThousandSeparator(_Init.f_ThousandSeparator())
 		{
 		}
 
-		inline_small static bool f_StaticRadix()
+		inline_always static bool f_StaticRadix()
 		{
 			return false;
 		}
 
 		template <typename t_CRadix>
-		inline_small t_CRadix f_Radix() const
+		inline_always t_CRadix f_Radix() const
 		{
 			return m_Radix;
 		}
-		inline_small bool f_NumberCaps() const
+		inline_always bool f_NumberCaps() const
 		{
 			return m_bNumberCaps;
 		}
-		inline_small bool f_Sign() const
+		inline_always bool f_Boolean() const
+		{
+			if constexpr (NTraits::TCIsSame<t_CIntType, bool>::mc_Value)
+				return m_bBoolean;
+			else
+				return false;
+		}
+		inline_always bool f_Sign() const
 		{
 			return m_bSign;
 		}
-		inline_small typename TICStrFormatType<t_CFormatter>::CChar f_ThousandSeparator() const
+		inline_always typename TICStrFormatType<t_CFormatter>::CChar f_ThousandSeparator() const
 		{
 			return m_ThousandSeparator;
 		}
@@ -67,23 +79,27 @@ namespace NMib::NStr
 		};
 
 		template <typename t_CRadix>
-		inline_small static t_CRadix f_Radix()
+		inline_always static t_CRadix f_Radix()
 		{
 			return 10;
 		}
-		inline_small static bool f_StaticRadix()
+		inline_always static bool f_StaticRadix()
 		{
 			return true;
 		}
-		inline_small static bool f_NumberCaps()
+		inline_always static bool f_NumberCaps()
 		{
 			return false;
 		}
-		inline_small static bool f_Sign()
+		inline_always static bool f_Boolean()
 		{
 			return false;
 		}
-		inline_small static ch8 f_ThousandSeparator()
+		inline_always static bool f_Sign()
+		{
+			return false;
+		}
+		inline_always static ch8 f_ThousandSeparator()
 		{
 			return 0;
 		}
@@ -93,32 +109,35 @@ namespace NMib::NStr
 	template <int32 t_Radix, typename t_CParent>
 	class TCStrFormatType_Int_OptionsStatic_Radix : public t_CParent
 	{
+	public:
 		typedef typename t_CParent::CIntType CIntType;
+
+	private:
 		static_assert(t_Radix >= 2 && t_Radix <= 36);
 		enum
 		{
 			ENumBits = sizeof(CIntType) * 8,
 			ENumBitsPerChar = TCHighestBitSet<int32, t_Radix>::mc_Value - 1
 		};
-	public:
 
+	public:
 		enum
 		{
 			ERadix = t_Radix,
 			ENumTempChar = (ENumBits+(ENumBitsPerChar-1))/ENumBitsPerChar + 2
 		};
 
-		inline_small TCStrFormatType_Int_OptionsStatic_Radix(const t_CParent &_Parent)
+		inline_always TCStrFormatType_Int_OptionsStatic_Radix(const t_CParent &_Parent)
 			: t_CParent(_Parent)
 		{
 		}
 
 		template <typename t_CRadix>
-		inline_small static t_CRadix f_Radix()
+		inline_always static t_CRadix f_Radix()
 		{
 			return t_Radix;
 		}
-		inline_small static bool f_StaticRadix()
+		inline_always static bool f_StaticRadix()
 		{
 			return true;
 		}
@@ -193,8 +212,7 @@ namespace NMib::NStr
 
 		typedef typename TICStrFormatType<t_CFormatter> :: COption COption;
 		typedef typename TICStrFormatType<t_CFormatter> :: COptions COptions;
-		typedef TCStrFormatType_Int_Options<t_CFormatter, CType> COptionsInt;
-		typedef TCStrFormatType_Int_OptionsStatic<CType> COptionsIntStatic;
+		typedef TCStrFormatType_Int_Options<t_CFormatter, typename t_COptions::CIntType> COptionsInt;
 
 		class CXprImplementation
 		{
@@ -259,7 +277,12 @@ namespace NMib::NStr
 						_Args.m_Options.m_Radix = 8;
 						break;
 					case 'B':
-						_Args.m_Options.m_Radix = 2;
+						switch (CTStrTraits::CStrTraits::fs_CharUpperCase(*_Option.m_pDataStart))
+						{
+						case 'T': _Args.m_Options.m_bBoolean = true; break;
+						case 'N': _Args.m_Options.m_bBoolean = false; break;
+						default: _Args.m_Options.m_Radix = 2; break;
+						}
 						break;
 					case 'C':
 						_Args.m_Options.m_bNumberCaps = *_Option.m_pDataStart != '0';
@@ -594,6 +617,30 @@ namespace NMib::NStr
 		};
 
 		template <typename t_COptions2>
+		static void fp_AddToStrBoolean(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
+		{
+			mint Length;
+			CChar const *pValue;
+			if (_Integer == 0)
+			{
+				static constexpr CChar ValueArray[] = {'f', 'a', 'l', 's', 'e', 0};
+				pValue = ValueArray;
+				Length = 5;
+			}
+			else
+			{
+				static constexpr CChar ValueArray[] = {'t', 'r', 'u', 'e', 0};
+				pValue = ValueArray;
+				Length = 4;
+			}
+
+			if (_Options.f_SimpleAlign())
+				CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, pValue, Length);
+			else
+				CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pValue, Length, false);
+		}
+
+		template <typename t_COptions2>
 		inline_small static void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
 		{
 			CUnsignedType Number = _Integer;
@@ -684,24 +731,36 @@ namespace NMib::NStr
 				CSuper::fs_ParseOptions(Args, _pFormat);
 			}
 
-			fp_AddToStr(_String, _CurrentStrLen, Options, Value);
+			if (!Options.f_Boolean())
+				fp_AddToStr(_String, _CurrentStrLen, Options, Value);
+			else
+				fp_AddToStrBoolean(_String, _CurrentStrLen, Options, Value);
 		}
 
 		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value)
 		{
 			t_COptions Options;
-			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+			if (!Options.f_Boolean())
+				fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+			else
+				fp_AddToStrBoolean(_String, _CurrentStrLen, Options, _Value);
 		}
 
 		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, t_COptions &_Options)
 		{
-			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+			if (!_Options.f_Boolean())
+				fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+			else
+				fp_AddToStrBoolean(_String, _CurrentStrLen, _Options, _Value);
 		}
 
 		template <typename t_COption2, typename t_CIntType2>
 		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCValueWithOptions<t_COption2, t_CIntType2> &_Value)
 		{
-			fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
+			if (!_Value.f_Boolean())
+				fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
+			else
+				fp_AddToStrBoolean(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
 		}
 
 		virtual aint f_Get_aint() const override
@@ -864,7 +923,21 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, bool>
 	{
 	public:
-		typedef TCStrFormatType_Int<t_CFormatter, int8> CFormatType;
+		class CBoolOptions : public TCStrFormatType_Int_Options<t_CFormatter, bool>
+		{
+		public:
+			CBoolOptions()
+				: TCStrFormatType_Int_Options<t_CFormatter, bool>(TCStrFormatType_Int_OptionsStatic<bool>())
+			{
+			}
+
+			inline_small static bool f_Boolean()
+			{
+				return true;
+			}
+		};
+
+		typedef TCStrFormatType_Int<t_CFormatter, int8, CBoolOptions> CFormatType;
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, bool const&_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);

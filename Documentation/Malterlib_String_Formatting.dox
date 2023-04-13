@@ -79,6 +79,12 @@ Option		| Description																	| Indirection	| Example (1118)
 `n+`		|Turns on indication of the sign of the number even if the number is positive.	|No				|\code "{n+}" -> "+1118"\endcode
 `xpr`		|Allows evaluation of an expression before formatting the integer. See below.	|N/A			|\code "{xpr($/2)}" -> "559"\endcode
 
+For `bool` type only, these additional options are available:
+Option		| Description																	| Indirection	| Example (true)
+------		| -----------																	| -----------	| --------------
+`nbt`		|Number output as boolean text. (default)										|No				|\code "{nbt}" -> "true"\endcode
+`nbn`		|Number output as number.														|No				|\code "{nbn}" -> "1"\endcode
+
 \section s_Malterlib_String_Formatting_Floating_Point_Formatting_Options Floating Point Formatting Options
 
 Option	| Description																	| Indirection	| Example (3.4456)
