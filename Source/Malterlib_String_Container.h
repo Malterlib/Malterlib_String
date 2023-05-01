@@ -187,95 +187,12 @@ namespace NMib::NStr
 
 	namespace NPrivate
 	{
-		DMibTypeTraitsImplement_MemberTraits(f_GetStringFormatType);
-		DMibTypeTraitsImplement_MemberTraits(f_CreateStringFormatter);
-		DMibTypeTraitsImplement_MemberTraits(f_Format);
-		DMibTypeTraitsImplement_MemberTraits(f_FormatParseOption);
-
-		template <typename t_CData>
-		struct TCWithoutByValue
-		{
-			using CType = t_CData;
-		};
-
-		template <typename t_CData>
-		struct TCWithoutByValue<TCByValue<t_CData>>
-		{
-			using CType = t_CData;
-		};
-
 		template
 		<
 			typename t_CFormatter
 			, typename t_CData
-			, bool t_bHasInline = TCHasMember_f_GetStringFormatType<t_CData>::mc_Value && NPrivate::TCHasMember_f_CreateStringFormatter<t_CData>::mc_Value
-			, bool t_bHasInlineFormatter = TCHasMember_f_Format<typename TCWithoutByValue<t_CData>::CType>::mc_Value
 		>
-		class TCStringFormatterHelper;
-
-		template <typename t_CFormatter, typename t_CData>
-		class TCStringFormatterHelper<t_CFormatter, t_CData, false, true>
-		{
-			static t_CFormatter &fs_GetFormatter();
-			static t_CData &fs_GetData();
-		public:
-
-			typedef TCStrFormatType_Inline<t_CFormatter, t_CData, true> CFormatType;
-			template <typename tf_CData>
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, tf_CData const &_Data)
-			{
-				_Formatter.template f_Alloc<CFormatType>(_Data);
-				return typename CFormatType::CStrFormatTypeClassifier();
-			}
-		};
-
-		template <typename t_CFormatter, typename t_CData>
-		class TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>, false, true>
-		{
-			static t_CFormatter &fs_GetFormatter();
-			static t_CData &fs_GetData();
-		public:
-
-			typedef TCStrFormatType_Inline<t_CFormatter, t_CData, false> CFormatType;
-			template <typename tf_CData>
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<tf_CData> const &_Data)
-			{
-				_Formatter.template f_Alloc<CFormatType>(*_Data);
-				return typename CFormatType::CStrFormatTypeClassifier();
-			}
-		};
-
-		template <typename t_CFormatter, typename t_CData>
-		class TCStringFormatterHelper<t_CFormatter, t_CData, true, false>
-		{
-			static t_CFormatter &fs_GetFormatter();
-			static t_CData &fs_GetData();
-		public:
-
-			typedef decltype(fs_GetData().f_GetStringFormatType(fs_GetFormatter())) CFormatType;
-
-			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data) -> decltype(_Data.f_CreateStringFormatter(_Formatter))
-			{
-				return _Data.f_CreateStringFormatter(_Formatter);
-			}
-		};
-
-		template <typename t_CFormatter, typename t_CData>
-		class TCStringFormatterHelper<t_CFormatter, t_CData, false, false>
-		{
-			static t_CFormatter &fs_GetFormatter();
-			static t_CData &fs_GetData();
-		public:
-
-			typedef typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType CFormatType;
-
-			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data) -> decltype(TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data))
-			{
-				return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data);
-			}
-
-		};
-
+		struct TCStringFormatterHelper;
 	}
 
 	template <typename t_CFormatter, typename t_CData>

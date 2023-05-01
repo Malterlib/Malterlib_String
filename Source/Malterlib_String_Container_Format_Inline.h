@@ -7,11 +7,95 @@
 
 namespace NMib::NStr
 {
+ 	namespace NPrivate
+	{
+		template <typename t_CData, typename t_CFormatter>
+		concept cHas_f_GetStringFormatType =
+			requires
+			(
+				t_CData *_pData
+				, t_CFormatter &_Formatter
+			)
+			{
+				_pData->f_GetStringFormatType(_Formatter);
+			}
+		;
+
+		template <typename t_CData, typename t_CFormatter>
+		concept cHas_f_CreateStringFormatter =
+			requires
+			(
+				t_CData const *_pData
+				, t_CFormatter &_Formatter
+			)
+			{
+				_pData->f_CreateStringFormatter(_Formatter);
+			}
+		;
+
+		template <typename t_CData>
+		concept cHas_f_Format =
+			requires (t_CData const *_pData, CStr &o_Str)
+			{
+				_pData->f_Format(o_Str);
+			}
+			|| requires (t_CData const *_pData, CStr &o_Str, typename t_CData::CFormatOptions &_Options)
+			{
+				_pData->f_Format(o_Str, _Options);
+			}
+		;
+
+		static_assert(cHas_f_Format<NContainer::TCVector<uint32>>);
+
+		template <typename t_CFormatter, typename t_CData>
+		struct TCStringFormatterHelper
+		{
+		public:
+			static auto fs_CreateFormatType(t_CFormatter &_Formatter, t_CData &_Data)
+			{
+				if constexpr (cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter>)
+					return fg_GetType<decltype(_Data.f_GetStringFormatType(_Formatter)) const &>();
+				else if constexpr (cHas_f_Format<t_CData>)
+					return fg_GetType<TCStrFormatType_Inline<t_CFormatter, t_CData, true> const &>();
+				else
+					return fg_GetType<typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType const &>();
+			}
+
+			using CFormatType = decltype(fs_CreateFormatType(fg_GetType<t_CFormatter &>(), fg_GetType<t_CData &>()));
+
+			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
+			{
+				if constexpr (cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter>)
+					return _Data.f_CreateStringFormatter(_Formatter);
+				else if constexpr (cHas_f_Format<t_CData>)
+				{
+					using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
+					_Formatter.template f_Alloc<CFormatType>(_Data);
+					return typename CFormatType::CStrFormatTypeClassifier();
+				}
+				else
+					return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data);
+			}
+		};
+
+		template <typename t_CFormatter, typename t_CData>
+		struct TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>>
+		{
+		public:
+			using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, false>;
+
+			static inline_large auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<t_CData> const &_Data)
+			{
+				_Formatter.template f_Alloc<CFormatType>(*_Data);
+				return typename CFormatType::CStrFormatTypeClassifier();
+			}
+		};
+	}
+
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	class TCStrFormatType_Inline final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
-
 		typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
 
 		virtual mint f_Delete() override
@@ -65,21 +149,20 @@ namespace NMib::NStr
 		typedef const t_CToFormat &CType;
 
 		template <typename tf_CType>
-		static typename TCEnableIf
-			<
-				NPrivate::TCHasMember_f_FormatParseOption<tf_CType>::mc_Value
-				, typename tf_CType::CFormatOptions
-			>::CType fs_GetFormatOptionsType(tf_CType const &_Type)
-		;
+		static auto fs_GetFormatOptionsType(tf_CType const &_Type)
+			requires requires(typename tf_CType::CFormatOptions const &_Options)
+			{
+				_Options;
+			}
+		{
+			return typename tf_CType::CFormatOptions();
+		}
 
 		template <typename tf_CType>
-		static typename TCEnableIf
-			<
-				!NPrivate::TCHasMember_f_FormatParseOption<tf_CType>::mc_Value
-				, int
-			>::CType fs_GetFormatOptionsType(tf_CType const &_Type)
-		;
-
+		static auto fs_GetFormatOptionsType(tf_CType const &_Type)
+		{
+			return int(0);
+		}
 
 		struct CLocalOptions : public COptions
 		{
@@ -93,13 +176,11 @@ namespace NMib::NStr
 		};
 
 		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
-			-> typename TCEnableIf
-			<
-				NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value
-				&& !NTraits::TCIsVoid<decltype(_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args))>::mc_Value
-				, aint
-			>::CType
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+			requires requires
+			{
+				_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args);
+			}
 		{
 			if (_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args))
 				return true;
@@ -108,13 +189,11 @@ namespace NMib::NStr
 		}
 
 		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small auto f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
-			-> typename TCEnableIf
-			<
-				NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value
-				&& !NTraits::TCIsVoid<decltype(_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option))>::mc_Value
-				, aint
-			>::CType
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+			requires requires
+			{
+				_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option);
+			}
 		{
 			if (_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option))
 				return true;
@@ -123,7 +202,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small typename TCEnableIf<!NPrivate::TCHasMember_f_FormatParseOption<t_CData>::mc_Value, aint>::CType f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
 		{
 			return CSuper::f_ParseOption(_Args, _Option);
 		}
@@ -154,20 +233,42 @@ namespace NMib::NStr
 		}
 
 		template <typename tf_COptions, typename tf_CToFormat>
-		static inline_small typename TCEnableIf<NPrivate::TCHasMember_f_FormatParseOption<tf_CToFormat>::mc_Value, void>::CType
-		fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const tf_CToFormat &_Value)
+		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const tf_CToFormat &_Value)
 		{
 			if (_Options.m_bSimpleAlign && !_Options.f_RestrictLength())
 			{
 				_String.f_SetStrLen(_CurrentStrLen);
-				_Value.f_Format(_String, _Options);
+				if constexpr
+					(
+						requires
+						{
+							_Value.f_Format(_String, _Options);
+						}
+					)
+				{
+					_Value.f_Format(_String, _Options);
+				}
+				else
+					_Value.f_Format(_String);
+
 				_CurrentStrLen = _String.f_GetLen();
 			}
 			else
 			{
 				TCStr<CTStrTraits> Temp;
 
-				_Value.f_Format(Temp, _Options);
+				if constexpr
+					(
+						requires
+						{
+							_Value.f_Format(Temp, _Options);
+						}
+					)
+				{
+					_Value.f_Format(Temp, _Options);
+				}
+				else
+					_Value.f_Format(Temp);
 
 				mint TempLen = Temp.f_GetLen();
 
@@ -178,46 +279,24 @@ namespace NMib::NStr
 			}
 		}
 
-		template <typename tf_COptions, typename tf_CToFormat>
-		static inline_small typename TCEnableIf<!NPrivate::TCHasMember_f_FormatParseOption<tf_CToFormat>::mc_Value, void>::CType
-		fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const tf_CToFormat &_Value)
+		template <typename tf_CToFormat>
+		static inline_small void fp_FormatInto(TCStrAggregate<CTStrTraits> &_String, const tf_CToFormat &_Value)
 		{
-			if (_Options.m_bSimpleAlign && !_Options.f_RestrictLength())
+			if constexpr
+				(
+					requires
+					{
+						_Value.f_Format(_String, fg_GetType<CLocalOptions &>());
+					}
+				)
 			{
-				_String.f_SetStrLen(_CurrentStrLen);
+				CLocalOptions Options;
+				_Value.f_Format(_String, Options);
+			}
+			else
+			{
 				_Value.f_Format(_String);
-				_CurrentStrLen = _String.f_GetLen();
 			}
-			else
-			{
-				TCStr<CTStrTraits> Temp;
-
-				_Value.f_Format(Temp);
-
-				mint TempLen = Temp.f_GetLen();
-
-				if (_Options.m_bSimpleAlign)
-					CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, Temp.f_GetStr(), TempLen);
-				else
-					CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, Temp.f_GetStr(), TempLen, 0);
-			}
-		}
-
-		template <typename tf_CToFormat>
-		static inline_small typename TCEnableIf<!NPrivate::TCHasMember_f_FormatParseOption<tf_CToFormat>::mc_Value, void>::CType
-		fp_FormatInto(TCStrAggregate<CTStrTraits> &_String, const tf_CToFormat &_Value)
-		{
-			_Value.f_Format(_String);
-		}
-
-
-
-		template <typename tf_CToFormat>
-		static inline_small typename TCEnableIf<NPrivate::TCHasMember_f_FormatParseOption<tf_CToFormat>::mc_Value, void>::CType
-		fp_FormatInto(TCStrAggregate<CTStrTraits> &_String, const tf_CToFormat &_Value)
-		{
-			CLocalOptions Options;
-			_Value.f_Format(_String, Options);
 		}
 
 		virtual aint f_Get_aint() const override
