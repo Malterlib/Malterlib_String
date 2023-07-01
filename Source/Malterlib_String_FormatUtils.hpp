@@ -38,7 +38,6 @@ namespace NMib::NStr
 				}
 			}
 
-
 			return;
 		}
 

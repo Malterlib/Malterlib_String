@@ -1477,6 +1477,37 @@ namespace
 			};
 		}
 
+		void fp_IndentTests()
+		{
+			DMibTestSuite("Indent")
+			{
+				DMibExpect(CStr("").f_Indent("i"), ==, "");
+				DMibExpect(CStr("").f_Indent("i", false, false), ==, "");
+				DMibExpect(CStr("").f_Indent("i", true, false), ==, "");
+				DMibExpect(CStr("").f_Indent("i", false, true), ==, "");
+
+				DMibExpect(CStr("\n").f_Indent("i"), ==, "i\ni");
+				DMibExpect(CStr("\n").f_Indent("i", false, false), ==, "\n");
+				DMibExpect(CStr("\n").f_Indent("i", true, false), ==, "i\n");
+				DMibExpect(CStr("\n").f_Indent("i", false, true), ==, "\ni");
+
+				DMibExpect(CStr("Test").f_Indent("i"), ==, "iTest");
+				DMibExpect(CStr("Test").f_Indent("i", false, false), ==, "Test");
+				DMibExpect(CStr("Test").f_Indent("i", true, false), ==, "iTest");
+				DMibExpect(CStr("Test").f_Indent("i", false, true), ==, "Test");
+
+				DMibExpect(CStr("Test\n").f_Indent("i"), ==, "iTest\ni");
+				DMibExpect(CStr("Test\n").f_Indent("i", false, false), ==, "Test\n");
+				DMibExpect(CStr("Test\n").f_Indent("i", true, false), ==, "iTest\n");
+				DMibExpect(CStr("Test\n").f_Indent("i", false, true), ==, "Test\ni");
+
+				DMibExpect(CStr("Test\nTest").f_Indent("i"), ==, "iTest\niTest");
+				DMibExpect(CStr("Test\nTest").f_Indent("i", false, false), ==, "Test\niTest");
+				DMibExpect(CStr("Test\nTest").f_Indent("i", true, false), ==, "iTest\niTest");
+				DMibExpect(CStr("Test\nTest").f_Indent("i", false, true), ==, "Test\niTest");
+			};
+		}
+
 	public:
 		void f_DoTests()
 		{
@@ -1486,8 +1517,8 @@ namespace
 			fp_UnicodeTests();
 			fp_SeparatorTests();
 			fp_FindTests();
+			fp_IndentTests();
 		}
-
 	};
 
 	 DMibTestRegister(CGlobalFunctions_Tests, Malterlib::String::Container);

@@ -1970,7 +1970,7 @@ EndArgSearch:
 			return fg_StrHashSDBM(CImp::f_GetStr());
 		}
 
-		CDynamicStr f_Indent(ch8 const *_pIndent, bool _bIndentFirst = true) const
+		CDynamicStr f_Indent(ch8 const *_pIndent, bool _bIndentFirst = true, bool _bIndentLastEmpty = true) const
 		{
 			auto const *pParse = this->f_GetStr();
 			auto const *pParseEnd = pParse + this->f_GetLen();
@@ -2005,7 +2005,7 @@ EndArgSearch:
 				Return.f_AddStr(pParseStart, pParse - pParseStart);
 			}
 
-			if (_bIndentFirst || !Return.f_IsEmpty())
+			if (!Return.f_IsEmpty() && _bIndentLastEmpty)
 				Return.f_AddStr(_pIndent);
 
 			return Return;
