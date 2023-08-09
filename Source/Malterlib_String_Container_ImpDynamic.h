@@ -506,11 +506,7 @@ namespace NMib::NStr
 			return m_Str;
 		}
 
-#ifdef DCompiler_MSVC_Workaround
 		TCStrConstData<t_nChars> const m_StrData;
-#else
-		TCStrConstData<t_nChars> const &m_StrData;
-#endif
 		CStr const m_Str{CStrInitGeneral(), m_StrData};
 	};
 
