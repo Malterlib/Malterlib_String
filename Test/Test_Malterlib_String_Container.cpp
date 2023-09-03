@@ -53,8 +53,7 @@ namespace
 				typedef int32 CValue;
 				using karma::hex;
 
-
-				std::vector<CValue> const vec(VectorSize,12345);
+				std::vector<CValue> const Vector(VectorSize,12345);
 
 				CMeasureType MalterlibAllocTime("Malterlib");
 				CMeasureType MalterlibAllocReserveTime("Malterlib");
@@ -83,15 +82,19 @@ namespace
 				std::string KarmaReserveResult;
 				std::string KarmaManualStaticAllocResult;
 				std::string KarmaManualStaticAllocReserveResult;
-				TCUniquePointer<ch8> KarmaCharResult = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
-				TCUniquePointer<ch8> MalterlibNoAllocResultData = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
-				TCUniquePointer<ch8> MalterlibStaticNoAllocResultData = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
-				TCUniquePointer<ch8> KarmaManualStaticNoAllocResult = NMib::fg_Explicit(DMibNew ch8 [NeededCharSize]);
+				TCVector<ch8> KarmaCharResult;
+				KarmaCharResult.f_SetLen(NeededCharSize);
+				TCVector<ch8> MalterlibNoAllocResultData;
+				MalterlibNoAllocResultData.f_SetLen(NeededCharSize);
+				TCVector<ch8> MalterlibStaticNoAllocResultData;
+				MalterlibStaticNoAllocResultData.f_SetLen(NeededCharSize);
+				TCVector<ch8> KarmaManualStaticNoAllocResult;
+				KarmaManualStaticNoAllocResult.f_SetLen(NeededCharSize);
 
 				CStrPtr MalterlibNoAllocResult;
-				MalterlibNoAllocResult.f_SetPtr(MalterlibNoAllocResultData.f_Get(), NeededCharSize);
+				MalterlibNoAllocResult.f_SetPtr(MalterlibNoAllocResultData.f_GetArray(), NeededCharSize);
 				CStrPtr MalterlibStaticNoAllocResult;
-				MalterlibStaticNoAllocResult.f_SetPtr(MalterlibStaticNoAllocResultData.f_Get(), NeededCharSize);
+				MalterlibStaticNoAllocResult.f_SetPtr(MalterlibStaticNoAllocResultData.f_GetArray(), NeededCharSize);
 
 	#ifdef DMibDebug
 				const static int nTests = 100;
@@ -103,10 +106,10 @@ namespace
 					KarmaResult = std::string();
 					{ // Timing boost.spirit
 						KarmaStaticAllocTime.f_Start();
-						std::back_insert_iterator<std::string> iter(KarmaResult);
-						karma::generate(iter
-							, '[' << hex % ',' << ']'
-							, vec);
+
+						std::back_insert_iterator<std::string> iInserter(KarmaResult);
+						karma::generate(iInserter, '[' << hex % ',' << ']', Vector);
+
 						KarmaStaticAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -116,10 +119,10 @@ namespace
 					KarmaReserveResult.reserve(NeededCharSize);
 					{ // Timing boost.spirit
 						KarmaStaticAllocReserveTime.f_Start();
-						std::back_insert_iterator<std::string> iter(KarmaReserveResult);
-						karma::generate(iter
-							, '[' << hex % ',' << ']'
-							, vec);
+
+						std::back_insert_iterator<std::string> iInserter(KarmaReserveResult);
+						karma::generate(iInserter, '[' << hex % ',' << ']', Vector);
+
 						KarmaStaticAllocReserveTime.f_Stop(VectorSize);
 					}
 				};
@@ -127,11 +130,11 @@ namespace
 				{
 					{ // Timing boost.spirit
 						KarmaStaticNoAllocTime.f_Start();
-						ch8 *pGenerate = KarmaCharResult.f_Get();
-						karma::generate(pGenerate
-							, '[' << hex % ',' << ']'
-							, vec);
+
+						ch8 *pGenerate = KarmaCharResult.f_GetArray();
+						karma::generate(pGenerate, '[' << hex % ',' << ']', Vector);
 						*pGenerate = 0;
+
 						KarmaStaticNoAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -143,8 +146,8 @@ namespace
 
 						std::back_insert_iterator<std::string> OutIter(KarmaManualStaticAllocResult);
 
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						*OutIter = '[';++OutIter;
 						if (Iter != IterEnd)
 						{
@@ -169,8 +172,8 @@ namespace
 
 						std::back_insert_iterator<std::string> OutIter(KarmaManualStaticAllocReserveResult);
 
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						*OutIter = '[';++OutIter;
 						if (Iter != IterEnd)
 						{
@@ -191,10 +194,10 @@ namespace
 					KarmaManualStaticNoAllocTime.f_Start();
 					{ // Timing boost.spirit
 
-						ch8 *pGenerate = KarmaManualStaticNoAllocResult.f_Get();
+						ch8 *pGenerate = KarmaManualStaticNoAllocResult.f_GetArray();
 
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						*pGenerate = '[';++pGenerate;
 						if (Iter != IterEnd)
 						{
@@ -217,9 +220,11 @@ namespace
 					MalterlibAllocResult.f_Clear();
 					{ // Timing CStr::Parse
 						MalterlibAllocTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						MalterlibAllocResult += '[';
+
 						if (Iter != IterEnd)
 						{
 							MalterlibAllocResult += (CStr::CFormat("{nh}") << *Iter);
@@ -233,7 +238,9 @@ namespace
 								MalterlibAllocResult += Format;
 							}
 						}
+
 						MalterlibAllocResult += ']';
+
 						MalterlibAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -243,8 +250,9 @@ namespace
 					MalterlibAllocReserveResult.f_Reserve(NeededCharSize);
 					{ // Timing CStr::Parse
 						MalterlibAllocReserveTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						MalterlibAllocReserveResult += '[';
 						if (Iter != IterEnd)
 						{
@@ -260,6 +268,7 @@ namespace
 							}
 						}
 						MalterlibAllocReserveResult += ']';
+
 						MalterlibAllocReserveTime.f_Stop(VectorSize);
 					}
 				};
@@ -268,8 +277,9 @@ namespace
 					MalterlibNoAllocResult.f_Clear();
 					{ // Timing CStr::Parse
 						MalterlibNoAllocTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						MalterlibNoAllocResult += '[';
 						if (Iter != IterEnd)
 						{
@@ -285,6 +295,7 @@ namespace
 							}
 						}
 						MalterlibNoAllocResult += ']';
+
 						MalterlibNoAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -293,8 +304,9 @@ namespace
 					MalterlibStaticNoAllocResult.f_Clear();
 					{ // Timing CStr::Parse
 						MalterlibStaticNoAllocTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						aint StrLen = 0;
 						MalterlibStaticNoAllocResult.fp_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
@@ -309,6 +321,7 @@ namespace
 						}
 						MalterlibStaticNoAllocResult.fp_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticNoAllocResult.f_SetStrLen(StrLen);
+
 						MalterlibStaticNoAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -317,8 +330,9 @@ namespace
 					MalterlibStaticAllocResult.f_Clear();
 					{ // Timing CStr::Parse
 						MalterlibStaticAllocTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						aint StrLen = 0;
 						MalterlibStaticAllocResult.fp_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
@@ -333,6 +347,7 @@ namespace
 						}
 						MalterlibStaticAllocResult.fp_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticAllocResult.f_SetStrLen(StrLen);
+
 						MalterlibStaticAllocTime.f_Stop(VectorSize);
 					}
 				};
@@ -342,8 +357,9 @@ namespace
 					MalterlibStaticAllocReserveResult.f_Reserve(NeededCharSize);
 					{ // Timing CStr::Parse
 						MalterlibStaticAllocReserveTime.f_Start();
-						auto Iter = vec.begin();
-						auto IterEnd = vec.end();
+
+						auto Iter = Vector.begin();
+						auto IterEnd = Vector.end();
 						aint StrLen = 0;
 						MalterlibStaticAllocReserveResult.fp_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
@@ -358,6 +374,7 @@ namespace
 						}
 						MalterlibStaticAllocReserveResult.fp_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticAllocReserveResult.f_SetStrLen(StrLen);
+
 						MalterlibStaticAllocReserveTime.f_Stop(VectorSize);
 					}
 				};
@@ -390,10 +407,10 @@ namespace
 					MalterlibStaticAllocReserve();
 
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaResult.c_str())) (ETestFlag_NoValues);
-				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaCharResult.f_Get())) (ETestFlag_NoValues);
+				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaCharResult.f_GetArray())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaReserveResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticAllocResult.c_str())) (ETestFlag_NoValues);
-				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticNoAllocResult.f_Get())) (ETestFlag_NoValues);
+				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticNoAllocResult.f_GetArray())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaManualStaticAllocReserveResult.c_str())) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibAllocReserveResult)) (ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(MalterlibNoAllocResult)) (ETestFlag_NoValues);
@@ -458,33 +475,28 @@ namespace
 				// Test 100 times and pick the fastest
 				for(int i=0;i<nTests;++i)
 				{
-					std::string in1(_HexList.f_GetStr());
+					std::string HexListStdStr(_HexList.f_GetStr());
 					SpiritVector.clear();
 					{ // Timing boost.spirit
 						SpiritTimer.f_Start();
-						std::string::iterator beg = in1.begin();
-						qi::parse(
-							beg,in1.end(),
-							(
-							'[' >> hex % ',' >> ']'
-							)
-							,SpiritVector);
+
+						std::string::iterator iBegin = HexListStdStr.begin();
+						qi::parse(iBegin, HexListStdStr.end(),('[' >> hex % ',' >> ']'), SpiritVector);
+
 						SpiritTimer.f_Stop(VectorSize);
 					}
 				}
 				for(int i=0;i<nTests;++i)
 				{
-					std::string in1(_HexList.f_GetStr());
+					std::string HexListStdStr(_HexList.f_GetStr());
 					SpiritSemanticVector.clear();
 					{ // Timing boost.spirit
 						SpiritSemanticTimer.f_Start();
-						std::string::iterator beg = in1.begin();
+
+						std::string::iterator iBegin = HexListStdStr.begin();
 						auto Lamba = [&SpiritSemanticVector] (const CValue &_Value, boost::spirit::unused_type, bool) {SpiritSemanticVector.push_back(_Value);};
-						qi::parse(
-							beg,in1.end(),
-							(
-							'[' >> hex[ Lamba ] % ',' >> ']'
-							));
+						qi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[ Lamba ] % ',' >> ']'));
+
 						SpiritSemanticTimer.f_Stop(VectorSize);
 					}
 				}
@@ -494,6 +506,7 @@ namespace
 					{  // Timing CStr::Parse
 						CValue val;
 						MalterlibTimer.f_Start();
+
 						const CStr::CChar *pParse = _HexList;
 						pParse = (TCStrParse<CStr::CStrTraits>("[{nh}") >> val).f_Parse(pParse);
 						MalterlibVector.push_back(val);
@@ -504,6 +517,7 @@ namespace
 							pParse = Parser.f_Parse(pParse);
 							MalterlibVector.push_back(val);
 						}
+
 						MalterlibTimer.f_Stop(VectorSize);
 					}
 				}
@@ -512,6 +526,7 @@ namespace
 					ManualVector.clear();
 					{  // Timing Manual
 						ManualTimer.f_Start();
+
 						CValue val;
 						const CStr::CChar *pParse = _HexList;
 						if (*pParse == '[')
@@ -523,6 +538,7 @@ namespace
 							if (*pParse == ',')
 								++pParse;
 						}
+
 						ManualTimer.f_Stop(VectorSize);
 					}
 				}
@@ -531,6 +547,7 @@ namespace
 					ManualHexOnlyVector.clear();
 					{  // Timing manual hex only
 						ManualHexOnlyTimer.f_Start();
+
 						CValue val;
 						const CStr::CChar *pParse = _HexList;
 						if (*pParse == '[')
@@ -542,6 +559,7 @@ namespace
 							if (*pParse == ',')
 								++pParse;
 						}
+
 						ManualHexOnlyTimer.f_Stop(VectorSize);
 					}
 				}
@@ -593,10 +611,10 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16InplaceTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									CFStr16::fs_ToStrInplace(MalterlibResult, i);
-								}
+
 								MalterlibCFStr16InplaceTime.f_Stop(nLoops);
 							}
 						};
@@ -608,12 +626,14 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									ch8 *pGenerate = Result;
 									karma::generate(pGenerate, int_, i);
 									*pGenerate = 0;
 								}
+
 								KarmaTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result)
@@ -622,16 +642,16 @@ namespace
 						CMeasureType MalterlibCStrPtrTime("Malterlib CStrPtr");
 						{
 							CCyclesMin Time;
-							CStrPtr Result;
 							ch8 ResultData[12];
+							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrPtrTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									CStrPtr::fs_ToStrInplace(Result, i);
-								}
+
 								MalterlibCStrPtrTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result)
@@ -643,10 +663,10 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									Result = CFStr16::fs_ToStr(i);;
-								}
+
 								MalterlibCFStr16Time.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result)
@@ -660,10 +680,12 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								ItoaTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									_itoa(i,Result,10);
 								}
+
 								ItoaTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result)
@@ -690,11 +712,13 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									MalterlibResult.f_Clear();
 									CStr::fs_ToStrInplace(MalterlibResult, i);
 								}
+
 								MalterlibCStrInplaceTime.f_Stop(nLoops);
 							}
 						};
@@ -706,12 +730,14 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									Result = std::string();
-									std::back_insert_iterator<std::string> iter(Result);
-									karma::generate(iter, int_, i);
+									std::back_insert_iterator<std::string> iInserter(Result);
+									karma::generate(iInserter, int_, i);
 								}
+
 								KarmaTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result.c_str())
@@ -724,10 +750,10 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									Result = CStr::fs_ToStr(i);;
-								}
+
 								MalterlibCStrTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result)
@@ -741,6 +767,7 @@ namespace
 							for(mint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									Stream.str("");
@@ -748,6 +775,7 @@ namespace
 									Stream << i;
 									Result = Stream.str();
 								}
+
 								StringStreamTime.f_Stop(nLoops);
 							}
 							if (MalterlibResult != Result.c_str())
@@ -770,10 +798,10 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									CStr::fs_ToStrInplace(MalterlibResult, i);
-								}
+
 								MalterlibCStrInplaceTime.f_Stop(nLoops);
 							}
 						};
@@ -786,14 +814,17 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									Result.clear();
-									std::back_insert_iterator<std::string> iter(Result);
-									karma::generate(iter, int_, i);
+									std::back_insert_iterator<std::string> iInserter(Result);
+									karma::generate(iInserter, int_, i);
 								}
+
 								KarmaTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
@@ -811,6 +842,7 @@ namespace
 								}
 								MalterlibCStrTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
@@ -823,6 +855,7 @@ namespace
 							for(mint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
 								{
 									Stream.str("");
@@ -830,8 +863,10 @@ namespace
 									Stream << i;
 									Result = Stream.str();
 								}
+
 								StringStreamTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
 						};
@@ -857,6 +892,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStrOptTime.f_Start();
+
 								CFStr16::CFormat Format("{}");
 								int Value;
 								Format << Value;
@@ -865,17 +901,19 @@ namespace
 									Value = i;
 									MalterlibResult = Format;
 								}
+
 								MalterlibCFStrOptTime.f_Stop(nLoops);
 							}
 						};
 						CMeasureType MalterlibCStrPtrOptTime("Malterlib CStrPtr Opt");
 						{
-							CStrPtr Result;
 							ch8 ResultData[12];
+							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrPtrOptTime.f_Start();
+
 								CStrPtr::CFormat Format("{}");
 								int Value;
 								Format << Value;
@@ -884,8 +922,10 @@ namespace
 									Value = i;
 									Result = Format;
 								}
+
 								MalterlibCStrPtrOptTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
@@ -895,12 +935,13 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
 									Result = CFStr16::CFormat("{}") << i;
-								}
+
 								MalterlibCFStr16Time.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
@@ -911,12 +952,13 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								SprintfTime.f_Start();
+
 								for(int i=0;i<nLoops;++i)
-								{
-									sprintf(Result,"%i",i);
-								}
+									snprintf(Result, 12, "%i",i);
+
 								SprintfTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
@@ -938,6 +980,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibOptTime.f_Start();
+
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
@@ -947,6 +990,7 @@ namespace
 									MalterlibResult.f_Clear();
 									MalterlibResult = Format;
 								}
+
 								MalterlibOptTime.f_Stop(nLoops);
 							}
 						};
@@ -956,13 +1000,16 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
+
 								for (int i=0; i < nLoops; ++i)
 								{
 									Result.f_Clear();
 									Result = CStr::CFormat("{}") << i;
 								}
+
 								MalterlibTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
@@ -981,6 +1028,7 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibOptTime.f_Start();
+
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
@@ -989,6 +1037,7 @@ namespace
 									Value = i;
 									MalterlibResult = Format;
 								}
+
 								MalterlibOptTime.f_Stop(nLoops);
 							}
 						};
@@ -999,12 +1048,13 @@ namespace
 							for(mint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
+
 								for (int i=0; i < nLoops; ++i)
-								{
 									Result = CStr::CFormat("{}") << i;
-								}
+
 								MalterlibTime.f_Stop(nLoops);
 							}
+
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
 						};
