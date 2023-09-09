@@ -926,6 +926,12 @@ EndArgSearch:
 			return (*CImp::f_GetStr()) == 0;
 		}
 
+		template <typename t_CType>
+		inline static CDynamicStr fs_ToStr(t_CType const &_Format)
+		{
+			return CDynamicStr::fs_ToStr(_Format);
+		}
+
 		inline_small CChar &operator [] (aint _Index)
 		{
 #ifdef DMibDebug
