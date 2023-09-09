@@ -207,15 +207,16 @@ namespace NMib::NStr
 
 	namespace NPrivate
 	{
-		template <typename t_CFormatter>
+		template <typename t_CFormatter, typename t_CData>
 		class TCStringFormatterEnum
 		{
 		public:
-			typedef TCStrFormatType_Int<t_CFormatter, uint32> CFormatType;
+			using CFormatType = TCStrFormatType_Int<t_CFormatter, NTraits::TCEnumUnderlyingType<t_CData>>;
+
 			template <typename tf_CData>
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, tf_CData const &_Data)
+			static inline_large CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, tf_CData const &_Data)
 			{
-				_Formatter.template f_Alloc<CFormatType>(_Data);
+				_Formatter.template f_Alloc<CFormatType>(static_cast<NTraits::TCEnumUnderlyingType<tf_CData>>(_Data));
 				return typename CFormatType::CStrFormatTypeClassifier();
 			}
 		};
@@ -229,7 +230,7 @@ namespace NMib::NStr
 		template <typename t_CFormatter, typename t_CData>
 		struct TCDetermineStringFormatter<t_CFormatter, t_CData, true>
 		{
-			typedef TCStringFormatterEnum<t_CFormatter> CType;
+			typedef TCStringFormatterEnum<t_CFormatter, t_CData> CType;
 		};
 	}
 
