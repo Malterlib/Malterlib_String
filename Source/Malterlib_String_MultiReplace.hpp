@@ -31,28 +31,28 @@ namespace NMib::NStr
 		mp_Replace = fg_Move(_StringMap);
 		mp_SearchList.f_Clear();
 		{
-			CStr const *pLast = nullptr;
+			typename CStringMap::CNode const *pLast = nullptr;
 			NContainer::TCLinkedList<NContainer::TCLinkedList<CStr const *> *> ToAdd;
 			NContainer::TCLinkedList<CStr const *> AddResults;
-			for (auto &Replace : mp_Replace)
+
+			for (auto &ReplaceEntry : mp_Replace.f_Entries().f_GetIteratorReverse())
 			{
-				auto &Key = _StringMap.fs_GetKey(Replace);
-				if (pLast && fs_StartsWith(_StringMap.fs_GetKey(*pLast), Key))
-					;
-				else
+				auto &Key = ReplaceEntry.f_Key();
+				auto &Replace = ReplaceEntry.f_Value();
+
+				if (pLast && !fs_StartsWith(Key, pLast->f_Key()))
 				{
-					if (pLast)
-					{
-						for (auto &pAddTo : ToAdd)
-							pAddTo->f_Insert(fg_Move(AddResults));
-					}
+					for (auto &pAddTo : ToAdd)
+						pAddTo->f_Insert(fg_Move(AddResults));
 
 					ToAdd.f_Clear();
 					AddResults.f_Clear();
-					pLast = &Replace;
+					pLast = &ReplaceEntry;
 				}
+				else if (!pLast)
+					pLast = &ReplaceEntry;
 
-				AddResults.f_Insert(&Replace);
+				AddResults.f_InsertFirst(&Replace);
 				auto &SearchListEntry = mp_SearchList[Key];
 				ToAdd.f_Insert(&SearchListEntry);
 			}

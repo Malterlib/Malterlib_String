@@ -9,7 +9,9 @@
 
 namespace
 {
+	using namespace NMib;
 	using namespace NMib::NStr;
+
 	class CMultiReplace_Tests : public NMib::NTest::CTest
 	{
 	public:
@@ -51,7 +53,7 @@ namespace
 			)--";
 			DMibExpect(MultiReplace.f_Replace(TestString), ==, ExpectedString);
 		}
-		
+
 		void f_DoTests()
 		{
 			DMibTestSuite("General")
@@ -64,6 +66,39 @@ namespace
 					DMibTestPath("CaseInsensitive");
 					fp_DoTests<false>();
 				}
+			};
+			DMibTestCategory("Bugs")
+			{
+				DMibTestSuite("2024-01-07")
+				{
+					using CStringMap = TCMultiReplace<true>::CStringMap;
+					CStringMap StringMap =
+						{
+							{"/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtbase/libexec/", "#(MalterlibQt_ToolsPath)/"}
+							, {"/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtbase/bin/", "#(MalterlibQt_ToolsPath)/"}
+							, {"/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/", "#(CMakeIntermediateDirectory)/"}
+						}
+					;
+
+					TCMultiReplace<true> MultiReplace(fg_Move(StringMap));
+
+					{
+						DMibTestPath("ShortCase");
+						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
+						CStr ReplacedString = MultiReplace.f_Replace(String);
+						CStr ExpectedString = "#(CMakeIntermediateDirectory)/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
+
+						DMibExpect(ReplacedString, ==, ExpectedString);
+					}
+					{
+						DMibTestPath("LongCase");
+						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtbase/bin/test.binary</file>";
+						CStr ReplacedString = MultiReplace.f_Replace(String);
+						CStr ExpectedString = "#(MalterlibQt_ToolsPath)/test.binary</file>";
+
+						DMibExpect(ReplacedString, ==, ExpectedString);
+					}
+				};
 			};
 		}
 	};
