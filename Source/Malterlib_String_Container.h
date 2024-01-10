@@ -873,6 +873,12 @@ EndArgSearch:
 			return CUnicodeIterator(*this);
 		}
 
+		CUnicodeIterator f_GetIterator() const
+			requires (mc_Type != EStrType_Ansi)
+		{
+			return CUnicodeIterator(*this);
+		}
+
 		constexpr inline_small void f_Destroy()
 		{
 			CImp::f_Destroy();
