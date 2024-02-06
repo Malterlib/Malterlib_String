@@ -60,6 +60,10 @@ namespace NMib::NStr
 			return m_pBegin - _Other.m_pBegin;
 		}
 
+		TCStrIteratorUnicode &f_GetIterator()
+		{
+			return *this;
+		}
 	};
 
 	class CStrIteratorUTF8
@@ -209,6 +213,11 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 			return *this;
 		}
+
+		CStrIteratorUTF8 &f_GetIterator()
+		{
+			return *this;
+		}
 	};
 
 
@@ -299,6 +308,11 @@ namespace NMib::NStr
 		inline_always smint operator - (CStrIteratorUTF16 const &_Other) const
 		{
 			return m_pBegin - _Other.m_pBegin;
+		}
+
+		CStrIteratorUTF16 &f_GetIterator()
+		{
+			return *this;
 		}
 	};
 

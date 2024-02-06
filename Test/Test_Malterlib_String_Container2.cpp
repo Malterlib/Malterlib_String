@@ -1326,6 +1326,34 @@ namespace
 						fCheckCharacter('\0');
 					}
 					{
+						DMibTestPath("Range based for loop");
+						CStr ValidString("abc\xc3\xa5\xc3\xa4\xc3\xb6\n");
+
+						ch32 ExpectedChars[] = {'a', 'b', 'c', 229, 228, 246, '\n'};
+						ch32 const *pExpectedChar = ExpectedChars;
+
+						for (auto Char : ValidString.f_GetUnicodeIterator())
+						{
+							DMibTestPath(CStr::CFormat("{}") << *pExpectedChar);
+							DMibTest(DMibExpr(Char) == DMibExpr(*pExpectedChar));
+							++pExpectedChar;
+						}
+					}
+					{
+						DMibTestPath("Range based for loop (ch8)");
+						CStr ValidString("abc\xc3\xa5\n");
+
+						ch8 ExpectedChars[] = {'a', 'b', 'c', '\xc3', '\xa5', '\n'};
+						ch8 const *pExpectedChar = ExpectedChars;
+
+						for (ch8 Char : ValidString)
+						{
+							DMibTestPath(CStr::CFormat("{}") << *pExpectedChar);
+							DMibTest(DMibExpr(Char) == DMibExpr(*pExpectedChar));
+							++pExpectedChar;
+						}
+					}
+					{
 						DMibTestPath("Incomplete string");
 						CStr IncompleteString("a\xc3");
 						auto iUTF = IncompleteString.f_GetUnicodeIterator();
