@@ -85,7 +85,168 @@ namespace NMib::NStr
 	template <typename tf_CStrTraits>
 	void TCStringAppender<t_CString>::operator += (NStr::TCStr<tf_CStrTraits> const &_String)
 	{
-		f_AddString(_String.f_GetStr(), _String.f_GetLen());
+		if constexpr (NTraits::TCIsSame<typename t_CString::CChar, typename NStr::TCStr<tf_CStrTraits>::CChar>::mc_Value)
+			f_AddString(_String.f_GetStr(), _String.f_GetLen());
+		else
+		{
+			if constexpr (sizeof(typename t_CString::CChar) == 1)
+			{
+				static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
+
+				mint LenNeeded = mp_StrLen;
+				auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch8 *
+					{
+						LenNeeded += _nChars;
+						return nullptr;
+					}
+				;
+
+				auto iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					fg_EncodeUTF8Char<true>(*iSource, fCalcLen);
+					++iSource;
+				}
+
+				if (LenNeeded == 0)
+					return;
+				else if (LenNeeded > mp_MaxLen)
+				{
+					fp_Commit();
+					mp_String.f_Reserve(LenNeeded);
+					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+					mp_MaxLen = mp_String.f_GetLength() - 1;
+				}
+
+				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+
+				auto *pOut = mp_pStrOut;
+				auto *pOutStart = pOut;
+				auto *pOutMax = pOut + MaxAddedLen - 1;
+
+				auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch8 *
+					{
+						if (pOut + _nChars > pOutMax)
+							return nullptr;
+						auto *pRet = pOut;
+						pOut += _nChars;
+						return (ch8 *)pRet;
+					}
+				;
+
+				iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					if (!fg_EncodeUTF8Char<true>(*iSource, fAddChars))
+						break;
+					++iSource;
+				}
+
+				mp_pStrOut = pOut;
+				mp_StrLen += pOut - pOutStart;
+				mp_bChanged = true;
+			}
+			else if constexpr (sizeof(typename t_CString::CChar) == 2)
+			{
+				static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
+
+				mint LenNeeded = mp_StrLen;
+				auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch16 *
+					{
+						LenNeeded += _nChars;
+						return nullptr;
+					}
+				;
+
+				auto iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					fg_EncodeUTF16Char<true>(*iSource, fCalcLen);
+					++iSource;
+				}
+
+				if (LenNeeded == 0)
+					return;
+				else if (LenNeeded > mp_MaxLen)
+				{
+					fp_Commit();
+					mp_String.f_Reserve(LenNeeded);
+					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+					mp_MaxLen = mp_String.f_GetLength() - 1;
+				}
+
+				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+
+				auto *pOut = mp_pStrOut;
+				auto *pOutStart = pOut;
+				auto *pOutMax = pOut + MaxAddedLen - 1;
+
+				auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch16 *
+					{
+						if (pOut + _nChars > pOutMax)
+							return nullptr;
+						auto *pRet = pOut;
+						pOut += _nChars;
+						return (ch16 *)pRet;
+					}
+				;
+
+				iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					if (!fg_EncodeUTF16Char<true>(*iSource, fAddChars))
+						break;
+					++iSource;
+				}
+
+				mp_pStrOut = pOut;
+				mp_StrLen += pOut - pOutStart;
+				mp_bChanged = true;
+			}
+			else
+			{
+				static_assert(t_CString::mc_Type == EStrType_Unicode, "Lossy conversion");
+
+				mint LenNeeded = mp_StrLen;
+				auto iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					++LenNeeded;
+					++iSource;
+				}
+
+				if (LenNeeded == 0)
+					return;
+				else if (LenNeeded > mp_MaxLen)
+				{
+					fp_Commit();
+					mp_String.f_Reserve(LenNeeded);
+					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+					mp_MaxLen = mp_String.f_GetLength() - 1;
+				}
+
+				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+
+				auto *pOut = mp_pStrOut;
+				auto *pOutStart = pOut;
+				auto *pOutMax = pOut + MaxAddedLen - 1;
+
+				iSource = _String.f_GetUnicodeIterator();
+				while (iSource)
+				{
+					if (pOut >= pOutMax)
+						break;
+
+					*pOut = *iSource;
+					++pOut;
+					++iSource;
+				}
+
+				mp_pStrOut = pOut;
+				mp_StrLen += pOut - pOutStart;
+				mp_bChanged = true;
+			}
+		}
 	}
 
 	template <typename t_CString>
