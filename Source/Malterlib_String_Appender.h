@@ -36,6 +36,8 @@ namespace NMib::NStr
 		template <typename tf_CStrTraits>
 		void operator += (NStr::TCStr<tf_CStrTraits> const &_String);
 
+		void f_AddUnicodeChar(ch32 _Character);
+
 		void f_AddString(typename t_CString::CChar const *_pString, mint _Len);
 
 		CCommitted f_Commit();

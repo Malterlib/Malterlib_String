@@ -89,6 +89,76 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CString>
+	void TCStringAppender<t_CString>::f_AddUnicodeChar(ch32 _Character)
+	{
+		if constexpr (sizeof(typename t_CString::CChar) == 1)
+		{
+			static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
+
+			fg_EncodeUTF8Char<true>
+				(
+					_Character
+					, [&](mint _nChars) inline_always_lambda ->typename t_CString::CUnsignedChar *
+					{
+						mint NeededLen = mp_StrLen + _nChars;
+						if (NeededLen > mp_MaxLen)
+						{
+							fp_Commit();
+							mp_String.f_Reserve(NeededLen);
+							mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+							mp_MaxLen = mp_String.f_GetLength() - 1;
+							if (mp_MaxLen < NeededLen)
+								return nullptr; // Overflow
+						}
+
+						auto *pReturn = mp_pStrOut;
+
+						mp_StrLen += _nChars;
+						mp_pStrOut += _nChars;
+						mp_bChanged = true;
+
+						return pReturn;
+					}
+				)
+			;
+		}
+		else if constexpr (sizeof(typename t_CString::CChar) == 2)
+		{
+			static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
+
+			fg_EncodeUTF16Char<true>
+				(
+					_Character
+					, [&](mint _nChars) inline_always_lambda -> typename t_CString::CUnsignedChar *
+					{
+						mint NeededLen = mp_StrLen + _nChars;
+						if (mp_MaxLen < NeededLen)
+						{
+							fp_Commit();
+							mp_String.f_Reserve(NeededLen);
+							mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+							mp_MaxLen = mp_String.f_GetLength() - 1;
+							if (mp_MaxLen < NeededLen)
+								return nullptr; // Overflow
+						}
+
+						auto *pReturn = mp_pStrOut;
+
+						mp_StrLen += _nChars;
+						mp_pStrOut += _nChars;
+						mp_bChanged = true;
+
+						return pReturn;
+					}
+				)
+			;
+		}
+		else
+			*this += _Character;
+	}
+	
+
+	template <typename t_CString>
 	void TCStringAppender<t_CString>::operator += (typename t_CString::CUnsignedChar _Character)
 	{
 		DMibFastCheck(((typename t_CString::CUnsignedChar *)mp_String.f_GetStrWritable() + mp_StrLen) == mp_pStrOut);
