@@ -2752,9 +2752,12 @@ EndArgSearch:
 		inline_large TCStr(t_CStrDataType const *_pStr)
 		{
 			CSuper::f_Construct();
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(_pStr);
-			Cleanup.f_Clear();
+			if (*_pStr)
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_SetStr(_pStr);
+				Cleanup.f_Clear();
+			}
 		}
 
 		template <typename t_CStrDataType, TCEnableIfType<CSuper::mc_bInitConstStr, t_CStrDataType *> = nullptr>
@@ -2767,9 +2770,12 @@ EndArgSearch:
 		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
 		{
 			CSuper::f_Construct();
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(_pStr, _Len);
-			Cleanup.f_Clear();
+			if (_Len)
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_SetStr(_pStr, _Len);
+				Cleanup.f_Clear();
+			}
 		}
 
 		template <typename ...tfp_CParams, TCEnableIfType<true, decltype(fg_GetType<CSuper>().f_Construct(fg_GetType<tfp_CParams>()...))> * = nullptr>
@@ -2780,9 +2786,14 @@ EndArgSearch:
 
 		inline_small TCStr(CSuper const &_Str)
 		{
-			CAutoDestroy Cleanup{this};
-			CSuper::f_Construct(_Str);
-			Cleanup.f_Clear();
+			if (!_Str)
+				CSuper::f_Construct();
+			else
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_Construct(_Str);
+				Cleanup.f_Clear();
+			}
 		}
 
 		constexpr inline_small TCStr(TCStr const &_Str)
@@ -2793,9 +2804,14 @@ EndArgSearch:
 			}
 			else
 			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_Construct((CSuper const &)_Str);
-				Cleanup.f_Clear();
+				if (!_Str)
+					CSuper::f_Construct();
+				else
+				{
+					CAutoDestroy Cleanup{this};
+					CSuper::f_Construct((CSuper const &)_Str);
+					Cleanup.f_Clear();
+				}
 			}
 		}
 
@@ -2807,17 +2823,27 @@ EndArgSearch:
 			}
 			else
 			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_Construct(fg_Move(_Str));
-				Cleanup.f_Clear();
+				if (!_Str)
+					CSuper::f_Construct();
+				else
+				{
+					CAutoDestroy Cleanup{this};
+					CSuper::f_Construct(fg_Move(_Str));
+					Cleanup.f_Clear();
+				}
 			}
 		}
 
 		inline_small TCStr(TCStr &&_Str)
 		{
-			CAutoDestroy Cleanup{this};
-			CSuper::f_Construct(fg_Move(_Str));
-			Cleanup.f_Clear();
+			if (!_Str)
+				CSuper::f_Construct();
+			else
+			{
+				CAutoDestroy Cleanup{this};
+				CSuper::f_Construct(fg_Move(_Str));
+				Cleanup.f_Clear();
+			}
 		}
 
 		template <typename t_CStrTraitsF>
