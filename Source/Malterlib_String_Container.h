@@ -1395,6 +1395,8 @@ EndArgSearch:
 		template <int t_CharSize, typename tf_CStrIterator>
 		typename TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void>::CType fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
 
+		void f_AddUnicodeChar(ch32 _Character);
+
 		enum
 		{
 			mc_NumSavedArgs = 16

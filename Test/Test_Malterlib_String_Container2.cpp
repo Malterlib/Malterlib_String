@@ -391,7 +391,7 @@ namespace
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
-							if (!fg_EncodeUTF8Char(*pParse, fl_AddChars))
+							if (!fg_EncodeUTF8Char<true>(*pParse, fl_AddChars))
 								break;
 							++pParse;
 						}
@@ -441,7 +441,7 @@ namespace
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
-							if (!fg_EncodeUTF16Char(*pParse, fl_AddChars))
+							if (!fg_EncodeUTF16Char<true>(*pParse, fl_AddChars))
 								break;
 							++pParse;
 						}

@@ -195,14 +195,80 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
+	void TCStrAggregate<t_TCStrTraits>::f_AddUnicodeChar(ch32 _Character)
+	{
+		if constexpr (sizeof(CChar) == 1)
+		{
+			static_assert( mc_Type == EStrType_UTF, "Lossy conversion");
+
+			aint CurrentLength = f_GetLen();
+
+			bool bSuccess = fg_EncodeUTF8Char<true>
+				(
+					_Character
+					, [&](mint _nChars) inline_always_lambda -> CChar *
+					{
+						mint NeededLen = CurrentLength + _nChars + 1;
+						mint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
+
+						if (MaxLen < NeededLen)
+							return nullptr;
+
+						auto pOut = CImp::f_GetStrWritable() + CurrentLength;
+						pOut[_nChars] = 0;
+
+						CurrentLength += _nChars;
+
+						return pOut;
+					}
+				)
+			;
+
+			if (bSuccess)
+				CImp::f_SetStrLen(CurrentLength);
+		}
+		else if constexpr (sizeof(CChar) == 2)
+		{
+			static_assert(mc_Type == EStrType_UTF, "Lossy conversion");
+
+			aint CurrentLength = f_GetLen();
+
+			bool bSuccess = fg_EncodeUTF16Char<true>
+				(
+					_Character
+					, [&](mint _nChars) inline_always_lambda -> CChar *
+					{
+						mint NeededLen = CurrentLength + _nChars + 1;
+						mint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
+
+						if (MaxLen < NeededLen)
+							return nullptr;
+
+						auto pOut = CImp::f_GetStrWritable() + CurrentLength;
+						pOut[_nChars] = 0;
+
+						CurrentLength += _nChars;
+
+						return pOut;
+					}
+				)
+			;
+
+			if (bSuccess)
+				CImp::f_SetStrLen(CurrentLength);
+		}
+		else
+			f_AddChar(_Character);
+	}
+
+	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
 	typename TCEnableIf<t_CharSize == 1, void>::CType TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 1 && mc_Type == EStrType_UTF, "Lossy conversion");
 
 		mint LenNeeded = _StrLen;
-		auto fl_CalcLen
-			= [&](mint _nChars) -> ch8 *
+		auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch8 *
 			{
 				LenNeeded += _nChars;
 				return nullptr;
@@ -211,7 +277,7 @@ namespace NMib::NStr
 		auto Iter = _From;
 		while (Iter)
 		{
-			fg_EncodeUTF8Char(*Iter, fl_CalcLen);
+			fg_EncodeUTF8Char<true>(*Iter, fCalcLen);
 			++Iter;
 		}
 		mint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
@@ -221,8 +287,7 @@ namespace NMib::NStr
 
 		pOut += _StrLen;
 
-		auto fl_AddChars
-			= [&](mint _nChars) -> ch8 *
+		auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch8 *
 			{
 				if (pOut + _nChars > pOutMax)
 					return nullptr;
@@ -235,7 +300,7 @@ namespace NMib::NStr
 		Iter = _From;
 		while (Iter)
 		{
-			if (!fg_EncodeUTF8Char(*Iter, fl_AddChars))
+			if (!fg_EncodeUTF8Char<true>(*Iter, fAddChars))
 				break;
 			++Iter;
 		}
@@ -250,8 +315,7 @@ namespace NMib::NStr
 	{
 		static_assert(sizeof(CChar) == 2 && mc_Type == EStrType_UTF, "Lossy conversion");
 		mint LenNeeded = _StrLen;
-		auto fl_CalcLen
-			= [&](mint _nChars) -> ch16 *
+		auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch16 *
 			{
 				LenNeeded += _nChars;
 				return nullptr;
@@ -260,7 +324,7 @@ namespace NMib::NStr
 		auto Iter = _From;
 		while (Iter)
 		{
-			fg_EncodeUTF16Char(*Iter, fl_CalcLen);
+			fg_EncodeUTF16Char<true>(*Iter, fCalcLen);
 			++Iter;
 		}
 		mint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
@@ -270,8 +334,7 @@ namespace NMib::NStr
 
 		pOut += _StrLen;
 
-		auto fl_AddChars
-			= [&](mint _nChars) -> ch16 *
+		auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch16 *
 			{
 				if (pOut + _nChars > pOutMax)
 					return nullptr;
@@ -284,7 +347,7 @@ namespace NMib::NStr
 		Iter = _From;
 		while (Iter)
 		{
-			if (!fg_EncodeUTF16Char(*Iter, fl_AddChars))
+			if (!fg_EncodeUTF16Char<true>(*Iter, fAddChars))
 				break;
 			++Iter;
 		}

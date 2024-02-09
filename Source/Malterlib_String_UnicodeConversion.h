@@ -335,85 +335,92 @@ namespace NMib::NStr
 	}
 
 
-	template <typename t_FOutFunctor>
-	bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
+	template <bool t_bCheckLength, typename t_FOutFunctor>
+	inline_always bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
 	{
 		if (_Char >= 0x4000000)
 		{
-			ch8 *pRet = _OutFunctor(6);
-			if (pRet)
+			auto *pRet = _OutFunctor(6);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = 0xFC | ((_Char >> 30) & 0x01); ++pRet;
-				*pRet = 0x80 | ((_Char >> 24) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
-				return true;
+				if (!pRet)
+					return false;
 			}
+
+			*pRet = 0xFC | ((_Char >> 30) & 0x01); ++pRet;
+			*pRet = 0x80 | ((_Char >> 24) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
 		}
 		else if (_Char >= 0x200000)
 		{
-			ch8 *pRet = _OutFunctor(5);
-			if (pRet)
+			auto *pRet = _OutFunctor(5);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = 0xF8 | ((_Char >> 24) & 0x03); ++pRet;
-				*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
-				return true;
+				if (!pRet)
+					return false;
 			}
+			*pRet = 0xF8 | ((_Char >> 24) & 0x03); ++pRet;
+			*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
 		}
 		else if (_Char >= 0x10000)
 		{
-			ch8 *pRet = _OutFunctor(4);
-			if (pRet)
+			auto *pRet = _OutFunctor(4);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = 0xF0 | ((_Char >> 18) & 0x07); ++pRet;
-				*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
-				return true;
+				if (!pRet)
+					return false;
 			}
+			*pRet = 0xF0 | ((_Char >> 18) & 0x07); ++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
 		}
 		else if (_Char >= 0x800)
 		{
-			ch8 *pRet = _OutFunctor(3);
-			if (pRet)
+			auto *pRet = _OutFunctor(3);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = 0xE0 | ((_Char >> 12) & 0x0F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
-				return true;
+				if (!pRet)
+					return false;
 			}
+			*pRet = 0xE0 | ((_Char >> 12) & 0x0F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
 		}
 		else if (_Char >= 0x80)
 		{
-			ch8 *pRet = _OutFunctor(2);
-			if (pRet)
+			auto *pRet = _OutFunctor(2);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = 0xC0 | ((_Char >> 6 ) & 0x1F); ++pRet;
-				*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
-				return true;
+				if (!pRet)
+					return false;
 			}
+			*pRet = 0xC0 | ((_Char >> 6 ) & 0x1F); ++pRet;
+			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
 		}
 		else
 		{
-			ch8 *pRet = _OutFunctor(1);
-			if (pRet)
+			auto *pRet = _OutFunctor(1);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = _Char;
-				return true;
+				if (!pRet)
+					return false;
 			}
+			*pRet = _Char;
 		}
-		return false;
+		return true;
 	}
 
 	template <typename t_FOutFunctor>
 	bool fg_EncodeUTF8BOM(t_FOutFunctor &&_OutFunctor)
 	{
-		ch8 *pRet = _OutFunctor(3);
+		auto *pRet = _OutFunctor(3);
 		if (pRet)
 		{
 			*pRet = ch8(0xEF); ++pRet;
@@ -424,42 +431,46 @@ namespace NMib::NStr
 		return false;
 	}
 
-	template <typename t_FOutFunctor>
-	bool fg_EncodeUTF16Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
+	template <bool t_bCheckLength, typename t_FOutFunctor>
+	inline_always bool fg_EncodeUTF16Char(ch32 _Char, t_FOutFunctor &&_OutFunctor)
 	{
 		if (_Char > 0xFFFF)
 		{
-			ch16 *pRet = _OutFunctor(2);
-			if (pRet)
+			auto *pRet = _OutFunctor(2);
+			if constexpr (t_bCheckLength)
 			{
-				_Char -= 0x10000;
-
-				uint32 vh = _Char >> 10;
-				uint32 v1 = _Char & 0x3FF;
-				uint32 w1 = 0xD800 + vh;
-				uint32 w2 = 0xDC00 + v1;
-
-				*pRet = w1;++pRet;
-				*pRet = w2;
-				return true;
+				if (!pRet)
+					return false;
 			}
+
+			_Char -= 0x10000;
+
+			uint32 vh = _Char >> 10;
+			uint32 v1 = _Char & 0x3FF;
+			uint32 w1 = 0xD800 + vh;
+			uint32 w2 = 0xDC00 + v1;
+
+			*pRet = w1;++pRet;
+			*pRet = w2;
 		}
 		else
 		{
-			ch16 *pRet = _OutFunctor(1);
-			if (pRet)
+			auto *pRet = _OutFunctor(1);
+			if constexpr (t_bCheckLength)
 			{
-				*pRet = _Char;
-				return true;
+				if (!pRet)
+					return false;
 			}
+
+			*pRet = _Char;
 		}
-		return false;
+		return true;
 	}
 
 	template <typename t_FOutFunctor>
 	bool fg_EncodeUTF16BOM(t_FOutFunctor &&_OutFunctor)
 	{
-		ch16 *pRet = _OutFunctor(1);
+		auto *pRet = _OutFunctor(1);
 		if (pRet)
 		{
 			*pRet = ch16(0xFFFE);

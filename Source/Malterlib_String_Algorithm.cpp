@@ -31,7 +31,7 @@ namespace NMib::NStr
 				ch8 *pNext = _pStr + iStr.f_GetLastWholeCodePointPos();
 #endif
 
-				fg_EncodeUTF8Char
+				fg_EncodeUTF8Char<false>
 					(
 						_Char
 						, [&](mint _nChars)
@@ -81,7 +81,7 @@ namespace NMib::NStr
 
 		auto fAddChar = [&](ch32 _Char)
 			{
-				return fg_EncodeUTF8Char
+				return fg_EncodeUTF8Char<true>
 					(
 						_Char
 						, [&](mint _nChars) -> ch8 *
@@ -144,7 +144,7 @@ namespace NMib::NStr
 				ch8 *pNext = _pStr + iStr.f_GetLastWholeCodePointPos();
 #endif
 
-				fg_EncodeUTF8Char
+				fg_EncodeUTF8Char<false>
 					(
 						_Char
 						, [&](mint _nChars)
@@ -188,7 +188,7 @@ namespace NMib::NStr
 
 		auto fAddChar = [&](ch32 _Char)
 			{
-				return fg_EncodeUTF8Char
+				return fg_EncodeUTF8Char<true>
 					(
 						_Char
 						, [&](mint _nChars) -> ch8 *
@@ -251,7 +251,7 @@ namespace NMib::NStr
 				ch8 *pNext = _pStr + iStr.f_GetLastWholeCodePointPos();
 #endif
 
-				fg_EncodeUTF8Char
+				fg_EncodeUTF8Char<false>
 					(
 						_Char
 						, [&](mint _nChars)
