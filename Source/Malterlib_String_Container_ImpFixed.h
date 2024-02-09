@@ -12,6 +12,8 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = false;
+		constexpr const static bool mc_bNoThrowConstruct = true;
+		constexpr const static bool mc_bNoThrowAssign = true;
 
 		constexpr TCStrImp_Fixed(EAggregateInitialization _Init)
 			: m_Len{0}
@@ -129,6 +131,8 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = true;
+		constexpr const static bool mc_bNoThrowConstruct = true;
+		constexpr const static bool mc_bNoThrowAssign = true;
 
 		typedef typename t_CStrTraits::CChar CChar;
 

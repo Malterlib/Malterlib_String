@@ -1536,6 +1536,67 @@ namespace
 			};
 		}
 
+		void fp_TestUserData()
+		{
+			DMibTestSuite("UserData")
+			{
+				for (mint i = 0; i < 2; ++i)
+				{
+					DMibTestPath(i == 0 ? "Non-Empty" : "Empty");
+						
+					for (mint TestValue = 0; TestValue < 4; ++TestValue)
+					{
+						DMibTestPath("{}"_f << TestValue);
+
+						CStr TestString;
+						if (i == 0)
+							TestString = "Test";
+
+						TestString.f_SetUserData(TestValue);
+						DMibExpect(TestString.f_GetUserData(), ==, TestValue);
+						
+						CStr TestString2{TestString};
+						DMibExpect(TestString2.f_GetUserData(), ==, TestValue);
+						
+						CStr TestString3;
+						TestString3 = TestString;
+						DMibExpect(TestString3.f_GetUserData(), ==, TestValue);
+						
+						CStr TestString4(NMib::fg_Move(TestString2));
+						DMibExpect(TestString4.f_GetUserData(), ==, TestValue);
+
+						CStr TestString5;
+						TestString5 = NMib::fg_Move(TestString3);
+						DMibExpect(TestString5.f_GetUserData(), ==, TestValue);
+
+						CStr TestString6 = TestString5;
+						TestString6 += "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+						DMibExpect(TestString6.f_GetUserData(), ==, TestValue);
+
+						CStr TestString7(TestString5);
+						TestString7 = "";
+						DMibExpect(TestString7.f_GetUserData(), ==, 0);
+
+						CStr TestString8(TestString5);
+						TestString8.f_Clear();
+						DMibExpect(TestString8.f_GetUserData(), ==, 0);
+
+						CStr TestString9(TestString5);
+						TestString9.f_CreateWritableBuffer(2, false);
+						TestString9.f_GetStrWritable()[0] = 0;
+						TestString9.f_SetStrLen(0);
+						DMibExpect(TestString9.f_GetUserData(), ==, TestValue);
+
+						CStr TestString10(TestString5);
+						TestString10.f_CreateWritableBuffer(2, true);
+						TestString10.f_GetStrWritable()[0] = 0;
+						TestString10.f_SetStrLen(0);
+						DMibExpect(TestString10.f_GetUserData(), ==, TestValue);
+					}
+				}
+			};
+		}
+
 	public:
 		void f_DoTests()
 		{
@@ -1546,6 +1607,7 @@ namespace
 			fp_SeparatorTests();
 			fp_FindTests();
 			fp_IndentTests();
+			fp_TestUserData();
 		}
 	};
 

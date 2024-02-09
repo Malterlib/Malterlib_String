@@ -19,7 +19,7 @@ namespace NMib::NStr
 
 		TCStrImp_Dynamic() = default;
 		constexpr TCStrImp_Dynamic(EAggregateInitialization _Init)
-			: m_pData(nullptr)
+			: m_pData(const_cast<CData *>((CData const *)&mc_EmptyStringData))
 		{
 		}
 
@@ -35,14 +35,7 @@ namespace NMib::NStr
 
 		struct CData
 		{
-			constexpr CData(mint _RefCount)
-				: m_RefCount{_RefCount}
-			{
-			}
-
-			inline_small constexpr CData() = default;
 			inline_small CChar *f_GetData() const;
-			inline_small aint f_GetLength();
 			inline_small mint f_GetMemorySize() const;
 			inline_small void f_SetLength(mint _MemoryLen);
 			inline_small void f_RefCountIncrease();
@@ -58,14 +51,28 @@ namespace NMib::NStr
 			const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 		};
 
-		const static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
-		const static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
+		struct CDataEmpty : public CData
+		{
+			constexpr CDataEmpty()
+				: CData{.m_RefCount = {TCLimitsInt<mint>::mc_Max}, .m_Len = 1, .m_bConstant = true, .m_StrLen = 0}
+			{
+			}
+
+			CChar m_StringData[1] = {0};
+		};
+
+		constexpr static CDataEmpty mc_EmptyStringData = {};
+
+		constexpr static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
+		constexpr static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
+		constexpr static bool mc_bNoThrowConstruct = true;
+		constexpr static bool mc_bNoThrowAssign = true;
 
 		CData *m_pData;
 
 		inline_small constexpr void f_Construct()
 		{
-			m_pData = nullptr;
+			m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
 		}
 
 		inline_always bool f_IsSameWeak(const TCStrImp_Dynamic &_Right) const
@@ -75,7 +82,7 @@ namespace NMib::NStr
 
 		inline_always bool f_IsConstant() const
 		{
-			return m_pData && m_pData->m_bConstant;
+			return m_pData->m_bConstant;
 		}
 
 		inline_medium constexpr void f_Construct(const TCStrImp_Dynamic &_From)
@@ -84,8 +91,7 @@ namespace NMib::NStr
 
 			if_not_consteval
 			{
-				if (m_pData)
-					m_pData->f_RefCountIncrease();
+				m_pData->f_RefCountIncrease();
 			}
 		}
 
@@ -97,27 +103,21 @@ namespace NMib::NStr
 		inline_medium void f_Construct(TCStrImp_Dynamic &&_From)
 		{
 			m_pData = _From.m_pData;
-			_From.m_pData = nullptr;
+			_From.m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
 		}
 
 		inline_medium void f_Assign(const TCStrImp_Dynamic &_From)
 		{
-			if (_From.m_pData)
-				_From.m_pData->f_RefCountIncrease();
-
-			if (m_pData)
-				m_pData->f_RefCountDecrease();
-
+			_From.m_pData->f_RefCountIncrease();
+			m_pData->f_RefCountDecrease();
 			m_pData = _From.m_pData;
 		}
 
 		inline_medium void f_Assign(TCStrImp_Dynamic &&_From)
 		{
-			if (m_pData)
-				m_pData->f_RefCountDecrease();
-
+			m_pData->f_RefCountDecrease();
 			m_pData = _From.m_pData;
-			_From.m_pData = nullptr;
+			_From.m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
 		}
 
 		//=================================
@@ -131,10 +131,8 @@ namespace NMib::NStr
 			}
 			else
 			{
-				if (m_pData)
-					m_pData->f_RefCountDecrease();
-
-				m_pData = nullptr;
+				m_pData->f_RefCountDecrease();
+				m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
 			}
 		}
 
@@ -146,69 +144,61 @@ namespace NMib::NStr
 		void f_SetUserData(uint8 _Data)
 		{
 			DMibSafeCheck(_Data < 4, "Only 2 bits available");
-			if (!m_pData || m_pData->m_bConstant)
+
+			if (m_pData->m_UserData == _Data)
+				return;
+
+			if (_Data == 0 && (*f_GetStr()) == 0)
 			{
-				f_Reserve(1);
-				*f_GetStrWritable() = 0;
-				m_pData->m_StrLen = 0;
+				m_pData->f_RefCountDecrease();
+				m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
+				return;
 			}
+
+			if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1 || m_pData->m_bConstant)
+			{
+				mint StrLen = f_GetStrLen();
+				mint Length = fg_Max(mint(m_pData->m_Len), mint(2));
+				f_CreateWritableBuffer(Length, false);
+				f_GetStrWritable()[StrLen] = 0;
+				DMibFastCheck(!m_pData->m_bConstant);
+				DMibFastCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1);
+			}
+
 			m_pData->m_UserData = _Data;
 		}
 
 		uint8 f_GetUserData() const
 		{
-			if (!m_pData)
-				return 0;
-
 			return m_pData->m_UserData;
 		}
 
-		static const CChar ms_NullStr[];
-
 		inline_small CChar *f_GetStrWritable() const
 		{
-			if (m_pData)
-			{
-				DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must own str");
-				return m_pData->f_GetData();
-			}
-			else
-				return (CChar *)ms_NullStr; // Return a const value if string is empty this will make application crash if it writes to this data
+			DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must own str");
+			return m_pData->f_GetData(); // Return a const value if string is empty this will make application crash if it writes to this data
 		}
 
 		constexpr inline_small const CChar *f_GetStr() const
 		{
-			if (m_pData)
-				return m_pData->f_GetData();
-			else
-				return ms_NullStr;
+			return m_pData->f_GetData();
 		}
 
 		inline_small mint f_GetRefCount() const
 		{
-			if (m_pData)
-				return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
-			else
-				return 0;
+			return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
 		}
 
 		constexpr inline_small aint f_GetLength() const
 		{
-			if (m_pData)
-				return m_pData->f_GetLength();
-			else
-				return 0;
+			return m_pData->m_Len;
 		}
 
 		constexpr inline_medium aint f_GetStrLen() const
 		{
-			if (!m_pData)
-				return 0;
 			mint Len = m_pData->m_StrLen;
 			if (Len == CData::mc_InvalidStrLen)
-			{
 				m_pData->m_StrLen = Len = t_CStrTraits::fs_StrLen(m_pData->f_GetData());
-			}
 			return Len;
 		}
 
@@ -219,27 +209,18 @@ namespace NMib::NStr
 
 		inline_medium void f_SetStrLen(aint _Len)
 		{
-			if (!_Len)
+			if (!_Len && m_pData->m_UserData == 0)
 			{
-				if (m_pData)
+				if (m_pData->m_bConstant || !m_pData->m_bReserved)
 				{
-					if (!m_pData->m_bReserved)
-					{
-						f_Destroy();
-						return;
-					}
-				}
-				else
+					f_Destroy();
 					return;
+				}
 			}
 
 			aint NewLen;
-			aint CurLen = NewLen = f_GetLength();
-			mint SetLen = _Len;
-			if (_Len < 0)
-				SetLen = CData::mc_InvalidStrLen;
-			if (m_pData)
-				m_pData->m_StrLen = SetLen;
+			aint CurLen = NewLen = m_pData->m_Len;
+			m_pData->m_StrLen = _Len < 0 ? CData::mc_InvalidStrLen : _Len;
 			if (_Len == -1)
 				NewLen = f_GetStrLen() + 1;
 			else if (_Len > 0)
@@ -247,17 +228,15 @@ namespace NMib::NStr
 
 			if (NewLen != CurLen)
 			{
-				DMibSafeCheck(!m_pData || m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must be no other having access to this data");
+				DMibSafeCheck(!m_pData->m_bConstant && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must be no other having access to this data");
 				f_TrimSize(NewLen);
 			}
 		}
 
 		inline_small void f_MakeUnique()
 		{
-			if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
-			{
+			if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
 				f_CreateWritableBuffer(f_GetStrLen()+1, false);
-			}
 		}
 
 		inline_never static void fs_ThrowLengthException()
@@ -275,35 +254,32 @@ namespace NMib::NStr
 
 			Size = CAllocator::f_SizePadded(mint(2) << NMib::fg_GetHighestBitSetNoZero(Size - 1));
 
-#				if DMibEnableSafeCheck > 0
+#			if DMibEnableSafeCheck > 0
 				mint nChars = (Size - sizeof(CData)) / sizeof(CChar);
 				DMibFastCheck(nChars >= _Length);
-#				endif
+#			endif
 
 			return Size;
 		}
 
 		mint fp_GetOldAllocSize()
 		{
-			mint OldSize = 0;
-			if (m_pData)
-				OldSize = m_pData->f_GetLength() * sizeof(CChar) + sizeof(CData);
-			return OldSize;
+			return m_pData->m_Len * sizeof(CChar) + sizeof(CData);
 		}
 
 		aint fp_CreateWritableBuffer(aint _Length, bool _bDiscard)
 		{
-#				ifdef DMibDebug
+#ifdef DMibDebug
 			{
 				f_GetRefCount(); // Make sure GetRef() gets linked in in debug build
 			}
-#				endif
-			aint CurLen = f_GetLength();
+#endif
+			aint CurLen = m_pData->m_Len;
 			if (CurLen < _Length)
 			{
-				if (_Length)
+				if (_Length > 1 || m_pData->m_UserData != 0)
 				{
-					if (m_pData)
+					if (m_pData != &mc_EmptyStringData)
 					{
 						if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 						{
@@ -312,10 +288,12 @@ namespace NMib::NStr
 							if (_bDiscard)
 							{
 								mint Len = fp_CalcNewSize(_Length);
-								mint OldReserved = m_pData->m_bReserved;
+								auto OldReserved = m_pData->m_bReserved;
+								auto OldUserData = m_pData->m_UserData;
 								m_pData = new(CAllocator::f_Realloc(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded)) CData();
 								m_pData->f_SetLength(Len);
 								m_pData->m_bReserved = OldReserved;
+								m_pData->m_UserData = OldUserData;
 							}
 							else
 							{
@@ -323,7 +301,7 @@ namespace NMib::NStr
 								m_pData = (CData *)(CAllocator::f_Resize(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded));
 								m_pData->f_SetLength(Len);
 							}
-							CurLen = f_GetLength();
+							CurLen = m_pData->m_Len;
 						}
 						else
 						{
@@ -332,11 +310,12 @@ namespace NMib::NStr
 							CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 							pNew->m_StrLen = m_pData->m_StrLen;
 							pNew->m_bReserved = m_pData->m_bReserved;
+							pNew->m_UserData = m_pData->m_UserData;
 							pNew->f_SetLength(NewLen);
 							// Remove self from data ref
 							CData *pOld = m_pData;
 							m_pData = pNew;
-							CurLen = f_GetLength();
+							CurLen = m_pData->m_Len;
 							if (!_bDiscard)
 							{
 								mint CopyLen = fg_Min(CurLen, OldLen);
@@ -354,30 +333,28 @@ namespace NMib::NStr
 						m_pData = new(CAllocator::f_Alloc(NewLen)) CData();
 						DMibFastCheck(m_pData);
 						m_pData->f_SetLength(NewLen);
-						CurLen = f_GetLength();
+						CurLen = m_pData->m_Len;
 						m_pData->f_GetData()[0] = 0;
 					}
 				}
 				else
 				{
-					if (m_pData)
-					{
-						m_pData->f_RefCountDecrease();
-						m_pData = nullptr;
-						CurLen = f_GetLength();
-					}
+					m_pData->f_RefCountDecrease();
+					m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
+					CurLen = m_pData->m_Len;
 				}
 			}
-			else if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
+			else if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
 			{
 				mint NewLen = fp_CalcNewSize(_Length);
 				CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 				pNew->m_StrLen = m_pData->m_StrLen;
 				pNew->m_bReserved = m_pData->m_bReserved;
+				pNew->m_UserData = m_pData->m_UserData;
 				pNew->f_SetLength(NewLen);
 				// Remove self from data ref
-				aint OldLen = m_pData->f_GetLength();
-				CurLen = pNew->f_GetLength();
+				aint OldLen = m_pData->m_Len;
+				CurLen = pNew->m_Len;
 				CData *pOld = m_pData;
 				m_pData = pNew;
 
@@ -396,8 +373,8 @@ namespace NMib::NStr
 		}
 		inline aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 		{
-			aint CurLen = f_GetLength();
-			if (CurLen >= _Length && m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+			aint CurLen = m_pData->m_Len;
+			if (CurLen >= _Length && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 				return CurLen;
 
 			return fp_CreateWritableBuffer(_Length, _bDiscard);
@@ -408,12 +385,12 @@ namespace NMib::NStr
 			if (_Len)
 			{
 				f_CreateWritableBuffer(_Len+1, false);
-				DMibFastCheck(m_pData);
+				DMibFastCheck(m_pData != &mc_EmptyStringData);
 				m_pData->m_bReserved = true;
 			}
 			else
 			{
-				if (m_pData && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+				if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 					m_pData->m_bReserved = false;
 			}
 		}
@@ -421,17 +398,14 @@ namespace NMib::NStr
 		void fp_TrimSize(mint _Length, mint _NeededSize)
 		{
 			DMibSafeCheck(_Length > 0, "Have to have place for a nullptr character");
-			if (_Length == 1)
+			if (_Length == 1 && m_pData->m_UserData == 0)
 			{
-				if (m_pData)
-				{
-					m_pData->f_RefCountDecrease();
-					m_pData = nullptr;
-				}
+				m_pData->f_RefCountDecrease();
+				m_pData = const_cast<CData *>((CData const *)&mc_EmptyStringData);
 				return;
 			}
 
-			DMibSafeCheck(m_pData, "Must be allocated here or something is wrong");
+			DMibSafeCheck(!m_pData->m_bConstant, "Must be allocated here or something is wrong");
 			if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
 			{
 				m_pData = (CData *)(CAllocator::f_Resize(m_pData, _NeededSize, m_pData->f_GetMemorySize()));
@@ -451,7 +425,7 @@ namespace NMib::NStr
 		{
 			DMibSafeCheck(_Length > 0, "Have to have place for a nullptr character");
 
-			if (!m_pData || m_pData->m_bReserved)
+			if (m_pData->m_bReserved || m_pData->m_bConstant)
 				return;
 
 			if (_Length == 1)
@@ -470,21 +444,21 @@ namespace NMib::NStr
 
 	};
 
-	template <typename t_CStrTraits> const typename t_CStrTraits::CChar TCStrImp_Dynamic<t_CStrTraits>::ms_NullStr[] = {0};
-
 	template <mint t_nChars>
 	struct TCStrConstData : public TCStrImp_Dynamic<CStr::CTraits::CStrTraits>::CData
 	{
 		constexpr TCStrConstData(ch8 const (&_String)[t_nChars], uint8 _UserData = 0)
-			: TCStrImp_Dynamic<CStr::CTraits::CStrTraits>::CData(TCLimitsInt<mint>::mc_Max)
+			: TCStrImp_Dynamic<CStr::CTraits::CStrTraits>::CData
+			{
+				.m_RefCount = {TCLimitsInt<mint>::mc_Max}
+				, .m_Len = t_nChars
+				, .m_bConstant = true
+				, .m_StrLen = t_nChars - 1
+				, .m_UserData = _UserData
+			}
 		{
 			for (mint i = 0; i < t_nChars; ++i)
 				m_Data[i] = _String[i];
-
-			m_Len = t_nChars;
-			m_StrLen = t_nChars - 1;
-			m_UserData = _UserData;
-			m_bConstant = true;
 		}
 
 		inline_always constexpr TCStrConstData &f_SetUserData(uint8 _UserData)

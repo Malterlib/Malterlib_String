@@ -12,14 +12,6 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small aint TCStrImp_Dynamic<t_CStrTraits>::CData::f_GetLength()
-	{
-		DMibFastCheck(m_Len != 0);
-		//DMibFastCheck(m_Len == (CAllocator::f_Size(this) - sizeof(*this)) / sizeof(CChar));
-		return m_Len;
-	}
-
-	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_SetLength(mint _MemoryLen)
 	{
 		m_Len = (_MemoryLen - sizeof(*this)) / sizeof(CChar);

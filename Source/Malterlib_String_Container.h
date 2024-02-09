@@ -2788,8 +2788,8 @@ EndArgSearch:
 
 		inline_small TCStr(CSuper const &_Str)
 		{
-			if (!_Str)
-				CSuper::f_Construct();
+			if constexpr (CSuper::mc_bNoThrowConstruct)
+				CSuper::f_Construct(_Str);
 			else
 			{
 				CAutoDestroy Cleanup{this};
@@ -2806,8 +2806,8 @@ EndArgSearch:
 			}
 			else
 			{
-				if (!_Str)
-					CSuper::f_Construct();
+				if constexpr (CSuper::mc_bNoThrowConstruct)
+					CSuper::f_Construct((CSuper const &)_Str);
 				else
 				{
 					CAutoDestroy Cleanup{this};
@@ -2825,8 +2825,8 @@ EndArgSearch:
 			}
 			else
 			{
-				if (!_Str)
-					CSuper::f_Construct();
+				if constexpr (CSuper::mc_bNoThrowConstruct)
+					CSuper::f_Construct(fg_Move(_Str));
 				else
 				{
 					CAutoDestroy Cleanup{this};
@@ -2838,8 +2838,8 @@ EndArgSearch:
 
 		inline_small TCStr(TCStr &&_Str)
 		{
-			if (!_Str)
-				CSuper::f_Construct();
+			if constexpr (CSuper::mc_bNoThrowConstruct)
+				CSuper::f_Construct(fg_Move(_Str));
 			else
 			{
 				CAutoDestroy Cleanup{this};
