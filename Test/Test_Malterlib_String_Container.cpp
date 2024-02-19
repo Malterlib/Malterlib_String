@@ -20,6 +20,7 @@
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/algorithm/string/find.hpp>
+#include <sstream>
 
 #include <Mib/Test/Test>
 #include <Mib/Test/Memory>
