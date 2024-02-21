@@ -24,6 +24,8 @@ namespace NMib::NStr
 		EParseFlag_ExtendedWhitespace = DMibBit(1),	// Whitespace in the format will match zero or more consecutive whitespace characters in the source.
 	};
 
+	template <typename t_CChar, CStrTypeUnderlying t_Type>
+	struct TCStrTraitsTypes;
 
 	template <typename t_CCharType, CStrTypeUnderlying t_Type, template <typename> class t_TImpl, typename t_CParams>
 	struct TCStrTraits_Eval
@@ -71,6 +73,11 @@ namespace NMib::NStr
 	{
 		typedef CStrTraits_CUStrSecure CType;
 	};
+
+	using CStrSpan = TCStrSpan<TCStrTraitsTypes<ch8, EStrType_UTF>>;
+	using CAnsiStrSpan = TCStrSpan<TCStrTraitsTypes<ch8, EStrType_Ansi>>;
+	using CWStrSpan = TCStrSpan<TCStrTraitsTypes<ch16, EStrType_UTF>>;
+	using CUStrSpan = TCStrSpan<TCStrTraitsTypes<ch32, EStrType_Unicode>>;
 
 	typedef TCStr<CStrTraits_CStr> CStr;
 	typedef TCStr<CStrTraits_CStrAnsi> CAnsiStr;

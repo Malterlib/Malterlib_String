@@ -5,6 +5,9 @@
 
 namespace NMib::NStr
 {
+	template <typename t_CStrTraits>
+	struct TCStrSpan;
+
 	template <typename t_CTCStrTraits>
 	class TCStrAggregate;
 

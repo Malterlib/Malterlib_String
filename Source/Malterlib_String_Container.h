@@ -11,14 +11,22 @@
 
 namespace NMib::NStr
 {
+	template <typename t_CChar, CStrTypeUnderlying t_Type>
+	struct TCStrTraitsTypes
+	{
+		using CChar = t_CChar;
+		constexpr static EStrType const mc_Type = (EStrType)t_Type;
+	};
+
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	class TCStrTraits
 	{
 	public:
-		typedef t_CChar CChar;
-		typedef t_CParams CParams;
+		using CChar = t_CChar;
+		constexpr static EStrType const mc_Type = (EStrType)t_Type;
+		using CTypes = TCStrTraitsTypes<t_CChar, t_Type>;
+		using CParams = t_CParams;
 		typedef typename t_CParams::CAllocator CAllocator;
-		static EStrType const mc_Type = (EStrType)t_Type;
 
 		template <typename t_CData>
 			static inline_small bool fs_CharIsNumber(const t_CData _Character)
@@ -783,6 +791,42 @@ EndArgSearch:
 	template <typename t_CString>
 	struct TCStringAppender;
 
+	template <typename t_CStrTraitsTypes>
+	struct TCStrSpan
+	{
+		using CStrTraitsTypes = t_CStrTraitsTypes;
+		using CChar = typename t_CStrTraitsTypes::CChar;
+		using CUnsignedChar = typename NTraits::TCUnsigned<typename t_CStrTraitsTypes::CChar>::CType;
+
+		TCStrSpan() = default;
+		TCStrSpan(TCStrSpan const &) = default;
+		TCStrSpan(TCStrSpan &&) = default;
+		TCStrSpan &operator = (TCStrSpan const &) = default;
+		TCStrSpan &operator = (TCStrSpan &&) = default;
+		
+		TCStrSpan(CChar const *_pStr, mint _Length)
+			: m_pStr(_pStr)
+			, m_Length(_Length)
+		{
+		}
+
+		CChar const *f_GetStr() const
+		{
+			return m_pStr;
+		}
+
+		mint f_GetLen() const
+		{
+			return m_Length;
+		}
+
+	private:
+		static constexpr CChar const mc_EmptyStr[1] = {0};
+
+		CChar const *m_pStr = mc_EmptyStr;
+		mint m_Length = 0;
+	};
+
 	template <typename t_CTCStrTraits>
 	class TCStrAggregate : public t_CTCStrTraits::CImp
 	{
@@ -950,6 +994,11 @@ EndArgSearch:
 		{
 			return (*CImp::f_GetStr()) == 0;
 		}
+
+		TCStrSpan<typename CStrTraits::CTypes> f_Span() const
+		{
+			return TCStrSpan<typename CStrTraits::CTypes>(f_GetStr(), f_GetLen());
+		};
 
 		template <typename t_CType>
 		inline static CDynamicStr fs_ToStr(t_CType const &_Format)
