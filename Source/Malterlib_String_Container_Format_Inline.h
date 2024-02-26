@@ -9,77 +9,67 @@ namespace NMib::NStr
 {
  	namespace NPrivate
 	{
-		template <typename t_CData, typename t_CFormatter>
-		concept cHas_f_GetStringFormatType =
-			requires
-			(
-				t_CData *_pData
-				, t_CFormatter &_Formatter
-			)
-			{
-				_pData->f_GetStringFormatType(_Formatter);
-			}
-		;
-
-		template <typename t_CData, typename t_CFormatter>
-		concept cHas_f_CreateStringFormatter =
-			requires
-			(
-				t_CData const *_pData
-				, t_CFormatter &_Formatter
-			)
-			{
-				_pData->f_CreateStringFormatter(_Formatter);
-			}
-		;
-
-		template <typename t_CData>
-		concept cHas_f_Format =
-			requires (t_CData const *_pData, CStr &o_Str)
-			{
-				_pData->f_Format(o_Str);
-			}
-			|| requires (t_CData const *_pData, CStr &o_Str, typename t_CData::CFormatOptions &_Options)
-			{
-				_pData->f_Format(o_Str, _Options);
-			}
-		;
-
 		static_assert(cHas_f_Format<NContainer::TCVector<uint32>>);
 
-		template <typename t_CFormatter, typename t_CData>
+		template
+		<
+			typename t_CFormatter
+			, typename t_CData
+			, EStringFormatType t_FormatType
+		>
 		struct TCStringFormatterHelper
 		{
-		public:
-			static auto fs_CreateFormatType(t_CFormatter &_Formatter, t_CData &_Data)
-			{
-				if constexpr (cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter>)
-					return fg_GetType<decltype(_Data.f_GetStringFormatType(_Formatter)) const &>();
-				else if constexpr (cHas_f_Format<t_CData>)
-					return fg_GetType<TCStrFormatType_Inline<t_CFormatter, t_CData, true> const &>();
-				else
-					return fg_GetType<typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType const &>();
-			}
+		};
 
-			using CFormatType = decltype(fs_CreateFormatType(fg_GetType<t_CFormatter &>(), fg_GetType<t_CData &>()));
+		template
+		<
+			typename t_CFormatter
+			, typename t_CData
+		>
+		struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_InlineCreateStringFormatter>
+		{
+			using CFormatType = decltype(fg_GetType<t_CData &>().f_GetStringFormatType(fg_GetType<t_CFormatter &>()));
 
 			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
 			{
-				if constexpr (cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter>)
-					return _Data.f_CreateStringFormatter(_Formatter);
-				else if constexpr (cHas_f_Format<t_CData>)
-				{
-					using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
-					_Formatter.template f_Alloc<CFormatType>(_Data);
-					return typename CFormatType::CStrFormatTypeClassifier();
-				}
-				else
-					return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data);
+				return _Data.f_CreateStringFormatter(_Formatter);
+			}
+		};
+
+		template
+		<
+			typename t_CFormatter
+			, typename t_CData
+		>
+		struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_Inline>
+		{
+			using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
+
+			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
+			{
+				using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
+				_Formatter.template f_Alloc<CFormatType>(_Data);
+				return typename CFormatType::CStrFormatTypeClassifier();
+			}
+		};
+
+		template
+		<
+			typename t_CFormatter
+			, typename t_CData
+		>
+		struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_FormatterTemplate>
+		{
+			using CFormatType = typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType;
+
+			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
+			{
+				return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data);
 			}
 		};
 
 		template <typename t_CFormatter, typename t_CData>
-		struct TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>>
+		struct TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>, EStringFormatType::mc_FormatterTemplate>
 		{
 		public:
 			using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, false>;
