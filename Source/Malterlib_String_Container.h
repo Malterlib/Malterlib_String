@@ -4892,4 +4892,11 @@ EndArgSearch:
 
 		_String += Formatter;
 	}
+
+	template <typename tf_CChar>
+	constexpr typename TCFStr<tf_CChar, 2, sizeof(tf_CChar) >= 4 ? EStrType_Unicode : EStrType_UTF>::CType fg_CharToString(tf_CChar const &_Char)
+	{
+		tf_CChar const Characters[2] = {_Char, 0};
+		return typename TCFStr<tf_CChar, 2, sizeof(tf_CChar) >= 4 ? EStrType_Unicode : EStrType_UTF>::CType(NMib::NStr::CStrInitGeneral(), Characters, 2);
+	}
 }

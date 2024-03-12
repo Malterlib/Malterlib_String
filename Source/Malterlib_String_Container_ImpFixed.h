@@ -41,6 +41,14 @@ namespace NMib::NStr
 			NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len+1) * sizeof(CChar));
 		}
 
+		inline_small constexpr TCStrImp_Fixed(CChar const *_pString, mint _Len)
+		{
+			mint nChars = fg_Min(t_DataLen - 1, _Len);
+			for (mint i = 0; i < nChars; ++i)
+				m_lData[i] = _pString[i];
+			m_Len = nChars;
+		}
+
 		inline_medium void f_Assign(TCStrImp_Fixed const &_Str)
 		{
 			mint Len = _Str.f_GetStrLen();
@@ -100,7 +108,7 @@ namespace NMib::NStr
 			return t_DataLen;
 		}
 
-		inline_small void f_Destroy()
+		inline_small constexpr void f_Destroy()
 		{
 			m_lData[0] = 0;
 			m_Len = 0;
