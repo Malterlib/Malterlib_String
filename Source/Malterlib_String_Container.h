@@ -22,6 +22,10 @@ namespace NMib::NStr
 		constexpr static EStrType const mc_Type = (EStrType)t_Type;
 	};
 
+	struct CInitByRange
+	{
+	};
+
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	class TCStrTraits
 	{
@@ -2750,16 +2754,34 @@ EndArgSearch:
 		{
 		}
 
+		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+			requires (CSuper::mc_bInitConstStr)
+			: CSuper(CStrInitGeneral(), _pStrStart, _pStrEnd - _pStrStart)
+		{
+		}
+
 		template <typename t_CStrDataType>
 		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
 			requires (!CSuper::mc_bInitConstStr)
 		{
-			if (_Len)
-			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_SetStr(_pStr, _Len);
-				Cleanup.f_Clear();
-			}
+			if (!_Len)
+				return;
+
+			CAutoDestroy Cleanup{this};
+			CSuper::f_SetStr(_pStr, _Len);
+			Cleanup.f_Clear();
+		}
+
+		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+			requires (!CSuper::mc_bInitConstStr)
+		{
+			auto Len = _pStrEnd - _pStrStart;
+			if (!Len)
+				return;
+			
+			CAutoDestroy Cleanup{this};
+			CSuper::f_SetStr(_pStrStart, Len);
+			Cleanup.f_Clear();
 		}
 
 		template <typename ...tfp_CParams>
