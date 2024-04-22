@@ -2169,11 +2169,11 @@ EndArgSearch:
 		\***************************************************************************************************/
 
 		template <typename t_CStrTraitsF>
-		inline_large TCStrAggregate & operator += (const TCStrAggregate<t_CStrTraitsF> &_Str);
+		inline_large TCStrAggregate & operator += (TCStrAggregate<t_CStrTraitsF> const &_Str);
 		template <typename t_CStrTraitsF>
-		inline_large TCStrAggregate & operator += (const TCStr<t_CStrTraitsF> &_Str);
+		inline_large TCStrAggregate & operator += (TCStr<t_CStrTraitsF> const &_Str);
 		template <typename t_CStrDataType>
-		inline_large TCStrAggregate & operator += (const t_CStrDataType *_pToAdd);
+		inline_large TCStrAggregate & operator += (t_CStrDataType const *_pToAdd);
 		inline_large TCStrAggregate & operator += (CFormat const &_Format);
 		inline_large TCStrAggregate & operator += (ch32 _ToAdd);
 
@@ -2896,7 +2896,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CDataF>
-			inline_large TCStr & operator = (const t_CDataF *_pFrom)
+		inline_large TCStr & operator = (t_CDataF * const _pFrom)
 		{
 			CSuper::f_SetStr(_pFrom);
 			return *this;
@@ -2910,7 +2910,7 @@ EndArgSearch:
 
 
 		template <typename t_CStrTraitsF>
-			inline_large TCStr & operator += (const TCStrAggregate<t_CStrTraitsF> &_Str)
+		inline_large TCStr & operator += (TCStrAggregate<t_CStrTraitsF> const &_Str)
 		{
 			if (this->f_IsEmpty())
 				*this = _Str;
@@ -2919,11 +2919,34 @@ EndArgSearch:
 
 			return *this;
 		}
+
 		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator += (const TCStr<t_CStrTraitsF> &_Str)
+		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> const &_Str)
 		{
 			if (this->f_IsEmpty())
 				*this = _Str;
+			else
+				CSuper::f_AddStr(_Str);
+
+			return *this;
+		}
+
+		template <typename t_CStrTraitsF>
+		inline_large TCStr & operator += (TCStrAggregate<t_CStrTraitsF> &&_Str)
+		{
+			if (this->f_IsEmpty())
+				*this = fg_Move(_Str);
+			else
+				CSuper::f_AddStr(_Str);
+
+			return *this;
+		}
+
+		template <typename t_CStrTraitsF>
+		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> &&_Str)
+		{
+			if (this->f_IsEmpty())
+				*this = fg_Move(_Str);
 			else
 				CSuper::f_AddStr(_Str);
 
@@ -2931,7 +2954,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CStrDataType>
-			inline_large TCStr & operator += (const t_CStrDataType *_pToAdd)
+		inline_large TCStr & operator += (t_CStrDataType const *_pToAdd)
 		{
 			CSuper::f_AddStr(_pToAdd);
 			return *this;

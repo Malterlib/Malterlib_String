@@ -189,7 +189,7 @@ namespace NMib::NStr
 			if (!bFirst)
 				Return += _Separator;
 			bFirst = false;
-			Return += Str;
+			Return += fg_ForwardAs<tf_CContainer>(Str);
 		}
 		return Return;
 	}
