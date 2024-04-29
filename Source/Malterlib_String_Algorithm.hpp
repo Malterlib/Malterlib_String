@@ -141,7 +141,7 @@ namespace NMib::NStr
 	{
 		if constexpr (sizeof(t_CData1) == sizeof(t_CData2))
 		{
-			mint Len = fg_Min(fg_StrLen(_pFrom), _MaxLen - 1);
+			mint Len = fg_Min(fg_StrLen(_pFrom, _MaxLen), _MaxLen - 1);
 			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(t_CData2));
 			_pTo[Len] = 0;
 			return _pTo;
@@ -1657,7 +1657,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
 	inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
 	{
-		return fg_StrReplace(_pStr1, fg_StrLen(_pStr1), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
+		return fg_StrReplace(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
@@ -1695,7 +1695,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
 	inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
 	{
-		return fg_StrReplaceNoCase(_pStr1, fg_StrLen(_pStr1), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
+		return fg_StrReplaceNoCase(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
 	/************************************************************************************************\

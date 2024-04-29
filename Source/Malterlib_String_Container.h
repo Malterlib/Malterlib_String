@@ -3228,7 +3228,7 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrCopy(TCStrAggregate<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom, mint _MaxLen)
 	{
 		_To.f_Clear();
-		_To.f_AddStr(_pFrom, fg_Min(_MaxLen, fg_StrLen(_pFrom)));
+		_To.f_AddStr(_pFrom, fg_Min(_MaxLen, fg_StrLen(_pFrom, _MaxLen)));
 		return _To;
 	}
 
