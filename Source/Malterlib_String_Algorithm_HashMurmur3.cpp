@@ -9,7 +9,7 @@ namespace NMib::NStr2::NPrivate
 	//-----------------------------------------------------------------------------
 	// Block read - if your platform needs to do endian-swapping or can only
 	// handle aligned reads, do the conversion here
-	static inline_always uint32 fg_GetBlock32(const uint32 *_pPointer)
+	static inline_always uint32 fg_GetBlock32(void const *_pPointer)
 	{
 		uint32 Value;
 		NMib::NMemory::fg_MemCopy(&Value, _pPointer, 4);
