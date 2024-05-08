@@ -25,6 +25,7 @@ namespace NMib
 	}
 }
 
+CStr const &fg_GetTestStringInAnotherTranslationUnit();
 
 namespace
 {
@@ -1597,6 +1598,27 @@ namespace
 			};
 		}
 
+		void fp_Constant()
+		{
+			DMibTestSuite("Constant")
+			{
+				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<"TestString">.m_Str), CStr const>::mc_Value);
+				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<str_utf16("TestString")>.m_Str), CWStr const>::mc_Value);
+				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<str_utf32("TestString")>.m_Str), CUStr const>::mc_Value);
+
+				DMibExpect(gc_Str<"TestString">.m_Str, ==, CStr("TestString"));
+				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &gc_Str<"TestString">.m_Str);
+#ifndef DCompiler_MSVC
+				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &fg_GetTestStringInAnotherTranslationUnit());				
+#endif
+				DMibExpect(gc_Str<str_utf16("TestString")>.m_Str, ==, CWStr(str_utf16("TestString")));
+				DMibExpect(&gc_Str<str_utf16("TestString")>.m_Str, ==, &gc_Str<str_utf16("TestString")>.m_Str);
+
+				DMibExpect(gc_Str<str_utf32("TestString")>.m_Str, ==, CUStr(str_utf32("TestString")));
+				DMibExpect(&gc_Str<str_utf32("TestString")>.m_Str, ==, &gc_Str<str_utf32("TestString")>.m_Str);
+			};
+		}
+
 	public:
 		void f_DoTests()
 		{
@@ -1608,6 +1630,7 @@ namespace
 			fp_FindTests();
 			fp_IndentTests();
 			fp_TestUserData();
+			fp_Constant();
 		}
 	};
 

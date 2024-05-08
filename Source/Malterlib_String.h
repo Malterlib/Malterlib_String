@@ -66,6 +66,10 @@ namespace NMib::NStr
 	extern template class TCStrAggregate<CStrTraits_CWStrVMem>;
 	extern template class TCStrAggregate<CStrTraits_CUStrVMem>;
 
+	extern template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
+	extern template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
+	extern template class TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
+
 	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 	extern template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 }

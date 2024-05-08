@@ -5,26 +5,26 @@
 
 namespace NMib::NStr
 {
-	template <typename t_CStrTraits>
-	inline_small auto TCStrImp_Dynamic<t_CStrTraits>::CData::f_GetData() const -> CChar *
+	template <typename t_CChar>
+	inline_small auto TCStrImp_Dynamic_StringData<t_CChar>::f_GetData() const -> t_CChar *
 	{
-		return (CChar *)(this+1);
+		return (t_CChar *)(this+1);
 	}
 
-	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_SetLength(mint _MemoryLen)
+	template <typename t_CChar>
+	inline_small void TCStrImp_Dynamic_StringData<t_CChar>::f_SetLength(mint _MemoryLen)
 	{
-		m_Len = (_MemoryLen - sizeof(*this)) / sizeof(CChar);
+		m_Len = (_MemoryLen - sizeof(*this)) / sizeof(t_CChar);
 	}
 
-	template <typename t_CStrTraits>
-	inline_small mint TCStrImp_Dynamic<t_CStrTraits>::CData::f_GetMemorySize() const
+	template <typename t_CChar>
+	inline_small mint TCStrImp_Dynamic_StringData<t_CChar>::f_GetMemorySize() const
 	{
-		return m_Len * sizeof(CChar) + sizeof(*this);
+		return m_Len * sizeof(t_CChar) + sizeof(*this);
 	}
 
-	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefCountIncrease()
+	template <typename t_CChar>
+	inline_small void TCStrImp_Dynamic_StringData<t_CChar>::f_RefCountIncrease()
 	{
 		if (m_bConstant)
 			return;
@@ -32,13 +32,12 @@ namespace NMib::NStr
 		m_RefCount.f_FetchAdd(1, NAtomic::EMemoryOrder_Release);
 	}
 
-	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Dynamic<t_CStrTraits>::CData::f_RefCountDecrease()
+	template <typename t_CChar>
+	inline_small bool TCStrImp_Dynamic_StringData<t_CChar>::f_RefCountDecrease()
 	{
 		if (m_bConstant)
-			return;
+			return false;
 
-		if (m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_AcquireRelease) == 1)
-			CAllocator::f_Free(this, f_GetMemorySize());
+		return m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_AcquireRelease) == 1;
 	}
 }

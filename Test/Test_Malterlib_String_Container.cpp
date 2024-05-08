@@ -31,6 +31,10 @@ using namespace NMib::NContainer;
 using namespace NMib::NTest;
 using namespace NMib::NTraits;
 
+NStr::CStr const &fg_GetTestStringInAnotherTranslationUnit()
+{
+	return NStr::gc_Str<"TestString">.m_Str;
+}
 
 namespace
 {

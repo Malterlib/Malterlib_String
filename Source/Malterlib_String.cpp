@@ -35,6 +35,22 @@ namespace NMib::NStr
 	template class TCStrAggregate<CStrTraits_CWStrVMem>;
 	template class TCStrAggregate<CStrTraits_CUStrVMem>;
 
+	template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
+	template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
+	template class TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
+
+	template struct TCStrImp_Dynamic_StringData<ch8>;
+	template struct TCStrImp_Dynamic_StringData<ch16>;
+	template struct TCStrImp_Dynamic_StringData<ch32>;
+
+	template struct TCStrImp_Dynamic_EmptyStringData<ch8>;
+	template struct TCStrImp_Dynamic_EmptyStringData<ch16>;
+	template struct TCStrImp_Dynamic_EmptyStringData<ch32>;
+
+	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch8>;
+	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch16>;
+	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch32>;
+
 	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 	template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
 
