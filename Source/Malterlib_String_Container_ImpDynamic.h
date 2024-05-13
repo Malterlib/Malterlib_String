@@ -107,12 +107,6 @@ namespace NMib::NStr
 		typedef typename t_CStrTraits::CParams CImpParams;
 		typedef typename CImpParams::CAllocator CAllocator;
 
-		TCStrImp_Dynamic() = default;
-		constexpr TCStrImp_Dynamic(EAggregateInitialization _Init)
-			: m_pData(const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance)))
-		{
-		}
-
 		enum
 		{
 			EMaxExtraChars = CImpParams::EMaxExtraChars
@@ -127,14 +121,42 @@ namespace NMib::NStr
 
 		constexpr static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
 		constexpr static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
-		constexpr static bool mc_bNoThrowConstruct = true;
 		constexpr static bool mc_bNoThrowAssign = true;
 
-		CData *m_pData;
+		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));
 
-		inline_small constexpr void f_Construct()
+		constexpr TCStrImp_Dynamic() = default;
+
+		constexpr ~TCStrImp_Dynamic()
 		{
-			f_SetDefault();
+			if_consteval
+			{
+				return;
+			}
+			else
+			{
+				if (m_pData->f_RefCountDecrease())
+					CAllocator::f_Free(m_pData, m_pData->f_GetMemorySize());
+			}
+		}
+
+		inline_medium constexpr TCStrImp_Dynamic(TCStrImp_Dynamic const &_From)
+			: m_pData(_From.m_pData)
+		{
+			if_not_consteval
+			{
+				m_pData->f_RefCountIncrease();
+			}
+		}
+
+		constexpr TCStrImp_Dynamic(CData const &_Data)
+			: m_pData(const_cast<CData *>(&_Data))
+		{
+		}
+
+		inline_medium TCStrImp_Dynamic(TCStrImp_Dynamic &&_From)
+			: m_pData(fg_Exchange(_From.m_pData, const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance))))
+		{
 		}
 
 		inline_small constexpr void f_SetDefault()
@@ -155,27 +177,6 @@ namespace NMib::NStr
 		inline_always bool f_IsConstant() const
 		{
 			return m_pData->m_bConstant;
-		}
-
-		inline_medium constexpr void f_Construct(TCStrImp_Dynamic const &_From)
-		{
-			m_pData = _From.m_pData;
-
-			if_not_consteval
-			{
-				m_pData->f_RefCountIncrease();
-			}
-		}
-
-		constexpr void f_Construct(CData const &_Data)
-		{
-			m_pData = const_cast<CData *>(&_Data);
-		}
-
-		inline_medium void f_Construct(TCStrImp_Dynamic &&_From)
-		{
-			m_pData = _From.m_pData;
-			_From.f_SetDefault();
 		}
 
 		inline_medium void f_Assign(TCStrImp_Dynamic const &_From)
@@ -201,7 +202,7 @@ namespace NMib::NStr
 		{
 			if_consteval
 			{
-				return;
+				f_SetDefault();
 			}
 			else
 			{
@@ -212,7 +213,7 @@ namespace NMib::NStr
 			}
 		}
 
-		inline_small void f_Clear()
+		constexpr inline_small void f_Clear()
 		{
 			f_Destroy();
 		}

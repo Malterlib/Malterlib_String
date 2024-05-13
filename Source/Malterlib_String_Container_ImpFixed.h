@@ -12,17 +12,7 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = false;
-		constexpr const static bool mc_bNoThrowConstruct = true;
 		constexpr const static bool mc_bNoThrowAssign = true;
-
-		constexpr TCStrImp_Fixed(EAggregateInitialization _Init)
-			: m_Len{0}
-			, m_lData{}
-		{
-		}
-		constexpr TCStrImp_Fixed()
-		{
-		}
 
 		typedef typename t_CStrTraits::CChar CChar;
 
@@ -37,13 +27,13 @@ namespace NMib::NStr
 		mint m_Len;
 		CChar m_lData[t_DataLen];
 
-		inline_small constexpr void f_Construct()
+		inline_small constexpr TCStrImp_Fixed()
+			: m_lData{0}
+			, m_Len(0)
 		{
-			m_lData[0] = 0;
-			m_Len = 0;
 		}
 
-		inline_small void f_Construct(const TCStrImp_Fixed &_Str)
+		inline_small TCStrImp_Fixed(TCStrImp_Fixed const &_Str)
 		{
 			mint Len = _Str.f_GetStrLen();
 			m_Len = Len;
@@ -51,7 +41,7 @@ namespace NMib::NStr
 			NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len+1) * sizeof(CChar));
 		}
 
-		inline_medium void f_Assign(const TCStrImp_Fixed &_Str)
+		inline_medium void f_Assign(TCStrImp_Fixed const &_Str)
 		{
 			mint Len = _Str.f_GetStrLen();
 			m_Len = Len;
@@ -131,7 +121,6 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = true;
-		constexpr const static bool mc_bNoThrowConstruct = true;
 		constexpr const static bool mc_bNoThrowAssign = true;
 
 		typedef typename t_CStrTraits::CChar CChar;
@@ -142,34 +131,33 @@ namespace NMib::NStr
 		mint m_MaxLen;
 		mint m_Len;
 
-		inline_small void f_Construct()
+		inline_small TCStrImp_Ptr()
 		{
 			m_pData = nullptr;
 			m_MaxLen = 0;
 			m_Len = 0;
 		}
 
-		inline_small void f_Construct(TCStrImp_Ptr &&_Str)
+		inline_small TCStrImp_Ptr(TCStrImp_Ptr &&_Str)
+			: m_pData(_Str.m_pData)
+			, m_MaxLen(fg_Exchange(_Str.m_MaxLen, 0))
+			, m_Len(_Str.m_Len)
 		{
-			m_pData = _Str.m_pData;
-			m_MaxLen = _Str.m_MaxLen;
-			m_Len = _Str.m_Len;
-			_Str.m_MaxLen = 0;
 		}
 
-		inline_small void f_Construct(TCStrImp_Ptr const &_Str)
+		inline_small TCStrImp_Ptr(TCStrImp_Ptr const &_Str)
+			: m_pData(_Str.m_pData)
+			, m_MaxLen(0)
+			, m_Len(_Str.m_Len)
 		{
-			m_pData = _Str.m_pData;
-			m_MaxLen = 0;
-			m_Len = _Str.m_Len;
 		}
 
-		inline_small void f_Construct(CChar *_pString, mint _Len)
+		inline_small TCStrImp_Ptr(CChar *_pString, mint _Len)
 		{
 			f_SetPtr(_pString, _Len);
 		}
 
-		inline_small void f_Construct(CChar const *_pString, mint _Len)
+		inline_small TCStrImp_Ptr(CChar const *_pString, mint _Len)
 		{
 			f_SetConstPtr(_pString, _Len);
 		}

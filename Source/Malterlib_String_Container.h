@@ -11,6 +11,10 @@
 
 namespace NMib::NStr
 {
+	struct CStrInitGeneral
+	{
+	};
+
 	template <typename t_CChar, CStrTypeUnderlying t_Type>
 	struct TCStrTraitsTypes
 	{
@@ -940,23 +944,21 @@ EndArgSearch:
 
 	public:
 
-		constexpr TCStrAggregate(EAggregateInitialization _Init)
-			: t_CTCStrTraits::CImp{_Init}
+		constexpr TCStrAggregate() = default;
+
+		TCStrAggregate &operator = (TCStrAggregate const &_From)
 		{
-#ifdef DMibDebuggerHelpers
-			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
+			f_Assign(_From);
+
+			return *this;
 		}
-		constexpr TCStrAggregate()
+
+		TCStrAggregate &operator = (TCStrAggregate &&_From)
 		{
-#ifdef DMibDebuggerHelpers
-			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
+			f_Assign(fg_Move(_From));
+
+			return *this;
 		}
-		TCStrAggregate & operator = (TCStrAggregate const &_From) = delete;
-		TCStrAggregate(TCStrAggregate const &_From) = delete;
-		TCStrAggregate & operator = (TCStrAggregate &&_From) = delete;
-		TCStrAggregate(TCStrAggregate &&_From) = delete;
 
 		CUnicodeIterator f_GetUnicodeIterator() const
 			requires (mc_Type != EStrType_Ansi)
@@ -964,41 +966,33 @@ EndArgSearch:
 			return CUnicodeIterator(*this);
 		}
 
-		constexpr inline_small void f_Destroy()
-		{
-			CImp::f_Destroy();
-		}
-		inline_small constexpr void f_Construct()
+		constexpr inline_small TCStrAggregate(TCStrAggregate const &_Src)
+			: CImp(_Src)
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
-			CImp::f_Construct();
 		}
 
-		constexpr inline_small void f_Construct(const TCStrAggregate &_Src)
+		constexpr inline_small TCStrAggregate(TCStrAggregate &&_Src)
+			: CImp(fg_Move(_Src))
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
-			CImp::f_Construct(_Src);
-		}
-
-		constexpr inline_small void f_Construct(TCStrAggregate &&_Src)
-		{
-#ifdef DMibDebuggerHelpers
-			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
-			CImp::f_Construct(fg_Move(_Src));
 		}
 
 		template <typename ...tfp_CParams>
-		inline_small constexpr void f_Construct(tfp_CParams &&...p_Params)
+		inline_small constexpr TCStrAggregate(CStrInitGeneral, tfp_CParams &&...p_Params)
+			requires requires ()
+			{
+				CImp(fg_Forward<tfp_CParams>(p_Params)...);
+			}
+			: CImp(fg_Forward<tfp_CParams>(p_Params)...)
 		{
 #ifdef DMibDebuggerHelpers
 			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
 #endif
-			CImp::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
 		}
 
 		inline_small void f_Assign(const TCStrAggregate &_Src)
@@ -2697,10 +2691,6 @@ EndArgSearch:
 		}
 	};
 
-	struct CStrInitGeneral
-	{
-	};
-
 	template <typename t_CTCStrTraits>
 	class TCStr : public TCStrAggregate<t_CTCStrTraits>
 	{
@@ -2732,19 +2722,11 @@ EndArgSearch:
 			TCStr *mp_pThis;
 		};
 
-		inline_small constexpr TCStr() noexcept
-		{
-			CSuper::f_Construct();
-		}
-
-		constexpr inline_small ~TCStr()
-		{
-			CSuper::f_Destroy();
-		}
+		inline_small constexpr TCStr() noexcept = default;
+		inline_small constexpr ~TCStr() = default;
 
 		inline_large TCStr(CFormat const &_Format)
 		{
-			CSuper::f_Construct();
 			CAutoDestroy Cleanup{this};
 			_Format.f_FormatToStr(*this);
 			Cleanup.f_Clear();
@@ -2753,7 +2735,6 @@ EndArgSearch:
 		template <typename t_CStrDataType>
 		inline_large TCStr(t_CStrDataType const *_pStr)
 		{
-			CSuper::f_Construct();
 			if (*_pStr)
 			{
 				CAutoDestroy Cleanup{this};
@@ -2762,16 +2743,17 @@ EndArgSearch:
 			}
 		}
 
-		template <typename t_CStrDataType, TCEnableIfType<CSuper::mc_bInitConstStr, t_CStrDataType *> = nullptr>
+		template <typename t_CStrDataType>
 		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
+			requires (CSuper::mc_bInitConstStr)
+			: CSuper(_pStr, _Len)
 		{
-			CSuper::f_Construct(_pStr, _Len);
 		}
 
-		template <typename t_CStrDataType, TCEnableIfType<!CSuper::mc_bInitConstStr, t_CStrDataType *> = nullptr>
+		template <typename t_CStrDataType>
 		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
+			requires (!CSuper::mc_bInitConstStr)
 		{
-			CSuper::f_Construct();
 			if (_Len)
 			{
 				CAutoDestroy Cleanup{this};
@@ -2780,78 +2762,40 @@ EndArgSearch:
 			}
 		}
 
-		template <typename ...tfp_CParams, TCEnableIfType<true, decltype(fg_GetType<CSuper>().f_Construct(fg_GetType<tfp_CParams>()...))> * = nullptr>
-		constexpr inline_large TCStr(CStrInitGeneral, tfp_CParams &&...p_Params)
+		template <typename ...tfp_CParams>
+		constexpr inline_large TCStr(CStrInitGeneral _Init, tfp_CParams &&...p_Params)
+			requires requires ()
+			{
+				CSuper(_Init, fg_Forward<tfp_CParams>(p_Params)...);
+			}
+			: CSuper(_Init, fg_Forward<tfp_CParams>(p_Params)...)
 		{
-			CSuper::f_Construct(fg_Forward<tfp_CParams>(p_Params)...);
+
 		}
 
 		inline_small TCStr(CSuper const &_Str)
+			: CSuper(_Str)
 		{
-			if constexpr (CSuper::mc_bNoThrowConstruct)
-				CSuper::f_Construct(_Str);
-			else
-			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_Construct(_Str);
-				Cleanup.f_Clear();
-			}
 		}
 
 		constexpr inline_small TCStr(TCStr const &_Str)
+			: CSuper((CSuper const &)_Str)
 		{
-			if_consteval
-			{
-				CSuper::f_Construct((CSuper const &)_Str);
-			}
-			else
-			{
-				if constexpr (CSuper::mc_bNoThrowConstruct)
-					CSuper::f_Construct((CSuper const &)_Str);
-				else
-				{
-					CAutoDestroy Cleanup{this};
-					CSuper::f_Construct((CSuper const &)_Str);
-					Cleanup.f_Clear();
-				}
-			}
 		}
 
 		constexpr inline_small TCStr(CSuper &&_Str)
+			: CSuper(fg_Move(_Str))
 		{
-			if_consteval
-			{
-				CSuper::f_Construct(fg_Move(_Str));
-			}
-			else
-			{
-				if constexpr (CSuper::mc_bNoThrowConstruct)
-					CSuper::f_Construct(fg_Move(_Str));
-				else
-				{
-					CAutoDestroy Cleanup{this};
-					CSuper::f_Construct(fg_Move(_Str));
-					Cleanup.f_Clear();
-				}
-			}
 		}
 
 		inline_small TCStr(TCStr &&_Str)
+			: CSuper(fg_Move(_Str))
 		{
-			if constexpr (CSuper::mc_bNoThrowConstruct)
-				CSuper::f_Construct(fg_Move(_Str));
-			else
-			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_Construct(fg_Move(_Str));
-				Cleanup.f_Clear();
-			}
 		}
 
 		template <typename t_CStrTraitsF>
 		inline_large TCStr(TCStrAggregate<t_CStrTraitsF> const &_From)
 		{
-			CImp::f_Construct();
 			CAutoDestroy Cleanup{this};
 			CSuper::f_SetStr(_From);
 			Cleanup.f_Clear();
@@ -4065,8 +4009,7 @@ EndArgSearch:
 		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrUntabify(TCStrAggregate<t_CTCStrTraits> &_Str1, mint _TabSize)
 	{
 		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
-		TCStrAggregate<t_CTCStrTraits> Temp;
-		Temp.f_Construct(_Str1);
+		TCStrAggregate<t_CTCStrTraits> Temp(_Str1);
 		const CChar *pStr1 = Temp.f_GetStr();
 		mint NeededLen = 0;
 		mint Column = 0;
