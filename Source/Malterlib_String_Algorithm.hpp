@@ -445,6 +445,34 @@ namespace NMib::NStr
 	|___________________________________________________________________________________________________|
 	\***************************************************************************************************/
 
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpConstExpr(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
+	{
+		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
+		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		t_CData1 const *pStr1 = _pStr1;
+		t_CData2 const *pStr2 = _pStr2;
+
+		while (*pStr1 && *pStr2)
+		{
+			CRetType Ret0 = CData1(*pStr1);
+			CRetType Ret1 = CData2(*pStr2);
+			if (Ret0 != Ret1)
+				return (Ret0 - Ret1) << 1;
+
+			++pStr1;
+			++pStr2;
+		}
+
+		if ((*pStr1) && !(*pStr2))
+			return 1;
+
+		if (!(*pStr1) && (*pStr2))
+			return -1;
+
+		return 0;
+	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2)

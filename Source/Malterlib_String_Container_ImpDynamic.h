@@ -529,6 +529,13 @@ namespace NMib::NStr
 
 	};
 
+	template <typename t_CStr>
+	struct TCStrConst
+	{
+		t_CStr const &m_Str;
+		t_CStr::CChar const *m_pStr;
+	};
+
 	template <mint t_nChars, typename t_CChar>
 	struct TCStrConstDataAndStr;
 
@@ -538,6 +545,11 @@ namespace NMib::NStr
 		constexpr operator NStr::CStr const &() const
 		{
 			return m_Str;
+		}
+
+		constexpr operator TCStrConst<NStr::CStr> () const
+		{
+			return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};
 		}
 
 		TCStrConstData<t_nChars, ch8> const m_StrData;
@@ -552,6 +564,11 @@ namespace NMib::NStr
 			return m_Str;
 		}
 
+		constexpr operator TCStrConst<NStr::CWStr> () const
+		{
+			return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};
+		}
+
 		TCStrConstData<t_nChars, ch16> const m_StrData;
 		CWStr const m_Str{CStrInitGeneral(), m_StrData};
 	};
@@ -562,6 +579,11 @@ namespace NMib::NStr
 		constexpr operator NStr::CUStr const &() const
 		{
 			return m_Str;
+		}
+
+		constexpr operator TCStrConst<NStr::CUStr> () const
+		{
+			return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};
 		}
 
 		TCStrConstData<t_nChars, ch32> const m_StrData;
