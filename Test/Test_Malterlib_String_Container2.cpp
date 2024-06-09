@@ -2214,13 +2214,13 @@ public:
 		CMStrDeprecated TestVSE3 = CStr("Testing CMStrDeprecated Ansi");
 		CMStrDeprecated TestVSE4 = CWStr("Testing CMStrDeprecated Wide");
 		CMStrDeprecated TestVSE5 = CUStr("Testing CMStrDeprecated Uni");
-
+				
 		DMibListLinkDSA_List(CTestClass, m_Link) TestList;
 		TestList.f_Construct();
-		TestList.f_Insert(DMibNew CTestClass("Item 0"));
-		TestList.f_Insert(DMibNew CTestClass("Item 1"));
-		TestList.f_Insert(DMibNew CTestClass("Item 2"));
-		TestList.f_Insert(DMibNew CTestClass("Item 3"));
+		TestList.f_Insert(fg_ConstructObject<CTestClass>(NMemory::CDefaultAllocator(), "Item 0"));
+		TestList.f_Insert(fg_ConstructObject<CTestClass>(NMemory::CDefaultAllocator(), "Item 1"));
+		TestList.f_Insert(fg_ConstructObject<CTestClass>(NMemory::CDefaultAllocator(), "Item 2"));
+		TestList.f_Insert(fg_ConstructObject<CTestClass>(NMemory::CDefaultAllocator(), "Item 3"));
 
 		DMibListLinkDS_Iter(CTestClass, m_Link) Iter = TestList;
 		mint Len = TestList.f_GetLen();
@@ -2311,21 +2311,21 @@ public:
 			fg_StrReplace(pTemp, "11", "ega");
 			if (fg_StrCmp(pTemp, "MegaFegaMegaFugaLugaLega"))
 			{
-				delete pTemp;
+				delete [] pTemp;
 				return "fg_StrReplace test failed";
 			}
 
 			fg_StrReplace(pTemp, "ega", "Muhha", 24);
 			if (fg_StrLen(pTemp) != 23)
 			{
-				delete pTemp;
+				delete [] pTemp;
 				return "fg_StrReplace max len test failed";
 			}
 
 			fg_StrDelete(pTemp, 4, 4);
 			if (fg_StrLen(pTemp) != 19)
 			{
-				delete pTemp;
+				delete [] pTemp;
 				return "fg_StrReplace max len test failed";
 			}
 
@@ -2362,7 +2362,7 @@ public:
 			fg_StrTrimRight(pTemp);
 			fg_StrTrim(pTemp);
 
-			delete pTemp;
+			delete [] pTemp;
 		}
 
 		if (1)
