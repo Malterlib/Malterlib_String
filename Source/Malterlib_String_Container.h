@@ -2746,7 +2746,7 @@ EndArgSearch:
 		template <typename t_CStrDataType>
 		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
 			requires (CSuper::mc_bInitConstStr)
-			: CSuper(_pStr, _Len)
+			: CSuper(CStrInitGeneral(), _pStr, _Len)
 		{
 		}
 
