@@ -1852,50 +1852,50 @@ EndArgSearch:
 
 
 		template <typename t_CData2>
-			inline_small aint f_StartsWith(const t_CData2 *_pStr2) const
+			inline_small bool f_StartsWith(const t_CData2 *_pStr2) const
 		{
 			return fg_StrStartsWith(*this, _pStr2);
 		}
 
 		template <typename t_CData2>
-			inline_small aint f_StartsWithNoCase(const t_CData2 *_pStr2) const
+			inline_small bool f_StartsWithNoCase(const t_CData2 *_pStr2) const
 		{
 			return fg_StrStartsWithNoCase(*this, _pStr2);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_StartsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_StartsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrStartsWith(*this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_StartsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_StartsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrStartsWithNoCase(*this, _Str1);
 		}
 
 
 		template <typename t_CData2>
-			inline_small aint f_EndsWith(const t_CData2 *_pStr2) const
+			inline_small bool f_EndsWith(const t_CData2 *_pStr2) const
 		{
 			return fg_StrEndsWith(*this, _pStr2);
 		}
 
 		template <typename t_CData2>
-			inline_small aint f_EndsWithNoCase(const t_CData2 *_pStr2) const
+			inline_small bool f_EndsWithNoCase(const t_CData2 *_pStr2) const
 		{
 			return fg_StrEndsWithNoCase(*this, _pStr2);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_EndsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_EndsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrEndsWith(*this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_EndsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_EndsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrEndsWithNoCase(*this, _Str1);
 		}
