@@ -195,6 +195,11 @@ namespace NMib::NStr
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType> CFStr16V;
 	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType> CFStr16Vp;
 
+	typedef TCFStr<ch8, 24, EStrType_UTF>::CType CFStr24;
+	typedef TCFStrAggregate<ch8, 24, EStrType_UTF>::CType CFStrAggregate24;
+	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 24, EStrType_UTF>::CType> CFStr24V;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 24, EStrType_UTF>::CType> CFStr24Vp;
+
 	typedef TCFStr<ch8, 32, EStrType_UTF>::CType CFStr32;
 	typedef TCFStrAggregate<ch8, 32, EStrType_UTF>::CType CFStrAggregate32;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType > CFStr32V;
@@ -236,6 +241,11 @@ namespace NMib::NStr
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType > CFWStr16V;
 	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType> CFWStr16Vp;
 
+	typedef TCFStr<ch16, 24, EStrType_UTF>::CType CFWStr24;
+	typedef TCFStrAggregate<ch16, 24, EStrType_UTF>::CType CFWStrAggregate24;
+	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 24, EStrType_UTF>::CType > CFWStr24V;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 24, EStrType_UTF>::CType> CFWStr24Vp;
+
 	typedef TCFStr<ch16, 32, EStrType_UTF>::CType CFWStr32;
 	typedef TCFStrAggregate<ch16, 32, EStrType_UTF>::CType CFWStrAggregate32;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType > CFWStr32V;
@@ -276,6 +286,11 @@ namespace NMib::NStr
 	typedef TCFStrAggregate<ch32, 16, EStrType_Unicode>::CType CFUStrAggregate16;
 	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType > CFUStr16V;
 	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType> CFUStr16Vp;
+
+	typedef TCFStr<ch32, 24, EStrType_Unicode>::CType CFUStr24;
+	typedef TCFStrAggregate<ch32, 24, EStrType_Unicode>::CType CFUStrAggregate24;
+	typedef TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 24, EStrType_Unicode>::CType > CFUStr24V;
+	typedef TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 24, EStrType_Unicode>::CType> CFUStr24Vp;
 
 	typedef TCFStr<ch32, 32, EStrType_Unicode>::CType CFUStr32;
 	typedef TCFStrAggregate<ch32, 32, EStrType_Unicode>::CType CFUStrAggregate32;
