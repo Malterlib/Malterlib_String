@@ -601,7 +601,7 @@ namespace
 				const static int32 nLoopsGlobal = 10000;
 				// Do
 
-				DMibTestSuite("Static")
+				DMibTestCategory("Static")
 				{
 					const static mint nTestsPropagate = nTestsGlobal;
 					const static int32 nLoopsPropagate = nLoopsGlobal;
@@ -884,7 +884,7 @@ namespace
 					};
 				};
 
-				DMibTestSuite("Dynamic")
+				DMibTestCategory("Dynamic")
 				{
 					const static mint nTestsPropagate = nTestsGlobal;
 					const static int32 nLoopsPropagate = nLoopsGlobal;
@@ -1133,15 +1133,15 @@ namespace
 			{
 				this->f_TestCFormat();
 			};
-			DMibTestCategory(CTestCategory("Performance") << CTestGroup("Performance"))
+			DMibTestSuite(CTestCategory("Performance") << CTestGroup("Performance"))
 			{
 				CStr_Tests::TCTests<false> Tests;
 				CStr HexList;
-				DMibTestSuite("Format hex list")
+				DMibTestCategory("Format hex list")
 				{
 					HexList = Tests.fs_GenerateHexList();
 				};
-				DMibTestSuite("Parse hex list")
+				DMibTestCategory("Parse hex list")
 				{
 					Tests.fs_DecodeHexList(HexList);
 				};
@@ -1155,11 +1155,11 @@ namespace
 			{
 				CStr_Tests::TCTests<true> Tests;
 				CStr HexList;
-				DMibTestSuite("Format hex list")
+				DMibTestCategory("Format hex list")
 				{
 					HexList = Tests.fs_GenerateHexList();
 				};
-				DMibTestSuite("Parse hex list")
+				DMibTestCategory("Parse hex list")
 				{
 					Tests.fs_DecodeHexList(HexList);
 				};
