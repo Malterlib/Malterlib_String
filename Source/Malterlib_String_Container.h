@@ -26,6 +26,10 @@ namespace NMib::NStr
 	{
 	};
 
+	struct CAllowNUL
+	{
+	};
+
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	class TCStrTraits
 	{
@@ -1230,6 +1234,19 @@ EndArgSearch:
 		void f_SetStr(CChar const *_pStr, aint _Len)
 		{
 			if (_Len && *_pStr != 0)
+			{
+				aint Length = 0;
+				CAddStrAgrs Args(Length, _Len);
+				fp_AddStrLengthAware(Args, _pStr);
+				CImp::f_SetStrLen(Length);
+			}
+			else
+				this->f_Clear();
+		}
+
+		void f_SetStr(CAllowNUL, CChar const *_pStr, aint _Len)
+		{
+			if (_Len)
 			{
 				aint Length = 0;
 				CAddStrAgrs Args(Length, _Len);
@@ -2769,6 +2786,18 @@ EndArgSearch:
 
 			CAutoDestroy Cleanup{this};
 			CSuper::f_SetStr(_pStr, _Len);
+			Cleanup.f_Clear();
+		}
+
+		template <typename t_CStrDataType>
+		inline_large TCStr(CAllowNUL, t_CStrDataType const *_pStr, mint _Len)
+			requires (!CSuper::mc_bInitConstStr)
+		{
+			if (!_Len)
+				return;
+
+			CAutoDestroy Cleanup{this};
+			CSuper::f_SetStr(CAllowNUL(), _pStr, _Len);
 			Cleanup.f_Clear();
 		}
 
