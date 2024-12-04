@@ -377,27 +377,29 @@ namespace NMib::NStr
 		return _Length > fg_GetRequiredUTF8SequenceLength(_Codepoint);
 	}
 
-	bool fg_IsInvalidCodepoint(ch32 _Codepoint)
+	bool fg_IsInvalidCodepoint(ch32 _Codepoint, EValidateUTF8Flag _Flags)
 	{
 		if (_Codepoint > 0x10FFFF)
 			return true;
 
-		if (_Codepoint == 0xFFFE || _Codepoint == 0xFFFF)
-			return true;
+		if (fg_IsSet(_Flags, EValidateUTF8Flag::mc_DisallowNonCharacters))
+		{
+			if (_Codepoint == 0xFFFE || _Codepoint == 0xFFFF)
+				return true;
 
-		// Treat internal non-character codepoints as invalid?
-		if ((_Codepoint & 0xFFFF) == 0xFFFE || (_Codepoint & 0xFFFF) == 0xFFFF)
-			return true;
+			if ((_Codepoint & 0xFFFF) == 0xFFFE || (_Codepoint & 0xFFFF) == 0xFFFF)
+				return true;
+		}
 
 		return false;
 	}
 
-	bool fg_IsValidSequence(ch32 _CodePoint, mint _Length)
+	bool fg_IsValidSequence(ch32 _CodePoint, mint _Length, EValidateUTF8Flag _Flags)
 	{
 		if (fg_IsUTF16Surrogate(_CodePoint))
 			return false;
 
-		if (fg_IsInvalidCodepoint(_CodePoint))
+		if (fg_IsInvalidCodepoint(_CodePoint, _Flags))
 			return false;
 
 		if (fg_IsOverlongUTF8Sequence(_CodePoint, _Length))
@@ -407,26 +409,28 @@ namespace NMib::NStr
 	}
 
 	template<typename tf_FProcess, typename tf_CString>
-	bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr)
+	inline_always bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr, mint _Len, EValidateUTF8Flag _Flags)
 	{
 		// BOM
-		if (_pStr[0] == 0xEF && _pStr[1] == 0xBB && _pStr[2] == 0xBF)
+		if (_Len >= 3 && _pStr[0] == 0xEF && _pStr[1] == 0xBB && _pStr[2] == 0xBF)
 		{
-			if (fg_Forward<tf_FProcess>(_fFunctor)(_pStr, 3, true))
+			if (_fFunctor(_pStr, 3, true))
 				return false;
 			_pStr += 3;
 		}
 		mint nOneByteCodepointsProcessed = 0;
 		tf_CString *pOneByteCodepoints = nullptr;
 
-		while (*_pStr)
+		auto pEnd = _pStr + _Len;
+
+		while (_pStr < pEnd)
 		{
 			uch8 ToTest = *_pStr;
 			if (ToTest & 0x80)
 			{
 				if (nOneByteCodepointsProcessed)
 				{
-					if (fg_Forward<tf_FProcess>(_fFunctor)(pOneByteCodepoints, nOneByteCodepointsProcessed, true))
+					if (_fFunctor(pOneByteCodepoints, nOneByteCodepointsProcessed, true))
 						return false;
 					pOneByteCodepoints = nullptr;
 					nOneByteCodepointsProcessed = 0;
@@ -435,9 +439,9 @@ namespace NMib::NStr
 				if (ToTest & 0x40)
 				{
 					mint SequenceLengthExpected = fg_GetExpectedUTF8SequenceLength(ToTest);
-					if (SequenceLengthExpected<2)
+					if (SequenceLengthExpected < 2)
 					{
-						if (fg_Forward<tf_FProcess>(_fFunctor)(_pStr, 1, false))
+						if (_fFunctor(_pStr, 1, false))
 							return false;
 						++_pStr;
 					}
@@ -447,9 +451,16 @@ namespace NMib::NStr
 						mint SequenceLengthParsed = 1;
 						++_pStr;
 
-						ch32 CodePoint = ToTest & ((1 << (8-(SequenceLengthExpected+1))) - 1);
+						ch32 CodePoint = ToTest & ((1 << (8 - (SequenceLengthExpected + 1))) - 1);
 						while (SequenceLengthParsed < SequenceLengthExpected)
 						{
+							if (_pStr >= pEnd)
+							{
+								if (_fFunctor(pSequenceStart, SequenceLengthParsed, false))
+									return false;
+								break;
+							}
+
 							ToTest = *_pStr;
 							if ((ToTest & 0xC0) == 0x80)
 							{
@@ -459,22 +470,27 @@ namespace NMib::NStr
 							}
 							else
 							{
-								if (fg_Forward<tf_FProcess>(_fFunctor)(pSequenceStart, SequenceLengthParsed, false))
+								if (_fFunctor(pSequenceStart, SequenceLengthParsed, false))
 									return false;
 								break;
 							}
 						}
 						if (SequenceLengthParsed == SequenceLengthExpected)
 						{
-							bool bValidSequence = fg_IsValidSequence(CodePoint, SequenceLengthParsed);
-							if (fg_Forward<tf_FProcess>(_fFunctor)(pSequenceStart, SequenceLengthParsed, bValidSequence))
+							bool bValidSequence = fg_IsValidSequence(CodePoint, SequenceLengthParsed, _Flags);
+							if (_fFunctor(pSequenceStart, SequenceLengthParsed, bValidSequence))
+								return false;
+						}
+						else if (_pStr >= pEnd)
+						{
+							if (_fFunctor(pSequenceStart, SequenceLengthParsed, false))
 								return false;
 						}
 					}
 				}
 				else
 				{
-					if (fg_Forward<tf_FProcess>(_fFunctor)(_pStr, 1, false))
+					if (_fFunctor(_pStr, 1, false))
 						return false;
 					++_pStr;
 				}
@@ -490,34 +506,48 @@ namespace NMib::NStr
 
 		if (nOneByteCodepointsProcessed)
 		{
-			if (fg_Forward<tf_FProcess>(_fFunctor)(pOneByteCodepoints, nOneByteCodepointsProcessed, true))
+			if (_fFunctor(pOneByteCodepoints, nOneByteCodepointsProcessed, true))
 				return false;
 		}
 
 		return true;
 	}
 
-	bool fg_IsValidUTF8( CStr const &_Str)
+	bool fg_IsValidUTF8(ch8 const *_pStr, mint _Len, EValidateUTF8Flag _Flags)
 	{
-		return fg_ProcessUTF8
+		mint nValidChars = 0;
+		bool bReturn = fg_ProcessUTF8
 			(
-				[&](uch8 const *, mint, bool _bValid) -> bool
+				[&](uch8 const *, mint _Len, bool _bValid) inline_always_lambda -> bool
 				{
+					nValidChars += _Len;
 					return !_bValid;
 				}
-				, (uch8*)_Str.f_GetStr()
+				, (uch8 *)_pStr
+				, _Len
+				, _Flags
 			)
 		;
+
+		if (!bReturn)
+			return false;
+
+		return nValidChars == _Len;
 	}
 
-	CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar)
+	bool fg_IsValidUTF8(CStr const &_Str, EValidateUTF8Flag _Flags)
+	{
+		return fg_IsValidUTF8(_Str.f_GetStr(), _Str.f_GetLen(), _Flags);
+	}
+
+	CStr fg_ReplaceCharactersUTF8(CStr const &_Str, EValidateUTF8Flag _Flags, uch8 _ReplacementChar)
 	{
 		CStr StringCopy = _Str;
 		uch8* pStr = (uch8*)StringCopy.f_GetStrUniqueWritable();
 
 		fg_ProcessUTF8
 			(
-				[&](uch8* pStr, mint _Length, bool _bValid) -> bool
+				[&](uch8* pStr, mint _Length, bool _bValid) inline_always_lambda -> bool
 				{
 					if (!_bValid)
 					{
@@ -531,12 +561,14 @@ namespace NMib::NStr
 					return false;
 				}
 				, pStr
+				, _Str.f_GetLen()
+				, _Flags
 			)
 		;
 		return StringCopy;
 	}
 
-	CStr fg_ReplaceSequenceUTF8(CStr const &_Str, CStr const &_ReplacementChar)
+	CStr fg_ReplaceSequenceUTF8(CStr const &_Str, EValidateUTF8Flag _Flags, CStr const &_ReplacementChar)
 	{
 		CStr Replacement = _ReplacementChar;
 
@@ -546,7 +578,7 @@ namespace NMib::NStr
 
 		fg_ProcessUTF8
 			(
-				[&](uch8* _pStr, mint _Length, bool _bValid) -> bool
+				[&](uch8* _pStr, mint _Length, bool _bValid) inline_always_lambda -> bool
 				{
 					if (_bValid)
 					{
@@ -561,18 +593,20 @@ namespace NMib::NStr
 					return false;
 				}
 				, (uch8*)_Str.f_GetStr()
+				, _Str.f_GetLen()
+				, _Flags
 			)
 		;
 		Destination.f_SetStrLen(Length);
 		return Destination;
 	}
 
-	CStr fg_CleanUTF8(CStr const &_CStr)
+	CStr fg_CleanUTF8(CStr const &_String, EValidateUTF8Flag _Flags)
 	{
-		if (fg_IsValidUTF8(_CStr))
-			return _CStr;
+		if (fg_IsValidUTF8(_String, _Flags))
+			return _String;
 		else
-			return fg_ReplaceSequenceUTF8(_CStr);
+			return fg_ReplaceSequenceUTF8(_String, _Flags);
 	}
 
 	void CParseError::f_Format(NStr::CStrAggregate &o_FormatInto) const

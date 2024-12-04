@@ -1029,7 +1029,8 @@ namespace
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x")))); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xdf\xbfx"))));
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));	// Invalid codepoint
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));	// Invalid codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));	// Invalid codepoint
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf7\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfb\xbf\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
@@ -1037,7 +1038,8 @@ namespace
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xed\x9f\xbfx"))));
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xee\x80\x80x"))));	// Private use area
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbdx"))));	// ReplacementChar character
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"))));	// Non-character codepoint
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"))));	// Non-character codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));	// Non-character codepoint
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x90\x80\x80x"))));  // Beyond U-10FFFF
 					}
 					{
@@ -1101,8 +1103,10 @@ namespace
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))));
 						// Invalid code positions
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbex"))));
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbex")))) ;
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbex"), EValidateUTF8Flag::mc_DisallowNonCharacters)));
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));
 					}
 				}
 				{
@@ -1119,7 +1123,8 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x"))) == DMibExpr(CStr("x??????x"))); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xdf\xbfx"))) == DMibExpr(CStr("x\xdf\xbfx")));
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(CStr("x???x")));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(CStr("x\xef\xbf\xbfx")));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(CStr("x???x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf7\xbf\xbf\xbfx"))) == DMibExpr(CStr("x????x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfb\xbf\xbf\xbf\xbfx"))) == DMibExpr(CStr("x?????x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))) == DMibExpr(CStr("x??????x")));
@@ -1127,7 +1132,8 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\x9f\xbfx"))) == DMibExpr(CStr("x\xed\x9f\xbfx")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x")));	// Private use area
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(CStr("x\xef\xbf\xbdx")));	// ReplacementChar character
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x????x")));	//Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx")));	//Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(CStr("x????x")));	//Non-character codepoint
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(CStr("x????x")));
 					}
 					{
@@ -1191,8 +1197,10 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))) == DMibExpr("x??????x"));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))) == DMibExpr("x??????x"));
 						// Invalid code positions
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr("x???x"));
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr("x???x"));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr("x\xef\xbf\xbex"));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr("x\xef\xbf\xbfx"));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbex"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr("x???x"));
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr("x???x"));
 					}
 				}
 				{
@@ -1212,7 +1220,8 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar)); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xdf\xbfx"))) == DMibExpr(CStr("x\xdf\xbfx")));
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(ReplacementChar));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(CStr("x\xef\xbf\xbfx")));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf7\xbf\xbf\xbfx"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfb\xbf\xbf\xbf\xbfx"))) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))) == DMibExpr(ReplacementChar));
@@ -1220,7 +1229,8 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\x9f\xbfx"))) == DMibExpr(CStr("x\xed\x9f\xbfx")));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x")));	// Private use area
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(ReplacementChar));	// ReplacementChar character
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(ReplacementChar));	// Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx")));	// Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));	// Non-character codepoint
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(ReplacementChar));
 					}
 					{
@@ -1284,8 +1294,10 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))) == DMibExpr(DoubleReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))) == DMibExpr(DoubleReplacementChar));
 						// Invalid code positions
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr(ReplacementChar));
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(ReplacementChar));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbex"))) == DMibExpr(CStr("x\xef\xbf\xbex")));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"))) == DMibExpr(CStr("x\xef\xbf\xbfx")));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbex"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));
 					}
 				}
 				{

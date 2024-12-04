@@ -112,11 +112,19 @@ namespace NMib::NStr
 	CStr fg_ForceStrUTF8(const CStr &_Str);
 	CStr fg_ForceStrUTF8(const CWStr &_Str);
 	CStr fg_ForceStrUTF8(const CUStr &_Str);
-	bool fg_IsValidUTF8(CStr const &_Str);
+
+	enum class EValidateUTF8Flag : uint32
+	{
+		mc_None = 0
+		, mc_DisallowNonCharacters = fg_Bit(0)
+	};
+
+	bool fg_IsValidUTF8(CStr const &_Str, EValidateUTF8Flag _Flags = EValidateUTF8Flag::mc_None);
+	bool fg_IsValidUTF8(ch8 const *_pStr, mint _Len, EValidateUTF8Flag _Flags = EValidateUTF8Flag::mc_None);
 	CWStr fg_ForceStrUTF16(const CWStr &_Str);
-	CStr fg_ReplaceCharactersUTF8(CStr const &_Str, uch8 _ReplacementChar = '?');
-	CStr fg_ReplaceSequenceUTF8(CStr const &_Str, CStr const &_ReplacementChar = CStr("\xef\xbf\xbd"));
-	CStr fg_CleanUTF8(CStr const &_Str);
+	CStr fg_ReplaceCharactersUTF8(CStr const &_Str, EValidateUTF8Flag _Flags = EValidateUTF8Flag::mc_None, uch8 _ReplacementChar = '?');
+	CStr fg_ReplaceSequenceUTF8(CStr const &_Str, EValidateUTF8Flag _Flags = EValidateUTF8Flag::mc_None, CStr const &_ReplacementChar = CStr("\xef\xbf\xbd"));
+	CStr fg_CleanUTF8(CStr const &_Str, EValidateUTF8Flag _Flags = EValidateUTF8Flag::mc_None);
 
 	inline_always CStr::CFormat operator ""_f (const char *_pStr, std::size_t _Len)
 	{
