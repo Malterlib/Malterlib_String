@@ -39,12 +39,12 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 		}
 
-		inline_always ch32 operator *() const
+		mark_nodebug inline_always ch32 operator *() const
 		{
 			return m_Current;
 		}
 
-		inline_always operator ch32 () const
+		mark_nodebug inline_always operator ch32 () const
 		{
 			return m_Current;
 		}
@@ -193,12 +193,12 @@ namespace NMib::NStr
 			return !m_bValidCodePoint;
 		}
 
-		inline_always ch32 operator *() const
+		mark_nodebug inline_always ch32 operator *() const
 		{
 			return m_Current;
 		}
 
-		inline_always operator ch32 () const
+		mark_nodebug inline_always operator ch32 () const
 		{
 			return m_Current;
 		}
@@ -289,12 +289,12 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 		}
 
-		inline_always operator ch32 () const
+		mark_nodebug inline_always operator ch32 () const
 		{
 			return m_Current;
 		}
 
-		inline_always ch32 operator *() const
+		mark_nodebug inline_always ch32 operator *() const
 		{
 			return m_Current;
 		}
