@@ -815,6 +815,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Int<t_CFormatter, NNumeric::TCInt<t_CInt0, t_CInt1> const &> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, NNumeric::TCInt<t_CInt0, t_CInt1> const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -827,6 +829,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Int<t_CFormatter, NNumeric::TCInt<t_CInt0, t_CInt1>> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>> const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(*_Data);
@@ -839,6 +843,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Int<t_CFormatter, t_CIntType const &, TCValueWithOptions<t_COption, t_CIntType>> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCValueWithOptions<t_COption, t_CIntType> const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data, _Data);
@@ -851,6 +857,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Int<t_CFormatter, t_CIntType, TCValueWithOptions<t_COption, t_CIntType>> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>> const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(*_Data, *_Data);
@@ -924,6 +932,8 @@ namespace NMib::NStr
 		};
 
 		typedef TCStrFormatType_Int<t_CFormatter, mint, CPtrOptions> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data)
 		{
 			mint Data = (mint)_Data;
@@ -950,6 +960,8 @@ namespace NMib::NStr
 		};
 
 		typedef TCStrFormatType_Int<t_CFormatter, int8, CBoolOptions> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, bool const&_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -962,7 +974,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, _Type> \
 	{ \
 	public: \
-		typedef TCStrFormatType_Int<t_CFormatter, _Type const &> CFormatType;\
+		typedef TCStrFormatType_Int<t_CFormatter, _Type const &> CFormatType; \
+		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, _Type const&_Data) \
 		{ \
 			_Formatter.template f_Alloc<CFormatType>(_Data);\
@@ -973,7 +986,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<_Type>> \
 	{ \
 	public: \
-		typedef TCStrFormatType_Int<t_CFormatter, _Type> CFormatType;\
+		typedef TCStrFormatType_Int<t_CFormatter, _Type> CFormatType; \
+		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<_Type> const &_Data) \
 		{ \
 			_Formatter.template f_Alloc<CFormatType>(*_Data);\

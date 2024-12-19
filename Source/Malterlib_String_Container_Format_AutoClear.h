@@ -20,6 +20,7 @@ namespace NMib::NStr
 
 		typedef decltype(fg_GetStringFormatType(fs_GetFormatter(), t_CInt(0))) CFormatType;
 
+		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, CData const &_Data) -> decltype(fg_CreateStringFormatter(_Formatter, _Data.m_Int))
 		{
 			return fg_CreateStringFormatter(_Formatter, _Data.m_Int);

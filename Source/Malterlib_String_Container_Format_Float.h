@@ -992,6 +992,8 @@ namespace NMib::NStr
 	public:
 		typedef NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloat;
 		typedef TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, true> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CFloat const&_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -1005,6 +1007,8 @@ namespace NMib::NStr
 	public:
 		typedef NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloat;
 		typedef TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, false> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CFloat> const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(*_Data);
@@ -1018,9 +1022,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, fp32>::CFormatType CFormatType;
-		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp32 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp32>::fs_CreateFormat(_Formatter, _Data))
+
+		template <typename tf_CTypeWithConst>
+		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp32 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp32>::template fs_CreateFormat<fp32>(_Formatter, _Data))
 		{
-			return TCStringFormatter<t_CFormatter, fp32>::fs_CreateFormat(_Formatter, reinterpret_cast<fp32 const &>(_Data));
+			return TCStringFormatter<t_CFormatter, fp32>::template fs_CreateFormat<fp32>(_Formatter, reinterpret_cast<fp32 const &>(_Data));
 		}
 	};
 
@@ -1029,9 +1035,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp32>>::CFormatType CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp32> const &_Data)
 		{
-			return TCStringFormatter<t_CFormatter, TCByValue<fp32>>::fs_CreateFormat(_Formatter, reinterpret_cast<TCByValue<fp32> const &>(_Data));
+			return TCStringFormatter<t_CFormatter, TCByValue<fp32>>::template fs_CreateFormat<fp32>(_Formatter, reinterpret_cast<TCByValue<fp32> const &>(_Data));
 		}
 	};
 #endif
@@ -1041,9 +1049,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, fp64>::CFormatType CFormatType;
-		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp64 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp64>::fs_CreateFormat(_Formatter, _Data))
+
+		template <typename tf_CTypeWithConst>
+		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp64 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp64>::template fs_CreateFormat<fp64>(_Formatter, _Data))
 		{
-			return TCStringFormatter<t_CFormatter, fp64>::fs_CreateFormat(_Formatter, reinterpret_cast<fp64 const &>(_Data));
+			return TCStringFormatter<t_CFormatter, fp64>::template fs_CreateFormat<fp64>(_Formatter, reinterpret_cast<fp64 const &>(_Data));
 		}
 	};
 
@@ -1052,9 +1062,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp64>>::CFormatType CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp64> const &_Data)
 		{
-			return TCStringFormatter<t_CFormatter, TCByValue<fp64>>::fs_CreateFormat(_Formatter, reinterpret_cast<TCByValue<fp64> const &>(_Data));
+			return TCStringFormatter<t_CFormatter, TCByValue<fp64>>::template fs_CreateFormat<fp64>(_Formatter, reinterpret_cast<TCByValue<fp64> const &>(_Data));
 		}
 	};
 #endif
@@ -1064,9 +1076,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, fp80>::CFormatType CFormatType;
-		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp80 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp80>::fs_CreateFormat(_Formatter, _Data))
+
+		template <typename tf_CTypeWithConst>
+		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp80 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp80>::template fs_CreateFormat<fp80>(_Formatter, _Data))
 		{
-			return TCStringFormatter<t_CFormatter, fp80>::fs_CreateFormat(_Formatter, reinterpret_cast<fp80 const &>(_Data));
+			return TCStringFormatter<t_CFormatter, fp80>::template fs_CreateFormat<fp80>(_Formatter, reinterpret_cast<fp80 const &>(_Data));
 		}
 	};
 
@@ -1075,9 +1089,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp80>>::CFormatType CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp80> const &_Data)
 		{
-			return TCStringFormatter<t_CFormatter, TCByValue<fp80>>::fs_CreateFormat(_Formatter, reinterpret_cast<TCByValue<fp80> const &>(_Data));
+			return TCStringFormatter<t_CFormatter, TCByValue<fp80>>::template fs_CreateFormat<fp80>(_Formatter, reinterpret_cast<TCByValue<fp80> const &>(_Data));
 		}
 	};
 #endif
@@ -1087,9 +1103,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, fp128>::CFormatType CFormatType;
-		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp128>::fs_CreateFormat(_Formatter, _Data))
+
+		template <typename tf_CTypeWithConst>
+		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter, _Data))
 		{
-			return TCStringFormatter<t_CFormatter, fp128>::fs_CreateFormat(_Formatter,  reinterpret_cast<fp128 const &>(_Data));
+			return TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter,  reinterpret_cast<fp128 const &>(_Data));
 		}
 	};
 
@@ -1098,9 +1116,11 @@ namespace NMib::NStr
 	{
 	public:
 		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp128>>::CFormatType CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data)
 		{
-			return TCStringFormatter<t_CFormatter, TCByValue<fp128>>::fs_CreateFormat(_Formatter,  reinterpret_cast<TCByValue<fp128> const &>(_Data));
+			return TCStringFormatter<t_CFormatter, TCByValue<fp128>>::template fs_CreateFormat<fp128>(_Formatter,  reinterpret_cast<TCByValue<fp128> const &>(_Data));
 		}
 	};
 #endif

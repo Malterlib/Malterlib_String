@@ -100,6 +100,12 @@ namespace NMib::NStr
 			return fg_StrLen(_pStr);
 		}
 
+		template <typename t_CData>
+			static inline_small mint fs_StrLen(const t_CData *_pStr, mint _MaxLen)
+		{
+			return fg_StrLen(_pStr, _MaxLen);
+		}
+
 		template <typename t_CData1, typename t_CData2>
 			static inline_small t_CData1 *fs_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 		{
@@ -280,7 +286,7 @@ namespace NMib::NStr
 		public:
 			using CFormatType = TCStrFormatType_Int<t_CFormatter, NTraits::TCEnumUnderlyingType<t_CData>>;
 
-			template <typename tf_CData>
+			template <typename tf_CTypeWithConst, typename tf_CData>
 			static inline_large CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, tf_CData const &_Data)
 			{
 				_Formatter.template f_Alloc<CFormatType>(static_cast<NTraits::TCEnumUnderlyingType<tf_CData>>(_Data));
@@ -301,15 +307,15 @@ namespace NMib::NStr
 		};
 	}
 
-	template <typename t_CFormatter, typename t_CData>
+	template <typename t_CFormatter, typename t_CData, typename t_CTypeWithConst = t_CData>
 	struct TCStringFormatterAll
 	{
 		typedef typename NPrivate::TCDetermineStringFormatter<t_CFormatter, t_CData>::CType CStringFormatter;
 		typedef typename CStringFormatter::CFormatType CFormatType;
 
-		static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data) -> decltype(CStringFormatter::fs_CreateFormat(_Formatter, _Data))
+		static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data) -> decltype(CStringFormatter::template fs_CreateFormat<t_CTypeWithConst>(_Formatter, _Data))
 		{
-			return CStringFormatter::fs_CreateFormat(_Formatter, _Data);
+			return CStringFormatter::template fs_CreateFormat<t_CTypeWithConst>(_Formatter, _Data);
 		}
 	};
 
@@ -566,7 +572,18 @@ namespace NMib::NStr
 				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
 			)
 		{
-			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
+			TCStringFormatterAll<TCFormat, t_CType, t_CType const>::fs_CreateFormat(*this, _Type);
+			return *this;
+		}
+
+		template <typename t_CType>
+		inline_small TCFormat &operator << (t_CType &_Type) &
+			requires
+			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
+				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+			)
+		{
+			TCStringFormatterAll<TCFormat, t_CType, t_CType>::fs_CreateFormat(*this, _Type);
 			return *this;
 		}
 
@@ -577,7 +594,18 @@ namespace NMib::NStr
 				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
 			)
 		{
-			TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*this, _Type);
+			TCStringFormatterAll<TCFormat, t_CType, t_CType const>::fs_CreateFormat(*this, _Type);
+			return fg_Move(*this);
+		}
+
+		template <typename t_CType>
+		inline_small TCFormat &&operator << (t_CType &_Type) &&
+			requires
+			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
+				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+			)
+		{
+			TCStringFormatterAll<TCFormat, t_CType, t_CType>::fs_CreateFormat(*this, _Type);
 			return fg_Move(*this);
 		}
 

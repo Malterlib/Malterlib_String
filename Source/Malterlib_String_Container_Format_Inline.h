@@ -30,6 +30,7 @@ namespace NMib::NStr
 		{
 			using CFormatType = decltype(fg_GetType<t_CData &>().f_GetStringFormatType(fg_GetType<t_CFormatter &>()));
 
+			template <typename tf_CTypeWithConst>
 			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
 			{
 				return _Data.f_CreateStringFormatter(_Formatter);
@@ -45,6 +46,7 @@ namespace NMib::NStr
 		{
 			using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
 
+			template <typename tf_CTypeWithConst>
 			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
 			{
 				using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
@@ -62,9 +64,10 @@ namespace NMib::NStr
 		{
 			using CFormatType = typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType;
 
+			template <typename tf_CTypeWithConst>
 			static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data)
 			{
-				return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::fs_CreateFormat(_Formatter, _Data);
+				return TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::template fs_CreateFormat<CStrFormatBinaryWrapperUntyped>(_Formatter, _Data);
 			}
 		};
 
@@ -74,6 +77,7 @@ namespace NMib::NStr
 		public:
 			using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, false>;
 
+			template <typename tf_CTypeWithConst>
 			static inline_large auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<t_CData> const &_Data)
 			{
 				_Formatter.template f_Alloc<CFormatType>(*_Data);

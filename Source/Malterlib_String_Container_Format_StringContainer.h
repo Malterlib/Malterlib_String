@@ -306,6 +306,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStrAggregate<t_CStrTraitsIn> const&_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -318,6 +320,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const&_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -331,6 +335,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat
 		(
 			t_CFormatter &_Formatter
@@ -347,6 +353,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat
 		(
 			t_CFormatter &_Formatter, TCByValue<TCStr<t_CStrTraitsIn>> const&_Data

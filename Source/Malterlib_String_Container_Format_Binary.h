@@ -137,6 +137,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapper> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CStrFormatBinaryWrapper const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -149,6 +151,8 @@ namespace NMib::NStr
 	{
 	public:
 		typedef TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapperUntyped> CFormatType;
+
+		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CStrFormatBinaryWrapperUntyped const &_Data)
 		{
 			_Formatter.template f_Alloc<CFormatType>(_Data);

@@ -1248,6 +1248,33 @@ namespace
 					DMibExpect(CStr("\\;").f_SplitEscaped<true>(';'), ==, (TCVector<CStr>{";"}));
 				}
 			};
+			DMibTestSuite("Bugs")
+			{
+				{
+					DMibTestPath("Doesn't check null terminator");
+					ch8 Test0[16] = "Test";
+					ch8 Test1[16] = "Test2";
+					CStr Formatted = CStr::CFormat("{}{}") << Test0 << Test1;
+					DMibExpect(Formatted, ==, "TestTest2");
+				}
+				{
+					DMibTestPath("Doesn't check null terminator by value");
+					ch8 Test0[16] = "Test";
+					ch8 Test1[16] = "Test2";
+					CStr Formatted = CStr::CFormat("{}{}") << fg_ByValue(Test0) << fg_ByValue(Test1);
+					DMibExpect(Formatted, ==, "TestTest2");
+				}
+				{
+					DMibTestPath("Doesn't check null terminator const");
+					CStr Formatted = CStr::CFormat("{}{}") << "Test" << "Test2";
+					DMibExpect(Formatted, ==, "TestTest2");
+				}
+				{
+					DMibTestPath("Doesn't check null terminator const by value");
+					CStr Formatted = CStr::CFormat("{}{}") << fg_ByValue("Test") << fg_ByValue("Test2");
+					DMibExpect(Formatted, ==, "TestTest2");
+				}
+			};
 		}
 	};
 
