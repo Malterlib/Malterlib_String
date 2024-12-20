@@ -88,6 +88,12 @@ namespace NMib::NStr
 			return fg_StrLen(_pStr);
 		}
 
+		template <typename t_CData>
+			static inline_small mint fs_StrLen(const t_CData *_pStr, mint _MaxLen)
+		{
+			return fg_StrLen(_pStr, _MaxLen);
+		}
+
 		template <typename t_CData1, typename t_CData2>
 			static inline_small t_CData1 *fs_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 		{

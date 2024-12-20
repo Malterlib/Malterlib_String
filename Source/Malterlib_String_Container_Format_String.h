@@ -52,7 +52,7 @@ namespace NMib::NStr
 
 		inline_small TCStrFormatType_String(t_CStrDataType const *_pStr, aint _StrLen)
 			: m_pStr(_pStr)
-			, m_StrLen(_StrLen)
+			, m_StrLen(CTStrTraits::CStrTraits::fs_StrLen(_pStr, _StrLen))
 		{
 		}
 
