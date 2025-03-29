@@ -496,6 +496,48 @@ Return:
 	}
 
 	template <typename t_CData, typename t_CReturn>
+		inline_medium t_CReturn fg_StrToIntParseHexNoSign(const t_CData *&_pStr, mint _MaxLen, t_CReturn _FailValue)
+	{
+		t_CReturn DestNumber = 0;
+		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+		const CData *pParseStr = (const CData *)_pStr;
+		auto pEndStr = pParseStr + _MaxLen;
+		aint bFoundNum = false;
+
+		while (*pParseStr && pParseStr < pEndStr)
+		{
+			aint Num;
+			if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
+				Num = (*pParseStr) - '0';
+			else if ((*pParseStr) >= 'a' && (*pParseStr) <= 'f')
+				Num = ((*pParseStr) - 'a') + 10;
+			else if ((*pParseStr) >= 'A' && (*pParseStr) <= 'F')
+				Num = ((*pParseStr) - 'A') + 10;
+			else
+				break;
+
+			DestNumber <<= 4;
+			if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+				DestNumber |= Num;
+			else
+			{
+				if (Num)
+					DestNumber |= Num;
+			}
+			bFoundNum = true;
+
+			++pParseStr;
+		}
+
+		_pStr = (const t_CData *)pParseStr;
+
+		if (bFoundNum)
+			return DestNumber;
+		else
+			return _FailValue;
+	}
+
+	template <typename t_CData, typename t_CReturn>
 		inline_small t_CReturn fg_StrToIntBase10(const t_CData *_pStr, t_CReturn _FailValue)
 	{
 		const t_CData *pStr = _pStr;
