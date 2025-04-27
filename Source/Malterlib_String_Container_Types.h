@@ -106,6 +106,16 @@ namespace NMib::NStr
 	typedef TCStrAggregate<CStrTraits_CWStrSecure> CWStrSecureAggregate;
 	typedef TCStrAggregate<CStrTraits_CUStrSecure> CUStrSecureAggregate;
 
+#ifdef DMibSecureClearIOBuffers_Enable
+	using CStrIO = CStrSecure;
+	using CWStrIO = CWStrSecure;
+	using CUStrIO = CUStrSecure;
+#else
+	using CStrIO = CStr;
+	using CWStrIO = CWStr;
+	using CUStrIO = CUStr;
+#endif
+
 	struct CDefaultStrParams
 	{
 		typedef NMemory::CDefaultAllocator CAllocator;
