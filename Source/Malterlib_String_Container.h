@@ -1445,6 +1445,12 @@ EndArgSearch:
 			mc_NumSavedArgs = 16
 		};
 
+		struct CParseResult
+		{
+			mint m_nCharsParsed = 0;
+			mint m_nVariablesParsed = 0;
+		};
+
 		class CParse : public TCStrParse<CStrTraits>
 		{
 		public:
@@ -1481,6 +1487,21 @@ EndArgSearch:
 			{
 				const CChar *pParse = _pStr;
 				return TCStrParse<CStrTraits>::f_Parse(pParse, _ParseFlags) - pParse;
+			}
+
+			inline_small CParseResult f_Execute(TCStrAggregate<t_CTCStrTraits> const &_Str, EParseFlag _ParseFlags = EParseFlag_None)
+			{
+				const CChar *pParse = _Str.f_GetStr();
+
+				aint nParsed = 0;
+				aint nCharsParsed = TCStrParse<CStrTraits>::f_Parse(pParse, nParsed, _ParseFlags) - pParse;
+
+				return
+					{
+						.m_nCharsParsed = mint(nCharsParsed)
+						, .m_nVariablesParsed = mint(nParsed)
+					}
+				;
 			}
 
 			template <typename t_CType>
