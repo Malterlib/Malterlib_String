@@ -2847,6 +2847,20 @@ namespace NMib::NStr
 		_pParse = (const t_CChar * )pParse;
 	}
 
+	template <typename t_CChar>
+	constexpr void fg_ParseNumeric(const t_CChar * &_pParse)
+	{
+		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
+		while (*pParse)
+		{
+			if (!fg_CharIsNumber(*pParse))
+				break;
+			++pParse;
+		}
+
+		_pParse = (const t_CChar * )pParse;
+	}
+
 	template <typename t_CChar, typename t_CChar1>
 	constexpr void fg_ParseAlphaNumericAndChars(const t_CChar * &_pParse, const t_CChar1 * _pChars)
 	{
