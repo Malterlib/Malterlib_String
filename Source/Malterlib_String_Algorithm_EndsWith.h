@@ -17,11 +17,11 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CContainerEndsWith
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>::CType>::mc_Value
-		>::CType * = nullptr
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+			|| !NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>>
+		> * = nullptr
 	>
 	auto fg_StrEndsWith(tf_CContainer &&_Container, tf_CContainerEndsWith &&_ContainerStartsWith);
 }

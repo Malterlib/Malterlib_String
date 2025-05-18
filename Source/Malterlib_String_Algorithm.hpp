@@ -161,7 +161,7 @@ namespace NMib::NStr
 	template <typename t_CData1>
 		inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pStr)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
 		CData1 *pStr = (CData1 *)_pStr;
 		CData1 UpperComapre = 0xffu;
 
@@ -182,7 +182,7 @@ namespace NMib::NStr
 	template <typename t_CData1>
 		inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pStr, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
 		CData1 *pStr = (CData1 *)_pStr;
 		const CData1 *pStrEnd = pStr + _MaxLen;
 		CData1 UpperComapre = 0xffu;
@@ -203,8 +203,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pDest, mint _MaxDestLen, const t_CData2 *_pSource)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData1 *pDestEnd = pDest + (_MaxDestLen - 1);
@@ -229,8 +229,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pDest, mint _MaxDestLen, const t_CData2 *_pSource, mint _SourceLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData1 *pDestEnd = pDest + (_MaxDestLen - 1);
@@ -256,8 +256,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, mint _SourceLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData2 *pSource = (const CData2 *)_pSource;
@@ -289,7 +289,7 @@ namespace NMib::NStr
 	template <typename t_CData1>
 		inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pStr)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
 
 		CData1 *pStr = (CData1 *)_pStr;
 
@@ -308,7 +308,7 @@ namespace NMib::NStr
 	template <typename t_CData1>
 		inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pStr, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
 
 		CData1 *pStr = (CData1 *)_pStr;
 		const CData1 *pStrEnd = pStr + _MaxLen;
@@ -329,8 +329,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pDest, mint _MaxDestLen, const t_CData2 *_pSource)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData1 *pDestEnd = pDest + (_MaxDestLen - 1);
@@ -354,8 +354,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pDest, mint _MaxDestLen, const t_CData2 *_pSource, mint _SourceLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData1 *pDestEnd = pDest + (_MaxDestLen - 1);
@@ -380,8 +380,8 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 		inline_large t_CData1 *fg_StrLowerCase(t_CData1 *_pDest, const t_CData2 *_pSource, mint _SourceLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 
 		CData1 *pDest = (CData1 *)_pDest;
 		const CData2 *pSource = (const CData2 *)_pSource;
@@ -413,7 +413,8 @@ namespace NMib::NStr
 	template <typename t_CData1>
 		inline_large t_CData1 *fg_StrCapitalize(t_CData1 *_pStr)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+
 		CData1 *pStr = (CData1 *)_pStr;
 		CData1 UpperComapre = 0xffu;
 
@@ -448,9 +449,10 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpConstExpr(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CRetType = typename TCChooseStrCompareType<t_CData1, t_CData2>::CType;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+
 		t_CData1 const *pStr1 = _pStr1;
 		t_CData2 const *pStr2 = _pStr2;
 
@@ -477,9 +479,10 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CRetType = typename TCChooseStrCompareType<t_CData1, t_CData2>::CType;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+
 		const CData1 *pStr1 = (const CData1 *)_pStr1;
 		const CData2 *pStr2 = (const CData2 *)_pStr2;
 
@@ -506,7 +509,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmp(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		if constexpr (NTraits::cIsSame<t_CData1, t_CData2>)
 		{
 			if (_pStr1 == _pStr2)
 				return 0;
@@ -543,9 +546,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCaseImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CRetType = typename TCChooseStrCompareType<t_CData1, t_CData2>::CType;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1 = (const CData1 *)_pStr1;
 		const CData2 *pStr2 = (const CData2 *)_pStr2;
 
@@ -574,7 +577,7 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_always typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		if constexpr (NTraits::cIsSame<t_CData1, t_CData2>)
 		{
 			if (_pStr1 == _pStr2)
 				return 0;
@@ -586,9 +589,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpImpl(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _MaxLen)
 	{
-		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CRetType = typename TCChooseStrCompareType<t_CData1, t_CData2>::CType;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1 = (const CData1 *)_pStr1;
 		const CData2 *pStr2 = (const CData2 *)_pStr2;
 
@@ -623,7 +626,7 @@ namespace NMib::NStr
 		if (_MaxLen == 0)
 			return 0;
 
-		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		if constexpr (NTraits::cIsSame<t_CData1, t_CData2>)
 		{
 			if (_pStr1 == _pStr2)
 				return 0;
@@ -635,9 +638,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<t_CData1, t_CData2>::CType fg_StrCmpNoCaseImpl(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
-		typedef typename TCChooseStrCompareType<t_CData1, t_CData2>::CType CRetType;
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CRetType = typename TCChooseStrCompareType<t_CData1, t_CData2>::CType;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1 = (const CData1 *)_pStr1;
 		const CData2 *pStr2 = (const CData2 *)_pStr2;
 		const CData1 *pStr1End = pStr1 + _MaxLen;
@@ -672,7 +675,7 @@ namespace NMib::NStr
 		if (_MaxLen == 0)
 			return 0;
 
-		if constexpr (NTraits::TCIsSame<t_CData1, t_CData2>::mc_Value)
+		if constexpr (NTraits::cIsSame<t_CData1, t_CData2>)
 		{
 			if (_pStr1 == _pStr2)
 				return 0;
@@ -690,9 +693,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint  fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = _Char;
+		NTraits::TCUnsigned<t_CData2> Char = _Char;
 
 		while (*pStr1)
 		{
@@ -707,9 +710,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = fg_CharLowerCase(_Char);
+		NTraits::TCUnsigned<t_CData2> Char = fg_CharLowerCase(_Char);
 
 		while (*pStr1)
 		{
@@ -727,9 +730,9 @@ namespace NMib::NStr
 		if (!(*_pStr1))
 			return -1;
 
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = _Char;
+		NTraits::TCUnsigned<t_CData2> Char = _Char;
 
 		// Find end
 		while (*pStr1)
@@ -755,9 +758,9 @@ namespace NMib::NStr
 		if (!(*_pStr1))
 			return -1;
 
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = fg_CharLowerCase(_Char);
+		NTraits::TCUnsigned<t_CData2> Char = fg_CharLowerCase(_Char);
 
 		// Find end
 		while (*pStr1)
@@ -780,9 +783,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindChar(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = _Char;
+		NTraits::TCUnsigned<t_CData2> Char = _Char;
 		const CChar1 *pStr1End = (const CChar1 *)(_pStr1 + _MaxLen);
 
 		while (*pStr1 && pStr1End - pStr1 > 0)
@@ -798,9 +801,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindCharNoCase(const t_CData1 *_pStr1, t_CData2 _Char, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
 		const CChar1 *pStr1 = (const CChar1 *)_pStr1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = fg_CharLowerCase(_Char);
+		NTraits::TCUnsigned<t_CData2> Char = fg_CharLowerCase(_Char);
 		const CChar1 *pStr1End = (const CChar1 *)(_pStr1 + _MaxLen);
 
 		while (*pStr1 && pStr1End - pStr1 > 0)
@@ -819,8 +822,8 @@ namespace NMib::NStr
 		if (!(*_pStr1))
 			return -1;
 
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = _Char;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
+		NTraits::TCUnsigned<t_CData2> Char = _Char;
 
 		const CChar1 *pStartPos = (const CChar1 *)_pStr1;
 		const CChar1 *pCurPos = pStartPos;
@@ -850,8 +853,8 @@ namespace NMib::NStr
 		if (!(*_pStr1))
 			return -1;
 
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CChar1;
-		typename NTraits::TCUnsigned<t_CData2>::CType Char = _Char;
+		using CChar1 = NTraits::TCUnsigned<t_CData1>;
+		NTraits::TCUnsigned<t_CData2> Char = _Char;
 
 		const CChar1 *pStartPos = (const CChar1 *)_pStr1;
 		const CChar1 *pCurPos = pStartPos;
@@ -1004,7 +1007,7 @@ namespace NMib::NStr
 	template <bool t_bCheckLen, typename t_CData1>
 	constexpr inline_large bool fg_StrIsAnsi(const t_CData1 *_pStr1, mint _Len)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
 		const CData1 *pStr1 = pStr1Start;
 		const CData1 *pStr1End = pStr1Start + _Len;
@@ -1080,8 +1083,8 @@ namespace NMib::NStr
 	template <bool t_bNoCase, bool t_bCheckLen, typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFind(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
 		const CData1 *pStr1 = pStr1Start;
 		const CData1 *pStr1End = pStr1Start + _Len;
@@ -1161,8 +1164,8 @@ namespace NMib::NStr
 		if (!(*_pStr1) || !(*_pStr2))
 			return -1;
 
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1 = (const CData1 *)_pStr1;
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
 		const CData2 *pStr2Start = (const CData2 *)_pStr2;
@@ -1359,8 +1362,8 @@ namespace NMib::NStr
 	template <bool t_bNoCase, bool t_bCheckLen, bool t_bCheckLen2, typename t_CData1, typename t_CData2>
 	constexpr inline_large bool fg_StrStartsWith(t_CData1 const *_pStr1, t_CData2 const *_pStr2, mint _Len, mint _Len2)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		auto *pStr1 = _pStr1;
 		t_CData1 const *pStr1End;
 		if constexpr (t_bCheckLen)
@@ -1468,8 +1471,8 @@ namespace NMib::NStr
 	template <bool t_bNoCase, bool t_bCheckLen, bool t_bCheckLen2, typename t_CData1, typename t_CData2>
 	constexpr inline_large bool fg_StrEndsWith(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _Len2)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
 
 		const CData1 *pStr1;
@@ -2027,10 +2030,10 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData1>
-	inline_small typename NTraits::TCUnsigned<t_CData1>::CType fg_StrLargestChar(const t_CData1 *_pStr1)
+	inline_small NTraits::TCUnsigned<t_CData1> fg_StrLargestChar(const t_CData1 *_pStr1)
 	{
-		typename NTraits::TCUnsigned<t_CData1>::CType Largest = 0;
-		const typename NTraits::TCUnsigned<t_CData1>::CType *pStr1 = (const typename NTraits::TCUnsigned<t_CData1>::CType *)_pStr1;
+		NTraits::TCUnsigned<t_CData1> Largest = 0;
+		const NTraits::TCUnsigned<t_CData1> *pStr1 = (const NTraits::TCUnsigned<t_CData1> *)_pStr1;
 		while (*pStr1)
 		{
 			if (*pStr1 > Largest)
@@ -2102,9 +2105,10 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2, typename t_CEscapeChar>
 		inline_large t_CData1 *fg_StrEscapeStr(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+
 		CData1 *pDest = (CData1 *)_pStrDest;
 		if (_MaxLen < 3)
 		{
@@ -2145,9 +2149,9 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2, typename t_CEscapeChar>
 		inline_large t_CData1 *fg_StrEscapeStr(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
 		CData1 *pDest = (CData1 *)_pStrDest;
 
 		*(pDest++) = (CEscapeChar)('"');
@@ -2180,10 +2184,10 @@ namespace NMib::NStr
 		inline_large t_CData1 *fg_StrEscapeStr(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, const t_CReplaceChar *_pReplaceChars, mint _MaxLen)
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
-		typedef typename NTraits::TCUnsigned<t_CReplaceChar>::CType CReplaceChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+		using CReplaceChar = NTraits::TCUnsigned<t_CReplaceChar>;
 
 		CData1 *pDest = (CData1 *)_pStrDest;
 		if (_MaxLen < 3)
@@ -2226,10 +2230,10 @@ namespace NMib::NStr
 		inline_large t_CData1 *fg_StrEscapeStr(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, const t_CReplaceChar *_pReplaceChars)
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
-		typedef typename NTraits::TCUnsigned<t_CReplaceChar>::CType CReplaceChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+		using CReplaceChar = NTraits::TCUnsigned<t_CReplaceChar>;
 
 		CData1 *pDest = (CData1 *)_pStrDest;
 
@@ -2315,9 +2319,9 @@ namespace NMib::NStr
 	template<typename t_CData1, typename t_CData2, typename t_CEscapeChar>
 		inline_large t_CData1 *fg_StrEscapeStrNoQuotes(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, mint _MaxLen)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
 		CData1 *pDest = (CData1 *)_pStrDest;
 		if (_MaxLen < 1)
 		{
@@ -2356,9 +2360,9 @@ namespace NMib::NStr
 	template<typename t_CData1, typename t_CData2, typename t_CEscapeChar>
 		inline_large t_CData1 *fg_StrEscapeStrNoQuotes(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
 		CData1 *pDest = (CData1 *)_pStrDest;
 
 		const CData2 *pParse = (const CData2 *)_pStrSource;
@@ -2389,10 +2393,10 @@ namespace NMib::NStr
 		inline_large t_CData1 *fg_StrEscapeStrNoQuotes(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, const t_CReplaceChar *_pReplaceChars, mint _MaxLen)
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
-		typedef typename NTraits::TCUnsigned<t_CReplaceChar>::CType CReplaceChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+		using CReplaceChar = NTraits::TCUnsigned<t_CReplaceChar>;
 
 		CData1 *pDest = (CData1 *)_pStrDest;
 		if (_MaxLen < 1)
@@ -2433,10 +2437,10 @@ namespace NMib::NStr
 		inline_large t_CData1 *fg_StrEscapeStrNoQuotes(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars, const t_CReplaceChar *_pReplaceChars)
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
-		typedef typename NTraits::TCUnsigned<t_CData1>::CType CData1;
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
-		typedef typename NTraits::TCUnsigned<t_CReplaceChar>::CType CReplaceChar;
+		using CData1 = NTraits::TCUnsigned<t_CData1>;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+		using CReplaceChar = NTraits::TCUnsigned<t_CReplaceChar>;
 
 		CData1 *pDest = (CData1 *)_pStrDest;
 
@@ -2494,8 +2498,8 @@ namespace NMib::NStr
 	template<typename t_CData2, typename t_CEscapeChar>
 	inline_large mint fg_StrEscapedLength(const t_CData2 *_pStrSource, const t_CEscapeChar *_pEscapeChars)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData2>::CType CData2;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CEscapeChar;
+		using CData2 = NTraits::TCUnsigned<t_CData2>;
+		using CEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
 
 		mint nEscapedChars = 0;
 
@@ -2546,7 +2550,8 @@ namespace NMib::NStr
 	template <typename t_CData>
 	constexpr inline_medium t_CData fg_CharUpperCase(t_CData _Character)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		CData Char = (CData) _Character;
 		CData UpperComapre = 0xffu;
 		if (Char >= 'a' && Char <= 'z')
@@ -2560,7 +2565,8 @@ namespace NMib::NStr
 	template <typename t_CData>
 	constexpr inline_medium t_CData fg_CharLowerCase(t_CData _Character)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		CData Char = (CData) _Character;
 
 		if (Char >= 'A' && Char <= 'Z')
@@ -2611,7 +2617,7 @@ namespace NMib::NStr
 	template<typename t_CData>
 	constexpr inline_large bool fg_CharIsAlphabetical(const t_CData _Character)
 	{
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+		using CData = NTraits::TCUnsigned<t_CData>;
 		CData Char = (CData) _Character;
 
 		if (Char >= 'A' && Char <= 'Z')
@@ -2814,9 +2820,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	constexpr void fg_ParseAlpha(const t_CChar * &_pParse)
+	constexpr void fg_ParseAlpha(t_CChar const * &_pParse)
 	{
-		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
+		auto *pParse = (NTraits::TCUnsigned<t_CChar> const *)_pParse;
 		while (*pParse)
 		{
 			if (*pParse >= 'a' && *pParse <= 'z')
@@ -2834,9 +2840,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	constexpr void fg_ParseAlphaNumeric(const t_CChar * &_pParse)
+	constexpr void fg_ParseAlphaNumeric(t_CChar const * &_pParse)
 	{
-		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
+		auto *pParse = (NTraits::TCUnsigned<t_CChar> const *)_pParse;
 		while (*pParse)
 		{
 			if (!fg_CharIsAlphabetical(*pParse) && !fg_CharIsNumber(*pParse))
@@ -2848,9 +2854,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	constexpr void fg_ParseNumeric(const t_CChar * &_pParse)
+	constexpr void fg_ParseNumeric(t_CChar const * &_pParse)
 	{
-		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
+		auto *pParse = (NTraits::TCUnsigned<t_CChar> const *)_pParse;
 		while (*pParse)
 		{
 			if (!fg_CharIsNumber(*pParse))
@@ -2862,12 +2868,12 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, typename t_CChar1>
-	constexpr void fg_ParseAlphaNumericAndChars(const t_CChar * &_pParse, const t_CChar1 * _pChars)
+	constexpr void fg_ParseAlphaNumericAndChars(t_CChar const * &_pParse, const t_CChar1 * _pChars)
 	{
-		const typename NTraits::TCUnsigned<t_CChar>::CType *pParse = (const typename NTraits::TCUnsigned<t_CChar>::CType *)_pParse;
+		auto *pParse = (NTraits::TCUnsigned<t_CChar> const *)_pParse;
 		while (*pParse)
 		{
-			const typename NTraits::TCUnsigned<t_CChar1>::CType *pCharsParse = (const typename NTraits::TCUnsigned<t_CChar1>::CType *)_pChars;
+			auto *pCharsParse = (NTraits::TCUnsigned<t_CChar1> const *)_pChars;
 			while (*pCharsParse)
 			{
 				if (*pParse == *pCharsParse)
@@ -3224,7 +3230,7 @@ namespace NMib::NStr
 	bool fg_StrEscapeBashQuotesNeeded(t_CStr const& _Str)
 	{
 		auto const *pParseSigned = _Str.f_GetStr();
-		typedef typename NTraits::TCUnsigned<typename NTraits::TCRemoveReferenceAndQualifiers<decltype(*pParseSigned)>::CType>::CType CUnsignedChar;
+		using CUnsignedChar = NTraits::TCUnsigned<NTraits::TCRemoveReferenceAndQualifiers<decltype(*pParseSigned)>>;
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pParseSigned;
 
 		while (*pParse)

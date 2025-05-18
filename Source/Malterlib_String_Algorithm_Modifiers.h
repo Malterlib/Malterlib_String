@@ -123,7 +123,7 @@ namespace NMib::NStr2
 		template <typename tf_CTags, typename tf_CFront, typename tf_CBack>
 		NIterator::TCRange<tf_CFront, tf_CBack> fg_GetStringRangeHelper(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, CReverse, CDummyBase)
 		{
-			static_assert(NTraits::TCIsVoid<tf_CTags>::mc_Value, "Range does not support reversing");
+			static_assert(NTraits::cIsVoid<tf_CTags>, "Range does not support reversing");
 		}
 	}
 

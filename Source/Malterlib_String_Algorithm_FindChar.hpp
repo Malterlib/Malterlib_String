@@ -14,7 +14,7 @@ namespace NMib::NStr2::NPrivate
 	template <typename tf_CTags, typename tf_CFront, typename tf_CBack, typename tf_CChar, typename tf_CUnicodeTag>
 	auto fg_Private_StrFindChar(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters, tf_CChar _Character, tf_CUnicodeTag, tf_CUnicodeTag) // Same tags, no conversion
 	{
-		typename NTraits::TCUnsigned<tf_CChar>::CType Character = _Character;
+		NTraits::TCUnsigned<tf_CChar> Character = _Character;
 		auto rCharacters = fg_GetStringRange<tf_CTags>(_rCharacters);
 		while (rCharacters)
 		{
@@ -63,7 +63,7 @@ namespace NMib::NStr2::NPrivate
 		, typename tf_CBack
 		, typename tf_CChar
 		, typename tf_CUnicodeTag
-		, typename TCEnableIf<!NTraits::TCIsSame<tf_CUnicodeTag, NMib::NStr::CIteratorStringEncoding_UTF32>::mc_Value>::CType * = nullptr
+		, TCEnableIf<!NTraits::cIsSame<tf_CUnicodeTag, NMib::NStr::CIteratorStringEncoding_UTF32>> * = nullptr
 	>
 	auto fg_Private_StrFindChar
 		(
@@ -90,7 +90,7 @@ namespace NMib::NStr2::NPrivate
 	{
 		static_assert
 			(
-				NTraits::TCIsVoid<tf_CFront>::mc_Value
+				NTraits::cIsVoid<tf_CFront>
 				, "This character type does not make sense to search for in this container. "
 				"You either need to search for the same character type as the container, or search for a UTF32 character (ch32)"
 			)
@@ -118,10 +118,10 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CChar
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-		>::CType *
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+		> *
 	>
 	auto fg_StrFindChar(tf_CContainer &_Container, tf_CChar _Character)
 	{

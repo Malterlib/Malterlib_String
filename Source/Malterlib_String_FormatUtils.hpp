@@ -15,7 +15,7 @@ namespace NMib::NStr
 	template <typename tf_CValue>
 	void TCFormatUtilities<t_CStr>::f_Value(tf_CValue &&_Value)
 	{
-		using CType = typename NTraits::TCRemoveReferenceAndQualifiers<decltype(_Value)>::CType;
+		using CType = NTraits::TCRemoveReferenceAndQualifiers<decltype(_Value)>;
 		if constexpr (NStorage::cIsOptional<CType>)
 			return f_Value(*_Value);
 
@@ -41,7 +41,7 @@ namespace NMib::NStr
 			return;
 		}
 
-		if constexpr (NTraits::TCIsSame<CType, bool>::mc_Value)
+		if constexpr (NTraits::cIsSame<CType, bool>)
 		{
 			if (_Value)
 				mp_Appender += "true";
@@ -50,7 +50,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			if constexpr (NTraits::TCIsSame<CType, t_CStr>::mc_Value)
+			if constexpr (NTraits::cIsSame<CType, t_CStr>)
 				mp_Appender += _Value;
 			else
 				mp_Appender.f_Commit().m_String += typename t_CStr::CFormat("{}") << _Value;
@@ -61,7 +61,7 @@ namespace NMib::NStr
 	template <typename tf_CName, typename tf_CValue>
 	void TCFormatUtilities<t_CStr>::f_TitledValue(tf_CName &&_Name, tf_CValue &&_Value)
 	{
-		using CType = typename NTraits::TCRemoveReferenceAndQualifiers<decltype(_Value)>::CType;
+		using CType = NTraits::TCRemoveReferenceAndQualifiers<decltype(_Value)>;
 
 		if constexpr (NStorage::cIsOptional<CType>)
 		{

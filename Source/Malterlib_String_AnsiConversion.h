@@ -36,10 +36,10 @@ namespace NMib::NStr
 
 		static ch32 fs_ToUnicode(ch32 _Char)
 		{
-			NTraits::TCUnsigned<ch32>::CType Temp = _Char;
+			NTraits::TCUnsigned<ch32> Temp = _Char;
 			if (Temp <= 0xff)
 			{
-				return NTraits::TCUnsigned<ch32>::CType(NTraits::TCUnsigned<ch16>::CType(ms_Table[_Char].m_UnicodeChar));
+				return NTraits::TCUnsigned<ch32>(NTraits::TCUnsigned<ch16>(ms_Table[_Char].m_UnicodeChar));
 			}
 			return 0x0020;
 		}

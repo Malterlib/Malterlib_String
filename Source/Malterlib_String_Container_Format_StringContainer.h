@@ -31,8 +31,8 @@ namespace NMib::NStr
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 
-		typedef typename TCChooseType<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, TCStr<t_CStrTraitsIn>>::CType CStorageType;
-		typedef typename TCChooseType<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, const TCStr<t_CStrTraitsIn> &>::CType CReferenceType;
+		typedef TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, TCStr<t_CStrTraitsIn>> CStorageType;
+		typedef TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, const TCStr<t_CStrTraitsIn> &> CReferenceType;
 
 		enum
 		{

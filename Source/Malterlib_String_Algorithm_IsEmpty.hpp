@@ -30,10 +30,10 @@ namespace NMib::NStr2
 	<
 		typename ...tfp_CTags
 		, typename tf_CContainer
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-		>::CType *
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+		> *
 	>
 	bool fg_StrIsEmpty(tf_CContainer &&_Container)
 	{

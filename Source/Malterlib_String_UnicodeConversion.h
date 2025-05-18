@@ -10,7 +10,8 @@ namespace NMib::NStr
 	template <typename t_CChar>
 	class TCStrIteratorUnicode
 	{
-		typedef typename NTraits::TCUnsigned<t_CChar>::CType CUnsignedChar;
+		using CUnsignedChar = NTraits::TCUnsigned<t_CChar>;
+
 		CUnsignedChar const *m_pBegin;
 		CUnsignedChar const *m_pEnd;
 		ch32 m_Current;
@@ -68,7 +69,6 @@ namespace NMib::NStr
 
 	class CStrIteratorUTF8
 	{
-		typedef NTraits::TCUnsigned<ch8>::CType uch8;
 		uch8 const *m_pBegin;
 		uch8 const *m_pEnd;
 		uch8 const *m_pInitialBegin;
@@ -223,7 +223,6 @@ namespace NMib::NStr
 
 	class CStrIteratorUTF16
 	{
-		typedef NTraits::TCUnsigned<ch16>::CType uch16;
 		uch16 const *m_pBegin;
 		uch16 const *m_pEnd;
 		ch32 m_Current;
@@ -317,19 +316,19 @@ namespace NMib::NStr
 	};
 
 	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	typename TCEnableIf<sizeof(tf_CChar) == 1, CStrIteratorUTF8>::CType fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
+	TCEnableIf<sizeof(tf_CChar) == 1, CStrIteratorUTF8> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
 	{
 		return CStrIteratorUTF8((ch8 const *)_pStr, _Len);
 	}
 
 	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	typename TCEnableIf<sizeof(tf_CChar) == 2, CStrIteratorUTF16>::CType fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
+	TCEnableIf<sizeof(tf_CChar) == 2, CStrIteratorUTF16> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
 	{
 		return CStrIteratorUTF16((ch16 const *)_pStr, _Len);
 	}
 
 	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	typename TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>>::CType fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
+	TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len)
 	{
 		return TCStrIteratorUnicode<ch32>((ch32 const *)_pStr, _Len);
 	}

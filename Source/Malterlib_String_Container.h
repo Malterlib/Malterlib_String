@@ -109,14 +109,14 @@ namespace NMib::NStr
 		template <typename t_CData1, typename t_CData2>
 			static inline_small t_CData1 *fs_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 		{
-			DMibFastCheck((sizeof(CChar) > 1 || NTraits::TCIsSame<CChar, ch8>::mc_Value && mc_Type == EStrType_UTF));
+			DMibFastCheck((sizeof(CChar) > 1 || NTraits::cIsSame<CChar, ch8> && mc_Type == EStrType_UTF));
 			return fg_StrUpperCase(_pDest, _pSource, _SourceLen);
 		}
 
 		template <typename t_CData1, typename t_CData2>
 			static inline_small t_CData1 *fs_StrLowerCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
 		{
-			DMibFastCheck((sizeof(CChar) > 1 || NTraits::TCIsSame<CChar, ch8>::mc_Value && mc_Type == EStrType_UTF));
+			DMibFastCheck((sizeof(CChar) > 1 || NTraits::cIsSame<CChar, ch8> && mc_Type == EStrType_UTF));
 			return fg_StrLowerCase(_pDest, _pSource, _SourceLen);
 		}
 
@@ -294,7 +294,7 @@ namespace NMib::NStr
 			}
 		};
 
-		template <typename t_CFormatter, typename t_CData, bool t_bIsEnum = NMib::NTraits::TCIsEnum<t_CData>::mc_Value>
+		template <typename t_CFormatter, typename t_CData, bool t_bIsEnum = NMib::NTraits::cIsEnum<t_CData>>
 		struct TCDetermineStringFormatter
 		{
 			typedef TCStringFormatter<t_CFormatter, t_CData> CType;
@@ -569,7 +569,7 @@ namespace NMib::NStr
 		inline_small TCFormat &operator << (t_CType const &_Type) &
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+				!cHasFormatClass<t_CType, EStrTypeClass_Untyped>
 			)
 		{
 			TCStringFormatterAll<TCFormat, t_CType, t_CType const>::fs_CreateFormat(*this, _Type);
@@ -580,7 +580,7 @@ namespace NMib::NStr
 		inline_small TCFormat &operator << (t_CType &_Type) &
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+				!cHasFormatClass<t_CType, EStrTypeClass_Untyped>
 			)
 		{
 			TCStringFormatterAll<TCFormat, t_CType, t_CType>::fs_CreateFormat(*this, _Type);
@@ -591,7 +591,7 @@ namespace NMib::NStr
 		inline_small TCFormat &&operator << (t_CType const &_Type) &&
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+				!cHasFormatClass<t_CType, EStrTypeClass_Untyped>
 			)
 		{
 			TCStringFormatterAll<TCFormat, t_CType, t_CType const>::fs_CreateFormat(*this, _Type);
@@ -602,7 +602,7 @@ namespace NMib::NStr
 		inline_small TCFormat &&operator << (t_CType &_Type) &&
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!TCHasFormatClass<t_CType, EStrTypeClass_Untyped>::mc_Value
+				!cHasFormatClass<t_CType, EStrTypeClass_Untyped>
 			)
 		{
 			TCStringFormatterAll<TCFormat, t_CType, t_CType>::fs_CreateFormat(*this, _Type);
@@ -883,7 +883,7 @@ EndArgSearch:
 	{
 		using CStrTraitsTypes = t_CStrTraitsTypes;
 		using CChar = typename t_CStrTraitsTypes::CChar;
-		using CUnsignedChar = typename NTraits::TCUnsigned<typename t_CStrTraitsTypes::CChar>::CType;
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CStrTraitsTypes::CChar>;
 
 		TCStrSpan() = default;
 		TCStrSpan(TCStrSpan const &) = default;
@@ -918,14 +918,14 @@ EndArgSearch:
 	class TCStrAggregate : public t_CTCStrTraits::CImp
 	{
 	public:
-		typedef t_CTCStrTraits CTraits;
-		typedef typename t_CTCStrTraits::CStrTraits CStrTraits;
-		typedef typename t_CTCStrTraits::CStrTraits::CChar CChar;
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits::CStrTraits::CChar>::CType CUnsignedChar;
-		typedef typename t_CTCStrTraits::CImp CImp;
-		typedef TCStrAggregate CAggregate;
-		typedef typename CStrTraits::CAllocator CAllocator;
-		typedef CChar CMaxChar;
+		using CTraits = t_CTCStrTraits;
+		using CStrTraits = typename t_CTCStrTraits::CStrTraits;
+		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits::CStrTraits::CChar>;
+		using CImp = typename t_CTCStrTraits::CImp;
+		using CAggregate = TCStrAggregate;
+		using CAllocator = typename CStrTraits::CAllocator;
+		using CMaxChar = CChar;
 		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 		using CDynamicStr = TCStr<t_CTCStrTraits>;
 
@@ -940,27 +940,27 @@ EndArgSearch:
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) < 4 || mc_Type == EStrType_Unicode);
 
-		typedef typename TCChooseType
+		typedef TCConditional
 			<
 				sizeof(CChar) == 1
-				, typename TCChooseType
+				, TCConditional
 				<
 					mc_Type == EStrType_UTF
 					, CStrIteratorUTF8
 					, TCStrIteratorUnicode<CChar>
-				>::CType
-				, typename TCChooseType
+				>
+				, TCConditional
 				<
 					sizeof(CChar) == 2
-					, typename TCChooseType
+					, TCConditional
 					<
 						mc_Type == EStrType_UTF
 						, CStrIteratorUTF16
 						, TCStrIteratorUnicode<CChar>
-					>::CType
+					>
 					, TCStrIteratorUnicode<CChar>
-				>::CType
-			>::CType CUnicodeIterator
+				>
+			> CUnicodeIterator
 		;
 
 	private:
@@ -970,12 +970,12 @@ EndArgSearch:
 			, EDebug_Type = t_CTCStrTraits::CStrTraits::mc_Type
 		};
 
-		typedef typename TCChooseType
+		typedef TCConditional
 			<
-				NTraits::TCIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>::mc_Value
+				NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
 				, CStrNonTracked
 				, CStr
-			>::CType CTempStr
+			> CTempStr
 		;
 
 	public:
@@ -1294,14 +1294,13 @@ EndArgSearch:
 		}
 
 		template <int t_CharSize>
-		typename TCEnableIf<t_CharSize == 1, void>::CType fp_ConvertFromType(EStrType _Type);
+		TCEnableIf<t_CharSize == 1, void> fp_ConvertFromType(EStrType _Type);
 
 		template <int t_CharSize>
-		typename TCEnableIf<t_CharSize == 2, void>::CType fp_ConvertFromType(EStrType _Type);
+		TCEnableIf<t_CharSize == 2, void> fp_ConvertFromType(EStrType _Type);
 
 		template <int t_CharSize>
-		typename TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void>::CType fp_ConvertFromType(EStrType _Type);
-
+		TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> fp_ConvertFromType(EStrType _Type);
 
 		template <typename t_CStrDataType>
 		inline_medium void fp_AddCharLengthAware(aint &_StrLen, t_CStrDataType _Char)
@@ -1310,7 +1309,7 @@ EndArgSearch:
 			if (MaxLen >= (_StrLen + 2))
 			{
 				CUnsignedChar *pStr = (CUnsignedChar *)CImp::f_GetStrWritable();
-				pStr[_StrLen++] = (CUnsignedChar)(typename NTraits::TCUnsigned<t_CStrDataType>::CType)_Char;
+				pStr[_StrLen++] = (CUnsignedChar)(NTraits::TCUnsigned<t_CStrDataType>)_Char;
 				pStr[_StrLen] = 0;
 			}
 		}
@@ -1326,7 +1325,7 @@ EndArgSearch:
 			pEndPtr = pWritePtr + (MaxLen - _StrLen);
 
 			while (pWritePtr < pEndPtr)
-				*(pWritePtr++) = (CUnsignedChar)(typename NTraits::TCUnsigned<t_CStrDataType>::CType)_Char;
+				*(pWritePtr++) = (CUnsignedChar)(NTraits::TCUnsigned<t_CStrDataType>)_Char;
 
 			*pWritePtr = 0;
 			_StrLen = pWritePtr - pStartPtr;
@@ -1430,13 +1429,13 @@ EndArgSearch:
 		}
 
 		template <int t_CharSize, typename tf_CStrIterator>
-		typename TCEnableIf<t_CharSize == 1, void>::CType fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
+		TCEnableIf<t_CharSize == 1, void> fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
 
 		template <int t_CharSize, typename tf_CStrIterator>
-		typename TCEnableIf<t_CharSize == 2, void>::CType fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
+		TCEnableIf<t_CharSize == 2, void> fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
 
 		template <int t_CharSize, typename tf_CStrIterator>
-		typename TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void>::CType fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
+		TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From);
 
 		void f_AddUnicodeChar(ch32 _Character);
 
@@ -1521,7 +1520,11 @@ EndArgSearch:
 		typedef typename CFormat::CFomatArgType::CVisitorString CFormatArgVisitorString;
 
 		template <typename t_CType>
-		inline_medium static void fs_ToStrInplace(typename TCEnableIf<!NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStrAggregate>::CType &_Destination, t_CType const& _Format)
+		inline_medium static void fs_ToStrInplace
+			(
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				, t_CType const& _Format
+			)
 		{
 			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
 			aint CurrentLen = 0;
@@ -1530,7 +1533,11 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		static void fs_ToStrInplace(typename TCEnableIf<NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStrAggregate>::CType &_Destination, t_CType const& _Format)
+		static void fs_ToStrInplace
+			(
+				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				, t_CType const& _Format
+			)
 		{
 			(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(_Destination);
 		}
@@ -1542,7 +1549,11 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		inline_medium static void fs_ToStrInplaceConcat(typename TCEnableIf<!NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStrAggregate>::CType &_Destination, t_CType const& _Format)
+		inline_medium static void fs_ToStrInplaceConcat
+			(
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				, t_CType const& _Format
+			)
 		{
 			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
 			aint CurrentLen = _Destination.f_GetStrLen();
@@ -1551,14 +1562,23 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		inline_medium static void fs_ToStrInplaceConcat(typename TCEnableIf<!NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStrAggregate>::CType &_Destination, t_CType const& _Format, aint &_Len)
+		inline_medium static void fs_ToStrInplaceConcat
+			(
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				, t_CType const& _Format
+				, aint &_Len
+			)
 		{
 			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
 			CFormatType::fs_AddToStrStatic(_Destination, _Len, _Format);
 		}
 
 		template <typename t_CType>
-		static void fs_ToStrInplaceConcat(typename TCEnableIf<NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value, TCStrAggregate>::CType &_Destination, t_CType const& _Format)
+		static void fs_ToStrInplaceConcat
+			(
+				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				, t_CType const& _Format
+			)
 		{
 			(CFormat(nullptr) << _Format).f_FormatArgumentsToStrConcat(_Destination);
 		}
@@ -3055,7 +3075,7 @@ EndArgSearch:
 		template <typename t_CType>
 		inline static TCStr fs_ToStr(t_CType const &_Format)
 		{
-			if constexpr (NTraits::TCIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>::mc_Value)
+			if constexpr (NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>)
 			{
 				TCStr Ret;
 				(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
@@ -3233,7 +3253,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small typename NTraits::TCUnsigned<typename TCStrAggregate<t_CTCStrTraits2>::CMaxChar >::CType fg_StrLargestChar(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small NTraits::TCUnsigned<typename TCStrAggregate<t_CTCStrTraits2>::CMaxChar> fg_StrLargestChar(const TCStrAggregate<t_CTCStrTraits2> &_Str)
 	{
 		return fg_StrLargestChar(_Str.f_GetStr());
 	}
@@ -3344,7 +3364,7 @@ EndArgSearch:
 		if (!pStr1)
 			return _To;
 
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 
 		fg_StrUpperCase(pStr1, _To.f_GetLen());
 		return _To;
@@ -3369,8 +3389,8 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrUpperCase(_pTo, _Source.f_GetStr());
 		return _pTo;
 	}
@@ -3378,8 +3398,8 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrUpperCase(_pTo, _MaxLen, _Source.f_GetStr());
 		return _pTo;
 	}
@@ -3387,7 +3407,7 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
@@ -3422,7 +3442,7 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
@@ -3449,8 +3469,8 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrLowerCase(_pTo, _Source.f_GetStr());
 		return _pTo;
 	}
@@ -3458,8 +3478,8 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::TCIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>::mc_Value, "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrLowerCase(_pTo, _Source.f_GetStr(), _MaxLen);
 		return _pTo;
 	}
@@ -3467,7 +3487,7 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
@@ -3502,7 +3522,7 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrCapitalize(TCStrAggregate<t_CTCStrTraits> &_To)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::TCIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8>::mc_Value && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
@@ -4738,7 +4758,7 @@ EndArgSearch:
 		if (_Index >= MaxLen)
 			return _Str1;
 
-		((typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar *)_Str1.f_GetStrWritable())[_Index] = (typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar)(typename NTraits::TCUnsigned<t_CData2>::CType)(_Character);
+		((typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar *)_Str1.f_GetStrWritable())[_Index] = (typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar)(NTraits::TCUnsigned<t_CData2>)(_Character);
 		if (_Character == 0)
 			_Str1.f_SetModified();
 		return _Str1;
@@ -4748,9 +4768,11 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+
 		mint NeededSize = 3;
 		while (*pParse)
 		{
@@ -4773,10 +4795,13 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CUnsignedEscapeChar;
+
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+		using CUnsignedEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+
 		mint NeededSize = 3;
 		while (*pParse)
 		{
@@ -4806,10 +4831,13 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CUnsignedEscapeChar;
+
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+		using CUnsignedEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+
 		mint NeededSize = 3;
 		while (*pParse)
 		{
@@ -4839,9 +4867,12 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
+
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+
 		mint NeededSize = 1;
 		while (*pParse)
 		{
@@ -4864,10 +4895,13 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CUnsignedEscapeChar;
+
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+		using CUnsignedEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+
 		mint NeededSize = 1;
 		while (*pParse)
 		{
@@ -4897,10 +4931,13 @@ EndArgSearch:
 		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
-		typedef typename NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>::CType CUnsignedChar;
-		typedef typename NTraits::TCUnsigned<t_CEscapeChar>::CType CUnsignedEscapeChar;
+
+		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
+		using CUnsignedEscapeChar = NTraits::TCUnsigned<t_CEscapeChar>;
+
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
+			
 		mint NeededSize = 1;
 		while (*pParse)
 		{

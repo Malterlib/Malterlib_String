@@ -1,9 +1,9 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Formatters/AutoClear>
 
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NStr::EStrTypeClass_String>::mc_Value));
+static_assert(!NMib::NStr::cHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NStr::EStrTypeClass_String>);
 
 namespace 
 {

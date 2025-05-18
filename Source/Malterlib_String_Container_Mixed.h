@@ -89,40 +89,35 @@ namespace NMib::NStr
 	class TCChooseStrCompareType<CMStrDeprecated, TCStr<t_CData0> >
 	{
 	public:
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32 >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	class TCChooseStrCompareType<TCStr<t_CData0>, CMStrDeprecated>
 	{
 	public:
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32 >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	class TCChooseStrCompareType<CMStrDeprecated, t_CData0>
 	{
 	public:
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, ch32 >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	class TCChooseStrCompareType<t_CData0, CMStrDeprecated>
 	{
 	public:
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, ch32 >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <>
 	class TCChooseStrCompareType<CMStrDeprecated, CMStrDeprecated>
 	{
 	public:
-		typedef NTraits::TCSigned< NTraits::TCLargerType< NTraits::TCLargestType<ch32, ch32 >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<ch32, ch32>>>;
 	};
 }
 

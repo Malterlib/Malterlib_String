@@ -49,8 +49,8 @@ namespace
 		template <bool t_bMemoryTests>
 		struct TCTests
 		{
-			typedef typename TCChooseType<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure>::CType CMeasureType;
-			typedef typename TCChooseType<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance>::CType CTestType;
+			typedef TCConditional<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure> CMeasureType;
+			typedef TCConditional<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance> CTestType;
 
 			const static mint VectorSize = 512;
 			static CStr fs_GenerateHexList()

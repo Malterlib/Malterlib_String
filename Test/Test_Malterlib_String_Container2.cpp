@@ -1614,9 +1614,9 @@ namespace
 		{
 			DMibTestSuite("Constant")
 			{
-				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<"TestString">.m_Str), CStr const>::mc_Value);
-				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<str_utf16("TestString")>.m_Str), CWStr const>::mc_Value);
-				static_assert(NMib::NTraits::TCIsSame<decltype(gc_Str<str_utf32("TestString")>.m_Str), CUStr const>::mc_Value);
+				static_assert(NMib::NTraits::cIsSame<decltype(gc_Str<"TestString">.m_Str), CStr const>);
+				static_assert(NMib::NTraits::cIsSame<decltype(gc_Str<str_utf16("TestString")>.m_Str), CWStr const>);
+				static_assert(NMib::NTraits::cIsSame<decltype(gc_Str<str_utf32("TestString")>.m_Str), CUStr const>);
 
 				DMibExpect(gc_Str<"TestString">.m_Str, ==, CStr("TestString"));
 				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &gc_Str<"TestString">.m_Str);

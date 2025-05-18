@@ -18,8 +18,9 @@ namespace NMib::NStr
 		template <bool tf_bNoCase, bool tf_bCheckLen, typename tf_CData1, typename tf_CData2>
 		aint fg_StrFindPartial(const tf_CData1 *_pStr1, const tf_CData2 *_pStr2, mint _Len, mint &_Found)
 		{
-			typedef typename NTraits::TCUnsigned<tf_CData1>::CType CData1;
-			typedef typename NTraits::TCUnsigned<tf_CData2>::CType CData2;
+			using CData1 = NTraits::TCUnsigned<tf_CData1>;
+			using CData2 = NTraits::TCUnsigned<tf_CData2>;
+
 			const CData1 *pStr1Start = (const CData1 *)_pStr1;
 			const CData1 *pStr1 = pStr1Start;
 			const CData1 *pStr1End = pStr1Start + _Len;

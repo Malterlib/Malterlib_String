@@ -143,11 +143,11 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CContainerToFind
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToFind>::CType>::mc_Value
-		>::CType *
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+			|| !NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerToFind>>
+		> *
 	>
 	auto fg_StrFindChars(tf_CContainer &&_Container, tf_CContainerToFind &&_ContainerToFind)
 	{

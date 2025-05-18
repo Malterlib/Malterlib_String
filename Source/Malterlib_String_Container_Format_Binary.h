@@ -12,7 +12,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename TCChooseType<NTraits::TCIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>::mc_Value, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary>::CType CStrFormatTypeClassifier;
+		typedef TCConditional<NTraits::cIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary> CStrFormatTypeClassifier;
 
 		virtual mint f_Delete() override
 		{

@@ -29,9 +29,9 @@ namespace NMib::NStr
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloatIn;
 		static constexpr aint mc_MantissaBits = t_MantissaBits + 8;
-		static constexpr aint mc_MinExponentBits = TCHighestBitSet<aint, mc_MantissaBits + (mc_MantissaBits - 1)>::mc_Value + 2;
+		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<aint, mc_MantissaBits + (mc_MantissaBits - 1)> + 2;
 		static constexpr aint mc_ExponentBits = (t_ExponentBits > mc_MinExponentBits ? t_ExponentBits : mc_MinExponentBits);
-//			typedef NNumeric::TCFloat<t_SignBits, mc_ExponentBits, mc_MantissaBits, typename TCChooseType<mc_ExponentBits == t_ExponentBits, t_CImplicitFloat, NNumeric::CNoImplicit>::CType, t_bDummyOptimize> CFloat;
+//			typedef NNumeric::TCFloat<t_SignBits, mc_ExponentBits, mc_MantissaBits, TCConditional<mc_ExponentBits == t_ExponentBits, t_CImplicitFloat, NNumeric::CNoImplicit>, t_bDummyOptimize> CFloat;
 		typedef CFloatIn CFloat;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 		typedef typename CFloat::CInteger CInteger;
@@ -40,7 +40,7 @@ namespace NMib::NStr
 		typedef typename CSuper::COptionsStatic COptionsStatic;
 		typedef typename CSuper::CVisitor CVisitor;
 
-		using CStorage = typename TCChooseType<t_bReference, CFloat const &, CFloat>::CType;
+		using CStorage = TCConditional<t_bReference, CFloat const &, CFloat>;
 
 		typedef CFloat CType;
 

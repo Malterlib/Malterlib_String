@@ -17,10 +17,10 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CChar
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-		>::CType * = nullptr
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+		> * = nullptr
 	>
 	auto fg_StrFindChar(tf_CContainer &_Container, tf_CChar _Character);
 }

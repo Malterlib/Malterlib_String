@@ -16,10 +16,10 @@ namespace NMib::NStr2
 	<
 		typename ...tfp_CTags
 		, typename tf_CContainer
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-		>::CType * = nullptr
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+		> * = nullptr
 	>
 	uint32 fg_StrHashMurmur3(tf_CContainer &&_Container, uint32 _Seed = 0x11a8742f);
 }

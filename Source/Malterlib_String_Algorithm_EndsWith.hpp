@@ -13,12 +13,12 @@ namespace NMib::NStr2
 	{
 		return NPrivate::fg_Private_StrStartsWith
 			<
-				typename TCChooseType
+				TCConditional
 				<
 					TCHasTag<TCTags<tfp_CTags...>, CReverse>::mc_Value
 					, typename TCRemoveTags<TCTags<tfp_CTags...>, CReverseBase>::CType
 					, TCTags<CReverse, tfp_CTags...>
-				>::CType
+				>
 			>
 			(
 				_rCharacters
@@ -34,11 +34,11 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CContainerEndsWith
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>::CType>::mc_Value
-		>::CType *
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+			|| !NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerEndsWith>>
+		> *
 	>
 	auto fg_StrEndsWith(tf_CContainer &&_Container, tf_CContainerEndsWith &&_ContainerStartsWith)
 	{

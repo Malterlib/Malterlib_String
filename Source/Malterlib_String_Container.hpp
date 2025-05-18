@@ -263,7 +263,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	typename TCEnableIf<t_CharSize == 1, void>::CType TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize == 1, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 1 && mc_Type == EStrType_UTF, "Lossy conversion");
 
@@ -311,7 +311,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	typename TCEnableIf<t_CharSize == 2, void>::CType TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize == 2, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 2 && mc_Type == EStrType_UTF, "Lossy conversion");
 		mint LenNeeded = _StrLen;
@@ -358,7 +358,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	typename TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void>::CType TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 4 && mc_Type == EStrType_Unicode, "Lossy conversion");
 		mint LenNeeded = _StrLen;
@@ -505,7 +505,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	typename TCEnableIf<t_CharSize == 1, void>::CType TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize == 1, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -543,7 +543,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	typename TCEnableIf<t_CharSize == 2, void>::CType TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize == 2, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -568,7 +568,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	typename TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void>::CType TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type == EStrType_Unicode);
 	}

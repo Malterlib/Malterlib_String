@@ -1,22 +1,22 @@
-﻿// Copyright © 2015 Hansoft AB
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Mixed>
 
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Float>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Integer>::mc_Value));
-DMibStaticCheck((NMib::NStr::TCHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_String>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Other>::mc_Value));
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Float>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Integer>);
+static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_String>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Other>);
 
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Float>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Integer>::mc_Value));
-DMibStaticCheck((NMib::NStr::TCHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_String>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Other>::mc_Value));
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Float>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Integer>);
+static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_String>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Other>);
 
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Float>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Integer>::mc_Value));
-DMibStaticCheck((NMib::NStr::TCHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_String>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Other>::mc_Value));
+static_assert(!NMib::NStr::cHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Float>);
+static_assert(!NMib::NStr::cHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Integer>);
+static_assert(NMib::NStr::cHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_String>);
+static_assert(!NMib::NStr::cHasFormatClass<const ch8 *, NMib::NStr::EStrTypeClass_Other>);
 
 using namespace NMib::NStr;
 

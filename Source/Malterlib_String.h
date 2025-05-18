@@ -5,13 +5,13 @@
 
 #include <Mib/Core/Core>
 
-typedef NMib::NTraits::TCUnsigned<ch8>::CType uch8;
-typedef NMib::NTraits::TCUnsigned<ch16>::CType uch16;
-typedef NMib::NTraits::TCUnsigned<ch32>::CType uch32;
+using uch8 = NMib::NTraits::TCUnsigned<ch8>;
+using uch16 = NMib::NTraits::TCUnsigned<ch16>;
+using uch32 = NMib::NTraits::TCUnsigned<ch32>;
 
-typedef NMib::TCAutoClear<uch8> zuch8;
-typedef NMib::TCAutoClear<uch16> zuch16;
-typedef NMib::TCAutoClear<uch32> zuch32;
+using zuch8 = NMib::TCAutoClear<uch8>;
+using zuch16 = NMib::TCAutoClear<uch16>;
+using zuch32 = NMib::TCAutoClear<uch32>;
 
 namespace NMib::NStr
 {
@@ -19,8 +19,14 @@ namespace NMib::NStr
 
 	extern ch8 g_lWhiteSpaceChars[];
 
+	namespace NPrivate
+	{
+		template <typename t_CDataToTest, typename t_CClassToTestAgainst>
+		class TCHasFormatClassHelper;
+	}
+
 	template <typename t_CDataToTest, typename t_CClassToTestAgainst>
-	class TCHasFormatClass;
+	concept cHasFormatClass = NPrivate::TCHasFormatClassHelper<t_CDataToTest, t_CClassToTestAgainst>::mc_bValue;
 }
 
 #include "Malterlib_String_Algorithm.hpp"

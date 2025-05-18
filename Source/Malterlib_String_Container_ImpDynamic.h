@@ -121,7 +121,7 @@ namespace NMib::NStr
 
 		constexpr static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
 		constexpr static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
-		constexpr static bool mc_bNoThrowAssign = true;
+		constexpr static bool mc_bNothrowAssign = true;
 
 		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));
 

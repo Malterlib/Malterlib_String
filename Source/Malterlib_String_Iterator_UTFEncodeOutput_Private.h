@@ -8,7 +8,7 @@ namespace NMib::NStr::NPrivate
 	template <typename t_CRange>
 	t_CRange fg_Private_RangeAdaptor_UTFEncodeOutput(t_CRange const &_Range, NStr::CIteratorStringEncoding_None)
 	{
-		static_assert(NTraits::TCIsVoid<t_CRange>::mc_Value, "Output range has no encoding");
+		static_assert(NTraits::cIsVoid<t_CRange>, "Output range has no encoding");
 		return _Range;
 	}
 }

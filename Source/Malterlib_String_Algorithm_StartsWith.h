@@ -19,11 +19,11 @@ namespace NMib::NStr2
 		typename ...tfp_CTags
 		, typename tf_CContainer
 		, typename tf_CContainerStartsWith
-		, typename TCEnableIf
+		, TCEnableIf
 		<
-			!NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>::CType>::mc_Value
-			|| !NIterator::TCIsRange<typename NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerStartsWith>::CType>::mc_Value
-		>::CType * = nullptr
+			!NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainer>>
+			|| !NIterator::cIsRange<NTraits::TCRemoveReferenceAndQualifiers<tf_CContainerStartsWith>>
+		> * = nullptr
 	>
 	auto fg_StrStartsWith(tf_CContainer &&_Container, tf_CContainerStartsWith &&_ContainerStartsWith);
 }

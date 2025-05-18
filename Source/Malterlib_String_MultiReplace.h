@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <bool t_bCaseSensitive>
 	struct TCMultiReplace
 	{
-		using COrdering = typename TCChooseType<t_bCaseSensitive, COrdering_Strong, COrdering_Weak>::CType;
+		using COrdering = TCConditional<t_bCaseSensitive, COrdering_Strong, COrdering_Weak>;
 		class CSort_Reverse
 		{
 		public:

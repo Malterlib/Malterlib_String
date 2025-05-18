@@ -379,12 +379,12 @@ namespace NMib::NStr
 				TCIterator_UTF16AdaptorWithBackward
 				<
 					tf_CIterator
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CFront
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CBack
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CFront
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CBack
 				>
 			>
 		{
-			typedef typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType CRange;
+			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
 			typedef NIterator::TCIterator<TCIterator_UTF16AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>> CIterator;
 			auto iFront = _rCharacters.f_Front();
 			--iFront;
@@ -404,11 +404,11 @@ namespace NMib::NStr
 				TCIterator_UTF16Adaptor
 				<
 					tf_CIterator
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CBack
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CBack
 				>
 			>
 		{
-			typedef typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType CRange;
+			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
 			typedef NIterator::TCIterator<TCIterator_UTF16Adaptor<tf_CIterator, typename CRange::CBack>> CIterator;
 			return CIterator(_Iterator, _rCharacters.f_Back());
 		}
@@ -426,12 +426,12 @@ namespace NMib::NStr
 				TCIterator_UTF8AdaptorWithBackward
 				<
 					tf_CIterator
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CFront
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CBack
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CFront
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CBack
 				>
 			>
 		{
-			typedef typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType CRange;
+			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
 			typedef NIterator::TCIterator<TCIterator_UTF8AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>> CIterator;
 			auto iFront = _rCharacters.f_Front();
 			--iFront;
@@ -450,11 +450,11 @@ namespace NMib::NStr
 				TCIterator_UTF8Adaptor
 				<
 					tf_CIterator
-					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType::CBack
+					, typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CBack
 				>
 			>
 		{
-			typedef typename NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>::CType CRange;
+			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
 			typedef NIterator::TCIterator<TCIterator_UTF8Adaptor<tf_CIterator, typename CRange::CBack>> CIterator;
 			return CIterator(_Iterator, _rCharacters.f_Back());
 		}

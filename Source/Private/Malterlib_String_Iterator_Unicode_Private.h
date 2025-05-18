@@ -15,6 +15,6 @@ namespace NMib::NStr::NPrivate
 			, NIterator::CIteratorTraversal_None
 		)
 	{
-		static_assert(NTraits::TCIsVoid<tf_CRange>::mc_Value, "This encoding is not supported");
+		static_assert(NTraits::cIsVoid<tf_CRange>, "This encoding is not supported");
 	}
 }

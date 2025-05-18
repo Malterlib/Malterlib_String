@@ -12,27 +12,27 @@ namespace
 	
 	static_assert
 		(
-			TCIsSame<TCRemoveTags<TCTags<CIteratorDistance_Supported, CIteratorTraversal_Forward>, CIteratorTraversal_None>::CType, TCTags<CIteratorDistance_Supported>>::mc_Value
+			cIsSame<TCRemoveTags<TCTags<CIteratorDistance_Supported, CIteratorTraversal_Forward>, CIteratorTraversal_None>::CType, TCTags<CIteratorDistance_Supported>>
 			, ""
 		)
 	;
 	static_assert
 		(
-			TCIsSame
+			cIsSame
 			<
 				TCRemoveTags<TCTags<CIteratorDistance_Supported, CIteratorTraversal_Forward, CIteratorAccess_ConstLValueArray>, CIteratorTraversal_None>::CType
 				, TCTags<CIteratorDistance_Supported, CIteratorAccess_ConstLValueArray>
-			>::mc_Value
+			>
 			, ""
 		)
 	;
 	static_assert
 		(
-			TCIsSame
+			cIsSame
 			<
 				TCRemoveTags<TCTags<CIteratorDistance_Supported, CIteratorTraversal_Forward, CIteratorAccess_ConstLValueArray>, CIteratorTraversal_None, CIteratorAccess_None>::CType
 				, TCTags<CIteratorDistance_Supported>
-			>::mc_Value
+			>
 			, ""
 		)
 	;

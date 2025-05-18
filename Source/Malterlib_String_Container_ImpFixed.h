@@ -12,7 +12,7 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = false;
-		constexpr const static bool mc_bNoThrowAssign = true;
+		constexpr const static bool mc_bNothrowAssign = true;
 
 		typedef typename t_CStrTraits::CChar CChar;
 
@@ -129,7 +129,7 @@ namespace NMib::NStr
 	{
 	public:
 		constexpr const static bool mc_bInitConstStr = true;
-		constexpr const static bool mc_bNoThrowAssign = true;
+		constexpr const static bool mc_bNothrowAssign = true;
 
 		typedef typename t_CStrTraits::CChar CChar;
 

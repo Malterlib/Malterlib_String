@@ -50,17 +50,7 @@ namespace NMib::NStr
 			template <typename tf_CData>
 			static auto fs_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
 		public:
-			enum
-			{
-				EValue = sizeof(fs_CheckFormat(fs_GetData())) == sizeof(NTraits::CTrueBySize)
-			};
+			constexpr static bool mc_bValue = sizeof(fs_CheckFormat(fs_GetData())) == sizeof(NTraits::CTrueBySize);
 		};
-
 	}
-
-	template <typename t_CDataToTest, typename t_CClassToTestAgainst>
-	class TCHasFormatClass : public NTraits::TCCompileTimeConstant<bool, NPrivate::TCHasFormatClassHelper<t_CDataToTest, t_CClassToTestAgainst>::EValue >
-	{
-	public:
-	};
 }

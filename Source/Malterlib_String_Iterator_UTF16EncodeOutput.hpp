@@ -133,7 +133,7 @@ namespace NMib::NStr
 			)
 		)
 	{
-//			static_assert(NTraits::TCIsConvertible<typename t_CRange::CTagsFront, TCTags<NStr::CIteratorStringEncoding_UTF32>>::mc_Value, "Range must be UTF32 encoded");
+//			static_assert(NTraits::cIsConvertible<typename t_CRange::CTagsFront, TCTags<NStr::CIteratorStringEncoding_UTF32>>, "Range must be UTF32 encoded");
 		return NPrivate::fg_Private_RangeAdaptor_UTF16EncodeOutput
 			(
 				_Range

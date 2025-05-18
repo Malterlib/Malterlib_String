@@ -41,8 +41,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, t_CData1>::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, t_CData1>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -50,8 +49,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -59,8 +57,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -68,8 +65,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<typename TCStrAggregate<t_CData0>::CChar, typename TCStrAggregate<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStrAggregate<t_CData0>::CChar, typename TCStrAggregate<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -77,8 +73,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, typename TCStr<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStr<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -86,8 +81,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<t_CData0, typename TCStr<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStr<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>
@@ -95,8 +89,7 @@ namespace NMib::NStr
 	{
 	public:
 
-		typedef typename NTraits::TCSigned< typename NTraits::TCLargerType< typename NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, typename TCStr<t_CData1>::CChar >::CType >::CType >::CType CType;
-		//typedef int64 CType;
+		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, typename TCStr<t_CData1>::CChar>>>;
 	};
 
 	/***************************************************************************************************\
@@ -400,7 +393,7 @@ namespace NMib::NStr
 	inline_small t_CData1 *fg_StrSetAt(t_CData1 *_pStr1, aint _Index, t_CData2 _Character);
 
 	template <typename t_CData1>
-	inline_small typename NTraits::TCUnsigned<t_CData1>::CType fg_StrLargestChar(const t_CData1 *_pStr1);
+	inline_small NTraits::TCUnsigned<t_CData1> fg_StrLargestChar(const t_CData1 *_pStr1);
 
 	template <typename t_CData1, typename t_CData2>
 	inline_large t_CData1 *fg_StrEscapeStr(t_CData1 *_pStrDest, const t_CData2 *_pStrSource, mint _MaxLen);

@@ -14,8 +14,8 @@ namespace NMib::NStr
 		t_CReturn DestExponent = t_CReturn::fs_0();
 		t_CReturn DecimalPlace = t_CReturn::fs_1();
 
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
-		typedef typename NTraits::TCUnsigned<t_CTerm>::CType CTerm;
+		using CData = NTraits::TCUnsigned<t_CData>;
+		using CTerm = NTraits::TCUnsigned<t_CTerm>;
 
 		const CData *pParseStr = (const CData *)_pStr;
 		static const t_CReturn Ten = fg_Convert<t_CReturn>(10);

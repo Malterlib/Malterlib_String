@@ -109,8 +109,8 @@ namespace NMib::NStr
 		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
 		typedef typename CTStrTraits::CStrTraits::CChar CChar;
 
-		typedef typename TCChooseType<t_bReference, const t_CToFormat &, t_CToFormat>::CType CStorageType;
-		typedef typename TCChooseType<t_bReference, const t_CToFormat &, const t_CToFormat &>::CType CReferenceType;
+		typedef TCConditional<t_bReference, const t_CToFormat &, t_CToFormat> CStorageType;
+		typedef TCConditional<t_bReference, const t_CToFormat &, const t_CToFormat &> CReferenceType;
 
 		enum
 		{

@@ -53,7 +53,7 @@ namespace NMib::NStr
 		}
 		inline_always bool f_Boolean() const
 		{
-			if constexpr (NTraits::TCIsSame<t_CIntType, bool>::mc_Value)
+			if constexpr (NTraits::cIsSame<t_CIntType, bool>)
 				return m_bBoolean;
 			else
 				return false;
@@ -117,7 +117,7 @@ namespace NMib::NStr
 		enum
 		{
 			ENumBits = sizeof(CIntType) * 8,
-			ENumBitsPerChar = TCHighestBitSet<int32, t_Radix>::mc_Value - 1
+			ENumBitsPerChar = gc_HighestBitSet<int32, t_Radix> - 1
 		};
 
 	public:
@@ -159,23 +159,22 @@ namespace NMib::NStr
 
 		virtual void f_Move(t_CFormatter &_Formatter) override
 		{
-			DMibFastCheck(!NTraits::TCIsReference<t_CIntType>::mc_Value); // Not supported
-			if constexpr (!NTraits::TCIsReference<t_CIntType>::mc_Value)
+			DMibFastCheck(!NTraits::cIsReference<t_CIntType>); // Not supported
+			if constexpr (!NTraits::cIsReference<t_CIntType>)
 				_Formatter.template f_Alloc<TCStrFormatType_Int>(f_GetValue(), f_GetOptions());
 		}
 
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-
-		typedef typename NTraits::TCRemoveConst<typename NTraits::TCRemoveReference<t_CIntType>::CType>::CType CType;
-		typedef typename NTraits::TCUnsigned<CType>::CType CUnsignedType;
-		typedef typename TCChooseType<NTraits::TCIsFundamental<CUnsignedType>::mc_Value, CUnsignedType, uint32>::CType CRadixType;
-		typedef typename CSuper::CVisitor CVisitor;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using CType = NTraits::TCRemoveConst<NTraits::TCRemoveReference<t_CIntType>>;
+		using CUnsignedType = NTraits::TCUnsigned<CType>;
+		using CRadixType = TCConditional<NTraits::cIsFundamental<CUnsignedType>, CUnsignedType, uint32>;
+		using CVisitor = typename CSuper::CVisitor;
 
 		enum
 		{
-			mc_bNeedDelete = !NTraits::TCIsReference<t_CIntType>::mc_Value
+			mc_bNeedDelete = !NTraits::cIsReference<t_CIntType>
 		};
 
 		class CStorage : public t_COptions
@@ -647,7 +646,7 @@ namespace NMib::NStr
 
 			bool bSign = _Options.f_Sign();
 			aint bSubStrStart = 0;
-			if constexpr (NTraits::TCIsSigned<CType>::mc_Value)
+			if constexpr (NTraits::cIsSigned<CType>)
 			{
 				CType Zero = 0;
 				if (_Integer < Zero)
@@ -671,8 +670,8 @@ namespace NMib::NStr
 			{
 				if (_Options.f_ThousandSeparator())
 				{
-					if constexpr (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
-						fs_DoNumber_BitExactWithThousand<TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1>(_Options, Number, pStrPlace);
+					if constexpr (1 << (gc_HighestBitSet<int32, t_COptions2::ERadix> - 1) == t_COptions2::ERadix)
+						fs_DoNumber_BitExactWithThousand<gc_HighestBitSet<int32, t_COptions2::ERadix> - 1>(_Options, Number, pStrPlace);
 					else if constexpr (t_COptions2::ERadix > 10)
 						fs_DoNumber_Above10StaticWithThousand<t_COptions2::ERadix>(_Options, Number, pStrPlace);
 					else
@@ -680,8 +679,8 @@ namespace NMib::NStr
 				}
 				else
 				{
-					if constexpr (1 << (TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1) == t_COptions2::ERadix)
-						fs_DoNumber_BitExact<TCHighestBitSet<int32, t_COptions2::ERadix>::mc_Value - 1>(_Options, Number, pStrPlace);
+					if constexpr (1 << (gc_HighestBitSet<int32, t_COptions2::ERadix> - 1) == t_COptions2::ERadix)
+						fs_DoNumber_BitExact<gc_HighestBitSet<int32, t_COptions2::ERadix> - 1>(_Options, Number, pStrPlace);
 					else if constexpr (t_COptions2::ERadix > 10)
 						fs_DoNumber_Above10Static<t_COptions2::ERadix>(_Options, Number, pStrPlace);
 					else
@@ -780,7 +779,7 @@ namespace NMib::NStr
 
 		virtual void f_Visit(CVisitor &_Extractor) const override
 		{
-			if constexpr (NTraits::TCIsSigned<CType>::mc_Value)
+			if constexpr (NTraits::cIsSigned<CType>)
 			{
 				if constexpr (sizeof(CType) > sizeof(int32))
 					_Extractor(int64(f_GetValue()));

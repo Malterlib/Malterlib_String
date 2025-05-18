@@ -85,7 +85,7 @@ namespace NMib::NStr
 	template <typename tf_CStrTraits>
 	void TCStringAppender<t_CString>::operator += (NStr::TCStr<tf_CStrTraits> const &_String)
 	{
-		if constexpr (NTraits::TCIsSame<typename t_CString::CChar, typename NStr::TCStr<tf_CStrTraits>::CChar>::mc_Value)
+		if constexpr (NTraits::cIsSame<typename t_CString::CChar, typename NStr::TCStr<tf_CStrTraits>::CChar>)
 			f_AddString(_String.f_GetStr(), _String.f_GetLen());
 		else
 		{

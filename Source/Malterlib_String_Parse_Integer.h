@@ -26,10 +26,12 @@ namespace NMib::NStr
 			, bool *_pFailed = nullptr
 		)
 	{
-		using CNumber = typename TCChooseType<NTraits::TCIsSame<t_CReturn, bool>::mc_Value, uint8, t_CReturn>::CType;
+		using CNumber = TCConditional<NTraits::cIsSame<t_CReturn, bool>, uint8, t_CReturn>;
 		CNumber DestNumber = 0;
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
-		typedef typename NTraits::TCUnsigned<t_CTerm>::CType CTerm;
+
+		using CData = NTraits::TCUnsigned<t_CData>;
+		using CTerm = NTraits::TCUnsigned<t_CTerm>;
+
 		const CData *pParseStr = (const CData *)_pStr;
 
 		uint32 ParseMode;
@@ -155,7 +157,7 @@ namespace NMib::NStr
 									break;
 
 								DestNumber <<= 4;
-								if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+								if constexpr (NTraits::cIsFundamental<t_CReturn>)
 									DestNumber |= Num;
 								else
 								{
@@ -181,7 +183,7 @@ namespace NMib::NStr
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 1;
-									if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+									if constexpr (NTraits::cIsFundamental<t_CReturn>)
 										DestNumber |= Num;
 									else
 									{
@@ -208,7 +210,7 @@ namespace NMib::NStr
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 3;
-									if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+									if constexpr (NTraits::cIsFundamental<t_CReturn>)
 										DestNumber |= Num;
 									else
 									{
@@ -320,7 +322,9 @@ Return:
 		inline_medium t_CReturn fg_StrToIntParseHex(const t_CData *&_pStr, t_CReturn _FailValue, t_CData _Terminator)
 	{
 		t_CReturn DestNumber = 0;
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		const CData *pParseStr = (const CData *)_pStr;
 
 		t_CReturn Sign = 1;
@@ -355,7 +359,7 @@ Return:
 						break;
 
 					DestNumber <<= 4;
-					if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+					if constexpr (NTraits::cIsFundamental<t_CReturn>)
 						DestNumber |= Num;
 					else
 					{
@@ -388,7 +392,9 @@ Return:
 		inline_medium t_CReturn fg_StrToIntParseHex(const t_CData *&_pStr, t_CReturn _FailValue)
 	{
 		t_CReturn DestNumber = 0;
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		const CData *pParseStr = (const CData *)_pStr;
 
 		t_CReturn Sign = 1;
@@ -421,7 +427,7 @@ Return:
 						break;
 
 					DestNumber <<= 4;
-					if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+					if constexpr (NTraits::cIsFundamental<t_CReturn>)
 						DestNumber |= Num;
 					else
 					{
@@ -453,7 +459,9 @@ Return:
 		inline_medium t_CReturn fg_StrToIntParseHexNoSign(const t_CData *&_pStr, t_CReturn _FailValue)
 	{
 		t_CReturn DestNumber = 0;
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		const CData *pParseStr = (const CData *)_pStr;
 		aint bFoundNum = false;
 		// Parse for characters, and end if str terminator is found
@@ -472,7 +480,7 @@ Return:
 					break;
 
 				DestNumber <<= 4;
-				if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+				if constexpr (NTraits::cIsFundamental<t_CReturn>)
 					DestNumber |= Num;
 				else
 				{
@@ -499,7 +507,9 @@ Return:
 		inline_medium t_CReturn fg_StrToIntParseHexNoSign(const t_CData *&_pStr, mint _MaxLen, t_CReturn _FailValue)
 	{
 		t_CReturn DestNumber = 0;
-		typedef typename NTraits::TCUnsigned<t_CData>::CType CData;
+
+		using CData = NTraits::TCUnsigned<t_CData>;
+
 		const CData *pParseStr = (const CData *)_pStr;
 		auto pEndStr = pParseStr + _MaxLen;
 		aint bFoundNum = false;
@@ -517,7 +527,7 @@ Return:
 				break;
 
 			DestNumber <<= 4;
-			if constexpr (NTraits::TCIsFundamental<t_CReturn>::mc_Value)
+			if constexpr (NTraits::cIsFundamental<t_CReturn>)
 				DestNumber |= Num;
 			else
 			{

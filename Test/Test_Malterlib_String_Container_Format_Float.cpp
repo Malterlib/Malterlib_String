@@ -1,12 +1,12 @@
-﻿// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB 
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
 
-DMibStaticCheck((NMib::NStr::TCHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Float>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Integer>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<fp32, NMib::NStr::EStrTypeClass_String>::mc_Value));
-DMibStaticCheck((!NMib::NStr::TCHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other>::mc_Value));
+static_assert(NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Float>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Integer>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_String>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other>);
 
 
 namespace 

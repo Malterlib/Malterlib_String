@@ -182,14 +182,14 @@ namespace NMib::NIterator
 		<
 			t_CType [t_Extent]
 			, t_CTags
-			, typename TCEnableIf<NStr::NPrivate::TCIsCharacter<typename NTraits::TCRemoveQualifiers<t_CType>::CType>::mc_Value>::CType
+			, TCEnableIf<NStr::NPrivate::TCIsCharacter<NTraits::TCRemoveQualifiers<t_CType>>::mc_Value>
 		> : public CValidMakeRange
 	{
 		typedef TCArrayIterator
 			<
 				t_CType
-				, typename NTraits::TCUnsigned<t_CType>::CType
-				, typename NStr::TCGetIteratorUnicodeFromChar<typename NTraits::TCRemoveQualifiers<t_CType>::CType>::CType
+				, NTraits::TCUnsigned<t_CType>
+				, typename NStr::TCGetIteratorUnicodeFromChar<NTraits::TCRemoveQualifiers<t_CType>>::CType
 				, NStr::CIteratorStringNullTermination_Required
 			>
 			CArrayIterator
@@ -216,8 +216,8 @@ namespace NMib::NIterator
 		typedef TCArrayIterator
 			<
 				t_CType
-				, typename NTraits::TCUnsigned<t_CType>::CType
-				, typename NStr::TCGetIteratorUnicodeFromChar<typename NTraits::TCRemoveQualifiers<t_CType>::CType>::CType
+				, NTraits::TCUnsigned<t_CType>
+				, typename NStr::TCGetIteratorUnicodeFromChar<NTraits::TCRemoveQualifiers<t_CType>>::CType
 			>
 			CArrayIterator
 		;
@@ -237,11 +237,11 @@ namespace NMib::NIterator
 		<
 			t_CPointer
 			, t_CTags
-			, typename TCEnableIf<NStr::NPrivate::TCIsCharacter<typename NTraits::TCRemoveQualifiers<typename NTraits::TCRemovePointer<t_CPointer>::CType>::CType>::mc_Value>::CType
+			, TCEnableIf<NStr::NPrivate::TCIsCharacter<NTraits::TCRemoveQualifiers<NTraits::TCRemovePointer<t_CPointer>>>::mc_Value>
 		>
 		: public CValidMakeRange
 	{
-		using CCharType = typename NTraits::TCRemovePointer<t_CPointer>::CType;
+		using CCharType = NTraits::TCRemovePointer<t_CPointer>;
 	public:
 		typedef TCRange
 			<
@@ -250,8 +250,8 @@ namespace NMib::NIterator
 					TCArrayIterator
 					<
 						CCharType
-						, typename NTraits::TCUnsigned<CCharType>::CType
-						, typename NStr::TCGetIteratorUnicodeFromChar<typename NTraits::TCRemoveQualifiers<CCharType>::CType>::CType
+						, NTraits::TCUnsigned<CCharType>
+						, typename NStr::TCGetIteratorUnicodeFromChar<NTraits::TCRemoveQualifiers<CCharType>>::CType
 					>
 				>
 				, TCIterator<NStr::CNullTerminatedBackIterator>
@@ -277,7 +277,7 @@ namespace NMib::NIterator
 		: public CValidMakeRange
 	{
 	public:
-		using CMakeRange = TCMakeRange<typename NTraits::TCRemoveReference<t_CContainer>::CType, t_CTags>;
+		using CMakeRange = TCMakeRange<NTraits::TCRemoveReference<t_CContainer>, t_CTags>;
 		typedef TCRange
 			<
 				typename CMakeRange::CRange::CFront

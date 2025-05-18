@@ -150,7 +150,8 @@ namespace NMib::NStr
 		}
 
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
-		static inline_small typename TCEnableIf<tf_DestinationType == tf_SourceType, void>::CType fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
+		static inline_small auto fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
+			-> TCEnableIf<tf_DestinationType == tf_SourceType, void>
 		{
 			if (_Options.m_Case)
 			{
@@ -329,7 +330,7 @@ namespace NMib::NStr
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 		{ \
-			if constexpr (NMib::NTraits::TCIsConst<tf_CTypeWithConst>::mc_Value) \
+			if constexpr (NMib::NTraits::cIsConst<tf_CTypeWithConst>) \
 				_Formatter.template f_Alloc<CFormatType>(_Data, t_Size - 1); \
 			else \
 				_Formatter.template f_Alloc<CFormatType>(_Data, t_Size - 1, true); \
