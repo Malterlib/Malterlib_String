@@ -91,6 +91,11 @@ Property
 		{
 			!!PlatformFamily "Windows"
 		}
+	
+		Warnings_MissingCommaVariadicParam false
+		{
+			!!Compiler "Clang"
+		}
 	}
 }
 
