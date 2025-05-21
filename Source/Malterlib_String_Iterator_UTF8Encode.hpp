@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <typename t_CIterator>
 	class TCIterator_UTF8Encode : public t_CIterator
 	{
-		typedef typename TCRemoveTags
+		using CStrippedTags = typename TCRemoveTags
 			<
 				typename t_CIterator::CTags
 				, NIterator::CIteratorTraversal_None
@@ -16,7 +16,7 @@ namespace NMib::NStr
 				, NIterator::CIteratorSegmentation_None
 				, NIterator::CIteratorValueLifeTime_None
 				, NIterator::CIteratorStep_None
-			>::CType CStrippedTags
+			>::CType
 		;
 
 		uch8 mp_Values[6];
@@ -74,18 +74,17 @@ namespace NMib::NStr
 		}
 	public:
 
-		typedef typename TCAddTags
+		using CTags = typename TCAddTags
 			<
 				CStrippedTags
 				, NStr::CIteratorStringEncoding_UTF8
 				, NIterator::CIteratorAccess_Readable
 				, NIterator::CIteratorTraversal_Forward
 				, NIterator::CIteratorStep_OneStep
-			>::CType CTags
+			>::CType
 		;
 
-		typedef uch8 CValueType;
-
+		using CValueType = uch8;
 
 		template <typename tf_CIterator>
 		TCIterator_UTF8Encode(tf_CIterator &&_Iterator)

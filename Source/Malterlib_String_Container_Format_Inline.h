@@ -90,7 +90,7 @@ namespace NMib::NStr
 	class TCStrFormatType_Inline final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
-		typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
+		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_String;
 
 		virtual mint f_Delete() override
 		{
@@ -106,11 +106,10 @@ namespace NMib::NStr
 				_Formatter.template f_Alloc<TCStrFormatType_Inline>(fg_Move(m_ToFormat));
 		}
 
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
-
-		typedef TCConditional<t_bReference, const t_CToFormat &, t_CToFormat> CStorageType;
-		typedef TCConditional<t_bReference, const t_CToFormat &, const t_CToFormat &> CReferenceType;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
+		using CStorageType = TCConditional<t_bReference, const t_CToFormat &, t_CToFormat>;
+		using CReferenceType = TCConditional<t_bReference, const t_CToFormat &, const t_CToFormat &>;
 
 		enum
 		{
@@ -134,13 +133,12 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-		typedef typename CSuper::COption COption;
-		typedef typename CSuper::COptions COptions;
-		typedef typename CSuper::COptionsStatic COptionsStatic;
-		typedef typename CSuper::CVisitor CVisitor;
-
-		typedef const t_CToFormat &CType;
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
+		using COptionsStatic = typename CSuper::COptionsStatic;
+		using CVisitor = typename CSuper::CVisitor;
+		using CType = t_CToFormat const &;
 
 		template <typename tf_CType>
 		static auto fs_GetFormatOptionsType(tf_CType const &_Type)

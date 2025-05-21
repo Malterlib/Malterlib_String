@@ -28,8 +28,8 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
-		typedef typename t_CParser::CStrTraits CStrTraits;
-		typedef typename CStrTraits::CChar CChar;
+		using CStrTraits = typename t_CParser::CStrTraits;
+		using CChar = typename CStrTraits::CChar;
 
 		enum
 		{
@@ -42,9 +42,9 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef TICStrParseType<t_CParser> CSuper;
-		typedef typename CSuper :: COption COption;
-		typedef typename CSuper :: COptions COptions;
+		using CSuper = TICStrParseType<t_CParser>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
 
 		class COptionsFloat : public COptions
 		{
@@ -98,8 +98,9 @@ namespace NMib::NStr
 	class TCStringParser<t_CParser, NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> >
 	{
 	public:
-		typedef NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloat;
-		typedef TCStrParseType_Float<t_CParser, CFloat > CParseType;
+		using CFloat = NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
+		using CParseType = TCStrParseType_Float<t_CParser, CFloat>;
+
 		static inline_large void f_CreateParse(t_CParser &_Formatter, CFloat &_Data)
 		{
 			mint Flags;

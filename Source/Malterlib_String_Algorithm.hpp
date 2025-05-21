@@ -1041,8 +1041,8 @@ namespace NMib::NStr
 	template <bool t_bNoCase, typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindIterator(t_CData1 &_Str1, t_CData2 &_Str2)
 	{
-		typedef t_CData1 CData1;
-		typedef t_CData2 CData2;
+		using CData1 = t_CData1;
+		using CData2 = t_CData2;
 		CData1 Str1Start = _Str1;
 		CData1 Str1 = Str1Start;
 		CData2 Str2 = _Str2;
@@ -3335,7 +3335,18 @@ namespace NMib::NStr
 	template<typename tf_CStr>
 	tf_CStr fg_StrSanitizeOneLine(tf_CStr const &_Str)
 	{
-		typedef TCStr <typename TCStrTraits_ReplaceParams<ch32, EStrType_Unicode, tf_CStr::CTraits::CStrTraits::mc_Type, typename tf_CStr::CImp, typename tf_CStr::CTraits::CStrTraits::CParams>::CType> CUnicodeStr;
+		using CUnicodeStr = TCStr
+			<
+				typename TCStrTraits_ReplaceParams
+				<
+					ch32
+					, EStrType_Unicode
+					, tf_CStr::CTraits::CStrTraits::mc_Type
+					, typename tf_CStr::CImp
+					, typename tf_CStr::CTraits::CStrTraits::CParams
+				>::CType
+			>
+		;
 
 		if (_Str.f_IsEmpty())
 			return CUnicodeStr();

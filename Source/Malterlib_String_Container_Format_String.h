@@ -19,7 +19,7 @@ namespace NMib::NStr
 	public:
 		static_assert(t_Type != EStrType_Ansi);
 
-		typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
+		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_String;
 
 		virtual mint f_Delete() override
 		{
@@ -33,8 +33,8 @@ namespace NMib::NStr
 			_Formatter.template f_Alloc<TCStrFormatType_String>(m_pStr, m_StrLen);
 		}
 
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
 
 		enum
 		{
@@ -63,13 +63,12 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef t_CStrDataType const *CType;
-
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-		typedef typename CSuper::COption COption;
-		typedef typename CSuper::COptions COptions;
-		typedef typename CSuper::COptionsStatic COptionsStatic;
-		typedef typename CSuper::CVisitor CVisitor;
+		using CType = t_CStrDataType const *;
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
+		using COptionsStatic = typename CSuper::COptionsStatic;
+		using CVisitor = typename CSuper::CVisitor;
 
 		class COptionsStr : public COptions
 		{
@@ -131,7 +130,8 @@ namespace NMib::NStr
 
 			if (_pFormat)
 			{
-				typedef decltype((m_pStr)) CStrType;
+				using CStrType = decltype((m_pStr));
+
 				TICStrFormatType_ParseOptionsArgs<CStrType, TCStrFormatType_String, COptionsStr> Args(m_pStr, *this, _String, _CurrentStrLen, Options, _ArgData);
 				CSuper::fs_ParseOptions(Args, _pFormat);
 			}
@@ -283,7 +283,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, d_Type *> \
 	{ \
 	public: \
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, d_Type * const &_Data) \
 		{ \
@@ -295,7 +295,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<d_Type *>> \
 	{ \
 	public: \
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<d_Type *> const &_Data) \
 		{ \
@@ -325,8 +325,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, d_Type [t_Size] > \
 	{ \
 	public: \
-		typedef d_Type CData[t_Size];\
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CData = d_Type[t_Size];\
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 		{ \
@@ -341,8 +341,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<d_Type [t_Size]> > \
 	{ \
 	public: \
-		typedef d_Type CData[t_Size];\
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CData = d_Type[t_Size];\
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CData> const&_Data) \
 		{ \
@@ -354,8 +354,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, d_Type [] > \
 	{ \
 	public: \
-		typedef d_Type CData[];\
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CData = d_Type[];\
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CData const&_Data) \
 		{ \
@@ -367,8 +367,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<d_Type []> > \
 	{ \
 	public: \
-		typedef d_Type CData[];\
-		typedef TCStrFormatType_String<t_CFormatter, d_Type, d_StrType> CFormatType; \
+		using CData = d_Type[];\
+		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CData> const&_Data) \
 		{ \

@@ -23,7 +23,7 @@ namespace
 		
 		struct CIteratorSegmented
 		{
-			typedef TCTags
+			using CTags = TCTags
 				<
 					CIteratorStep_OneStep
 					, CIteratorTraversal_Forward
@@ -34,7 +34,6 @@ namespace
 					, NStr::CIteratorStringEncoding_UTF8
 					, CIteratorSegmentation_Segmented
 				>
-				CTags
 			;
 			
 			NContainer::TCLinkedList<NStr::CStr>::CIteratorConst m_Iterator;
@@ -113,7 +112,7 @@ namespace
 		
 		struct CIterator
 		{
-			typedef TCTags
+			using CTags = TCTags
 				<
 					CIteratorStep_OneStep
 					, CIteratorTraversal_Forward
@@ -124,7 +123,6 @@ namespace
 					, NStr::CIteratorStringEncoding_UTF8
 					, CIteratorSegmentation_Supported
 				>
-				CTags
 			;
 			
 			NContainer::TCLinkedList<NStr::CStr>::CIteratorConst m_Iterator;
@@ -250,7 +248,7 @@ namespace
 		
 		struct CIteratorSegmented
 		{
-			typedef TCTags
+			using CTags = TCTags
 				<
 					CIteratorStep_OneStep
 					, CIteratorTraversal_Forward
@@ -261,7 +259,6 @@ namespace
 					, NStr::CIteratorStringEncoding_UTF8
 					, CIteratorSegmentation_Segmented
 				>
-				CTags
 			;
 			
 			NContainer::TCLinkedList<CSegmentedString>::CIteratorConst m_Iterator;
@@ -339,7 +336,7 @@ namespace
 		
 		struct CIterator
 		{
-			typedef TCTags
+			using CTags = TCTags
 				<
 					CIteratorStep_OneStep
 					, CIteratorTraversal_Forward
@@ -350,7 +347,6 @@ namespace
 					, NStr::CIteratorStringEncoding_UTF8
 					, CIteratorSegmentation_Supported
 				>
-				CTags
 			;
 			
 			NContainer::TCLinkedList<CSegmentedString>::CIteratorConst m_Iterator;

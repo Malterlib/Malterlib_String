@@ -11,8 +11,7 @@ namespace NMib::NStr
 	class TCStrFormatType_TStr final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
-
-		typedef CStrFormatTypeClassifier_String CStrFormatTypeClassifier;
+		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_String;
 
 		virtual mint f_Delete() override
 		{
@@ -28,11 +27,10 @@ namespace NMib::NStr
 				_Formatter.template f_Alloc<TCStrFormatType_TStr>(fg_Move(m_TStr));
 		}
 
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
-
-		typedef TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, TCStr<t_CStrTraitsIn>> CStorageType;
-		typedef TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, const TCStr<t_CStrTraitsIn> &> CReferenceType;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
+		using CStorageType = TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, TCStr<t_CStrTraitsIn>>;
+		using CReferenceType = TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, const TCStr<t_CStrTraitsIn> &>;
 
 		enum
 		{
@@ -41,8 +39,8 @@ namespace NMib::NStr
 
 		CStorageType m_TStr;
 
-		typedef const TCStrAggregate<t_CStrTraitsIn> & CType;
-		typedef typename t_CStrTraitsIn::CStrTraits::CChar CCharIn;
+		using CType = TCStrAggregate<t_CStrTraitsIn> const &;
+		using CCharIn = typename t_CStrTraitsIn::CStrTraits::CChar;
 
 		inline_small TCStrFormatType_TStr(TCStrAggregate<t_CStrTraitsIn> const &_Str)
 			: m_TStr(_Str)
@@ -59,11 +57,11 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-		typedef typename CSuper::COption COption;
-		typedef typename CSuper::COptions COptions;
-		typedef typename CSuper::COptionsStatic COptionsStatic;
-		typedef typename CSuper::CVisitor CVisitor;
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
+		using COptionsStatic = typename CSuper::COptionsStatic;
+		using CVisitor = typename CSuper::CVisitor;
 
 		class COptionsStr : public COptions
 		{
@@ -203,14 +201,14 @@ namespace NMib::NStr
 				{
 					// TODO: Support for UTF with new string algorithm
 
-					typedef TCStr
+					using CUnicodeStr = TCStr
 						<
 							typename TCStrTraits_ReplaceParams<ch32
 							, EStrType_Unicode
 							, TCStrAggregate<t_CStrTraitsIn>::CTraits::CStrTraits::mc_Type
 							, typename TCStrAggregate<t_CStrTraitsIn>::CImp
 							, typename TCStrAggregate<t_CStrTraitsIn>::CTraits::CStrTraits::CParams>::CType
-						> CUnicodeStr
+						>
 					;
 
 					CUnicodeStr UnicodeStr = _Value;
@@ -305,7 +303,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCStrAggregate<t_CStrTraitsIn> >
 	{
 	public:
-		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true> CFormatType;
+		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStrAggregate<t_CStrTraitsIn> const&_Data)
@@ -319,7 +317,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn> >
 	{
 	public:
-		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true> CFormatType;
+		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const&_Data)
@@ -334,7 +332,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<TCStrAggregate<t_CStrTraitsIn>> >
 	{
 	public:
-		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false> CFormatType;
+		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat
@@ -352,7 +350,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>> >
 	{
 	public:
-		typedef TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false> CFormatType;
+		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat

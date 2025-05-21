@@ -38,7 +38,7 @@ namespace NMib::NStr
 		constexpr static EStrType const mc_Type = (EStrType)t_Type;
 		using CTypes = TCStrTraitsTypes<t_CChar, t_Type>;
 		using CParams = t_CParams;
-		typedef typename t_CParams::CAllocator CAllocator;
+		using CAllocator = typename t_CParams::CAllocator;
 
 		template <typename t_CData>
 			static inline_small bool fs_CharIsNumber(const t_CData _Character)
@@ -297,21 +297,21 @@ namespace NMib::NStr
 		template <typename t_CFormatter, typename t_CData, bool t_bIsEnum = NMib::NTraits::cIsEnum<t_CData>>
 		struct TCDetermineStringFormatter
 		{
-			typedef TCStringFormatter<t_CFormatter, t_CData> CType;
+			using CType = TCStringFormatter<t_CFormatter, t_CData>;
 		};
 
 		template <typename t_CFormatter, typename t_CData>
 		struct TCDetermineStringFormatter<t_CFormatter, t_CData, true>
 		{
-			typedef TCStringFormatterEnum<t_CFormatter, t_CData> CType;
+			using CType = TCStringFormatterEnum<t_CFormatter, t_CData>;
 		};
 	}
 
 	template <typename t_CFormatter, typename t_CData, typename t_CTypeWithConst = t_CData>
 	struct TCStringFormatterAll
 	{
-		typedef typename NPrivate::TCDetermineStringFormatter<t_CFormatter, t_CData>::CType CStringFormatter;
-		typedef typename CStringFormatter::CFormatType CFormatType;
+		using CStringFormatter = typename NPrivate::TCDetermineStringFormatter<t_CFormatter, t_CData>::CType;
+		using CFormatType = typename CStringFormatter::CFormatType;
 
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, t_CData const &_Data) -> decltype(CStringFormatter::template fs_CreateFormat<t_CTypeWithConst>(_Formatter, _Data))
 		{
@@ -324,7 +324,7 @@ namespace NMib::NStr
 		template <typename t_CFormatter, typename t_CData>
 		struct TCDetermineStringFormatterReturnType
 		{
-			typedef decltype(TCStringFormatterAll<t_CFormatter, t_CData>::fs_CreateFormat(fg_GetType<t_CFormatter &>(), fg_GetType<t_CData const &>())) CType;
+			using CType = decltype(TCStringFormatterAll<t_CFormatter, t_CData>::fs_CreateFormat(fg_GetType<t_CFormatter &>(), fg_GetType<t_CData const &>()));
 		};
 	}
 
@@ -345,14 +345,14 @@ namespace NMib::NStr
 	class TCFormat
 	{
 	public:
-		typedef typename t_CTCStrTraits::CStrTraits::CChar CChar;
-		typedef typename t_CTCStrTraits::CStrTraits::CAllocator CAllocator;
-		typedef TCStrAggregate<t_CTCStrTraits> CStrAggregate;
-		typedef TCStr<t_CTCStrTraits> CStr;
-		typedef t_CTCStrTraits CTStrTraits;
-		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
+		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
+		using CAllocator = typename t_CTCStrTraits::CStrTraits::CAllocator;
+		using CStrAggregate = TCStrAggregate<t_CTCStrTraits>;
+		using CStr = TCStr<t_CTCStrTraits>;
+		using CTStrTraits = t_CTCStrTraits;
+		using CFomatArgType = TICStrFormatType<TCFormat>;
 
-		typedef TICStrFormatType<TCFormat> CFomatArgType;
+		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 		void f_MoveFormats(TCFormat &&_Other)
 		{
@@ -940,7 +940,7 @@ EndArgSearch:
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) < 4 || mc_Type == EStrType_Unicode);
 
-		typedef TCConditional
+		using CUnicodeIterator = TCConditional
 			<
 				sizeof(CChar) == 1
 				, TCConditional
@@ -960,7 +960,7 @@ EndArgSearch:
 					>
 					, TCStrIteratorUnicode<CChar>
 				>
-			> CUnicodeIterator
+			>
 		;
 
 	private:
@@ -970,12 +970,12 @@ EndArgSearch:
 			, EDebug_Type = t_CTCStrTraits::CStrTraits::mc_Type
 		};
 
-		typedef TCConditional
+		using CTempStr = TCConditional
 			<
 				NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
 				, CStrNonTracked
 				, CStr
-			> CTempStr
+			>
 		;
 
 	public:
@@ -1512,12 +1512,12 @@ EndArgSearch:
 
 		};
 
-		typedef TCFormat<t_CTCStrTraits> CFormat;
-		typedef typename CFormat::CFomatArgType::CVisitor CFormatArgVisitor;
-		typedef typename CFormat::CFomatArgType::CVisitorInteger CFormatArgVisitorInteger;
-		typedef typename CFormat::CFomatArgType::CVisitorFloat CFormatArgVisitorFloat;
-		typedef typename CFormat::CFomatArgType::CVisitorNumber CFormatArgVisitorNumber;
-		typedef typename CFormat::CFomatArgType::CVisitorString CFormatArgVisitorString;
+		using CFormat = TCFormat<t_CTCStrTraits>;
+		using CFormatArgVisitor = typename CFormat::CFomatArgType::CVisitor;
+		using CFormatArgVisitorInteger = typename CFormat::CFomatArgType::CVisitorInteger;
+		using CFormatArgVisitorFloat = typename CFormat::CFomatArgType::CVisitorFloat;
+		using CFormatArgVisitorNumber = typename CFormat::CFomatArgType::CVisitorNumber;
+		using CFormatArgVisitorString = typename CFormat::CFomatArgType::CVisitorString;
 
 		template <typename t_CType>
 		inline_medium static void fs_ToStrInplace
@@ -1526,7 +1526,7 @@ EndArgSearch:
 				, t_CType const& _Format
 			)
 		{
-			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
+			using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
 			aint CurrentLen = 0;
 			CFormatType::fs_AddToStrStatic(_Destination, CurrentLen, _Format);
 			_Destination.f_SetStrLen(CurrentLen);
@@ -1555,7 +1555,8 @@ EndArgSearch:
 				, t_CType const& _Format
 			)
 		{
-			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
+			using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
+
 			aint CurrentLen = _Destination.f_GetStrLen();
 			CFormatType::fs_AddToStrStatic(_Destination, CurrentLen, _Format);
 			_Destination.f_SetStrLen(CurrentLen);
@@ -1569,7 +1570,8 @@ EndArgSearch:
 				, aint &_Len
 			)
 		{
-			typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
+			using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
+
 			CFormatType::fs_AddToStrStatic(_Destination, _Len, _Format);
 		}
 
@@ -2785,13 +2787,12 @@ EndArgSearch:
 	class TCStr : public TCStrAggregate<t_CTCStrTraits>
 	{
 	public:
-
-		typedef typename t_CTCStrTraits::CImp CImp;
-		typedef t_CTCStrTraits CTraits;
-		typedef typename t_CTCStrTraits::CStrTraits::CChar CChar;
-		typedef TCStrAggregate<t_CTCStrTraits> CSuper;
-		typedef typename CSuper::CFormat CFormat;
-		typedef typename CSuper::CAddStrAgrs CAddStrAgrs;
+		using CImp = typename t_CTCStrTraits::CImp;
+		using CTraits = t_CTCStrTraits;
+		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
+		using CSuper = TCStrAggregate<t_CTCStrTraits>;
+		using CFormat = typename CSuper::CFormat;
+		using CAddStrAgrs = typename CSuper::CAddStrAgrs;
 
 		struct CAutoDestroy
 		{
@@ -3084,7 +3085,9 @@ EndArgSearch:
 			else
 			{
 				TCStr Ret;
-				typedef typename TCStringFormatterAll<CFormat, t_CType>::CFormatType CFormatType;
+
+				using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
+
 				aint CurrentLen = 0;
 				CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
 				Ret.f_SetStrLen(CurrentLen);
@@ -4128,7 +4131,8 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrUntabify(TCStrAggregate<t_CTCStrTraits> &_Str1, mint _TabSize)
 	{
-		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+
 		TCStrAggregate<t_CTCStrTraits> Temp(_Str1);
 		const CChar *pStr1 = Temp.f_GetStr();
 		mint NeededLen = 0;
@@ -4240,7 +4244,8 @@ EndArgSearch:
 			, mint _LenReplace
 		)
 	{
-		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
 
@@ -4311,7 +4316,8 @@ EndArgSearch:
 			, mint _MaxLen
 		)
 	{
-		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
 
@@ -4390,7 +4396,8 @@ EndArgSearch:
 			, mint _LenReplace
 		)
 	{
-		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
 
@@ -4461,7 +4468,8 @@ EndArgSearch:
 			, mint _MaxLen
 		)
 	{
-		typedef typename TCStrAggregate<t_CTCStrTraits>::CChar CChar;
+		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
 

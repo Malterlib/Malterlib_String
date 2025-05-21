@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <typename t_CIterator, typename t_CBackIterator>
 	class TCIterator_UTF8EncodeOutput : public t_CIterator
 	{
-		typedef typename TCRemoveTags
+		using CStrippedTags = typename TCRemoveTags
 			<
 				typename t_CIterator::CTags
 				, NIterator::CIteratorTraversal_None
@@ -16,7 +16,7 @@ namespace NMib::NStr
 				, NIterator::CIteratorSegmentation_None
 				, NIterator::CIteratorValueLifeTime_None
 				, NIterator::CIteratorStep_None
-			>::CType CStrippedTags
+			>::CType
 		;
 
 		t_CBackIterator mp_Back;
@@ -92,17 +92,17 @@ namespace NMib::NStr
 		}
 	public:
 
-		typedef typename TCAddTags
+		using CTags = typename TCAddTags
 			<
 				CStrippedTags
 				, NStr::CIteratorStringEncoding_UTF32
 				, NIterator::CIteratorAccess_Writable
 				, NIterator::CIteratorTraversal_Forward
 				, NIterator::CIteratorStep_OneStep
-			>::CType CTags
+			>::CType
 		;
 
-		typedef uch8 CValueType;
+		using CValueType = uch8;
 
 		template <typename tf_CBackIterator>
 		TCIterator_UTF8EncodeOutput(t_CIterator const &_Iterator, tf_CBackIterator &&_BackIterator)

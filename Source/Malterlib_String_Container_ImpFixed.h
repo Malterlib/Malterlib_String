@@ -14,7 +14,7 @@ namespace NMib::NStr
 		constexpr const static bool mc_bInitConstStr = false;
 		constexpr const static bool mc_bNothrowAssign = true;
 
-		typedef typename t_CStrTraits::CChar CChar;
+		using CChar = typename t_CStrTraits::CChar;
 
 		const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 
@@ -131,7 +131,7 @@ namespace NMib::NStr
 		constexpr const static bool mc_bInitConstStr = true;
 		constexpr const static bool mc_bNothrowAssign = true;
 
-		typedef typename t_CStrTraits::CChar CChar;
+		using CChar = typename t_CStrTraits::CChar;
 
 		const static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
 

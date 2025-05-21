@@ -102,7 +102,8 @@ namespace NMib::NStr
 	class TCValueWithOptions : public t_COptions
 	{
 	public:
-		typedef t_COptions COptions;
+		using COptions = t_COptions;
+
 		const t_CIntType &m_Int;
 		inline_small TCValueWithOptions(const t_CIntType &_Int, t_COptions const &_Options)
 			: t_COptions(_Options)
@@ -280,8 +281,9 @@ namespace NMib::NStr
 	class TICStrFormatType_ParseOptionsArgs
 	{
 	public:
-		typedef typename t_CFormatType::CStrAggregate CStrAggregate;
-		typedef typename t_CFormatType::CFormatter CFormatter;
+		using CStrAggregate = typename t_CFormatType::CStrAggregate;
+		using CFormatter = typename t_CFormatType::CFormatter;
+
 		TICStrFormatType_ParseOptionsArgs(t_CData &_Data, const t_CFormatType &_FormatType, CStrAggregate &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFormatter &_Formatter)
 			: m_Data(_Data)
 			, m_FormatType(_FormatType)
@@ -305,19 +307,17 @@ namespace NMib::NStr
 	class TICStrFormatType
 	{
 	public:
-		typedef CDefaultStrFormatTypeClassifier CStrFormatTypeClassifier;
 		virtual mint f_Delete() = 0;
 		virtual void f_Move(t_CFormatter &_Formatter) = 0;
 
-		//	virtual void
-		typedef t_CFormatter CFormatter;
-		typedef typename t_CFormatter::CStrAggregate::CStrTraits::CChar CChar;
-		typedef typename t_CFormatter::CStrAggregate CStrAggregate;
-		typedef typename t_CFormatter::CStr CStr;
-		typedef typename t_CFormatter::CStrAggregate::CStrTraits CStrTraits;
-
-		typedef TICStrFormatType_Options<CChar> COptions;
-		typedef TICStrFormatType_StaticOptions COptionsStatic;
+		using CStrFormatTypeClassifier = CDefaultStrFormatTypeClassifier;
+		using CFormatter = t_CFormatter;
+		using CChar = typename t_CFormatter::CStrAggregate::CStrTraits::CChar;
+		using CStrAggregate = typename t_CFormatter::CStrAggregate;
+		using CStr = typename t_CFormatter::CStr;
+		using CStrTraits = typename t_CFormatter::CStrAggregate::CStrTraits;
+		using COptions = TICStrFormatType_Options<CChar>;
+		using COptionsStatic = TICStrFormatType_StaticOptions;
 
 		TICStrFormatType *m_pNextFormat;
 

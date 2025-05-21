@@ -384,8 +384,9 @@ namespace NMib::NStr
 				>
 			>
 		{
-			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
-			typedef NIterator::TCIterator<TCIterator_UTF16AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>> CIterator;
+			using CRange = NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> ;
+			using CIterator = NIterator::TCIterator<TCIterator_UTF16AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>>;
+
 			auto iFront = _rCharacters.f_Front();
 			--iFront;
 			return CIterator(_Iterator, iFront, _rCharacters.f_Back());
@@ -408,8 +409,9 @@ namespace NMib::NStr
 				>
 			>
 		{
-			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
-			typedef NIterator::TCIterator<TCIterator_UTF16Adaptor<tf_CIterator, typename CRange::CBack>> CIterator;
+			using CRange = NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>;
+			using CIterator = NIterator::TCIterator<TCIterator_UTF16Adaptor<tf_CIterator, typename CRange::CBack>>;
+
 			return CIterator(_Iterator, _rCharacters.f_Back());
 		}
 
@@ -431,8 +433,9 @@ namespace NMib::NStr
 				>
 			>
 		{
-			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
-			typedef NIterator::TCIterator<TCIterator_UTF8AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>> CIterator;
+			using CRange = NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>;
+			using CIterator = NIterator::TCIterator<TCIterator_UTF8AdaptorWithBackward<tf_CIterator, typename CRange::CFront, typename CRange::CBack>>;
+
 			auto iFront = _rCharacters.f_Front();
 			--iFront;
 			return CIterator(_Iterator, iFront, _rCharacters.f_Back());
@@ -454,8 +457,9 @@ namespace NMib::NStr
 				>
 			>
 		{
-			typedef NTraits::TCRemoveReferenceAndQualifiers<tf_CRange> CRange;
-			typedef NIterator::TCIterator<TCIterator_UTF8Adaptor<tf_CIterator, typename CRange::CBack>> CIterator;
+			using CRange = NTraits::TCRemoveReferenceAndQualifiers<tf_CRange>;
+			using CIterator = NIterator::TCIterator<TCIterator_UTF8Adaptor<tf_CIterator, typename CRange::CBack>>;
+
 			return CIterator(_Iterator, _rCharacters.f_Back());
 		}
 

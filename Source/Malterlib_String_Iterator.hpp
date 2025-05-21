@@ -8,42 +8,42 @@ namespace NMib::NStr
 	template <>
 	struct TCGetIteratorUnicodeFromChar<ch8>
 	{
-		typedef CIteratorStringEncoding_UTF8 CType;
+		using CType = CIteratorStringEncoding_UTF8;
 	};
 
 #ifdef DMibPSignedType_ch8
 	template <>
 	struct TCGetIteratorUnicodeFromChar<uch8>
 	{
-		typedef CIteratorStringEncoding_UTF8 CType;
+		using CType = CIteratorStringEncoding_UTF8;
 	};
 #endif
 
 	template <>
 	struct TCGetIteratorUnicodeFromChar<ch16>
 	{
-		typedef CIteratorStringEncoding_UTF16 CType;
+		using CType = CIteratorStringEncoding_UTF16;
 	};
 
 #ifdef DMibPSignedType_ch16
 	template <>
 	struct TCGetIteratorUnicodeFromChar<uch16>
 	{
-		typedef CIteratorStringEncoding_UTF16 CType;
+		using CType = CIteratorStringEncoding_UTF16;
 	};
 #endif
 
 	template <>
 	struct TCGetIteratorUnicodeFromChar<ch32>
 	{
-		typedef CIteratorStringEncoding_UTF32 CType;
+		using CType = CIteratorStringEncoding_UTF32;
 	};
 
 #ifdef DMibPSignedType_ch32
 	template <>
 	struct TCGetIteratorUnicodeFromChar<uch32>
 	{
-		typedef CIteratorStringEncoding_UTF32 CType;
+		using CType = CIteratorStringEncoding_UTF32;
 	};
 #endif
 
@@ -185,17 +185,16 @@ namespace NMib::NIterator
 			, TCEnableIf<NStr::NPrivate::TCIsCharacter<NTraits::TCRemoveQualifiers<t_CType>>::mc_Value>
 		> : public CValidMakeRange
 	{
-		typedef TCArrayIterator
+		using CArrayIterator = TCArrayIterator
 			<
 				t_CType
 				, NTraits::TCUnsigned<t_CType>
 				, typename NStr::TCGetIteratorUnicodeFromChar<NTraits::TCRemoveQualifiers<t_CType>>::CType
 				, NStr::CIteratorStringNullTermination_Required
 			>
-			CArrayIterator
 		;
 	public:
-		typedef TCRange<TCIterator<CArrayIterator>, TCIterator<CArrayIterator>> CRange;
+		using CRange = TCRange<TCIterator<CArrayIterator>, TCIterator<CArrayIterator>>;
 
 		template <typename t_CType2>
 		static CRange fs_Range(t_CType2 &&_Container)
@@ -213,16 +212,15 @@ namespace NMib::NIterator
 			, void
 		> : public CValidMakeRange
 	{
-		typedef TCArrayIterator
+		using CArrayIterator = TCArrayIterator
 			<
 				t_CType
 				, NTraits::TCUnsigned<t_CType>
 				, typename NStr::TCGetIteratorUnicodeFromChar<NTraits::TCRemoveQualifiers<t_CType>>::CType
 			>
-			CArrayIterator
 		;
 	public:
-		typedef TCRange<TCIterator<CArrayIterator>, TCIterator<CArrayIterator>> CRange;
+		using CRange = TCRange<TCIterator<CArrayIterator>, TCIterator<CArrayIterator>>;
 
 		template <typename t_CType2>
 		static CRange fs_Range(t_CType2 &&_Container)
@@ -243,7 +241,7 @@ namespace NMib::NIterator
 	{
 		using CCharType = NTraits::TCRemovePointer<t_CPointer>;
 	public:
-		typedef TCRange
+		using CRange = TCRange
 			<
 				TCIterator
 				<
@@ -256,7 +254,6 @@ namespace NMib::NIterator
 				>
 				, TCIterator<NStr::CNullTerminatedBackIterator>
 			>
-			CRange
 		;
 
 		template <typename t_CType2>
@@ -278,12 +275,11 @@ namespace NMib::NIterator
 	{
 	public:
 		using CMakeRange = TCMakeRange<NTraits::TCRemoveReference<t_CContainer>, t_CTags>;
-		typedef TCRange
+		using CRange = TCRange
 			<
 				typename CMakeRange::CRange::CFront
 				, TCIterator<NStr::TCNullTerminatedBackIteratorAdaptor<typename CMakeRange::CRange::CBack>>
 			>
-			CRange
 		;
 
 		template <typename t_CType2>

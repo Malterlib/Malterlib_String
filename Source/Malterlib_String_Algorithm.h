@@ -21,20 +21,19 @@ namespace NMib::NStr
 	class CStrTraits_CWStrNonTracked;
 	class CStrTraits_CUStrNonTracked;
 
-	typedef TCStr<CStrTraits_CStr> CStr;
-	typedef TCStr<CStrTraits_CWStr> CWStr;
-	typedef TCStr<CStrTraits_CUStr> CUStr;
-	typedef TCStrAggregate< CStrTraits_CStr> CStrAggregate;
-	typedef TCStrAggregate< CStrTraits_CWStr> CWStrAggregate;
-	typedef TCStrAggregate< CStrTraits_CUStr> CUStrAggregate;
+	using CStr = TCStr<CStrTraits_CStr>;
+	using CWStr = TCStr<CStrTraits_CWStr>;
+	using CUStr = TCStr<CStrTraits_CUStr>;
+	using CStrAggregate = TCStrAggregate< CStrTraits_CStr>;
+	using CWStrAggregate = TCStrAggregate< CStrTraits_CWStr>;
+	using CUStrAggregate = TCStrAggregate< CStrTraits_CUStr>;
 
-	typedef TCStr<CStrTraits_CStrNonTracked> CStrNonTracked;
-	typedef TCStr<CStrTraits_CWStrNonTracked> CWStrNonTracked;
-	typedef TCStr<CStrTraits_CUStrNonTracked> CUStrNonTracked;
-	typedef TCStrAggregate<CStrTraits_CStrNonTracked> CStrAggregateNonTracked;
-	typedef TCStrAggregate<CStrTraits_CWStrNonTracked> CWStrAggregateNonTracked;
-	typedef TCStrAggregate<CStrTraits_CUStrNonTracked> CUStrAggregateNonTracked;
-
+	using CStrNonTracked = TCStr<CStrTraits_CStrNonTracked>;
+	using CWStrNonTracked = TCStr<CStrTraits_CWStrNonTracked>;
+	using CUStrNonTracked = TCStr<CStrTraits_CUStrNonTracked>;
+	using CStrAggregateNonTracked = TCStrAggregate<CStrTraits_CStrNonTracked>;
+	using CWStrAggregateNonTracked = TCStrAggregate<CStrTraits_CWStrNonTracked>;
+	using CUStrAggregateNonTracked = TCStrAggregate<CStrTraits_CUStrNonTracked>;
 
 	template <typename t_CData0, typename t_CData1>
 	class TCChooseStrCompareType

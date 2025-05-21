@@ -103,9 +103,9 @@ namespace NMib::NStr
 	public:
 		constexpr const static bool mc_bInitConstStr = false;
 
-		typedef typename t_CStrTraits::CChar CChar;
-		typedef typename t_CStrTraits::CParams CImpParams;
-		typedef typename CImpParams::CAllocator CAllocator;
+		using CChar = typename t_CStrTraits::CChar;
+		using CImpParams = typename t_CStrTraits::CParams;
+		using CAllocator = typename CImpParams::CAllocator;
 
 		enum
 		{

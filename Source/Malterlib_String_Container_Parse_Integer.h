@@ -18,8 +18,8 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
-		typedef typename t_CParser::CStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CChar CChar;
+		using CTStrTraits = typename t_CParser::CStrTraits;
+		using CChar = typename CTStrTraits::CChar;
 
 		enum
 		{
@@ -32,9 +32,9 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef TICStrParseType<t_CParser> CSuper;
-		typedef typename CSuper :: COption COption;
-		typedef typename CSuper :: COptions COptions;
+		using CSuper = TICStrParseType<t_CParser>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
 
 		class COptionsInt : public COptions
 		{

@@ -17,7 +17,7 @@ namespace NMib::NStr
 	class TCIterator_UTF8Adaptor
 	{
 	public:
-		typedef TCTags
+		using CTags = TCTags
 			<
 				NIterator::CIteratorStep_OneStep
 				, NIterator::CIteratorTraversal_Forward
@@ -27,10 +27,9 @@ namespace NMib::NStr
 				, NIterator::CIteratorAccess_Readable
 				, NStr::CIteratorStringEncoding_UTF32
 			>
-			CTags
 		;
 
-		typedef ch32 CValueType;
+		using CValueType = ch32;
 
 		TCIterator_UTF8Adaptor(t_CBaseIterator const &_iCurrent, t_CBaseIteratorBack const &_iBack);
 
@@ -70,7 +69,7 @@ namespace NMib::NStr
 	class TCIterator_UTF8AdaptorWithBackward : public TCIterator_UTF8Adaptor<t_CBaseIterator, t_CBaseIteratorBack>
 	{
 	public:
-		typedef TCTags
+		using CTags = TCTags
 			<
 				NIterator::CIteratorStep_OneStep
 				, NIterator::CIteratorTraversal_Both
@@ -80,7 +79,6 @@ namespace NMib::NStr
 				, NIterator::CIteratorAccess_Readable
 				, NStr::CIteratorStringEncoding_UTF32
 			>
-			CTags
 		;
 
 		TCIterator_UTF8AdaptorWithBackward(t_CBaseIterator const &_iCurrent, t_CBaseIteratorFront const &_iFront, t_CBaseIteratorBack const &_iBack);
@@ -102,7 +100,7 @@ namespace NMib::NStr
 	class TCIterator_UTF16Adaptor
 	{
 	public:
-		typedef TCTags
+		using CTags = TCTags
 			<
 				NIterator::CIteratorStep_OneStep
 				, NIterator::CIteratorTraversal_Both
@@ -112,10 +110,9 @@ namespace NMib::NStr
 				, NIterator::CIteratorAccess_Readable
 				, NStr::CIteratorStringEncoding_UTF32
 			>
-			CTags
 		;
 
-		typedef ch32 CValueType;
+		using CValueType = ch32;
 
 		/// Functions
 
@@ -154,7 +151,7 @@ namespace NMib::NStr
 	class TCIterator_UTF16AdaptorWithBackward : public TCIterator_UTF16Adaptor<t_CBaseIterator, t_CBaseIteratorBack>
 	{
 	public:
-		typedef TCTags
+		using CTags = TCTags
 			<
 				NIterator::CIteratorStep_OneStep
 				, NIterator::CIteratorTraversal_Both
@@ -164,7 +161,6 @@ namespace NMib::NStr
 				, NIterator::CIteratorAccess_Readable
 				, NStr::CIteratorStringEncoding_UTF32
 			>
-			CTags
 		;
 
 		TCIterator_UTF16AdaptorWithBackward f_Invalid() const

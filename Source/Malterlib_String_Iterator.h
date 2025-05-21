@@ -47,12 +47,11 @@ namespace NMib::NStr
 
 	struct CNullTerminatedBackIterator
 	{
-		typedef TCTags
+		using CTags = TCTags
 			<
 				NIterator::CIteratorCopy_Copy
 				, NIterator::CIteratorConstruct_Default
 			>
-			CTags
 		;
 
 		CNullTerminatedBackIterator f_Invalid() const

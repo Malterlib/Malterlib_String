@@ -21,28 +21,24 @@ namespace NMib::NStr
 	class TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_Float;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CFloatIn = NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
 
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-
-		typedef CStrFormatTypeClassifier_Float CStrFormatTypeClassifier;
-
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloatIn;
 		static constexpr aint mc_MantissaBits = t_MantissaBits + 8;
 		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<aint, mc_MantissaBits + (mc_MantissaBits - 1)> + 2;
 		static constexpr aint mc_ExponentBits = (t_ExponentBits > mc_MinExponentBits ? t_ExponentBits : mc_MinExponentBits);
-//			typedef NNumeric::TCFloat<t_SignBits, mc_ExponentBits, mc_MantissaBits, TCConditional<mc_ExponentBits == t_ExponentBits, t_CImplicitFloat, NNumeric::CNoImplicit>, t_bDummyOptimize> CFloat;
-		typedef CFloatIn CFloat;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
-		typedef typename CFloat::CInteger CInteger;
-		typedef typename CFloat::CUnsignedInteger CUnsignedInteger;
-		typedef typename CSuper::CStrAggregate CStrAggregate;
-		typedef typename CSuper::COptionsStatic COptionsStatic;
-		typedef typename CSuper::CVisitor CVisitor;
-
+//		using CFloat = NNumeric::TCFloat<t_SignBits, mc_ExponentBits, mc_MantissaBits, TCConditional<mc_ExponentBits == t_ExponentBits, t_CImplicitFloat, NNumeric::CNoImplicit>, t_bDummyOptimize>;
+		using CFloat = CFloatIn;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
+		using CInteger = typename CFloat::CInteger;
+		using CUnsignedInteger = typename CFloat::CUnsignedInteger;
+		using CStrAggregate = typename CSuper::CStrAggregate;
+		using COptionsStatic = typename CSuper::COptionsStatic;
+		using CVisitor = typename CSuper::CVisitor;
 		using CStorage = TCConditional<t_bReference, CFloat const &, CFloat>;
-
-		typedef CFloat CType;
+		using CType = CFloat;
 
 		enum
 		{
@@ -69,8 +65,8 @@ namespace NMib::NStr
 				_Formatter.template f_Alloc<TCStrFormatType_Float>(m_Value);
 		}
 
-		typedef typename TICStrFormatType<t_CFormatter> :: COption COption;
-		typedef typename TICStrFormatType<t_CFormatter> :: COptions COptions;
+		using COption = typename TICStrFormatType<t_CFormatter>::COption;
+		using COptions = typename TICStrFormatType<t_CFormatter>::COptions;
 
 		class COptionsFloat : public COptions
 		{
@@ -990,8 +986,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>>
 	{
 	public:
-		typedef NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloat;
-		typedef TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, true> CFormatType;
+		using CFloat = NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
+		using CFormatType = TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, true>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CFloat const&_Data)
@@ -1005,8 +1001,8 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>>>
 	{
 	public:
-		typedef NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage> CFloat;
-		typedef TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, false> CFormatType;
+		using CFloat = NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
+		using CFormatType = TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, false>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CFloat> const &_Data)
@@ -1021,7 +1017,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, pfp32>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, fp32>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, fp32>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp32 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp32>::template fs_CreateFormat<fp32>(_Formatter, _Data))
@@ -1034,7 +1030,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<pfp32>>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp32>>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp32>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp32> const &_Data)
@@ -1048,7 +1044,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, pfp64>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, fp64>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, fp64>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp64 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp64>::template fs_CreateFormat<fp64>(_Formatter, _Data))
@@ -1061,7 +1057,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<pfp64>>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp64>>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp64>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp64> const &_Data)
@@ -1075,7 +1071,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, pfp80>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, fp80>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, fp80>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp80 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp80>::template fs_CreateFormat<fp80>(_Formatter, _Data))
@@ -1088,7 +1084,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<pfp80>>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp80>>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp80>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<pfp80> const &_Data)
@@ -1102,7 +1098,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, pfp128>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, fp128>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, fp128>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data) -> decltype(TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter, _Data))
@@ -1115,7 +1111,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, TCByValue<pfp128>>
 	{
 	public:
-		typedef typename TCStringFormatter<t_CFormatter, TCByValue<fp128>>::CFormatType CFormatType;
+		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp128>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data)

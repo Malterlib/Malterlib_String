@@ -11,8 +11,7 @@ namespace NMib::NStr
 	class TCStrFormatType_Binary final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
-
-		typedef TCConditional<NTraits::cIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary> CStrFormatTypeClassifier;
+		using CStrFormatTypeClassifier = TCConditional<NTraits::cIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary>;
 
 		virtual mint f_Delete() override
 		{
@@ -26,12 +25,11 @@ namespace NMib::NStr
 			DMibFastCheck(false); // Not supported
 		}
 
-		typedef typename t_CFormatter::CTStrTraits CTStrTraits;
-		typedef typename CTStrTraits::CStrTraits::CChar CChar;
-		typedef TICStrFormatType<t_CFormatter> CSuper;
-
-		typedef t_CBinaryType CType;
-		typedef typename CSuper::CVisitor CVisitor;
+		using CTStrTraits = typename t_CFormatter::CTStrTraits;
+		using CChar = typename CTStrTraits::CStrTraits::CChar;
+		using CSuper = TICStrFormatType<t_CFormatter>;
+		using CType = t_CBinaryType;
+		using CVisitor = typename CSuper::CVisitor;
 
 		t_CBinaryType m_Value;
 		enum
@@ -44,16 +42,17 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef typename TICStrFormatType<t_CFormatter> :: COption COption;
-		typedef typename TICStrFormatType<t_CFormatter> :: COptions COptions;
-		typedef typename TICStrFormatType<t_CFormatter> :: COptionsStatic COptionsStatic;
+		using COption = typename TICStrFormatType<t_CFormatter>::COption;
+		using COptions = typename TICStrFormatType<t_CFormatter>::COptions;
+		using COptionsStatic = typename TICStrFormatType<t_CFormatter>::COptionsStatic;
 
 		template <typename t_COptions2>
 		inline_small static void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Value)
 		{
 			uint8 OutValue = 0;
 			auto Temp = fg_FormatMaxLength<2>(fg_FormatMinLength<2>(fg_FormatFillOut<'0'>(fg_FormatIntFormat<16>(OutValue))));
-			typedef typename TCStringFormatter<t_CFormatter, decltype(Temp)>::CFormatType CFormatType;
+
+			using CFormatType = typename TCStringFormatter<t_CFormatter, decltype(Temp)>::CFormatType;
 
 			const uint8 *pValue = (const uint8 *)_Value.f_GetArray();
 			mint nBytes = _Value.f_GetSize();
@@ -136,7 +135,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapper >
 	{
 	public:
-		typedef TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapper> CFormatType;
+		using CFormatType = TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapper>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CStrFormatBinaryWrapper const &_Data)
@@ -150,7 +149,7 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped >
 	{
 	public:
-		typedef TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapperUntyped> CFormatType;
+		using CFormatType = TCStrFormatType_Binary<t_CFormatter, CStrFormatBinaryWrapperUntyped>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CStrFormatBinaryWrapperUntyped const &_Data)

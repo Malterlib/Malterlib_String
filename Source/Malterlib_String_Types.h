@@ -20,7 +20,7 @@ namespace NMib::NStr
 	class CStrImp_Dynamic_ParamsDeflauts
 	{
 	public:
-		typedef NMemory::CAllocator_Heap CAllocator;
+		using CAllocator = NMemory::CAllocator_Heap;
 		enum
 		{
 			EMaxExtraChars = 32
@@ -30,7 +30,7 @@ namespace NMib::NStr
 	class CStrImp_Dynamic_ParamsNonTracked
 	{
 	public:
-		typedef NMemory::CAllocator_NonTrackedHeap CAllocator;
+		using CAllocator = NMemory::CAllocator_NonTrackedHeap;
 		enum
 		{
 			EMaxExtraChars = 32
@@ -40,7 +40,7 @@ namespace NMib::NStr
 	class CStrImp_Dynamic_ParamsVirtual : public CStrImp_Dynamic_ParamsDeflauts
 	{
 	public:
-		typedef NMemory::CAllocator_Virtual CAllocator;
+		using CAllocator = NMemory::CAllocator_Virtual;
 	};
 
 	class CStrImp_Dynamic_ParamsSecure
@@ -66,9 +66,8 @@ namespace NMib::NStr
 	class TCTCStrTraits
 	{
 	public:
-		typedef t_CStrTraits CStrTraits;
-		typedef t_CImplementation CImp;
-
+		using CStrTraits = t_CStrTraits;
+		using CImp = t_CImplementation;
 	};
 
 	template <typename t_CStrTraits, typename t_CImpParams>

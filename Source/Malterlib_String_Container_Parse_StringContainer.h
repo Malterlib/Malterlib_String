@@ -18,8 +18,8 @@ namespace NMib::NStr
 			return sizeof(*this);
 		}
 
-		typedef typename t_CParser::CStrTraits CStrTraits;
-		typedef typename CStrTraits::CChar CChar;
+		using CStrTraits = typename t_CParser::CStrTraits;
+		using CChar = typename CStrTraits::CChar;
 
 		enum
 		{
@@ -40,9 +40,9 @@ namespace NMib::NStr
 		{
 		}
 
-		typedef TICStrParseType<t_CParser> CSuper;
-		typedef typename CSuper :: COption COption;
-		typedef typename CSuper :: COptions COptions;
+		using CSuper = TICStrParseType<t_CParser>;
+		using COption = typename CSuper::COption;
+		using COptions = typename CSuper::COptions;
 
 		class COptionsStr : public COptions
 		{
@@ -267,7 +267,8 @@ namespace NMib::NStr
 	class TCStringParser<t_CParser, TCStrAggregate<t_CStrTraitsIn> >
 	{
 	public:
-		typedef TCStrParseType_TStr<t_CParser, t_CStrTraitsIn> CParseType;
+		using CParseType = TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>;
+
 		static inline_large void f_CreateParse(t_CParser &_Formatter, TCStrAggregate<t_CStrTraitsIn> &_Data)
 		{
 			mint Flags;
@@ -284,7 +285,8 @@ namespace NMib::NStr
 	class TCStringParser<t_CParser, TCStr<t_CStrTraitsIn> >
 	{
 	public:
-		typedef TCStrParseType_TStr<t_CParser, t_CStrTraitsIn> CParseType;
+		using CParseType = TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>;
+
 		static inline_large void f_CreateParse(t_CParser &_Formatter, TCStr<t_CStrTraitsIn> &_Data)
 		{
 			mint Flags;

@@ -2564,7 +2564,7 @@ public:
 			NMib::NTime::CTimerMin Timer;
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CFStr256 TestType;
+				using TestType = CFStr256;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
@@ -2584,7 +2584,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CStr TestType;
+				using TestType = CStr;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
@@ -2602,7 +2602,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CFWStr256 TestType;
+				using TestType = CFWStr256;
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
@@ -2620,7 +2620,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CWStr TestType;
+				using TestType = CWStr;
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
@@ -2642,7 +2642,7 @@ public:
 			NMib::NTime::CTimerMin Timer;
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CFStr256 TestType;
+				using TestType = CFStr256;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
@@ -2662,7 +2662,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CStr TestType;
+				using TestType = CStr;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na";
 				{
 					DMibScopeTimerMin(Timer);
@@ -2680,7 +2680,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CFWStr256 TestType;
+				using TestType = CFWStr256;
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
@@ -2697,7 +2697,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTest; ++j)
 			{
-				typedef CWStr TestType;
+				using TestType = CWStr;
 				TestType TestString = str_utf16("oaeh untoaeh untoaheu ntaoehu ntaoeuh notahu aontuh aontuh oantu aontuh naoth unatouh naotuh oatnuhaontsuh aotnuh na");
 				{
 					DMibScopeTimerMin(Timer);
@@ -2720,7 +2720,7 @@ public:
 			NMib::NTime::CTimerMin Timer;
 			for (aint j = 0; j < NumTestAdds; ++j)
 			{
-				typedef CFStr1024 TestType;
+				using TestType = CFStr1024;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu";
 
 				TestType TestResult;
@@ -2740,7 +2740,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTestAdds; ++j)
 			{
-				typedef CStr TestType;
+				using TestType = CStr;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu";
 				TestType TestResult;
 				{
@@ -2758,7 +2758,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTestAdds; ++j)
 			{
-				typedef CFWStr1024 TestType;
+				using TestType = CFWStr1024;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu";
 				TestType TestResult;
 				{
@@ -2775,7 +2775,7 @@ public:
 			Timer.f_Reset();
 			for (aint j = 0; j < NumTestAdds; ++j)
 			{
-				typedef CWStr TestType;
+				using TestType = CWStr;
 				TestType TestString = "oaeh untoaeh untoaheu ntaoehu";
 				TestType TestResult;
 				{

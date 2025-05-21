@@ -49,13 +49,13 @@ namespace
 		template <bool t_bMemoryTests>
 		struct TCTests
 		{
-			typedef TCConditional<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure> CMeasureType;
-			typedef TCConditional<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance> CTestType;
+			using CMeasureType = TCConditional<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure>;
+			using CTestType = TCConditional<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance>;
 
 			const static mint VectorSize = 512;
 			static CStr fs_GenerateHexList()
 			{
-				typedef int32 CValue;
+				using CValue = int32;
 				using karma::hex;
 
 				std::vector<CValue> const Vector(VectorSize,12345);
@@ -458,7 +458,7 @@ namespace
 			static void fs_DecodeHexList(const CStr &_HexList)
 			{
 				using qi::hex;
-				typedef int32 CValue;
+				using CValue = int32;
 
 				// Generate test data
 

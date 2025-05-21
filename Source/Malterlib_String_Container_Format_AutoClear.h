@@ -10,15 +10,14 @@ namespace NMib::NStr
 	class TCStringFormatter<t_CFormatter, NMib::TCAutoClearInt<t_CInt, t_ClearVal> >
 	{
 	public:
-		typedef NMib::TCAutoClearInt<t_CInt, t_ClearVal> CData;
+		using CData = NMib::TCAutoClearInt<t_CInt, t_ClearVal>;
 
 	private:
 		static t_CFormatter &fs_GetFormatter();
 		static CData &fs_GetData();
 
 	public:
-
-		typedef decltype(fg_GetStringFormatType(fs_GetFormatter(), t_CInt(0))) CFormatType;
+		using CFormatType = decltype(fg_GetStringFormatType(fs_GetFormatter(), t_CInt(0)));
 
 		template <typename tf_CTypeWithConst>
 		static auto fs_CreateFormat(t_CFormatter &_Formatter, CData const &_Data) -> decltype(fg_CreateStringFormatter(_Formatter, _Data.m_Int))

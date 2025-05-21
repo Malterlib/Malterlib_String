@@ -26,8 +26,8 @@ namespace NMib::NStr
 	public:
 		virtual mint f_Delete() = 0;
 
-		typedef typename t_CParser::CStrTraits CStrTraits;
-		typedef typename CStrTraits::CChar CChar;
+		using CStrTraits = typename t_CParser::CStrTraits;
+		using CChar = typename CStrTraits::CChar;
 
 		TICStrParseType *m_pNextParse;
 
@@ -344,10 +344,10 @@ namespace NMib::NStr
 	class TCStrParse
 	{
 	public:
-		typedef typename t_CStrTraits::CChar CChar;
-		typedef t_CStrTraits CStrTraits;
-	private:
+		using CChar = typename t_CStrTraits::CChar;
+		using CStrTraits = t_CStrTraits;
 
+	private:
 		enum
 		{
 			EStaticParses = 16,
