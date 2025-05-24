@@ -94,6 +94,7 @@ namespace NMib::NStr
 			, aint t_SignBits
 			, aint t_ExponentBits
 			, aint t_MantissaBits
+			, aint t_PaddingBits
 			, typename t_CImplicitFloat
 			, bool t_bDummyOptimize
 			, typename t_CIntegerStorage

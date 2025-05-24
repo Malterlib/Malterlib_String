@@ -62,11 +62,7 @@ namespace NMib::NStr
 				ch32 m_Parse2;
 			};
 
-			union
-			{
-				CParseTypes m_ParseTypes;
-				uint32 m_ParseWhole;
-			};
+			CParseTypes m_ParseTypes;
 
 			void f_GetData_Str(const t_CParser & _ArgData, CChar *_pDestStr, aint _MaxChars) const
 			{
@@ -231,10 +227,11 @@ namespace NMib::NStr
 			case 0:
 			case ',':
 			case '*':
-				_NewParse.m_ParseWhole = 0;
+				_NewParse.m_ParseTypes.m_Parse1 = 0;
+				_NewParse.m_ParseTypes.m_Parse2 = 0;
 				break;
 			default:
-				_NewParse.m_ParseTypes.m_Parse1 = (int16)CStrTraits::fs_CharUpperCase((*pParse));
+				_NewParse.m_ParseTypes.m_Parse1 = CStrTraits::fs_CharUpperCase((*pParse));
 				++pParse;
 				if ((*pParse) > '9' || (*pParse) < '0')
 				{
@@ -249,11 +246,13 @@ namespace NMib::NStr
 						_NewParse.m_ParseTypes.m_Parse2 = 0;
 						break;
 					default:
-						_NewParse.m_ParseTypes.m_Parse2 = (int16)CStrTraits::fs_CharUpperCase((*pParse));
+						_NewParse.m_ParseTypes.m_Parse2 = CStrTraits::fs_CharUpperCase((*pParse));
 						++pParse;
 						break;
 					}
 				}
+				else
+					_NewParse.m_ParseTypes.m_Parse2 = 0;
 				break;
 			}
 
@@ -305,7 +304,7 @@ namespace NMib::NStr
 				COption Option;
 				pRet = _Parser.fp_GetNextParse(Option, _pParse);
 
-				if (Option.m_ParseWhole)
+				if (Option.m_ParseTypes.m_Parse1)
 				{
 					if (!_Parser.f_ParseOption(Option, _Options, _ArgData))
 					{

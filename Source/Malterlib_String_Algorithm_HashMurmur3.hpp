@@ -17,11 +17,7 @@ namespace NMib::NStr2::NPrivate
 	{
 		mint mp_Length;
 		uint32 mp_Hash;
-		union
-		{
-			uint8 mp_Block[4];
-			uint32 mp_Block32;
-		};
+		uint8 mp_Block[4];
 
 		static uint32 const mcp_Constant1 = 0xcc9e2d51;
 		static uint32 const mcp_Constant2 = 0x1b873593;
@@ -35,7 +31,10 @@ namespace NMib::NStr2::NPrivate
 			mp_Block[mp_Length & 0x3] = _Byte;
 			++mp_Length;
 			if ((mp_Length & 0x3) == 0)
-				fp_AddBlock(NMib::fg_ByteSwapLE(mp_Block32));
+			{
+				uint32 Block32 = fg_BitCast<uint32>(mp_Block);
+				fp_AddBlock(NMib::fg_ByteSwapLE(Block32));
+			}
 		}
 	};
 

@@ -398,11 +398,7 @@ namespace NMib::NStr
 				ch32 m_Format2;
 			};
 
-			union
-			{
-				CFormatTypes m_FormatTypes;
-				uint32 m_FormatWhole;
-			};
+			CFormatTypes m_FormatTypes;
 
 			void f_GetData_Str(CChar *_pDestStr, aint _MaxChars) const
 			{
@@ -564,10 +560,11 @@ namespace NMib::NStr
 			case 0:
 			case ',':
 			case '*':
-				_NewFormat.m_FormatWhole = 0;
+				_NewFormat.m_FormatTypes.m_Format1 = 0;
+				_NewFormat.m_FormatTypes.m_Format2 = 0;
 				break;
 			default:
-				_NewFormat.m_FormatTypes.m_Format1 = (int16)CStrTraits::fs_CharUpperCase((*pFormat));
+				_NewFormat.m_FormatTypes.m_Format1 = CStrTraits::fs_CharUpperCase((*pFormat));
 				++pFormat;
 				if ((*pFormat) > '9' || (*pFormat) < '0')
 				{
@@ -582,11 +579,13 @@ namespace NMib::NStr
 						_NewFormat.m_FormatTypes.m_Format2 = 0;
 						break;
 					default:
-						_NewFormat.m_FormatTypes.m_Format2 = (int16)CStrTraits::fs_CharUpperCase((*pFormat));
+						_NewFormat.m_FormatTypes.m_Format2 = CStrTraits::fs_CharUpperCase((*pFormat));
 						++pFormat;
 						break;
 					}
 				}
+				else
+					_NewFormat.m_FormatTypes.m_Format2 = 0;
 				break;
 			}
 
@@ -621,7 +620,7 @@ namespace NMib::NStr
 				COption Option;
 				_Args.m_FormatType.fp_GetNextFormat(Option, _pFormat);
 
-				if (Option.m_FormatWhole)
+				if (Option.m_FormatTypes.m_Format1)
 				{
 					if (!_Args.m_FormatType.f_ParseOption(_Args, Option))
 						Option.f_DisplayUnknownFormat(_Args.m_String, _Args.m_CurrentStrLen);
