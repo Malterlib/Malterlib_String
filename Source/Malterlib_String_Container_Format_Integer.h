@@ -1005,14 +1005,20 @@ DMibStrStringFormatterImplementInt(uint64);
 DMibStrStringFormatterImplementInt(int64);
 DMibStrStringFormatterImplementInt(uint80);
 DMibStrStringFormatterImplementInt(int80);
+DMibStrStringFormatterImplementInt(uint96);
+DMibStrStringFormatterImplementInt(int96);
 DMibStrStringFormatterImplementInt(uint128);
 DMibStrStringFormatterImplementInt(int128);
 DMibStrStringFormatterImplementInt(uint160);
 DMibStrStringFormatterImplementInt(int160);
+DMibStrStringFormatterImplementInt(uint192);
+DMibStrStringFormatterImplementInt(int192);
 DMibStrStringFormatterImplementInt(uint256);
 DMibStrStringFormatterImplementInt(int256);
 DMibStrStringFormatterImplementInt(uint320);
 DMibStrStringFormatterImplementInt(int320);
+DMibStrStringFormatterImplementInt(uint384);
+DMibStrStringFormatterImplementInt(int384);
 DMibStrStringFormatterImplementInt(uint512);
 DMibStrStringFormatterImplementInt(int512);
 DMibStrStringFormatterImplementInt(uint1024);
@@ -1023,6 +1029,9 @@ DMibStrStringFormatterImplementInt(uint4096);
 DMibStrStringFormatterImplementInt(int4096);
 DMibStrStringFormatterImplementInt(uint8192);
 DMibStrStringFormatterImplementInt(int8192);
+DMibStrStringFormatterImplementInt(uint16384);
+DMibStrStringFormatterImplementInt(int16384);
+
 
 #ifdef DMibPUniqueType_mint
 DMibStrStringFormatterImplementInt(mint);

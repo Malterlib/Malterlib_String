@@ -188,14 +188,20 @@ DMibStrStringParserImplementInt(uint64);
 DMibStrStringParserImplementInt(int64);
 DMibStrStringParserImplementInt(uint80);
 DMibStrStringParserImplementInt(int80);
+DMibStrStringParserImplementInt(uint96);
+DMibStrStringParserImplementInt(int96);
 DMibStrStringParserImplementInt(uint128);
 DMibStrStringParserImplementInt(int128);
 DMibStrStringParserImplementInt(uint160);
 DMibStrStringParserImplementInt(int160);
+DMibStrStringParserImplementInt(uint192);
+DMibStrStringParserImplementInt(int192);
 DMibStrStringParserImplementInt(uint256);
 DMibStrStringParserImplementInt(int256);
 DMibStrStringParserImplementInt(uint320);
 DMibStrStringParserImplementInt(int320);
+DMibStrStringParserImplementInt(uint384);
+DMibStrStringParserImplementInt(int384);
 DMibStrStringParserImplementInt(uint512);
 DMibStrStringParserImplementInt(int512);
 DMibStrStringParserImplementInt(uint1024);
@@ -206,6 +212,9 @@ DMibStrStringParserImplementInt(uint4096);
 DMibStrStringParserImplementInt(int4096);
 DMibStrStringParserImplementInt(uint8192);
 DMibStrStringParserImplementInt(int8192);
+DMibStrStringParserImplementInt(uint16384);
+DMibStrStringParserImplementInt(int16384);
+
 
 #ifdef DMibPUniqueType_mint
 DMibStrStringParserImplementInt(mint);
