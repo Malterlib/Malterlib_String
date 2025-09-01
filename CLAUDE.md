@@ -235,7 +235,7 @@ CStrSpan View(SomeString.f_GetArray(), SomeString.f_GetLen());
 
 // Compile-time constant strings
 constexpr auto& MyConstStr = gc_Str<"Compile-time constant">.m_Str;  // CStr const
-constexpr auto& MyWideStr = gc_Str<str_utf16("Wide string")>.m_Str;  // CWStr const  
+constexpr auto& MyWideStr = gc_Str<str_utf16("Wide string")>.m_Str;  // CWStr const
 constexpr auto& MyUnicodeStr = gc_Str<str_utf32("Unicode")>.m_Str;   // CUStr const
 
 // Interoperability with runtime strings
@@ -381,3 +381,20 @@ auto Result2 = NStr::fg_StrMatchWildcard("file123.doc", "file???.doc");
 - Reserve capacity when final size is known
 - Use MultiReplace for batch replacements (more efficient)
 - Consider Fixed strings for stack allocation in performance-critical code
+
+### Common String Formatting Mistakes
+
+**Compilation Error with `_f` Operator**
+
+The `_f` string formatting operator requires the `NMib::NStr` namespace to be in scope:
+
+```cpp
+// INCORRECT - will cause compilation error
+auto Result = "Value: {}"_f << 42;
+
+// CORRECT - add using declaration before formatting
+using namespace NMib::NStr;
+auto Result = "Value: {}"_f << 42;
+```
+
+**Solution**: Add `using namespace NMib::NStr;` locally before using the `_f` formatting operator at the top of the function. If you are in a cpp file you can put the using declaration at the top of the file.
