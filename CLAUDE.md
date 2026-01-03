@@ -264,7 +264,7 @@ auto Result2 = NStr::fg_StrMatchWildcard("file123.doc", "file???.doc");
 ### Running Module Tests
 ```bash
 # Build tests
-./mib build Tests macOS x86_64 Debug
+MalterlibBuildShowProgress=false ./mib build Tests macOS arm64 Debug
 
 # Run all string tests
 /opt/Deploy/Tests/RunAllTests --paths '["String/*"]'
