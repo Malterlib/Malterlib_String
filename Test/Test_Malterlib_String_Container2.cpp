@@ -1556,7 +1556,7 @@ namespace
 				for (mint i = 0; i < 2; ++i)
 				{
 					DMibTestPath(i == 0 ? "Non-Empty" : "Empty");
-						
+
 					for (mint TestValue = 0; TestValue < 4; ++TestValue)
 					{
 						DMibTestPath("{}"_f << TestValue);
@@ -1567,14 +1567,14 @@ namespace
 
 						TestString.f_SetUserData(TestValue);
 						DMibExpect(TestString.f_GetUserData(), ==, TestValue);
-						
+
 						CStr TestString2{TestString};
 						DMibExpect(TestString2.f_GetUserData(), ==, TestValue);
-						
+
 						CStr TestString3;
 						TestString3 = TestString;
 						DMibExpect(TestString3.f_GetUserData(), ==, TestValue);
-						
+
 						CStr TestString4(NMib::fg_Move(TestString2));
 						DMibExpect(TestString4.f_GetUserData(), ==, TestValue);
 
@@ -1621,7 +1621,7 @@ namespace
 				DMibExpect(gc_Str<"TestString">.m_Str, ==, CStr("TestString"));
 				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &gc_Str<"TestString">.m_Str);
 #ifndef DCompiler_MSVC
-				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &fg_GetTestStringInAnotherTranslationUnit());				
+				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &fg_GetTestStringInAnotherTranslationUnit());
 #endif
 				DMibExpect(gc_Str<str_utf16("TestString")>.m_Str, ==, CWStr(str_utf16("TestString")));
 				DMibExpect(&gc_Str<str_utf16("TestString")>.m_Str, ==, &gc_Str<str_utf16("TestString")>.m_Str);
@@ -2226,7 +2226,7 @@ public:
 		CMStrDeprecated TestVSE3 = CStr("Testing CMStrDeprecated Ansi");
 		CMStrDeprecated TestVSE4 = CWStr("Testing CMStrDeprecated Wide");
 		CMStrDeprecated TestVSE5 = CUStr("Testing CMStrDeprecated Uni");
-				
+
 		DMibListLinkDSA_List(CTestClass, m_Link) TestList;
 		TestList.f_Construct();
 		TestList.f_Insert(fg_ConstructObject<CTestClass>(NMemory::CDefaultAllocator(), "Item 0"));

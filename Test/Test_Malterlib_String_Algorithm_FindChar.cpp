@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/FindChar>
@@ -11,7 +11,7 @@ namespace
 	using namespace NMib;
 	using namespace NMib::NStr2;
 	using namespace NMib::NIterator;
-	
+
 	class CFindChar_Tests : public NMib::NTest::CTest
 	{
 	public:
@@ -25,7 +25,7 @@ namespace
 					DMibTestPath("ANSI");
 					auto rFound = fg_StrFindChar(fg_Const("Char5Char5Char"), '6');
 					DMibExpectFalse(rFound);
-					
+
 					{
 						auto pArray = "Char5Char5Char";
 						auto rFound = fg_StrFindChar(pArray, '5');
@@ -38,7 +38,7 @@ namespace
 					{
 						auto rFound = fg_StrFindChar(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar(pArray, CharacterToFind);
@@ -50,14 +50,14 @@ namespace
 						DMibTestPath("CReturn_Front_ResFront");
 						auto rFound = fg_StrFindChar<CReturn_Front_ResFront>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_Front_ResFront>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray);
@@ -68,14 +68,14 @@ namespace
 						DMibTestPath("CReturn_ResFront_ResBack");
 						auto rFound = fg_StrFindChar<CReturn_ResFront_ResBack>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_ResFront_ResBack>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("𠀀")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
@@ -86,14 +86,14 @@ namespace
 						DMibTestPath("CReturn_ResBack_Back");
 						auto rFound = fg_StrFindChar<CReturn_ResBack_Back>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_ResBack_Back>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char𠀀Char")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 8);
@@ -103,14 +103,14 @@ namespace
 						DMibTestPath("CReturn_ResFront_Back");
 						auto rFound = fg_StrFindChar<CReturn_ResFront_Back>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_ResFront_Back>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("𠀀Char𠀀Char")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray + 4);
@@ -120,14 +120,14 @@ namespace
 						DMibTestPath("CReturn_Front_ResBack");
 						auto rFound = fg_StrFindChar<CReturn_Front_ResBack>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_Front_ResBack>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char𠀀")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray);
@@ -138,14 +138,14 @@ namespace
 						DMibTestPath("CReturn_Front_Back");
 						auto rFound = fg_StrFindChar<CReturn_Front_Back>(fg_Const(str_utf8("Char𠀀Char𠀀Char")), CharacterToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChar<CReturn_Front_Back>(pArray, CharacterToFind);
 
 							ch8 Data[32] = {0};
 							fg_StrCopy(Data, rFound);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(Data), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 
 							DMibExpect(rFound.f_Front().f_Base(), ==, pArray);
@@ -156,7 +156,7 @@ namespace
 					DMibTestPath("UTF16");
 					auto rFound = fg_StrFindChar(fg_Const(str_utf16("Char𠀀Char𠀀Char")), CharacterToNotFind);
 					DMibExpectFalse(rFound);
-					
+
 					{
 						auto pArray = str_utf16("Char𠀀Char𠀀Char");
 						auto rFound = fg_StrFindChar(pArray, CharacterToFind);
@@ -168,7 +168,7 @@ namespace
 					DMibTestPath("UTF32");
 					auto rFound = fg_StrFindChar(fg_Const(str_utf32("Char𠀀Char𠀀Char")), CharacterToNotFind);
 					DMibExpectFalse(rFound);
-					
+
 					{
 						auto pArray = str_utf32("Char𠀀Char𠀀Char");
 						auto rFound = fg_StrFindChar(pArray, CharacterToFind);

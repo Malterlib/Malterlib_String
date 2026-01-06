@@ -54,7 +54,7 @@ namespace
 				fp_DoCapitalizeTest<CUStr>("CUStr");
 			};
 		}
-			
+
 	};
 
 	DMibTestRegister(CStr_Tests, Malterlib::String::Format);

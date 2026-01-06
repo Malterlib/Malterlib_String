@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -890,7 +890,7 @@ EndArgSearch:
 		TCStrSpan(TCStrSpan &&) = default;
 		TCStrSpan &operator = (TCStrSpan const &) = default;
 		TCStrSpan &operator = (TCStrSpan &&) = default;
-		
+
 		TCStrSpan(CChar const *_pStr, mint _Length)
 			: m_pStr(_pStr)
 			, m_Length(_Length)
@@ -2877,7 +2877,7 @@ EndArgSearch:
 			auto Len = _pStrEnd - _pStrStart;
 			if (!Len)
 				return;
-			
+
 			CAutoDestroy Cleanup{this};
 			CSuper::f_SetStr(_pStrStart, Len);
 			Cleanup.f_Clear();
@@ -4945,7 +4945,7 @@ EndArgSearch:
 
 		const CUnsignedChar *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		const CUnsignedChar *pParse = (CUnsignedChar const *)pSource;
-			
+
 		mint NeededSize = 1;
 		while (*pParse)
 		{

@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -265,7 +265,7 @@ namespace NMib::NStr
 
 			if (fg_StrCmp(m_pStr, pRight->m_pStr, m_StrLen) != 0)
 				return false;
-			
+
 			return true;
 		}
 

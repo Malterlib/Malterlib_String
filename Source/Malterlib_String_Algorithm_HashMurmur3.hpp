@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -105,7 +105,7 @@ namespace NMib::NStr2::NPrivate
 		return fg_MurmurHash3_x86_32(&(*_rCharacters), _rCharacters.f_Distance(), _Seed);
 	}
 }
-		
+
 namespace NMib::NStr2
 {
 	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack>

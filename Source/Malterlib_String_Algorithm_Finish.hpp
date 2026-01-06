@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -62,7 +62,7 @@ namespace NMib::NStr2::NPrivate
 		if ((*rCharacters & 0xC0) == 0xC0)
 		{
 			++nUTF;
-			
+
 			smint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(*rCharacters)) & 0xFF) | 1u);
 
 			if (nChars != nUTF) // Unfinished codepoint

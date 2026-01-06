@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -500,7 +500,7 @@ namespace NMib::NStr
 			return *this;
 		}
 
-//			inline_large 
+//			inline_large
 		static const CChar *fp_ParseArgList(const CChar *_pFormat, const CChar *_pParse, const TCStrParse &_DataArgs, EParseFlag _ParseFlags, aint &_nParsed)
 		{
 			const CChar *pFormat = _pFormat;

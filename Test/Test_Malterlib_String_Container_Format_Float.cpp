@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -9,7 +9,7 @@ static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Strin
 static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other>);
 
 
-namespace 
+namespace
 {
 
 	template <typename t_CTest>

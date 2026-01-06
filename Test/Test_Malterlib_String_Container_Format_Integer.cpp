@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Float>);
@@ -22,9 +22,9 @@ namespace
 				DMibTest(DMibExpr(0) == DMibExpr(0));
 			};
 		}
-			
+
 	};
-	
+
 	DMibTestRegister(CInt_Tests, Malterlib::String::Format);
 }
 

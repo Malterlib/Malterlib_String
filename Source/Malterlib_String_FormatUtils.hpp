@@ -71,7 +71,7 @@ namespace NMib::NStr
 
 		if (mp_Appender.f_GetStrLen() != 0)
 			mp_Appender += "\n";
-		
+
 		mp_Appender += _Name;
 		mp_Appender += ": ";
 		f_Value(_Value);

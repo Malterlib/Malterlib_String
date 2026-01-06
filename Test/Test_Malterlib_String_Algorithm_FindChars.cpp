@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/FindChars>
@@ -63,12 +63,12 @@ namespace
 	{
 		return str_utf32("de");
 	}
-	
-	
+
+
 	class CFindChars_Tests : public NMib::NTest::CTest
 	{
 	public:
-		
+
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
@@ -82,7 +82,7 @@ namespace
 						DMibTestPath("ANSI");
 						auto rFound = fg_StrFindChars(fg_Const("Char5Char5Char"), "67");
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = "Char5Char5Char";
 							auto rFound = fg_StrFindChars(pArray, "65");
@@ -94,7 +94,7 @@ namespace
 						DMibTestPath("UTF8");
 						auto rFound = fg_StrFindChars(fg_Const(str_utf8("Char𠀀Char𠀀Char")), ToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf8("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChars(pArray, ToFind);
@@ -106,7 +106,7 @@ namespace
 						DMibTestPath("UTF16");
 						auto rFound = fg_StrFindChars(fg_Const(str_utf16("Char𠀀Char𠀀Char")), ToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf16("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChars(pArray, ToFind);
@@ -118,7 +118,7 @@ namespace
 						DMibTestPath("UTF32");
 						auto rFound = fg_StrFindChars(fg_Const(str_utf32("Char𠀀Char𠀀Char")), ToNotFind);
 						DMibExpectFalse(rFound);
-						
+
 						{
 							auto pArray = str_utf32("Char𠀀Char𠀀Char");
 							auto rFound = fg_StrFindChars(pArray, ToFind);

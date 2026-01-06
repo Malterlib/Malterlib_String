@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/Compare>
@@ -48,7 +48,7 @@ namespace
 	class CCompare_Tests : public NMib::NTest::CTest
 	{
 	public:
-		
+
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{

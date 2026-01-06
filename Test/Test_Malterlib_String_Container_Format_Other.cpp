@@ -1,11 +1,11 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Formatters/AutoClear>
 
 static_assert(!NMib::NStr::cHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NStr::EStrTypeClass_String>);
 
-namespace 
+namespace
 {
 	class COther_Tests : public NMib::NTest::CTest
 	{
@@ -26,7 +26,7 @@ namespace
 				DMibTest(DMibExpr(0) == DMibExpr(0));
 			};
 		}
-			
+
 	};
 
 	DMibTestRegister(COther_Tests, Malterlib::String::Format);

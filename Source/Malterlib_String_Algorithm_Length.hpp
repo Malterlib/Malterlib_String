@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -53,7 +53,7 @@ namespace NMib::NStr2::NPrivate
 		return fg_Private_StrLength1<tf_CTags>(_rCharacters);
 	}
 }
-		
+
 namespace NMib::NStr2
 {
 	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack>

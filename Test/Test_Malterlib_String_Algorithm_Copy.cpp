@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/Compare>
@@ -20,7 +20,7 @@ namespace
 		NContainer::TCLinkedList<NStr::CStr> m_Segments;
 
 		struct CIterator;
-		
+
 		struct CIteratorSegmented
 		{
 			using CTags = TCTags
@@ -35,12 +35,12 @@ namespace
 					, CIteratorSegmentation_Segmented
 				>
 			;
-			
+
 			NContainer::TCLinkedList<NStr::CStr>::CIteratorConst m_Iterator;
 			TCIterator<TCArrayIterator<ch8 const, uch8 const>> m_Segment;
 			TCIterator<TCArrayIterator<ch8 const, uch8 const>> m_SegmentEnd;
 			bool m_bEnd;
-			
+
 			CIteratorSegmented(CIterator const &_Iterator);
 
 			CIteratorSegmented
@@ -56,12 +56,12 @@ namespace
 				, m_bEnd(_bEnd)
 			{
 			}
-			
+
 			CIteratorSegmented const &fp_Base() const
 			{
 				return *this;
 			}
-			
+
 			void fp_ParentIterator() const
 			{
 			}
@@ -92,13 +92,13 @@ namespace
 			{
 				return fp_Base() == fg_Base(_Other);
 			}
-			
+
 			bool operator == (CIteratorSegmented const &_Other) const
 			{
 				return !m_Iterator;
 			}
-			
-			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>> 
+
+			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>>
 			fp_ToSegmented(CIteratorSegmented const &_Back, TCRange<TCIterator<TCArrayIterator<ch8 const, uch8 const>>, TCIterator<TCArrayIterator<ch8 const, uch8 const>>> const &_Range) const
 			{
 				return fg_Range
@@ -109,7 +109,7 @@ namespace
 				;
 			}
 		};
-		
+
 		struct CIterator
 		{
 			using CTags = TCTags
@@ -124,19 +124,19 @@ namespace
 					, CIteratorSegmentation_Supported
 				>
 			;
-			
+
 			NContainer::TCLinkedList<NStr::CStr>::CIteratorConst m_Iterator;
 			TCIterator<TCArrayIterator<ch8 const, uch8 const>> m_Segment;
 			TCIterator<TCArrayIterator<ch8 const, uch8 const>> m_SegmentEnd;
 			bool m_bEnd;
-			
+
 			CIterator()
 				: m_bEnd(false)
 				, m_Segment(nullptr)
 				, m_SegmentEnd(nullptr)
 			{
 			}
-			
+
 			CIterator(NContainer::TCLinkedList<NStr::CStr>::CIteratorConst _Iterator, bool _bEnd)
 				: m_Iterator(_Iterator)
 				, m_bEnd(_bEnd)
@@ -166,12 +166,12 @@ namespace
 				, m_bEnd(_bEnd)
 			{
 			}
-			
+
 			CIterator const &fp_Base() const
 			{
 				return *this;
 			}
-			
+
 			void fp_ParentIterator() const
 			{
 			}
@@ -197,21 +197,21 @@ namespace
 			{
 				return fp_Base() == fg_Base(_Other);
 			}
-			
+
 			bool operator == (CIterator const &_Other) const
 			{
 				if (m_Segment != _Other.m_Segment)
 					return false;
-				
+
 				return !m_Iterator;
 			}
-			
+
 			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>> fp_Segmented(CIterator const &_Other) const
 			{
 				return fg_Range(TCIterator<CIteratorSegmented>(*this), TCIterator<CIteratorSegmented>(_Other));
 			}
-			
-			static TCRange<TCIterator<CIterator>, TCIterator<CIterator>> 
+
+			static TCRange<TCIterator<CIterator>, TCIterator<CIterator>>
 			fsp_FromSegmented(TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>>  const &_Range)
 			{
 				return fg_Range
@@ -221,17 +221,17 @@ namespace
 					)
 				;
 			}
-			
+
 		};
-		
+
 		template <typename tf_CTags>
 		TCRange<TCIterator<CIterator>, TCIterator<CIterator>> f_Range() const
 		{
 			return {CIterator(m_Segments.f_GetIterator(), false), CIterator(m_Segments.f_GetIterator(), true)};
 		}
-		
+
 	};
-	
+
 	CSegmentedString::CIteratorSegmented::CIteratorSegmented(CIterator const &_Iterator)
 		: m_Iterator(_Iterator.m_Iterator)
 		, m_Segment(_Iterator.m_Segment)
@@ -245,7 +245,7 @@ namespace
 	{
 		NContainer::TCLinkedList<CSegmentedString> m_Segments;
 		struct CIterator;
-		
+
 		struct CIteratorSegmented
 		{
 			using CTags = TCTags
@@ -260,14 +260,14 @@ namespace
 					, CIteratorSegmentation_Segmented
 				>
 			;
-			
+
 			NContainer::TCLinkedList<CSegmentedString>::CIteratorConst m_Iterator;
 			TCRange<TCIterator<CSegmentedString::CIterator>, TCIterator<CSegmentedString::CIterator>> m_Range;
 			bool m_bEnd;
-			
+
 			CIteratorSegmented(CIterator const &_Iterator);
-			
-			
+
+
 			CIteratorSegmented()
 				: m_bEnd(false)
 			{
@@ -284,12 +284,12 @@ namespace
 				, m_bEnd(_bEnd)
 			{
 			}
-			
+
 			CIteratorSegmented const &fp_Base() const
 			{
 				return *this;
 			}
-			
+
 			void fp_ParentIterator() const
 			{
 			}
@@ -316,13 +316,13 @@ namespace
 			{
 				return fp_Base() == fg_Base(_Other);
 			}
-			
+
 			bool operator == (CIteratorSegmented const &_Other) const
 			{
 				return !m_Iterator;
 			}
-			
-			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>> 
+
+			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>>
 			fp_ToSegmented(CIteratorSegmented const &_Back, TCRange<TCIterator<CSegmentedString::CIterator>, TCIterator<CSegmentedString::CIterator>> const &_Range) const
 			{
 				return fg_Range
@@ -333,7 +333,7 @@ namespace
 				;
 			}
 		};
-		
+
 		struct CIterator
 		{
 			using CTags = TCTags
@@ -348,11 +348,11 @@ namespace
 					, CIteratorSegmentation_Supported
 				>
 			;
-			
+
 			NContainer::TCLinkedList<CSegmentedString>::CIteratorConst m_Iterator;
 			TCRange<TCIterator<CSegmentedString::CIterator>, TCIterator<CSegmentedString::CIterator>> m_Range;
 			bool m_bEnd;
-			
+
 			CIterator(NContainer::TCLinkedList<CSegmentedString>::CIteratorConst _Iterator, bool _bEnd)
 				: m_Iterator(_Iterator)
 				, m_bEnd(_bEnd)
@@ -372,12 +372,12 @@ namespace
 				, m_bEnd(_bEnd)
 			{
 			}
-			
+
 			CIterator const &fp_Base() const
 			{
 				return *this;
 			}
-			
+
 			void fp_ParentIterator() const
 			{
 			}
@@ -402,21 +402,21 @@ namespace
 			{
 				return fp_Base() == fg_Base(_Other);
 			}
-			
+
 			bool operator == (CIterator const &_Other) const
 			{
 				if (!m_Range)
 					return false;
-				
+
 				return !m_Iterator;
 			}
-			
+
 			TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>> fp_Segmented(CIterator const &_Other) const
 			{
 				return fg_Range(TCIterator<CIteratorSegmented>(*this), TCIterator<CIteratorSegmented>(_Other));
 			}
-			
-			static TCRange<TCIterator<CIterator>, TCIterator<CIterator>> 
+
+			static TCRange<TCIterator<CIterator>, TCIterator<CIterator>>
 			fsp_FromSegmented(TCRange<TCIterator<CIteratorSegmented>, TCIterator<CIteratorSegmented>>  const &_Range)
 			{
 				return fg_Range
@@ -426,18 +426,18 @@ namespace
 					)
 				;
 			}
-			
+
 		};
-		
+
 		template <typename tf_CTags>
 		TCRange<TCIterator<CIterator>, TCIterator<CIterator>> f_Range() const
 		{
 			return {CIterator(m_Segments.f_GetIterator(), false), CIterator(m_Segments.f_GetIterator(), true)};
 		}
-		
+
 	};
 
-	
+
 	CSegmentedString2::CIteratorSegmented::CIteratorSegmented(CIterator const &_Iterator)
 		: m_Iterator(_Iterator.m_Iterator)
 		, m_Range(_Iterator.m_Range)
@@ -463,11 +463,11 @@ namespace
 	{
 		return str_utf32("Char𠀀Char𠀀Char");
 	}
-	
+
 	class CCopy_Tests : public NMib::NTest::CTest
 	{
 	public:
-		
+
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
@@ -481,7 +481,7 @@ namespace
 						ch8 OutArray[100];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 						auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
-						
+
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), "Char65Char5Char"), ==, ECompare_Equal);
 					}
 					{
@@ -491,7 +491,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -499,7 +499,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -507,7 +507,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -515,7 +515,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -523,7 +523,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -531,7 +531,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 						{
@@ -539,7 +539,7 @@ namespace
 							ch8 OutArray[100];
 							NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 							auto rDestination = fg_StrCopy(OutArray, ToCopy);
-							
+
 							DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 						}
 					}
@@ -548,7 +548,7 @@ namespace
 						ch16 OutArray[100];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 100);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
-						
+
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char𠀀Char𠀀Char")), ==, ECompare_Equal);
 					}
 					{
@@ -566,7 +566,7 @@ namespace
 						ch8 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, "Char65Char5Char");
-						
+
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), "Char6"), ==, ECompare_Equal);
 					}
 					{
@@ -574,7 +574,7 @@ namespace
 						ch8 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
-						
+
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char")), ==, ECompare_Equal);
 					}
 					{
@@ -582,7 +582,7 @@ namespace
 						ch16 OutArray[6];
 						NMemory::fg_ObjectSet(OutArray, 0xff, 6);
 						auto rDestination = fg_StrCopy(OutArray, ToCopy);
-						
+
 						DMibExpect(fg_StrCompare(NStr::fg_NullTerminated(OutArray), str_utf8("Char")), ==, ECompare_Equal);
 					}
 					{
@@ -595,7 +595,7 @@ namespace
 				}
 			};
 		}
-		
+
 		void fp_DoSegmentedTest()
 		{
 			DMibTestSuite("Segmented")
@@ -603,27 +603,27 @@ namespace
 				CSegmentedString2 ToCopy;
 				{
 					auto &Segment = ToCopy.m_Segments.f_Insert();
-					
+
 					auto &Segment0 = Segment.m_Segments.f_Insert();
-					
+
 					Segment0 += "Segment00";
-					
+
 					auto &Segment1 = Segment.m_Segments.f_Insert();
 
 					Segment1 += "Segment01";
 				}
 				{
 					auto &Segment = ToCopy.m_Segments.f_Insert();
-					
+
 					auto &Segment0 = Segment.m_Segments.f_Insert();
-					
+
 					Segment0 += "Segment10";
-					
+
 					auto &Segment1 = Segment.m_Segments.f_Insert();
 
 					Segment1 += "Segment11";
 				}
-				
+
 				ch8 OutArray[256];
 				NMemory::fg_ObjectSet(OutArray, 0xff, 256);
 				auto rDestination = fg_StrCopy(OutArray, ToCopy);
@@ -636,13 +636,13 @@ namespace
 				;
 			};
 		}
-		
+
 		void f_DoTests()
 		{
 			fp_DoTests<ch8>("UTF8");
 			fp_DoTests<ch16>("UTF16");
 			fp_DoTests<ch32>("UTF32");
-			
+
 			fp_DoSegmentedTest();
 		}
 	};

@@ -1,9 +1,9 @@
-﻿// Copyright © 2015 Hansoft AB 
+﻿// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
 
-namespace 
+namespace
 {
 	class CGeneral_Tests : public NMib::NTest::CTest
 	{
@@ -21,7 +21,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{}...{}...{}") >> String1 >> String2 >> String3).f_Parse("Test1...Test2...Test3", nParsed);
 
@@ -35,7 +35,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{}...{}...{}") >> String1 >> String2 >> String3).f_Parse("Test1..-...Test2...Test3...", nParsed);
 
@@ -49,7 +49,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{}...{}...{}") >> String1 >> String2 >> String3).f_Parse("Test1...Test2", nParsed);
 
@@ -63,7 +63,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{}...{}...{}") >> String1 >> String2 >> String3).f_Parse("Test1...Test2...", nParsed);
 
@@ -77,7 +77,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{}...{}...{}") >> String1 >> String2 >> String3).f_Parse("......", nParsed);
 
@@ -94,7 +94,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se}...{se}...{se}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2\"...Test3", nParsed);
 
@@ -108,7 +108,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se}...{se}...{se}") >> String1 >> String2 >> String3).f_Parse("Test1..-...\"Te\\\"st2\"...Test3...", nParsed);
 
@@ -122,7 +122,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se}...{se}...{se}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2\"", nParsed);
 
@@ -136,7 +136,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se}...{se}...{se}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2...5\"...", nParsed);
 
@@ -150,7 +150,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se}...{se}...{se}") >> String1 >> String2 >> String3).f_Parse("...\"\"...", nParsed);
 
@@ -167,7 +167,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se,sr}...{se,sr}...{se,sr}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2\"...Test3", nParsed);
 
@@ -181,7 +181,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se,sr}...{se,sr}...{se,sr}") >> String1 >> String2 >> String3).f_Parse("Test1..-...\"Te\\\"st2\"...Test3...", nParsed);
 
@@ -195,7 +195,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se,sr}...{se,sr}...{se,sr}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2\"", nParsed);
 
@@ -209,7 +209,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se,sr}...{se,sr}...{se,sr}") >> String1 >> String2 >> String3).f_Parse("Test1...\"Test2...5\"...", nParsed);
 
@@ -223,7 +223,7 @@ namespace
 					CStr String1;
 					CStr String2;
 					CStr String3;
-					
+
 					aint nParsed = 0;
 					(CStr::CParse("{se,sr}...{se,sr}...{se,sr}") >> String1 >> String2 >> String3).f_Parse("...\"\"...", nParsed);
 

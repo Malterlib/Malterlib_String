@@ -1,4 +1,4 @@
-// Copyright © 2021 Favro Holding AB 
+// Copyright © 2021 Favro Holding AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -77,7 +77,7 @@ namespace NMib::NStr
 	bool TCMultiReplace<t_bCaseSensitive>::f_StringMatches(ch8 const *_pString)
 	{
 		return f_StringMatches(_pString, [](CStr const &_ToFind, CStr const &_FoundEntry) { return true; });
-	} 
+	}
 
 	template <bool t_bCaseSensitive>
 	template <typename tf_FCheckFound>

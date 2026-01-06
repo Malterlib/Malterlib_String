@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
@@ -11,7 +11,7 @@ namespace NMib::NStr2
 {
 	template <typename ...tfp_CTags, typename tf_CFront, typename tf_CBack>
 	bool fg_StrIsEmpty(NIterator::TCRange<tf_CFront, tf_CBack> const &_rCharacters);
-	
+
 	template
 	<
 		typename ...tfp_CTags

@@ -317,7 +317,7 @@ namespace NMib::NStr
 		else
 			*this += _Character;
 	}
-	
+
 
 	template <typename t_CString>
 	void TCStringAppender<t_CString>::operator += (typename t_CString::CUnsignedChar _Character)

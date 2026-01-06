@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/String/Algorithms/HashSDBM>
@@ -7,7 +7,7 @@ namespace
 {
 	using namespace NMib;
 	using namespace NMib::NStr2;
-	
+
 	class CHashSDBM_Tests : public NMib::NTest::CTest
 	{
 	public:
