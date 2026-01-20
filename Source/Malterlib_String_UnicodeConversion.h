@@ -155,9 +155,9 @@ namespace NMib::NStr
 	public:
 		CStrIteratorUTF8(ch8 const *_pStr, mint _StrLen)
 			: m_pBegin((uch8 const *)_pStr)
+			, m_pEnd((uch8 const *)_pStr + _StrLen)
 			, m_pInitialBegin((uch8 const *)_pStr)
 			, m_pLastValidBegin((uch8 const *)_pStr)
-			, m_pEnd((uch8 const *)_pStr + _StrLen)
 			, m_bWholeCodePoint(true)
 			, m_bValidCodePoint(true)
 		{
@@ -167,9 +167,9 @@ namespace NMib::NStr
 		template <typename t_CStrTraits>
 		CStrIteratorUTF8(TCStrAggregate<t_CStrTraits> const &_String)
 			: m_pBegin((uch8 const *)_String.f_GetStr())
+			, m_pEnd((uch8 const *)_String.f_GetStr() + _String.f_GetStrLen())
 			, m_pInitialBegin((uch8 const *)_String.f_GetStr())
 			, m_pLastValidBegin((uch8 const *)_String.f_GetStr())
-			, m_pEnd((uch8 const *)_String.f_GetStr() + _String.f_GetStrLen())
 			, m_bWholeCodePoint(true)
 			, m_bValidCodePoint(true)
 		{
