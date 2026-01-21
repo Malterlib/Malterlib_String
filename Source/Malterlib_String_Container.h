@@ -1926,6 +1926,18 @@ EndArgSearch:
 			return fg_StrFindReverseNoCase(*this, _pStr1, _MaxLen);
 		}
 
+		template <typename t_CData2>
+			inline_small aint f_FindReverse(const t_CData2 *_pStr1, mint _MaxLen, mint _FindLen) const
+		{
+			return fg_StrFindReverse(*this, _pStr1, _MaxLen, _FindLen);
+		}
+
+		template <typename t_CData2>
+			inline_small aint f_FindReverseNoCase(const t_CData2 *_pStr1, mint _MaxLen, mint _FindLen) const
+		{
+			return fg_StrFindReverseNoCase(*this, _pStr1, _MaxLen, _FindLen);
+		}
+
 		template <typename t_CTCStrTraits2>
 			inline_small aint f_FindReverse(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
@@ -1936,6 +1948,18 @@ EndArgSearch:
 			inline_small aint f_FindReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFindReverseNoCase(*this, _Str1, _MaxLen);
+		}
+
+		template <typename t_CTCStrTraits2>
+			inline_small aint f_FindReverse(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
+		{
+			return fg_StrFindReverse(*this, _Str1, _MaxLen, _FindLen);
+		}
+
+		template <typename t_CTCStrTraits2>
+			inline_small aint f_FindReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
+		{
+			return fg_StrFindReverseNoCase(*this, _Str1, _MaxLen, _FindLen);
 		}
 
 
@@ -3908,37 +3932,37 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
-		return fg_StrFindReverse(_Str1.f_GetStr(), _pStr2);
+		return fg_StrFindReverse<false, true, false>(_Str1.f_GetStr(), _pStr2, _Str1.f_GetLen(), 0);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
-		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _pStr2);
+		return fg_StrFindReverse<true, true, false>(_Str1.f_GetStr(), _pStr2, _Str1.f_GetLen(), 0);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
 	{
-		return fg_StrFindReverse(_pStr1, _Str2.f_GetStr());
+		return fg_StrFindReverse<false, false, true>(_pStr1, _Str2.f_GetStr(), 0, _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
 	{
-		return fg_StrFindReverseNoCase(_pStr1, _Str2.f_GetStr());
+		return fg_StrFindReverse<true, false, true>(_pStr1, _Str2.f_GetStr(), 0, _Str2.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
 		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
-		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr());
+		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), _Str1.f_GetLen(), _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
 		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
-		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
+		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _Str1.f_GetLen(), _Str2.f_GetLen());
 	}
 
 	/////////
@@ -4012,36 +4036,71 @@ EndArgSearch:
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
-		return fg_StrFindReverse(_Str1.f_GetStr(), _pStr2, _MaxLen);
+		return fg_StrFindReverse<false, true, false>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), 0);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
-		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _pStr2, _MaxLen);
+		return fg_StrFindReverse<true, true, false>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), 0);
+	}
+
+	template <typename t_CTCStrTraits, typename t_CData2>
+		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
+	{
+		return fg_StrFindReverse<false, true, true>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), _FindLen);
+	}
+	template <typename t_CTCStrTraits, typename t_CData2>
+		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
+	{
+		return fg_StrFindReverse<true, true, true>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), _FindLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
-		return fg_StrFindReverse(_pStr1, _Str2.f_GetStr(), _MaxLen);
+		return fg_StrFindReverse<false, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
 		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
-		return fg_StrFindReverseNoCase(_pStr1, _Str2.f_GetStr(), _MaxLen);
+		return fg_StrFindReverse<true, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, _Str2.f_GetLen());
+	}
+
+	template <typename t_CTCStrTraits, typename t_CData2>
+		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
+	{
+		return fg_StrFindReverse<false, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, fg_Min(_Str2.f_GetLen(), _FindLen));
+	}
+	template <typename t_CTCStrTraits, typename t_CData2>
+		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
+	{
+		return fg_StrFindReverse<true, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, fg_Min(_Str2.f_GetLen(), _FindLen));
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
 		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
-		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
+		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
 		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
-		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
+		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), _Str2.f_GetLen());
+	}
+
+	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
+		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
+	{
+		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), fg_Min(_Str2.f_GetLen(), _FindLen));
+	}
+	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
+		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
+	{
+		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
+		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), fg_Min(_Str2.f_GetLen(), _FindLen));
 	}
 
 
@@ -4266,8 +4325,10 @@ EndArgSearch:
 		mint NeededSize = Len;
 		if (_LenReplace > _LenFind)
 			NeededSize += nReplaces * (_LenReplace - _LenFind);
+		else
+			NeededSize -= nReplaces * (_LenFind - _LenReplace);
 
-		fg_StrReplace(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace);
+		fg_StrReplaceWithCount(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, NeededSize + 1, nReplaces);
 		_Str1.f_SetModified();
 		return _Str1;
 	}
@@ -4335,11 +4396,17 @@ EndArgSearch:
 
 		mint Len = fg_StrLen(_Str1);
 
-		mint NeededSize = fg_Min((Len + nReplaces * (_LenReplace - _LenFind)), _MaxLen);
-		fg_StrReplace(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen);
+		mint NeededSize;
+		if (_LenReplace >= _LenFind)
+			NeededSize = fg_Min(Len + nReplaces * (_LenReplace - _LenFind), _MaxLen);
+		else
+			NeededSize = fg_Min(Len - nReplaces * (_LenFind - _LenReplace), _MaxLen);
+
+		fg_StrReplaceWithCount(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, NeededSize + 1, nReplaces);
 		_Str1.f_SetModified();
 		return _Str1;
 	}
+
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
 	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
 	{
@@ -4418,8 +4485,10 @@ EndArgSearch:
 		mint NeededSize = Len;
 		if (_LenReplace > _LenFind)
 			NeededSize += nReplaces * (_LenReplace - _LenFind);
+		else
+			NeededSize -= nReplaces * (_LenFind - _LenReplace);
 
-		fg_StrReplaceNoCase(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace);
+		fg_StrReplaceNoCaseWithCount(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, NeededSize + 1, nReplaces);
 		_Str1.f_SetModified();
 		return _Str1;
 	}
@@ -4487,8 +4556,13 @@ EndArgSearch:
 
 		mint Len = fg_StrLen(_Str1);
 
-		mint NeededSize = fg_Min((Len + nReplaces * (_LenReplace - _LenFind)), _MaxLen);
-		fg_StrReplaceNoCase(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen);
+		mint NeededSize;
+		if (_LenReplace >= _LenFind)
+			NeededSize = fg_Min(Len + nReplaces * (_LenReplace - _LenFind), _MaxLen);
+		else
+			NeededSize = fg_Min(Len - nReplaces * (_LenFind - _LenReplace), _MaxLen);
+
+		fg_StrReplaceNoCaseWithCount(_Str1.f_GetStr(NeededSize), Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, NeededSize + 1, nReplaces);
 		_Str1.f_SetModified();
 		return _Str1;
 	}

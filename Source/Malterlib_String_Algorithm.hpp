@@ -1158,8 +1158,8 @@ namespace NMib::NStr
 		return fg_StrFind<true, true>(_pStr1, _pStr2, _MaxLen);
 	}
 
-	template <bool t_bNoCase, bool t_bCheckLen, typename t_CData1, typename t_CData2>
-	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
+	template <bool t_bNoCase, bool t_bHasLen, bool t_bHasFindLen, typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _FindLen)
 	{
 		if (!(*_pStr1) || !(*_pStr2))
 			return -1;
@@ -1171,26 +1171,25 @@ namespace NMib::NStr
 		const CData2 *pStr2Start = (const CData2 *)_pStr2;
 		const CData2 *pStr2End = (const CData2 *)_pStr2;
 
-		// Find end of search pattern
-		while (*pStr2End)
-			++pStr2End;
-		--pStr2End;
+		if constexpr (t_bHasFindLen)
+		{
+			if (_FindLen == 0)
+				return -1;
+			pStr2End += _FindLen - 1;
+		}
+		else
+		{
+			// Find end of search pattern
+			while (*pStr2End)
+				++pStr2End;
+			--pStr2End;
+		}
 
-		if constexpr (t_bCheckLen)
+		if constexpr (t_bHasLen)
 		{
 			if (_Len == 0)
 				return -1;
-
-			// Find actual string length, but cap at _Len
-			mint Len = 0;
-			while (*pStr1 && Len < _Len)
-			{
-				++pStr1;
-				++Len;
-			}
-			if (Len == 0)
-				return -1;
-			--pStr1;
+			pStr1 += _Len - 1;
 		}
 		else
 		{
@@ -1243,25 +1242,37 @@ namespace NMib::NStr
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		return fg_StrFindReverse<false, false>(_pStr1, _pStr2, 0);
+		return fg_StrFindReverse<false, false, false>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2)
 	{
-		return fg_StrFindReverse<true, false>(_pStr1, _pStr2, 0);
+		return fg_StrFindReverse<true, false, false>(_pStr1, _pStr2, 0, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
-		return fg_StrFindReverse<false, true>(_pStr1, _pStr2, _Len);
+		return fg_StrFindReverse<false, true, false>(_pStr1, _pStr2, _Len, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2>
 	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len)
 	{
-		return fg_StrFindReverse<true, true>(_pStr1, _pStr2, _Len);
+		return fg_StrFindReverse<true, true, false>(_pStr1, _pStr2, _Len, 0);
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindReverse(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _FindLen)
+	{
+		return fg_StrFindReverse<false, true, true>(_pStr1, _pStr2, _Len, _FindLen);
+	}
+
+	template <typename t_CData1, typename t_CData2>
+	constexpr inline_large aint fg_StrFindReverseNoCase(const t_CData1 *_pStr1, const t_CData2 *_pStr2, mint _Len, mint _FindLen)
+	{
+		return fg_StrFindReverse<true, true, true>(_pStr1, _pStr2, _Len, _FindLen);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -1580,50 +1591,237 @@ namespace NMib::NStr
 	}
 
 
-	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace)
+	template <bool t_bNoCase, bool t_bUseCount = false, typename t_CData1, typename t_CData2, typename t_CData3>
+	inline t_CData1 *fg_StrReplace(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen, mint _Count = 0)
 	{
-		t_CData1 *pStr1 = _pStr1;
-		mint Len = _Len;
+		--_MaxLen; // Reserve space for null terminator
 
-		while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind)))
+		if (_LenReplace <= _LenFind)
 		{
-			Len = Len - ((pStrFind + _LenFind) - pStr1);
-			NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, (Len + 1) * sizeof(t_CData1));
-			NMemory::fg_ObjectCopy(pStrFind, _pStrReplace, _LenReplace);
-			pStr1 = pStrFind + _LenReplace;
+			t_CData1 *pWrite = _pStr1;
+			t_CData1 const *pRead = _pStr1;
+			t_CData1 const *pEnd = _pStr1 + _Len;
+
+			bool bFastPath;
+			if constexpr (t_bUseCount)
+				bFastPath = _MaxLen + _Count * (_LenFind - _LenReplace) >= _Len;
+			else
+				bFastPath = _MaxLen >= _Len;
+
+			if (bFastPath)
+			{
+				for (;;)
+				{
+					mint SearchLen = pEnd - pRead;
+					aint MatchPos = fg_StrFind<t_bNoCase, true>(pRead, _pStrFind, SearchLen);
+					if (MatchPos < 0)
+						break;
+
+					t_CData1 const *pMatch = pRead + MatchPos;
+
+					mint SegLen = pMatch - pRead;
+					if (pWrite != pRead)
+						NMemory::fg_MemMove(pWrite, pRead, SegLen * sizeof(t_CData1));
+					pWrite += SegLen;
+
+					if constexpr (sizeof(t_CData1) == sizeof(t_CData3))
+						NMemory::fg_MemCopy(pWrite, _pStrReplace, _LenReplace * sizeof(t_CData1));
+					else
+						NMemory::fg_ObjectCopy(pWrite, _pStrReplace, _LenReplace);
+					pWrite += _LenReplace;
+					pRead = pMatch + _LenFind;
+				}
+
+				if (pRead < pEnd)
+				{
+					mint RemainLen = pEnd - pRead;
+					if (pWrite != pRead)
+						NMemory::fg_MemMove(pWrite, pRead, RemainLen * sizeof(t_CData1));
+					pWrite += RemainLen;
+				}
+
+				*pWrite = 0;
+			}
+			else
+			{
+				t_CData1 *pWriteEnd = _pStr1 + _MaxLen;
+
+				for (;;)
+				{
+					mint SearchLen = pEnd - pRead;
+					if (SearchLen <= 0)
+						break;
+
+					aint MatchPos = fg_StrFind<t_bNoCase, true>(pRead, _pStrFind, SearchLen);
+					if (MatchPos < 0)
+						break;
+
+					t_CData1 const *pMatch = pRead + MatchPos;
+
+					mint SegLen = pMatch - pRead;
+					mint WriteLen = fg_Min(SegLen, pWriteEnd - pWrite);
+					if (WriteLen > 0)
+					{
+						if (pWrite != pRead)
+							NMemory::fg_MemMove(pWrite, pRead, WriteLen * sizeof(t_CData1));
+						pWrite += WriteLen;
+					}
+
+					WriteLen = fg_Min(_LenReplace, pWriteEnd - pWrite);
+					if (WriteLen > 0)
+					{
+						if constexpr (sizeof(t_CData1) == sizeof(t_CData3))
+							NMemory::fg_MemCopy(pWrite, _pStrReplace, WriteLen * sizeof(t_CData1));
+						else
+							NMemory::fg_ObjectCopy(pWrite, _pStrReplace, WriteLen);
+						pWrite += WriteLen;
+					}
+
+					pRead = pMatch + _LenFind;
+
+					if (pWrite >= pWriteEnd)
+						break;
+				}
+
+				if (pWrite < pWriteEnd && pRead < pEnd)
+				{
+					mint RemainLen = fg_Min(pEnd - pRead, pWriteEnd - pWrite);
+					if (RemainLen > 0 && pWrite != pRead)
+						NMemory::fg_MemMove(pWrite, pRead, RemainLen * sizeof(t_CData1));
+					pWrite += RemainLen;
+				}
+
+				*pWrite = 0;
+			}
 		}
+		else
+		{
+			t_CData1 const *pLenEnd = _pStr1 + _Len;
+
+			mint nCount;
+			if constexpr (t_bUseCount)
+				nCount = _Count;
+			else
+			{
+				nCount = 0;
+				t_CData1 const *pScan = _pStr1;
+				for (;;)
+				{
+					mint SearchLen = pLenEnd - pScan;
+					if (SearchLen <= 0)
+						break;
+					aint MatchPos = fg_StrFind<t_bNoCase, true>(pScan, _pStrFind, SearchLen);
+					if (MatchPos < 0)
+						break;
+					++nCount;
+					pScan = pScan + MatchPos + _LenFind;
+				}
+			}
+
+			if (nCount == 0)
+			{
+				mint NewLen = fg_Min(_Len, _MaxLen);
+				_pStr1[NewLen] = 0;
+				return _pStr1;
+			}
+
+			mint LenDiff = _LenReplace - _LenFind;
+			mint ProcessedNewLen = _Len + nCount * LenDiff;
+			mint NewLen = fg_Min(ProcessedNewLen, _MaxLen);
+			mint SkipRemaining = ProcessedNewLen - NewLen; // Amount to truncate from right
+
+			t_CData1 *pWrite = _pStr1 + NewLen;
+			*pWrite = 0;
+
+			t_CData1 const *pReadEnd = pLenEnd;
+			mint SearchLen = _Len;
+			for (aint MatchPos = fg_StrFindReverse<t_bNoCase, true, true>(_pStr1, _pStrFind, SearchLen, _LenFind); MatchPos >= 0; MatchPos = fg_StrFindReverse<t_bNoCase, true, true>(_pStr1, _pStrFind, SearchLen, _LenFind))
+			{
+				t_CData1 const *pMatch = _pStr1 + MatchPos;
+				t_CData1 const *pAfterMatch = pMatch + _LenFind;
+
+				if (pReadEnd > pAfterMatch)
+				{
+					mint SegLen = pReadEnd - pAfterMatch;
+					if (SkipRemaining >= SegLen)
+						SkipRemaining -= SegLen;
+					else
+					{
+						mint WriteLen = SegLen - SkipRemaining;
+						pWrite -= WriteLen;
+						NMemory::fg_MemMove(pWrite, pAfterMatch, WriteLen * sizeof(t_CData1));
+						SkipRemaining = 0;
+					}
+				}
+
+				if (SkipRemaining >= _LenReplace)
+					SkipRemaining -= _LenReplace;
+				else
+				{
+					mint WriteLen = _LenReplace - SkipRemaining;
+					pWrite -= WriteLen;
+					if constexpr (sizeof(t_CData1) == sizeof(t_CData3))
+						NMemory::fg_MemCopy(pWrite, _pStrReplace, WriteLen * sizeof(t_CData1));
+					else
+						NMemory::fg_ObjectCopy(pWrite, _pStrReplace, WriteLen);
+					SkipRemaining = 0;
+				}
+
+				pReadEnd = pMatch;
+				SearchLen = MatchPos;
+			}
+
+			if (pReadEnd > _pStr1)
+			{
+				mint SegLen = pReadEnd - _pStr1;
+				if (SkipRemaining < SegLen)
+				{
+					mint WriteLen = SegLen - SkipRemaining;
+					pWrite -= WriteLen;
+					if (pWrite != _pStr1)
+						NMemory::fg_MemMove(pWrite, _pStr1, WriteLen * sizeof(t_CData1));
+				}
+			}
+		}
+
 		return _pStr1;
 	}
 
-
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
+	t_CData1 *fg_StrReplace(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
 	{
-		return fg_StrReplace(_pStr1, fg_StrLen(_pStr1), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace));
+		return fg_StrReplace<false, false>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace)
+	t_CData1 *fg_StrReplace(t_CData1 *_pStr1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
 	{
-		t_CData1 *pStr1 = _pStr1;
-
-		mint Len = _Len;
-
-		while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
-		{
-			Len = Len - ((pStrFind + _LenFind) - pStr1);
-			NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, (Len + 1) * sizeof(t_CData1));
-			NMemory::fg_ObjectCopy(pStrFind, _pStrReplace, _LenReplace);
-			pStr1 = pStrFind + _LenReplace;
-		}
-		return _pStr1;
+		return fg_StrReplace<false, false>(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen, 0);
 	}
 
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
+	t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
 	{
-		return fg_StrReplaceNoCase(_pStr1, fg_StrLen(_pStr1), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace));
+		return fg_StrReplace<true, false>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, 0);
+	}
+
+	template <typename t_CData1, typename t_CData2, typename t_CData3>
+	t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
+	{
+		return fg_StrReplace<true, false>(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen, 0);
+	}
+
+	// Convenience overloads that accept a pre-computed match count
+	template <typename t_CData1, typename t_CData2, typename t_CData3>
+	t_CData1 *fg_StrReplaceWithCount(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen, mint _Count)
+	{
+		return fg_StrReplace<false, true>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, _Count);
+	}
+
+	template <typename t_CData1, typename t_CData2, typename t_CData3>
+	t_CData1 *fg_StrReplaceNoCaseWithCount(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen, mint _Count)
+	{
+		return fg_StrReplace<true, true>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, _Count);
 	}
 
 	template <typename t_CData1, typename t_CData2, typename t_CData3>
@@ -1648,83 +1846,6 @@ namespace NMib::NStr
 			++pStr1;
 		}
 		return _pStr1;
-	}
-
-
-	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
-	{
-		t_CData1 *pStr1 = _pStr1;
-		--_MaxLen; // Null charater
-
-		mint Len = _Len;
-		aint LenLeft = _MaxLen - Len;
-		aint Diff = _LenReplace - _LenFind;
-
-		while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind)))
-		{
-			if (LenLeft < Diff)
-			{
-				Len = _MaxLen - ((pStrFind + _LenFind) - _pStr1);
-				NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, Len * sizeof(t_CData1));
-				_pStr1[_MaxLen]  = 0;
-				mint Len2 = fg_Min((_MaxLen - (pStrFind - _pStr1)), _LenReplace);
-				NMemory::fg_MemCopy(pStrFind, _pStrReplace, Len2 * sizeof(t_CData1));
-				pStr1 = pStrFind + Len2;
-			}
-			else
-			{
-				Len = Len - ((pStrFind + _LenFind) - pStr1);
-				NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, (Len + 1) * sizeof(t_CData1));
-				NMemory::fg_MemCopy(pStrFind, _pStrReplace, _LenReplace * sizeof(t_CData1));
-				pStr1 = pStrFind + _LenReplace;
-			}
-		}
-		return _pStr1;
-	}
-
-	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplace(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
-	{
-		return fg_StrReplace(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
-	}
-
-	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, mint _Len, t_CData2 const *_pStrFind, mint _LenFind, t_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
-	{
-		t_CData1 *pStr1 = _pStr1;
-		--_MaxLen; // Null charater
-
-		mint Len = _Len;
-		aint LenLeft = _MaxLen - Len;
-		aint Diff = _LenReplace - _LenFind;
-
-		while (t_CData1 *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind)))
-		{
-			if (LenLeft < Diff)
-			{
-				Len = _MaxLen - ((pStrFind + _LenFind) - _pStr1);
-				NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, Len * sizeof(t_CData1));
-				_pStr1[_MaxLen]  = 0;
-				mint Len2 = fg_Min((_MaxLen - (pStrFind - _pStr1)), _LenReplace);
-				NMemory::fg_MemCopy(pStrFind, _pStrReplace, Len2 * sizeof(t_CData1));
-				pStr1 = pStrFind + Len2;
-			}
-			else
-			{
-				Len = Len - ((pStrFind + _LenFind) - pStr1);
-				NMemory::fg_MemMove(pStrFind + _LenReplace, pStrFind + _LenFind, (Len + 1) * sizeof(t_CData1));
-				NMemory::fg_MemCopy(pStrFind, _pStrReplace, _LenReplace * sizeof(t_CData1));
-				pStr1 = pStrFind + _LenReplace;
-			}
-		}
-		return _pStr1;
-	}
-
-	template <typename t_CData1, typename t_CData2, typename t_CData3>
-	inline_large t_CData1 *fg_StrReplaceNoCase(t_CData1 *_pStr1, const t_CData2 *_pStrFind, const t_CData3 *_pStrReplace, mint _MaxLen)
-	{
-		return fg_StrReplaceNoCase(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
 	/************************************************************************************************\
