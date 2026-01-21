@@ -1170,44 +1170,38 @@ namespace NMib::NStr
 		const CData1 *pStr1Start = (const CData1 *)_pStr1;
 		const CData2 *pStr2Start = (const CData2 *)_pStr2;
 		const CData2 *pStr2End = (const CData2 *)_pStr2;
-		const CData1 *pStr1End;
 
-		// Find end
+		// Find end of search pattern
 		while (*pStr2End)
-		{
 			++pStr2End;
-		}
 		--pStr2End;
 
 		if constexpr (t_bCheckLen)
 		{
+			if (_Len == 0)
+				return -1;
+
+			// Find actual string length, but cap at _Len
 			mint Len = 0;
-			// Find end
-			while (*pStr1)
+			while (*pStr1 && Len < _Len)
 			{
 				++pStr1;
 				++Len;
 			}
+			if (Len == 0)
+				return -1;
 			--pStr1;
-
-
-			if (Len > _Len)
-				pStr1End = (const CData1 *)_pStr1 + (Len - _Len);
-			else
-				pStr1End = (const CData1 *)_pStr1;
 		}
 		else
 		{
-			// Find end
+			// Find end of string
 			while (*pStr1)
-			{
 				++pStr1;
-			}
 			--pStr1;
-			pStr1End = (const CData1 *)_pStr1;
 		}
 
-		while (pStr1 >= pStr1End)
+		// Search backward from pStr1 to pStr1Start
+		while (pStr1 >= pStr1Start)
 		{
 			const CData1 *pStr1Current = pStr1;
 			const CData2 *pStr2Current = pStr2End;
@@ -1225,12 +1219,16 @@ namespace NMib::NStr
 					Data1 = *pStr1Current;
 					Data2 = *pStr2Current;
 				}
+
 				if (Data1 != Data2)
 					break;
+
 				if (pStr2Current == pStr2Start)
 					return pStr1Current - pStr1Start;
-				if (pStr1Current == pStr1End)
+
+				if (pStr1Current == pStr1Start)
 					return -1;
+
 				--pStr1Current;
 				--pStr2Current;
 			}
