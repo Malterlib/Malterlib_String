@@ -264,16 +264,16 @@ auto Result2 = NStr::fg_StrMatchWildcard("file123.doc", "file???.doc");
 ### Running Module Tests
 ```bash
 # Build tests
-MalterlibBuildShowProgress=false ./mib build Tests macOS arm64 Debug
+MalterlibBuildShowProgress=false ./mib build Tests
 
 # Run all string tests
-/opt/Deploy/Tests/RunAllTests --paths '["String/*"]'
+/opt/Deploy/Tests/RunAllTests --paths '["Malterlib/String/*"]'
 
 # Run specific algorithm tests
-/opt/Deploy/Tests/RunAllTests --paths '["String/Algorithm/Compare", "String/Algorithm/Find"]'
+/opt/Deploy/Tests/RunAllTests --paths '["Malterlib/String/Algorithm/Compare", "Malterlib/String/Algorithm/Find"]'
 
 # Run format/parse tests
-/opt/Deploy/Tests/RunAllTests --paths '["String/Container/Format/*", "String/Container/Parse"]'
+/opt/Deploy/Tests/RunAllTests --paths '["Malterlib/String/Container/Format/*", "Malterlib/String/Container/Parse"]'
 ```
 
 ## Important Files
