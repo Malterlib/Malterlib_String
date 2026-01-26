@@ -3198,7 +3198,7 @@ EndArgSearch:
 		{
 			mc_Value =
 				(
-					sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr0::CStrTraits::CChar)
+					sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar)
 					&& t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type
 				)
 				||
@@ -3216,12 +3216,12 @@ EndArgSearch:
 		{
 			mc_Value =
 				(
-					sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr0::CStrTraits::CChar)
+					sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar)
 					&& t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type
 				)
 				||
 				(
-					sizeof(typename t_TCStr0::CStrTraits::CChar) >= sizeof(typename t_TCStr0::CStrTraits::CChar)
+					sizeof(typename t_TCStr0::CStrTraits::CChar) >= sizeof(typename t_TCStr1::CStrTraits::CChar)
 					&& t_TCStr0::CStrTraits::mc_Type == EStrType_Unicode
 					&& t_TCStr1::CStrTraits::mc_Type == EStrType_Unicode
 				)
