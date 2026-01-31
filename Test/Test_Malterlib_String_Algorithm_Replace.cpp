@@ -1,11 +1,6 @@
 // Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
-#include <Mib/String/Algorithms/Replace>
-#include <Mib/String/Algorithms/Copy>
-#include <Mib/String/Algorithms/Compare>
-#include <Mib/String/Algorithms/Length>
-#include <Mib/String/Algorithms/Find>
 #include <Mib/String/String>
 
 namespace
