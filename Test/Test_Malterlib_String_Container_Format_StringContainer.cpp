@@ -59,6 +59,3 @@ namespace
 
 	DMibTestRegister(CStr_Tests, Malterlib::String::Format);
 }
-
-
-

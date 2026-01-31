@@ -8,7 +8,6 @@ static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Integ
 static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_String>);
 static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other>);
 
-
 namespace
 {
 
@@ -45,6 +44,3 @@ namespace
 
 	DMibTestRegister(CFloat_Tests, Malterlib::String::Format);
 }
-
-
-

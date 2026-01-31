@@ -31,5 +31,3 @@ namespace
 
 	DMibTestRegister(COther_Tests, Malterlib::String::Format);
 }
-
-

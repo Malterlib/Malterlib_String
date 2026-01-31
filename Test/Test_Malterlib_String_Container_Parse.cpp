@@ -5,10 +5,8 @@
 
 namespace
 {
-	class CGeneral_Tests : public NMib::NTest::CTest
+	struct CGeneral_Tests : public NMib::NTest::CTest
 	{
-	public:
-
 		int m_Test;
 
 		void f_DoTests()
@@ -238,5 +236,3 @@ namespace
 
 	DMibTestRegister(CGeneral_Tests, Malterlib::String::Parse);
 }
-
-

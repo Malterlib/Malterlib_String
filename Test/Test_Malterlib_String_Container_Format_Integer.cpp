@@ -6,7 +6,6 @@ static_assert(NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Integ
 static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_String>);
 static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Other>);
 
-
 namespace
 {
 	class CInt_Tests : public NMib::NTest::CTest
@@ -27,5 +26,3 @@ namespace
 
 	DMibTestRegister(CInt_Tests, Malterlib::String::Format);
 }
-
-

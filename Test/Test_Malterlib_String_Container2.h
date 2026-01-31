@@ -5,6 +5,5 @@ namespace NMib
 {
 	namespace NStr
 	{
-
 	}
 }
