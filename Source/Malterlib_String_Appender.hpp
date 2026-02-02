@@ -318,7 +318,6 @@ namespace NMib::NStr
 			*this += _Character;
 	}
 
-
 	template <typename t_CString>
 	void TCStringAppender<t_CString>::operator += (typename t_CString::CUnsignedChar _Character)
 	{
@@ -336,6 +335,12 @@ namespace NMib::NStr
 		++mp_pStrOut;
 		++mp_StrLen;
 		mp_bChanged = true;
+	}
+
+	template <typename t_CString>
+	void TCStringAppender<t_CString>::f_AddChar(typename t_CString::CUnsignedChar _Character)
+	{
+		*this += _Character;
 	}
 
 	template <typename t_CString>
@@ -372,5 +377,11 @@ namespace NMib::NStr
 	mint TCStringAppender<t_CString>::f_GetStrLen() const
 	{
 		return mp_StrLen;
+	}
+
+	template <typename t_CString>
+	bool TCStringAppender<t_CString>::f_IsEmpty() const
+	{
+		return mp_StrLen == 0;
 	}
 }

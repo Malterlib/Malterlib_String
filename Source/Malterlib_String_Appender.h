@@ -11,6 +11,7 @@ namespace NMib::NStr
 	struct TCStringAppender
 	{
 		using CString = t_CString;
+		using CDynamicStr = t_CString;
 
 		TCStringAppender(t_CString &_String);
 		~TCStringAppender();
@@ -37,11 +38,13 @@ namespace NMib::NStr
 		void operator += (NStr::TCStr<tf_CStrTraits> const &_String);
 
 		void f_AddUnicodeChar(ch32 _Character);
+		void f_AddChar(typename t_CString::CUnsignedChar _Character);
 
 		void f_AddString(typename t_CString::CChar const *_pString, mint _Len);
 
 		CCommitted f_Commit();
 		mint f_GetStrLen() const;
+		bool f_IsEmpty() const;
 
 	private:
 		void fp_Reset();
