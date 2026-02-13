@@ -9,9 +9,6 @@ namespace NMib::NStr
 	struct TCStrSpan;
 
 	template <typename t_CTCStrTraits>
-	class TCStrAggregate;
-
-	template <typename t_CTCStrTraits>
 	class TCStr;
 
 	class CStrTraits_CStr;
@@ -24,16 +21,10 @@ namespace NMib::NStr
 	using CStr = TCStr<CStrTraits_CStr>;
 	using CWStr = TCStr<CStrTraits_CWStr>;
 	using CUStr = TCStr<CStrTraits_CUStr>;
-	using CStrAggregate = TCStrAggregate< CStrTraits_CStr>;
-	using CWStrAggregate = TCStrAggregate< CStrTraits_CWStr>;
-	using CUStrAggregate = TCStrAggregate< CStrTraits_CUStr>;
 
 	using CStrNonTracked = TCStr<CStrTraits_CStrNonTracked>;
 	using CWStrNonTracked = TCStr<CStrTraits_CWStrNonTracked>;
 	using CUStrNonTracked = TCStr<CStrTraits_CUStrNonTracked>;
-	using CStrAggregateNonTracked = TCStrAggregate<CStrTraits_CStrNonTracked>;
-	using CWStrAggregateNonTracked = TCStrAggregate<CStrTraits_CWStrNonTracked>;
-	using CUStrAggregateNonTracked = TCStrAggregate<CStrTraits_CUStrNonTracked>;
 
 	template <typename t_CData0, typename t_CData1>
 	class TCChooseStrCompareType
@@ -41,30 +32,6 @@ namespace NMib::NStr
 	public:
 
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, t_CData1>>>;
-	};
-
-	template <typename t_CData0, typename t_CData1>
-	class TCChooseStrCompareType<t_CData0, TCStrAggregate<t_CData1> >
-	{
-	public:
-
-		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar>>>;
-	};
-
-	template <typename t_CData0, typename t_CData1>
-	class TCChooseStrCompareType<TCStrAggregate<t_CData1>, t_CData0>
-	{
-	public:
-
-		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, typename TCStrAggregate<t_CData1>::CChar>>>;
-	};
-
-	template <typename t_CData0, typename t_CData1>
-	class TCChooseStrCompareType<TCStrAggregate<t_CData0>, TCStrAggregate<t_CData1> >
-	{
-	public:
-
-		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStrAggregate<t_CData0>::CChar, typename TCStrAggregate<t_CData1>::CChar>>>;
 	};
 
 	template <typename t_CData0, typename t_CData1>

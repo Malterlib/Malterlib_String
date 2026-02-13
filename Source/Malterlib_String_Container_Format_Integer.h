@@ -616,7 +616,7 @@ namespace NMib::NStr
 		};
 
 		template <typename t_COptions2>
-		static void fp_AddToStrBoolean(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
+		static void fp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
 		{
 			mint Length;
 			CChar const *pValue;
@@ -640,7 +640,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_COptions2>
-		inline_small static void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
+		inline_small static void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Integer)
 		{
 			CUnsignedType Number = _Integer;
 
@@ -720,7 +720,7 @@ namespace NMib::NStr
 				CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pStrPlace + 1, pStrPlaceEnd - pStrPlace, bSubStrStart);
 		}
 
-		virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 		{
 			COptionsInt Options(f_GetOptions());
 			CType Value = f_GetValue();
@@ -736,7 +736,7 @@ namespace NMib::NStr
 				fp_AddToStrBoolean(_String, _CurrentStrLen, Options, Value);
 		}
 
-		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value)
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value)
 		{
 			t_COptions Options;
 			if (!Options.f_Boolean())
@@ -745,7 +745,7 @@ namespace NMib::NStr
 				fp_AddToStrBoolean(_String, _CurrentStrLen, Options, _Value);
 		}
 
-		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, t_COptions &_Options)
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, t_COptions &_Options)
 		{
 			if (!_Options.f_Boolean())
 				fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
@@ -754,7 +754,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_COption2, typename t_CIntType2>
-		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCValueWithOptions<t_COption2, t_CIntType2> &_Value)
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const TCValueWithOptions<t_COption2, t_CIntType2> &_Value)
 		{
 			if (!_Value.f_Boolean())
 				fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());

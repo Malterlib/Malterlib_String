@@ -281,10 +281,10 @@ namespace NMib::NStr
 	class TICStrFormatType_ParseOptionsArgs
 	{
 	public:
-		using CStrAggregate = typename t_CFormatType::CStrAggregate;
+		using CString = typename t_CFormatType::CString;
 		using CFormatter = typename t_CFormatType::CFormatter;
 
-		TICStrFormatType_ParseOptionsArgs(t_CData &_Data, const t_CFormatType &_FormatType, CStrAggregate &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFormatter &_Formatter)
+		TICStrFormatType_ParseOptionsArgs(t_CData &_Data, const t_CFormatType &_FormatType, CString &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFormatter &_Formatter)
 			: m_Data(_Data)
 			, m_FormatType(_FormatType)
 			, m_String(_String)
@@ -296,7 +296,7 @@ namespace NMib::NStr
 
 		t_CData &m_Data;
 		const t_CFormatType &m_FormatType;
-		CStrAggregate &m_String;
+		CString &m_String;
 		aint &m_CurrentStrLen;
 		t_COptions &m_Options;
 		const CFormatter &m_Formatter;
@@ -312,10 +312,10 @@ namespace NMib::NStr
 
 		using CStrFormatTypeClassifier = CDefaultStrFormatTypeClassifier;
 		using CFormatter = t_CFormatter;
-		using CChar = typename t_CFormatter::CStrAggregate::CStrTraits::CChar;
-		using CStrAggregate = typename t_CFormatter::CStrAggregate;
-		using CStr = typename t_CFormatter::CStr;
-		using CStrTraits = typename t_CFormatter::CStrAggregate::CStrTraits;
+		using CChar = typename t_CFormatter::CString::CStrTraits::CChar;
+		using CString = typename t_CFormatter::CString;
+		using CStr = typename t_CFormatter::CString;
+		using CStrTraits = typename t_CFormatter::CString::CStrTraits;
 		using COptions = TICStrFormatType_Options<CChar>;
 		using COptionsStatic = TICStrFormatType_StaticOptions;
 
@@ -327,7 +327,7 @@ namespace NMib::NStr
 		}
 
 
-		virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const = 0;
+		virtual void f_AddToStr(CString &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const = 0;
 
 		virtual aint f_Get_aint() const = 0;
 		virtual fp32 f_Get_fp32() const = 0;
@@ -522,7 +522,7 @@ namespace NMib::NStr
 				}
 			}
 
-			void f_DisplayUnknownFormat(CStrAggregate &_String, aint &_CurrentStrLen) const
+			void f_DisplayUnknownFormat(CString &_String, aint &_CurrentStrLen) const
 			{
 				const ch8 *pTmp = "| format specifier unknown (";
 				while (*pTmp)
@@ -540,7 +540,7 @@ namespace NMib::NStr
 		};
 
 		template <typename t_CChar>
-		void fp_ReportParseError(CStrAggregate &_String, aint &_CurrentStrLen, const t_CChar *_pStr, mint _MaxLen = TCLimitsInt<mint>::mc_Max) const
+		void fp_ReportParseError(CString &_String, aint &_CurrentStrLen, const t_CChar *_pStr, mint _MaxLen = TCLimitsInt<mint>::mc_Max) const
 		{
 			auto pStart = _pStr;
 			while (*_pStr && mint(_pStr - pStart) < _MaxLen)
@@ -693,7 +693,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_COptions>
-		static void fs_AddSubStrToStr(CStrAggregate &_String, aint &_CurrentStrLen, const t_COptions &_Options, const CChar *_pSubStr, mint _SubStrLen, aint _SubStrStart)
+		static void fs_AddSubStrToStr(CString &_String, aint &_CurrentStrLen, const t_COptions &_Options, const CChar *_pSubStr, mint _SubStrLen, aint _SubStrStart)
 		{
 			aint PreAdd;
 			aint PostAdd;
@@ -717,7 +717,7 @@ namespace NMib::NStr
 			if (PreAdd < 0)
 				PreAdd = 0;
 
-			typename CStrAggregate::CAddStrAgrs Args(_CurrentStrLen, _SubStrLen);
+			typename CString::CAddStrAgrs Args(_CurrentStrLen, _SubStrLen);
 			CChar const *pSubStr = _pSubStr;
 
 			if (PreAdd > 0 || PostAdd > 0)
@@ -764,9 +764,9 @@ namespace NMib::NStr
 		}
 
 		template <typename t_COptions>
-		static inline_small void fs_AddSubStrToStrSimple(CStrAggregate &_String, aint &_CurrentStrLen, const t_COptions &_Options, const CChar *_pSubStr, mint _SubStrLen)
+		static inline_small void fs_AddSubStrToStrSimple(CString &_String, aint &_CurrentStrLen, const t_COptions &_Options, const CChar *_pSubStr, mint _SubStrLen)
 		{
-			typename CStrAggregate::CAddStrAgrs Args(_CurrentStrLen, _SubStrLen);
+			typename CString::CAddStrAgrs Args(_CurrentStrLen, _SubStrLen);
 			CChar const *pSubStr = _pSubStr;
 			if (_Options.f_RestrictLength())
 			{

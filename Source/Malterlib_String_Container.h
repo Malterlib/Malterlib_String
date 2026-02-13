@@ -347,8 +347,7 @@ namespace NMib::NStr
 	public:
 		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
 		using CAllocator = typename t_CTCStrTraits::CStrTraits::CAllocator;
-		using CStrAggregate = TCStrAggregate<t_CTCStrTraits>;
-		using CStr = TCStr<t_CTCStrTraits>;
+		using CString = TCStr<t_CTCStrTraits>;
 		using CTStrTraits = t_CTCStrTraits;
 		using CFomatArgType = TICStrFormatType<TCFormat>;
 
@@ -461,7 +460,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_CTCStrTraits2>
-		explicit inline_medium TCFormat(TCStrAggregate<t_CTCStrTraits2> const &_Format)
+		explicit inline_medium TCFormat(TCStr<t_CTCStrTraits2> const &_Format)
 		{
 			m_pFormatStr = _Format;
 			m_pFormats = m_plFormats;
@@ -528,25 +527,25 @@ namespace NMib::NStr
 			f_ClearFormats();
 		}
 
-		inline_small void f_FormatToStr(TCStrAggregate<t_CTCStrTraits> &_Str) const
+		inline_small void f_FormatToStr(TCStr<t_CTCStrTraits> &_Str) const
 		{
 			m_iCurrentArgument = 0;
 			fp_FormatArgList<0>(*this, m_pFormatStr, _Str);
 		}
 
-		inline_small void f_FormatToStrConcat(TCStrAggregate<t_CTCStrTraits> &_Str) const
+		inline_small void f_FormatToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 		{
 			m_iCurrentArgument = 0;
 			fp_FormatArgList<1>(*this, m_pFormatStr, _Str);
 		}
 
-		inline_small void f_FormatArgumentsToStr(TCStrAggregate<t_CTCStrTraits> &_Str) const
+		inline_small void f_FormatArgumentsToStr(TCStr<t_CTCStrTraits> &_Str) const
 		{
 			m_iCurrentArgument = 0;
 			fp_FormatArguments<0>(*this, _Str);
 		}
 
-		inline_small void f_FormatArgumentsToStrConcat(TCStrAggregate<t_CTCStrTraits> &_Str) const
+		inline_small void f_FormatArgumentsToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 		{
 			m_iCurrentArgument = 0;
 			fp_FormatArguments<1>(*this, _Str);
@@ -613,7 +612,7 @@ namespace NMib::NStr
 		static auto fs_GetFormatClassifier(t_CType const &_Type) -> decltype(TCStringFormatterAll<TCFormat, t_CType>::fs_CreateFormat(*((TCFormat *)0), _Type)); // Only used compile time
 
 		template <bool t_bConcat>
-		static void fp_FormatArguments(const TCFormat &_Format, TCStrAggregate<t_CTCStrTraits> &_ToStr)
+		static void fp_FormatArguments(const TCFormat &_Format, TCStr<t_CTCStrTraits> &_ToStr)
 		{
 			aint CurrentStrLen;
 			aint MaxLen;
@@ -642,7 +641,7 @@ namespace NMib::NStr
 		}
 
 		template <bool t_bConcat>
-		static void fp_FormatArgList(const TCFormat &_Format, const CChar *_pFormat, TCStrAggregate<t_CTCStrTraits> &_ToStr)
+		static void fp_FormatArgList(const TCFormat &_Format, const CChar *_pFormat, TCStr<t_CTCStrTraits> &_ToStr)
 		{
 			aint CurrentStrLen;
 			aint MaxLen;
@@ -870,7 +869,7 @@ EndArgSearch:
 
 #ifdef DMibDebuggerHelpers
 	template <int t_Type>
-	struct TCStrAggregateTypeHelper
+	struct TCStrTypeHelper
 	{
 	};
 #endif
@@ -915,26 +914,132 @@ EndArgSearch:
 	};
 
 	template <typename t_CTCStrTraits>
-	class TCStrAggregate : public t_CTCStrTraits::CImp
+	class TCStr : public t_CTCStrTraits::CImp
 	{
 	public:
-		using CTraits = t_CTCStrTraits;
 		using CStrTraits = typename t_CTCStrTraits::CStrTraits;
+		using CAllocator = typename CStrTraits::CAllocator;
+		using CImp = typename t_CTCStrTraits::CImp;
+		using CTraits = t_CTCStrTraits;
 		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
 		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits::CStrTraits::CChar>;
-		using CImp = typename t_CTCStrTraits::CImp;
-		using CAggregate = TCStrAggregate;
-		using CAllocator = typename CStrTraits::CAllocator;
+
+		using CFormat = TCFormat<t_CTCStrTraits>;
+		using CFormatArgVisitor = typename CFormat::CFomatArgType::CVisitor;
+		using CFormatArgVisitorInteger = typename CFormat::CFomatArgType::CVisitorInteger;
+		using CFormatArgVisitorFloat = typename CFormat::CFomatArgType::CVisitorFloat;
+		using CFormatArgVisitorNumber = typename CFormat::CFomatArgType::CVisitorNumber;
+		using CFormatArgVisitorString = typename CFormat::CFomatArgType::CVisitorString;
+
 		using CMaxChar = CChar;
-		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
-		using CDynamicStr = TCStr<t_CTCStrTraits>;
+		using CDynamicStr = TCStr;
+
+		struct CParseResult
+		{
+			mint m_nCharsParsed = 0;
+			mint m_nVariablesParsed = 0;
+		};
+
+		class CAddStrAgrs
+		{
+		public:
+			CAddStrAgrs(aint &_StrLen, mint _Len)
+				: m_StrLen(_StrLen)
+				, m_Len(_Len)
+			{
+			}
+			aint &m_StrLen;
+			mint m_Len;
+		};
+
+		class CParse : public TCStrParse<CStrTraits>
+		{
+		public:
+			TCStrParse<CStrTraits> &f_ByPointer()
+			{
+				return *this;
+			}
+
+			inline_medium CParse(const typename TCStr<t_CTCStrTraits>::CChar *_pParseStr) : TCStrParse<CStrTraits>(_pParseStr)
+			{
+			}
+			inline_small aint f_Parse(const TCStr<t_CTCStrTraits> &_Str, aint &_nParsed, EParseFlag _ParseFlags)
+			{
+				const CChar *pParse = _Str.f_GetStr();
+				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
+			}
+			inline_small aint f_Parse(const TCStr<t_CTCStrTraits> &_Str, aint &_nParsed)
+			{
+				const CChar *pParse = _Str.f_GetStr();
+				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, EParseFlag_None) - pParse;
+			}
+			inline_small aint f_Parse(const TCStr<t_CTCStrTraits> &_Str, EParseFlag _ParseFlags = EParseFlag_None)
+			{
+				const CChar *pParse = _Str.f_GetStr();
+				return TCStrParse<CStrTraits>::f_Parse(pParse, _ParseFlags) - pParse;
+			}
+
+			inline_small aint f_Parse(const CChar *_pStr, aint &_nParsed, EParseFlag _ParseFlags = EParseFlag_None)
+			{
+				const CChar *pParse = _pStr;
+				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
+			}
+			inline_small aint f_Parse(const CChar *_pStr, EParseFlag _ParseFlags = EParseFlag_None)
+			{
+				const CChar *pParse = _pStr;
+				return TCStrParse<CStrTraits>::f_Parse(pParse, _ParseFlags) - pParse;
+			}
+
+			inline_small CParseResult f_Execute(TCStr<t_CTCStrTraits> const &_Str, EParseFlag _ParseFlags = EParseFlag_None)
+			{
+				const CChar *pParse = _Str.f_GetStr();
+
+				aint nParsed = 0;
+				aint nCharsParsed = TCStrParse<CStrTraits>::f_Parse(pParse, nParsed, _ParseFlags) - pParse;
+
+				return
+					{
+						.m_nCharsParsed = mint(nCharsParsed)
+						, .m_nVariablesParsed = mint(nParsed)
+					}
+				;
+			}
+
+			template <typename t_CType>
+			inline_small CParse &operator >> (t_CType &_Type)
+			{
+				TCStringParser<TCStrParse<CStrTraits>, t_CType>::f_CreateParse(*this, _Type);
+				return *this;
+			}
+
+		};
+
+		struct CAutoDestroy
+		{
+			CAutoDestroy(TCStr *_pThis)
+				: mp_pThis(_pThis)
+			{
+			}
+			~CAutoDestroy()
+			{
+				if (mp_pThis)
+					mp_pThis->f_Destroy();
+			}
+			void f_Clear()
+			{
+				mp_pThis = nullptr;
+			}
+		private:
+			TCStr *mp_pThis;
+		};
 
 #ifdef DMibDebuggerHelpers
-		static TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> fs_TypeDebugHelper();
+		static TCStrTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> fs_TypeDebugHelper();
 #endif
-
 		static const CChar ms_FormatStr[];
 		static const CChar ms_FormatConcatStr[];
+
+		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 		static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
@@ -979,47 +1084,78 @@ EndArgSearch:
 		;
 
 	public:
+		inline_small constexpr TCStr() noexcept = default;
+		inline_small constexpr ~TCStr() = default;
 
-		constexpr TCStrAggregate() = default;
-
-		TCStrAggregate &operator = (TCStrAggregate const &_From)
+		inline_large TCStr(CFormat const &_Format)
 		{
-			f_Assign(_From);
-
-			return *this;
+			CAutoDestroy Cleanup{this};
+			_Format.f_FormatToStr(*this);
+			Cleanup.f_Clear();
 		}
 
-		TCStrAggregate &operator = (TCStrAggregate &&_From)
+		template <typename t_CStrDataType>
+		inline_large TCStr(t_CStrDataType const *_pStr)
 		{
-			f_Assign(fg_Move(_From));
-
-			return *this;
+			if (*_pStr)
+			{
+				CAutoDestroy Cleanup{this};
+				f_SetStr(_pStr);
+				Cleanup.f_Clear();
+			}
 		}
 
-		CUnicodeIterator f_GetUnicodeIterator() const
-			requires (mc_Type != EStrType_Ansi)
+		template <typename t_CStrDataType>
+		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
+			requires (CImp::mc_bInitConstStr)
+			: CImp(_pStr, _Len)
 		{
-			return CUnicodeIterator(*this);
 		}
 
-		constexpr inline_small TCStrAggregate(TCStrAggregate const &_Src)
-			: CImp(_Src)
+		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+			requires (CImp::mc_bInitConstStr)
+			: CImp(_pStrStart, _pStrEnd - _pStrStart)
 		{
-#ifdef DMibDebuggerHelpers
-			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
 		}
 
-		constexpr inline_small TCStrAggregate(TCStrAggregate &&_Src)
-			: CImp(fg_Move(_Src))
+		template <typename t_CStrDataType>
+		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
+			requires (!CImp::mc_bInitConstStr)
 		{
-#ifdef DMibDebuggerHelpers
-			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
+			if (!_Len)
+				return;
+
+			CAutoDestroy Cleanup{this};
+			f_SetStr(_pStr, _Len);
+			Cleanup.f_Clear();
+		}
+
+		template <typename t_CStrDataType>
+		inline_large TCStr(CAllowNUL, t_CStrDataType const *_pStr, mint _Len)
+			requires (!CImp::mc_bInitConstStr)
+		{
+			if (!_Len)
+				return;
+
+			CAutoDestroy Cleanup{this};
+			f_SetStr(CAllowNUL(), _pStr, _Len);
+			Cleanup.f_Clear();
+		}
+
+		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+			requires (!CImp::mc_bInitConstStr)
+		{
+			auto Len = _pStrEnd - _pStrStart;
+			if (!Len)
+				return;
+
+			CAutoDestroy Cleanup{this};
+			f_SetStr(_pStrStart, Len);
+			Cleanup.f_Clear();
 		}
 
 		template <typename ...tfp_CParams>
-		inline_small constexpr TCStrAggregate(CStrInitGeneral, tfp_CParams &&...p_Params)
+		constexpr inline_large TCStr(CStrInitGeneral _Init, tfp_CParams &&...p_Params)
 			requires requires ()
 			{
 				CImp(fg_Forward<tfp_CParams>(p_Params)...);
@@ -1031,12 +1167,186 @@ EndArgSearch:
 #endif
 		}
 
-		inline_small void f_Assign(const TCStrAggregate &_Src)
+		constexpr inline_small TCStr(TCStr const &_Str)
+			: CImp(_Str)
+		{
+#ifdef DMibDebuggerHelpers
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
+#endif
+		}
+
+		inline_small TCStr(TCStr &&_Str)
+			: CImp(fg_Move(_Str))
+		{
+#ifdef DMibDebuggerHelpers
+			static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
+#endif
+		}
+
+		template <typename t_CStrTraitsF>
+		inline_large TCStr(TCStr<t_CStrTraitsF> const &_From)
+		{
+			CAutoDestroy Cleanup{this};
+			f_SetStr(_From);
+			Cleanup.f_Clear();
+		}
+
+		template <typename t_CStrTraitsF>
+		inline_large TCStr & operator = (const TCStr<t_CStrTraitsF> &_From)
+		{
+			if (!(*_From.f_GetStr()))
+			{
+				this->f_Clear();
+				return *this;
+			}
+			f_SetStr(_From);
+			return *this;
+		}
+
+		inline_large TCStr & operator = (const TCStr &_From)
+		{
+			CImp::f_Assign(_From);
+			return *this;
+		}
+
+		inline_large TCStr & operator = (TCStr &&_From)
+		{
+			DMibFastCheck(this != &_From);
+			CImp::f_Assign(fg_Move(_From));
+			return *this;
+		}
+
+		template <typename t_CDataF>
+		inline_large TCStr & operator = (t_CDataF * const _pFrom)
+		{
+			f_SetStr(_pFrom);
+			return *this;
+		}
+
+		inline_large TCStr & operator = (CFormat const &_Format)
+		{
+			_Format.f_FormatToStr(*this);
+			return *this;
+		}
+
+
+		template <typename t_CStrTraitsF>
+		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> &&_Str)
+		{
+			if (this->f_IsEmpty())
+				*this = fg_Move(_Str);
+			else
+				f_AddStr(_Str);
+
+			return *this;
+		}
+
+		template <typename t_CStrTraitsF>
+			TCStr operator + (const TCStr<t_CStrTraitsF> &_Str)  const
+		{
+			if (this->f_IsEmpty())
+				return _Str;
+			else if (_Str.f_IsEmpty())
+				return *this;
+
+			TCStr Temp = *this;
+			Temp.f_AddStr(_Str);
+			return Temp;
+		}
+
+		template <typename t_CStrDataType>
+			TCStr operator + (const t_CStrDataType *_pToAdd) const
+		{
+			TCStr Temp = *this;
+			Temp.f_AddStr(_pToAdd);
+			return Temp;
+		}
+
+		TCStr operator ^ (mint _nCopies) const
+		{
+			if (!_nCopies)
+				return {};
+
+			TCStr Temp = *this;
+			--_nCopies;
+
+			for (; _nCopies; --_nCopies)
+				Temp += *this;
+
+			return Temp;
+		}
+
+		template <typename t_CType>
+		inline static TCStr fs_ToStr(t_CType const &_Format)
+		{
+			if constexpr (NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>)
+			{
+				TCStr Ret;
+				(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
+				return Ret;
+			}
+			else
+			{
+				TCStr Ret;
+
+				using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
+
+				aint CurrentLen = 0;
+				CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
+				Ret.f_SetStrLen(CurrentLen);
+				return Ret;
+			}
+		}
+
+		inline static TCStr fs_ToStr(CFormat const &_Format)
+		{
+			return _Format;
+		}
+
+		template <typename t_CType>
+		static TCStr fs_ToStr(const CChar *_pFormat, t_CType const& _Format)
+		{
+			return (CFormat(_pFormat) << _Format).f_GetStr();
+		}
+
+		template <typename t_CStrDataType>
+			static TCStr fs_Create(const t_CStrDataType *_pStr)
+		{
+			TCStr New;
+			New.f_SetStr(_pStr);
+			return New;
+		}
+
+		template <typename t_CStrDataType>
+			static TCStr fs_Create(const t_CStrDataType *_pStr, aint _Len)
+		{
+			TCStr New;
+			New.f_SetStr(_pStr, _Len);
+			return New;
+		}
+
+		template <typename t_CStrTraitsF>
+			static TCStr fs_Create(const TCStr<t_CStrTraitsF> &_From)
+		{
+			TCStr New;
+			New.f_SetStr(_From);
+			return New;
+		}
+
+		static TCStr fs_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
+
+		CUnicodeIterator f_GetUnicodeIterator() const
+			requires (mc_Type != EStrType_Ansi)
+		{
+			return CUnicodeIterator(*this);
+		}
+
+		inline_small void f_Assign(const TCStr &_Src)
 		{
 			CImp::f_Assign(_Src);
 		}
 
-		inline_small void f_Assign(TCStrAggregate &&_Src)
+		inline_small void f_Assign(TCStr &&_Src)
 		{
 			CImp::f_Assign(fg_Move(_Src));
 		}
@@ -1076,12 +1386,6 @@ EndArgSearch:
 		{
 			return TCStrSpan<typename CStrTraits::CTypes>(f_GetStr(), f_GetLen());
 		};
-
-		template <typename t_CType>
-		inline static CDynamicStr fs_ToStr(t_CType const &_Format)
-		{
-			return CDynamicStr::fs_ToStr(_Format);
-		}
 
 		inline_small CChar &operator [] (aint _Index)
 		{
@@ -1170,7 +1474,7 @@ EndArgSearch:
 			CImp::f_SetStrLen(Length);
 		}
 
-		using CAppender = TCStringAppender<TCStrAggregate>;
+		using CAppender = TCStringAppender<TCStr>;
 
 		template <typename t_CStrDataType>
 		void f_AddStr(t_CStrDataType *_pStr)
@@ -1216,7 +1520,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CStrTraitsF>
-		void f_AddStr(TCStrAggregate<t_CStrTraitsF> const &_From);
+		void f_AddStr(TCStr<t_CStrTraitsF> const &_From);
 
 
 		// //
@@ -1286,7 +1590,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CStrTraitsF>
-		void f_SetStr(TCStrAggregate<t_CStrTraitsF> const &_From);
+		void f_SetStr(TCStr<t_CStrTraitsF> const &_From);
 
 		void fp_ConvertFromType(EStrType _Type)
 		{
@@ -1356,18 +1660,6 @@ EndArgSearch:
 				Grow <<= 1;
 			}
 		}
-
-		class CAddStrAgrs
-		{
-		public:
-			CAddStrAgrs(aint &_StrLen, mint _Len)
-				: m_StrLen(_StrLen)
-				, m_Len(_Len)
-			{
-			}
-			aint &m_StrLen;
-			mint m_Len;
-		};
 
 		inline_extralarge void fp_AddStrLengthAware(const CAddStrAgrs &_Args, CChar const *_pStr)
 		{
@@ -1439,90 +1731,10 @@ EndArgSearch:
 
 		void f_AddUnicodeChar(ch32 _Character);
 
-		enum
-		{
-			mc_NumSavedArgs = 16
-		};
-
-		struct CParseResult
-		{
-			mint m_nCharsParsed = 0;
-			mint m_nVariablesParsed = 0;
-		};
-
-		class CParse : public TCStrParse<CStrTraits>
-		{
-		public:
-			TCStrParse<CStrTraits> &f_ByPointer()
-			{
-				return *this;
-			}
-
-			inline_medium CParse(const typename TCStrAggregate<t_CTCStrTraits>::CChar *_pParseStr) : TCStrParse<CStrTraits>(_pParseStr)
-			{
-			}
-			inline_small aint f_Parse(const TCStrAggregate<t_CTCStrTraits> &_Str, aint &_nParsed, EParseFlag _ParseFlags)
-			{
-				const CChar *pParse = _Str.f_GetStr();
-				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
-			}
-			inline_small aint f_Parse(const TCStrAggregate<t_CTCStrTraits> &_Str, aint &_nParsed)
-			{
-				const CChar *pParse = _Str.f_GetStr();
-				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, EParseFlag_None) - pParse;
-			}
-			inline_small aint f_Parse(const TCStrAggregate<t_CTCStrTraits> &_Str, EParseFlag _ParseFlags = EParseFlag_None)
-			{
-				const CChar *pParse = _Str.f_GetStr();
-				return TCStrParse<CStrTraits>::f_Parse(pParse, _ParseFlags) - pParse;
-			}
-
-			inline_small aint f_Parse(const CChar *_pStr, aint &_nParsed, EParseFlag _ParseFlags = EParseFlag_None)
-			{
-				const CChar *pParse = _pStr;
-				return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
-			}
-			inline_small aint f_Parse(const CChar *_pStr, EParseFlag _ParseFlags = EParseFlag_None)
-			{
-				const CChar *pParse = _pStr;
-				return TCStrParse<CStrTraits>::f_Parse(pParse, _ParseFlags) - pParse;
-			}
-
-			inline_small CParseResult f_Execute(TCStrAggregate<t_CTCStrTraits> const &_Str, EParseFlag _ParseFlags = EParseFlag_None)
-			{
-				const CChar *pParse = _Str.f_GetStr();
-
-				aint nParsed = 0;
-				aint nCharsParsed = TCStrParse<CStrTraits>::f_Parse(pParse, nParsed, _ParseFlags) - pParse;
-
-				return
-					{
-						.m_nCharsParsed = mint(nCharsParsed)
-						, .m_nVariablesParsed = mint(nParsed)
-					}
-				;
-			}
-
-			template <typename t_CType>
-			inline_small CParse &operator >> (t_CType &_Type)
-			{
-				TCStringParser<TCStrParse<CStrTraits>, t_CType>::f_CreateParse(*this, _Type);
-				return *this;
-			}
-
-		};
-
-		using CFormat = TCFormat<t_CTCStrTraits>;
-		using CFormatArgVisitor = typename CFormat::CFomatArgType::CVisitor;
-		using CFormatArgVisitorInteger = typename CFormat::CFomatArgType::CVisitorInteger;
-		using CFormatArgVisitorFloat = typename CFormat::CFomatArgType::CVisitorFloat;
-		using CFormatArgVisitorNumber = typename CFormat::CFomatArgType::CVisitorNumber;
-		using CFormatArgVisitorString = typename CFormat::CFomatArgType::CVisitorString;
-
 		template <typename t_CType>
 		inline_medium static void fs_ToStrInplace
 			(
-				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStr> &_Destination
 				, t_CType const& _Format
 			)
 		{
@@ -1535,7 +1747,7 @@ EndArgSearch:
 		template <typename t_CType>
 		static void fs_ToStrInplace
 			(
-				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStr> &_Destination
 				, t_CType const& _Format
 			)
 		{
@@ -1543,7 +1755,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CType>
-		static void fs_ToStrInplace(TCStrAggregate &_Destination, const CChar *_pFormat, t_CType const& _Format)
+		static void fs_ToStrInplace(TCStr &_Destination, const CChar *_pFormat, t_CType const& _Format)
 		{
 			return (CFormat(_pFormat) << _Format).f_FormatToStr(_Destination);
 		}
@@ -1551,7 +1763,7 @@ EndArgSearch:
 		template <typename t_CType>
 		inline_medium static void fs_ToStrInplaceConcat
 			(
-				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStr> &_Destination
 				, t_CType const& _Format
 			)
 		{
@@ -1565,7 +1777,7 @@ EndArgSearch:
 		template <typename t_CType>
 		inline_medium static void fs_ToStrInplaceConcat
 			(
-				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStr> &_Destination
 				, t_CType const& _Format
 				, aint &_Len
 			)
@@ -1578,7 +1790,7 @@ EndArgSearch:
 		template <typename t_CType>
 		static void fs_ToStrInplaceConcat
 			(
-				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStrAggregate> &_Destination
+				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>, TCStr> &_Destination
 				, t_CType const& _Format
 			)
 		{
@@ -1587,7 +1799,7 @@ EndArgSearch:
 
 
 		template <typename t_CType>
-		static void fs_ToStrInplaceConcat(TCStrAggregate &_Destination, const CChar *_pFormat, t_CType const& _Format)
+		static void fs_ToStrInplaceConcat(TCStr &_Destination, const CChar *_pFormat, t_CType const& _Format)
 		{
 			return (CFormat(_pFormat) << _Format).f_FormatToStrConcat(_Destination);
 		}
@@ -1610,7 +1822,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small typename TCChooseStrCompareType<CChar, TCStrAggregate<t_CTCStrTraits2> >::CType f_Cmp(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small typename TCChooseStrCompareType<CChar, TCStr<t_CTCStrTraits2> >::CType f_Cmp(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrCmp(*this, _Str1);
 		}
@@ -1622,7 +1834,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-		inline_small typename TCChooseStrCompareType<CChar, TCStrAggregate<t_CTCStrTraits2> >::CType f_CmpNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+		inline_small typename TCChooseStrCompareType<CChar, TCStr<t_CTCStrTraits2> >::CType f_CmpNoCase(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrCmpNoCase(*this, _Str1);
 		}
@@ -1634,7 +1846,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small typename TCChooseStrCompareType<CChar, TCStrAggregate<t_CTCStrTraits2> >::CType f_Cmp(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small typename TCChooseStrCompareType<CChar, TCStr<t_CTCStrTraits2> >::CType f_Cmp(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrCmp(*this, _Str1, _MaxLen);
 		}
@@ -1646,7 +1858,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small typename TCChooseStrCompareType<CChar, TCStrAggregate<t_CTCStrTraits2> >::CType f_CmpNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small typename TCChooseStrCompareType<CChar, TCStr<t_CTCStrTraits2> >::CType f_CmpNoCase(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrCmpNoCase(*this, _Str1, _MaxLen);
 		}
@@ -1760,42 +1972,42 @@ EndArgSearch:
 
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindChars(const TCStrAggregate<t_CTCStrTraits2> &_Chars) const
+			inline_small aint f_FindChars(const TCStr<t_CTCStrTraits2> &_Chars) const
 		{
 			return fg_StrFindChars(*this, _Chars);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Chars) const
+			inline_small aint f_FindCharsNoCase(const TCStr<t_CTCStrTraits2> &_Chars) const
 		{
 			return fg_StrFindCharsNoCase(*this, _Chars);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsReverse(const TCStrAggregate<t_CTCStrTraits2> &_Chars) const
+			inline_small aint f_FindCharsReverse(const TCStr<t_CTCStrTraits2> &_Chars) const
 		{
 			return fg_StrFindCharsReverse(*this, _Chars);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Chars) const
+			inline_small aint f_FindCharsReverseNoCase(const TCStr<t_CTCStrTraits2> &_Chars) const
 		{
 			return fg_StrFindCharsReverseNoCase(*this, _Chars);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindChars(const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
+			inline_small aint f_FindChars(const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
 		{
 			return fg_StrFindChars(*this, _Chars, _MaxLen);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
+			inline_small aint f_FindCharsNoCase(const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
 		{
 			return fg_StrFindCharsNoCase(*this, _Chars, _MaxLen);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsReverse(const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
+			inline_small aint f_FindCharsReverse(const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
 		{
 			return fg_StrFindCharsReverse(*this, _Chars, _MaxLen);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
+			inline_small aint f_FindCharsReverseNoCase(const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen) const
 		{
 			return fg_StrFindCharsReverseNoCase(*this, _Chars, _MaxLen);
 		}
@@ -1823,23 +2035,23 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_Find(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_Find(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFind(*this, _Str1);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_Find(aint _Start, const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_Find(aint _Start, const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFind(_Start, *this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_FindNoCase(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFindNoCase(*this, _Str1);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_FindNoCase(aint _Start, const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFindNoCase(_Start, *this, _Str1);
 		}
@@ -1857,13 +2069,13 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverse(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_FindReverse(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFindReverse(*this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small aint f_FindReverseNoCase(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrFindReverseNoCase(*this, _Str1);
 		}
@@ -1893,23 +2105,23 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_Find(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_Find(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFind(*this, _Str1, _MaxLen);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_Find(aint _Start, const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_Find(aint _Start, const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFind(_Start, *this, _Str1, _MaxLen);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_FindNoCase(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFindNoCase(*this, _Str1, _MaxLen);
 		}
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_FindNoCase(aint _Start, const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFindNoCase(_Start, *this, _Str1, _MaxLen);
 		}
@@ -1939,25 +2151,25 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverse(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_FindReverse(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFindReverse(*this, _Str1, _MaxLen);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
+			inline_small aint f_FindReverseNoCase(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen) const
 		{
 			return fg_StrFindReverseNoCase(*this, _Str1, _MaxLen);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverse(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
+			inline_small aint f_FindReverse(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
 		{
 			return fg_StrFindReverse(*this, _Str1, _MaxLen, _FindLen);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small aint f_FindReverseNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
+			inline_small aint f_FindReverseNoCase(const TCStr<t_CTCStrTraits2> &_Str1, mint _MaxLen, mint _FindLen) const
 		{
 			return fg_StrFindReverseNoCase(*this, _Str1, _MaxLen, _FindLen);
 		}
@@ -1976,13 +2188,13 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small bool f_StartsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_StartsWith(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrStartsWith(*this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small bool f_StartsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_StartsWithNoCase(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrStartsWithNoCase(*this, _Str1);
 		}
@@ -2001,13 +2213,13 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small bool f_EndsWith(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_EndsWith(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrEndsWith(*this, _Str1);
 		}
 
 		template <typename t_CTCStrTraits2>
-			inline_small bool f_EndsWithNoCase(const TCStrAggregate<t_CTCStrTraits2> &_Str1) const
+			inline_small bool f_EndsWithNoCase(const TCStr<t_CTCStrTraits2> &_Str1) const
 		{
 			return fg_StrEndsWithNoCase(*this, _Str1);
 		}
@@ -2279,13 +2491,11 @@ EndArgSearch:
 		\***************************************************************************************************/
 
 		template <typename t_CStrTraitsF>
-		inline_large TCStrAggregate & operator += (TCStrAggregate<t_CStrTraitsF> const &_Str);
-		template <typename t_CStrTraitsF>
-		inline_large TCStrAggregate & operator += (TCStr<t_CStrTraitsF> const &_Str);
+		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> const &_Str);
 		template <typename t_CStrDataType>
-		inline_large TCStrAggregate & operator += (t_CStrDataType const *_pToAdd);
-		inline_large TCStrAggregate & operator += (CFormat const &_Format);
-		inline_large TCStrAggregate & operator += (ch32 _ToAdd);
+		inline_large TCStr & operator += (t_CStrDataType const *_pToAdd);
+		inline_large TCStr & operator += (CFormat const &_Format);
+		inline_large TCStr & operator += (ch32 _ToAdd);
 
 		/************************************************************************************************\
 		||||
@@ -2355,7 +2565,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
+			CDynamicStr f_Replace(const TCStr<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _StrFind, _pStrReplace);
@@ -2364,7 +2574,7 @@ EndArgSearch:
 
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
+			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStr<t_CTCStrTraits1> &_StrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _pStrFind, _StrReplace);
@@ -2372,7 +2582,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
+			CDynamicStr f_Replace(const TCStr<t_CTCStrTraits1> &_StrFind, const TCStr<t_CTCStrTraits2> &_StrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _StrFind, _StrReplace);
@@ -2389,7 +2599,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
+			CDynamicStr f_ReplaceNoCase(const TCStr<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace);
@@ -2398,7 +2608,7 @@ EndArgSearch:
 
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace) const
+			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStr<t_CTCStrTraits1> &_StrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace);
@@ -2406,7 +2616,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace) const
+			CDynamicStr f_ReplaceNoCase(const TCStr<t_CTCStrTraits1> &_StrFind, const TCStr<t_CTCStrTraits2> &_StrReplace) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace);
@@ -2432,7 +2642,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+			CDynamicStr f_Replace(const TCStr<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _StrFind, _pStrReplace, _MaxLen);
@@ -2441,7 +2651,7 @@ EndArgSearch:
 
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
+			CDynamicStr f_Replace(const t_CData3 *_pStrFind, const TCStr<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _pStrFind, _StrReplace, _MaxLen);
@@ -2449,7 +2659,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			CDynamicStr f_Replace(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
+			CDynamicStr f_Replace(const TCStr<t_CTCStrTraits1> &_StrFind, const TCStr<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplace(Temp, _StrFind, _StrReplace, _MaxLen);
@@ -2466,7 +2676,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
+			CDynamicStr f_ReplaceNoCase(const TCStr<t_CTCStrTraits1> &_StrFind, const t_CData3 *_pStrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
@@ -2475,7 +2685,7 @@ EndArgSearch:
 
 
 		template <typename t_CTCStrTraits1, typename t_CData3>
-			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
+			CDynamicStr f_ReplaceNoCase(const t_CData3 *_pStrFind, const TCStr<t_CTCStrTraits1> &_StrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace, _MaxLen);
@@ -2483,7 +2693,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-			CDynamicStr f_ReplaceNoCase(const TCStrAggregate<t_CTCStrTraits1> &_StrFind, const TCStrAggregate<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
+			CDynamicStr f_ReplaceNoCase(const TCStr<t_CTCStrTraits1> &_StrFind, const TCStr<t_CTCStrTraits2> &_StrReplace, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace, _MaxLen);
@@ -2514,7 +2724,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			CDynamicStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert) const
+			CDynamicStr f_Insert(aint _StartChar, const TCStr<t_CTCStrTraits2> &_StrInsert) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrInsert(Temp, _StartChar, _StrInsert);
@@ -2530,7 +2740,7 @@ EndArgSearch:
 		}
 
 		template <typename t_CTCStrTraits2>
-			CDynamicStr f_Insert(aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert, mint _MaxLen) const
+			CDynamicStr f_Insert(aint _StartChar, const TCStr<t_CTCStrTraits2> &_StrInsert, mint _MaxLen) const
 		{
 			CDynamicStr Temp = *this;
 			fg_StrInsert(Temp, _StartChar, _StrInsert, _MaxLen);
@@ -2763,7 +2973,7 @@ EndArgSearch:
 
 		// Operator +
 		template <typename tf_CCharData>
-		friend CDynamicStr operator + (const tf_CCharData *_pToAdd, const TCStrAggregate &_Second)
+		friend CDynamicStr operator + (const tf_CCharData *_pToAdd, const TCStr &_Second)
 		{
 			CDynamicStr Temp;
 			Temp.f_SetStr(_pToAdd);
@@ -2779,7 +2989,7 @@ EndArgSearch:
 
 		// Operator ==
 		template <typename tf_CTCStrTraits>
-		bool operator == (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
+		bool operator == (TCStr<tf_CTCStrTraits> const &_Right) const
 		{
 			if (f_GetLen() != _Right.f_GetLen())
 				return false;
@@ -2795,7 +3005,7 @@ EndArgSearch:
 
 		// Operator <=>
 		template <typename tf_CTCStrTraits>
-		COrdering_Strong operator <=> (TCStrAggregate<tf_CTCStrTraits> const &_Right) const
+		COrdering_Strong operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const
 		{
 			return fg_StrCmp(this->f_GetStr(), _Right.f_GetStr()) <=> 0;
 		}
@@ -2807,359 +3017,9 @@ EndArgSearch:
 		}
 	};
 
-	template <typename t_CTCStrTraits>
-	class TCStr : public TCStrAggregate<t_CTCStrTraits>
-	{
-	public:
-		using CImp = typename t_CTCStrTraits::CImp;
-		using CTraits = t_CTCStrTraits;
-		using CChar = typename t_CTCStrTraits::CStrTraits::CChar;
-		using CSuper = TCStrAggregate<t_CTCStrTraits>;
-		using CFormat = typename CSuper::CFormat;
-		using CAddStrAgrs = typename CSuper::CAddStrAgrs;
+	template <typename t_CTCStrTraits> const typename TCStr<t_CTCStrTraits>::CChar TCStr<t_CTCStrTraits>::ms_FormatStr[] = {'{', '}', 0};
 
-		struct CAutoDestroy
-		{
-			CAutoDestroy(TCStr *_pThis)
-				: mp_pThis(_pThis)
-			{
-			}
-			~CAutoDestroy()
-			{
-				if (mp_pThis)
-					mp_pThis->CSuper::f_Destroy();
-			}
-			void f_Clear()
-			{
-				mp_pThis = nullptr;
-			}
-		private:
-			TCStr *mp_pThis;
-		};
-
-		inline_small constexpr TCStr() noexcept = default;
-		inline_small constexpr ~TCStr() = default;
-
-		inline_large TCStr(CFormat const &_Format)
-		{
-			CAutoDestroy Cleanup{this};
-			_Format.f_FormatToStr(*this);
-			Cleanup.f_Clear();
-		}
-
-		template <typename t_CStrDataType>
-		inline_large TCStr(t_CStrDataType const *_pStr)
-		{
-			if (*_pStr)
-			{
-				CAutoDestroy Cleanup{this};
-				CSuper::f_SetStr(_pStr);
-				Cleanup.f_Clear();
-			}
-		}
-
-		template <typename t_CStrDataType>
-		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
-			requires (CSuper::mc_bInitConstStr)
-			: CSuper(CStrInitGeneral(), _pStr, _Len)
-		{
-		}
-
-		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
-			requires (CSuper::mc_bInitConstStr)
-			: CSuper(CStrInitGeneral(), _pStrStart, _pStrEnd - _pStrStart)
-		{
-		}
-
-		template <typename t_CStrDataType>
-		inline_large TCStr(t_CStrDataType const *_pStr, mint _Len)
-			requires (!CSuper::mc_bInitConstStr)
-		{
-			if (!_Len)
-				return;
-
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(_pStr, _Len);
-			Cleanup.f_Clear();
-		}
-
-		template <typename t_CStrDataType>
-		inline_large TCStr(CAllowNUL, t_CStrDataType const *_pStr, mint _Len)
-			requires (!CSuper::mc_bInitConstStr)
-		{
-			if (!_Len)
-				return;
-
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(CAllowNUL(), _pStr, _Len);
-			Cleanup.f_Clear();
-		}
-
-		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
-			requires (!CSuper::mc_bInitConstStr)
-		{
-			auto Len = _pStrEnd - _pStrStart;
-			if (!Len)
-				return;
-
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(_pStrStart, Len);
-			Cleanup.f_Clear();
-		}
-
-		template <typename ...tfp_CParams>
-		constexpr inline_large TCStr(CStrInitGeneral _Init, tfp_CParams &&...p_Params)
-			requires requires ()
-			{
-				CSuper(_Init, fg_Forward<tfp_CParams>(p_Params)...);
-			}
-			: CSuper(_Init, fg_Forward<tfp_CParams>(p_Params)...)
-		{
-
-		}
-
-		inline_small TCStr(CSuper const &_Str)
-			: CSuper(_Str)
-		{
-		}
-
-		constexpr inline_small TCStr(TCStr const &_Str)
-			: CSuper((CSuper const &)_Str)
-		{
-		}
-
-		constexpr inline_small TCStr(CSuper &&_Str)
-			: CSuper(fg_Move(_Str))
-		{
-		}
-
-		inline_small TCStr(TCStr &&_Str)
-			: CSuper(fg_Move(_Str))
-		{
-		}
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr(TCStrAggregate<t_CStrTraitsF> const &_From)
-		{
-			CAutoDestroy Cleanup{this};
-			CSuper::f_SetStr(_From);
-			Cleanup.f_Clear();
-		}
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator = (const TCStrAggregate<t_CStrTraitsF> &_From)
-		{
-			if (!(*_From.f_GetStr()))
-			{
-				this->f_Clear();
-				return *this;
-			}
-			CSuper::f_SetStr(_From);
-			return *this;
-		}
-
-		inline_large TCStr & operator = (const CSuper &_From)
-		{
-			CImp::f_Assign(_From);
-			return *this;
-		}
-
-		inline_large TCStr & operator = (const TCStr &_From)
-		{
-			CImp::f_Assign((CSuper const &)_From);
-			return *this;
-		}
-
-		inline_large TCStr & operator = (CSuper &&_From)
-		{
-			DMibFastCheck(this != &_From);
-			CImp::f_Assign(fg_Move(_From));
-			return *this;
-		}
-
-		inline_large TCStr & operator = (TCStr &&_From)
-		{
-			DMibFastCheck(this != &_From);
-			CImp::f_Assign(fg_Move(_From));
-			return *this;
-		}
-
-		template <typename t_CDataF>
-		inline_large TCStr & operator = (t_CDataF * const _pFrom)
-		{
-			CSuper::f_SetStr(_pFrom);
-			return *this;
-		}
-
-		inline_large TCStr & operator = (CFormat const &_Format)
-		{
-			_Format.f_FormatToStr(*this);
-			return *this;
-		}
-
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator += (TCStrAggregate<t_CStrTraitsF> const &_Str)
-		{
-			if (this->f_IsEmpty())
-				*this = _Str;
-			else
-				CSuper::f_AddStr(_Str);
-
-			return *this;
-		}
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> const &_Str)
-		{
-			if (this->f_IsEmpty())
-				*this = _Str;
-			else
-				CSuper::f_AddStr(_Str);
-
-			return *this;
-		}
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator += (TCStrAggregate<t_CStrTraitsF> &&_Str)
-		{
-			if (this->f_IsEmpty())
-				*this = fg_Move(_Str);
-			else
-				CSuper::f_AddStr(_Str);
-
-			return *this;
-		}
-
-		template <typename t_CStrTraitsF>
-		inline_large TCStr & operator += (TCStr<t_CStrTraitsF> &&_Str)
-		{
-			if (this->f_IsEmpty())
-				*this = fg_Move(_Str);
-			else
-				CSuper::f_AddStr(_Str);
-
-			return *this;
-		}
-
-		template <typename t_CStrDataType>
-		inline_large TCStr & operator += (t_CStrDataType const *_pToAdd)
-		{
-			CSuper::f_AddStr(_pToAdd);
-			return *this;
-		}
-
-		inline_large TCStr & operator += (CFormat const &_Format)
-		{
-			_Format.f_FormatToStrConcat(*this);
-			return *this;
-		}
-
-		inline_large TCStr & operator += (ch32 _ToAdd)
-		{
-			this->f_AddChar(_ToAdd);
-			return *this;
-		}
-
-
-		template <typename t_CStrTraitsF>
-			TCStr operator + (const TCStrAggregate<t_CStrTraitsF> &_Str)  const
-		{
-			if (this->f_IsEmpty())
-				return _Str;
-			else if (_Str.f_IsEmpty())
-				return *this;
-
-			TCStr Temp = *this;
-			Temp.f_AddStr(_Str);
-			return Temp;
-		}
-
-		template <typename t_CStrDataType>
-			TCStr operator + (const t_CStrDataType *_pToAdd) const
-		{
-			TCStr Temp = *this;
-			Temp.f_AddStr(_pToAdd);
-			return Temp;
-		}
-
-		TCStr operator ^ (mint _nCopies) const
-		{
-			if (!_nCopies)
-				return {};
-
-			TCStr Temp = *this;
-			--_nCopies;
-
-			for (; _nCopies; --_nCopies)
-				Temp += *this;
-
-			return Temp;
-		}
-
-		template <typename t_CType>
-		inline static TCStr fs_ToStr(t_CType const &_Format)
-		{
-			if constexpr (NTraits::cIsSame<typename TCStringFormatterAll<CFormat, t_CType>::CFormatType, int>)
-			{
-				TCStr Ret;
-				(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(Ret);
-				return Ret;
-			}
-			else
-			{
-				TCStr Ret;
-
-				using CFormatType = typename TCStringFormatterAll<CFormat, t_CType>::CFormatType;
-
-				aint CurrentLen = 0;
-				CFormatType::fs_AddToStrStatic(Ret, CurrentLen, typename CFormatType::CType(_Format));
-				Ret.f_SetStrLen(CurrentLen);
-				return Ret;
-			}
-		}
-
-		inline static TCStr fs_ToStr(CFormat const &_Format)
-		{
-			return _Format;
-		}
-
-		template <typename t_CType>
-		static TCStr fs_ToStr(const CChar *_pFormat, t_CType const& _Format)
-		{
-			return (CFormat(_pFormat) << _Format).f_GetStr();
-		}
-
-		template <typename t_CStrDataType>
-			static TCStr fs_Create(const t_CStrDataType *_pStr)
-		{
-			TCStr New;
-			New.f_SetStr(_pStr);
-			return New;
-		}
-
-		template <typename t_CStrDataType>
-			static TCStr fs_Create(const t_CStrDataType *_pStr, aint _Len)
-		{
-			TCStr New;
-			New.f_SetStr(_pStr, _Len);
-			return New;
-		}
-
-		template <typename t_CStrTraitsF>
-			static TCStr fs_Create(const TCStrAggregate<t_CStrTraitsF> &_From)
-		{
-			TCStr New;
-			New.f_SetStr(_From);
-			return New;
-		}
-
-		static TCStr fs_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
-	};
-
-	template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatStr[] = {'{', '}', 0};
-
-	template <typename t_CTCStrTraits> const typename TCStrAggregate<t_CTCStrTraits>::CChar TCStrAggregate<t_CTCStrTraits>::ms_FormatConcatStr[] = {'{', '}', '{', '}', 0};
+	template <typename t_CTCStrTraits> const typename TCStr<t_CTCStrTraits>::CChar TCStr<t_CTCStrTraits>::ms_FormatConcatStr[] = {'{', '}', '{', '}', 0};
 
 
 	template <typename t_CTCStrTraits>
@@ -3230,45 +3090,45 @@ EndArgSearch:
 
 	// Static functions
 	template <typename t_CTCStrTraits2>
-		inline_small mint fg_StrLen(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small mint fg_StrLen(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return _Str.f_GetLen();
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small uint32 fg_StrHashDJB2(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small uint32 fg_StrHashDJB2(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return _Str.f_HashDJB2();
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small uint32 fg_StrHashSDBM(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small uint32 fg_StrHashSDBM(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return _Str.f_HashSDBM();
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small uint32 fg_StrHash(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small uint32 fg_StrHash(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return _Str.f_Hash();
 	}
 
 
 	template <typename t_CTCStrTraits2>
-		inline_small uint32 fg_StrIsAnsi(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small uint32 fg_StrIsAnsi(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return fg_StrIsAnsi(_Str.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small uint32 fg_StrIsAnsi(const TCStrAggregate<t_CTCStrTraits2> &_Str, mint _MaxLen)
+		inline_small uint32 fg_StrIsAnsi(const TCStr<t_CTCStrTraits2> &_Str, mint _MaxLen)
 	{
 		return fg_StrIsAnsi(_Str.f_GetStr(), _MaxLen);
 	}
 
 
 	template <typename t_CTCStrTraits2>
-	bool fg_StrIsEmpty(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+	bool fg_StrIsEmpty(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return _Str.f_IsEmpty();
 	}
@@ -3280,14 +3140,14 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits2>
-		inline_small NTraits::TCUnsigned<typename TCStrAggregate<t_CTCStrTraits2>::CMaxChar> fg_StrLargestChar(const TCStrAggregate<t_CTCStrTraits2> &_Str)
+		inline_small NTraits::TCUnsigned<typename TCStr<t_CTCStrTraits2>::CMaxChar> fg_StrLargestChar(const TCStr<t_CTCStrTraits2> &_Str)
 	{
 		return fg_StrLargestChar(_Str.f_GetStr());
 	}
 
 
 	template <typename t_CTCStrTraits2, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits2> &fg_StrCopy(TCStrAggregate<t_CTCStrTraits2> &_To, const t_CData2 *_pFrom)
+		inline_small TCStr<t_CTCStrTraits2> &fg_StrCopy(TCStr<t_CTCStrTraits2> &_To, const t_CData2 *_pFrom)
 	{
 		_To.f_Clear();
 		_To.f_AddStr(_pFrom);
@@ -3295,28 +3155,28 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits2, typename t_CData2>
-		inline_small t_CData2 *fg_StrCopy(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits2> &_From)
+		inline_small t_CData2 *fg_StrCopy(t_CData2 *_pTo, const TCStr<t_CTCStrTraits2> &_From)
 	{
 		fg_StrCopy(_pTo, _From.f_GetStr());
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrCopy(TCStrAggregate<t_CTCStrTraits3> &_To, const TCStrAggregate<t_CTCStrTraits2> &_From)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrCopy(TCStr<t_CTCStrTraits3> &_To, const TCStr<t_CTCStrTraits2> &_From)
 	{
 		_To = _From;
 		return _To;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small t_CData2 *fg_StrCopy(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits3> &_From, mint _MaxLen)
+		inline_small t_CData2 *fg_StrCopy(t_CData2 *_pTo, const TCStr<t_CTCStrTraits3> &_From, mint _MaxLen)
 	{
 		fg_StrCopy(_pTo, _From.f_GetStr(), _MaxLen);
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrCopy(TCStrAggregate<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrCopy(TCStr<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom, mint _MaxLen)
 	{
 		_To.f_Clear();
 		_To.f_AddStr(_pFrom, fg_Min(_MaxLen, fg_StrLen(_pFrom, _MaxLen)));
@@ -3324,7 +3184,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrCopy(TCStrAggregate<t_CTCStrTraits3> &_To, const TCStrAggregate<t_CTCStrTraits2> &_From, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrCopy(TCStr<t_CTCStrTraits3> &_To, const TCStr<t_CTCStrTraits2> &_From, mint _MaxLen)
 	{
 		_To.f_Clear();
 		_To.f_AddStr(_From.f_GetStr(), fg_Min(_MaxLen, fg_StrLen(_From)));
@@ -3334,43 +3194,43 @@ EndArgSearch:
 	///////////////////////////
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrMove(TCStrAggregate<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrMove(TCStr<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom)
 	{
-		TCStrAggregate<t_CTCStrTraits3> Temp;
+		TCStr<t_CTCStrTraits3> Temp;
 		fg_StrCopy(Temp, _pFrom);
 		_To = Temp;
 		return Temp;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small t_CData2 *fg_StrMove(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits3> &_From)
+		inline_small t_CData2 *fg_StrMove(t_CData2 *_pTo, const TCStr<t_CTCStrTraits3> &_From)
 	{
 		return fg_StrCopy(_pTo, _From);
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrMove(TCStrAggregate<t_CTCStrTraits3> &_To, const TCStrAggregate<t_CTCStrTraits2> &_From)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrMove(TCStr<t_CTCStrTraits3> &_To, const TCStr<t_CTCStrTraits2> &_From)
 	{
 		return fg_StrCopy(_To, _From);
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small t_CData2 *fg_StrMove(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits3> &_From, mint _MaxLen)
+		inline_small t_CData2 *fg_StrMove(t_CData2 *_pTo, const TCStr<t_CTCStrTraits3> &_From, mint _MaxLen)
 	{
 		return fg_StrCopy(_pTo, _From, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrMove(TCStrAggregate<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrMove(TCStr<t_CTCStrTraits3> &_To, const t_CData2 *_pFrom, mint _MaxLen)
 	{
-		TCStrAggregate<t_CTCStrTraits3> Temp;
+		TCStr<t_CTCStrTraits3> Temp;
 		fg_StrCopy(Temp, _pFrom, _MaxLen);
 		_To = Temp;
 		return _To;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrMove(TCStrAggregate<t_CTCStrTraits3> &_To, const TCStrAggregate<t_CTCStrTraits2> &_From, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrMove(TCStr<t_CTCStrTraits3> &_To, const TCStr<t_CTCStrTraits2> &_From, mint _MaxLen)
 	{
 		return fg_StrCopy(_To, _From, _MaxLen);
 	}
@@ -3385,20 +3245,20 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrUpperCase(TCStr<t_CTCStrTraits> &_To)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
 
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
 
 		fg_StrUpperCase(pStr1, _To.f_GetLen());
 		return _To;
 	}
 
 	template <typename t_CTCStrTraits3, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits3> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits3> &_To, const t_CData2 *_pSource)
+		inline_small TCStr<t_CTCStrTraits3> &fg_StrUpperCase(TCStr<t_CTCStrTraits3> &_To, const t_CData2 *_pSource)
 	{
 		_To = _pSource;
 		fg_StrUpperCase(_To);
@@ -3406,7 +3266,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, const TCStrAggregate<t_CTCStrTraits2> &_Source)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrUpperCase(TCStr<t_CTCStrTraits> &_To, const TCStr<t_CTCStrTraits2> &_Source)
 	{
 		_To = _Source;
 		fg_StrUpperCase(_To);
@@ -3414,28 +3274,28 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
+		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStr<t_CTCStrTraits> &_Source)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStr<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrUpperCase(_pTo, _Source.f_GetStr());
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
+		inline_small t_CData2 *fg_StrUpperCase(t_CData2 *_pTo, const TCStr<t_CTCStrTraits> &_Source, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStr<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrUpperCase(_pTo, _MaxLen, _Source.f_GetStr());
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrUpperCase(TCStr<t_CTCStrTraits> &_To, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
 		fg_StrUpperCase(pStr1, _MaxLen);
@@ -3444,7 +3304,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, const t_CData2 *_pSource, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrUpperCase(TCStr<t_CTCStrTraits> &_To, const t_CData2 *_pSource, mint _MaxLen)
 	{
 		_To = _pSource;
 		fg_StrUpperCase(_To, _MaxLen);
@@ -3452,7 +3312,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrUpperCase(TCStrAggregate<t_CTCStrTraits> &_To, const TCStrAggregate<t_CTCStrTraits2> &_Source, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrUpperCase(TCStr<t_CTCStrTraits> &_To, const TCStr<t_CTCStrTraits2> &_Source, mint _MaxLen)
 	{
 		_To = _Source;
 		fg_StrUpperCase(_To, _MaxLen);
@@ -3467,10 +3327,10 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
 		fg_StrLowerCase(pStr1, _To.f_GetLen());
@@ -3478,7 +3338,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, const t_CData2 *_pSource)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To, const t_CData2 *_pSource)
 	{
 		_To = _pSource;
 		fg_StrLowerCase(_To);
@@ -3486,7 +3346,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, const TCStrAggregate<t_CTCStrTraits2> &_Source)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To, const TCStr<t_CTCStrTraits2> &_Source)
 	{
 		_To = _Source;
 		fg_StrLowerCase(_To);
@@ -3494,28 +3354,28 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source)
+		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStr<t_CTCStrTraits> &_Source)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStr<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrLowerCase(_pTo, _Source.f_GetStr());
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStrAggregate<t_CTCStrTraits> &_Source, mint _MaxLen)
+		inline_small t_CData2 *fg_StrLowerCase(t_CData2 *_pTo, const TCStr<t_CTCStrTraits> &_Source, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		static_assert(NTraits::cIsSame<t_CData2, typename TCStrAggregate<t_CTCStrTraits>::CChar>, "Unsupported");
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		static_assert(NTraits::cIsSame<t_CData2, typename TCStr<t_CTCStrTraits>::CChar>, "Unsupported");
 		fg_StrLowerCase(_pTo, _Source.f_GetStr(), _MaxLen);
 		return _pTo;
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To, mint _MaxLen)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
 		fg_StrLowerCase(pStr1, _MaxLen);
@@ -3524,7 +3384,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, const t_CData2 *_pSource, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To, const t_CData2 *_pSource, mint _MaxLen)
 	{
 		_To = _pSource;
 		fg_StrLowerCase(_To, _MaxLen);
@@ -3532,7 +3392,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrLowerCase(TCStrAggregate<t_CTCStrTraits> &_To, const TCStrAggregate<t_CTCStrTraits2> &_Source, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrLowerCase(TCStr<t_CTCStrTraits> &_To, const TCStr<t_CTCStrTraits2> &_Source, mint _MaxLen)
 	{
 		_To = _Source;
 		fg_StrLowerCase(_To, _MaxLen);
@@ -3547,10 +3407,10 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrCapitalize(TCStrAggregate<t_CTCStrTraits> &_To)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrCapitalize(TCStr<t_CTCStrTraits> &_To)
 	{
-		static_assert(sizeof(typename TCStrAggregate<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStrAggregate<t_CTCStrTraits>::CChar, ch8> && TCStrAggregate<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
+		static_assert(sizeof(typename TCStr<t_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<t_CTCStrTraits>::CChar, ch8> && TCStr<t_CTCStrTraits>::mc_Type == EStrType_UTF), "Unsupported");
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _To.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _To;
 
@@ -3559,7 +3419,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrCapitalize(TCStrAggregate<t_CTCStrTraits> &_To, const TCStrAggregate<t_CTCStrTraits2> &_Source)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrCapitalize(TCStr<t_CTCStrTraits> &_To, const TCStr<t_CTCStrTraits2> &_Source)
 	{
 		_To = _Source;
 		fg_StrCapitalize(_To);
@@ -3576,38 +3436,38 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrCmp(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrCmp(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, TCStrAggregate<t_CTCStrTraits2> >::CType fg_StrCmp(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, TCStr<t_CTCStrTraits2> >::CType fg_StrCmp(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrCmp(_Str1.f_GetStr(), _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-	inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+	inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrCmpNoCase(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrCmpNoCase(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, TCStrAggregate<t_CTCStrTraits2> >::CType fg_StrCmpNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, TCStr<t_CTCStrTraits2> >::CType fg_StrCmpNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrCmpNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
@@ -3616,38 +3476,38 @@ EndArgSearch:
 	////
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrCmp(_Str1.f_GetStr(), _pStr2, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmp(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrCmp(_pStr1, _Str2.f_GetStr(), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, TCStrAggregate<t_CTCStrTraits2> >::CType fg_StrCmp(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, TCStr<t_CTCStrTraits2> >::CType fg_StrCmp(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrCmp(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrCmpNoCase(_Str1.f_GetStr(), _pStr2, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, t_CData2>::CType fg_StrCmpNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrCmpNoCase(_pStr1, _Str2.f_GetStr(), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small typename TCChooseStrCompareType<TCStrAggregate<t_CTCStrTraits>, TCStrAggregate<t_CTCStrTraits2> >::CType fg_StrCmpNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small typename TCChooseStrCompareType<TCStr<t_CTCStrTraits>, TCStr<t_CTCStrTraits2> >::CType fg_StrCmpNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrCmpNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
@@ -3660,161 +3520,161 @@ EndArgSearch:
 	\************************************************************************************************/
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChar(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindChar(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		return fg_StrFindChar(_Str1.f_GetStr(), _Char);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChar(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindChar(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindChar(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _Char));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindCharNoCase(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		return fg_StrFindCharNoCase(_Str1.f_GetStr(), _Char);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindCharNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindCharNoCase(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _Char));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindCharReverse(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		return fg_StrFindCharReverse(_Str1.f_GetStr(), _Char);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char)
+		inline_small aint fg_StrFindCharReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char)
 	{
 		return fg_StrFindCharReverseNoCase(_Str1.f_GetStr(), _Char);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChar(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindChar(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		return fg_StrFindChar(_Str1.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChar(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindChar(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindChar(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _Char, _MaxLen));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindCharNoCase(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		return fg_StrFindCharNoCase(_Str1.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindCharNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindCharNoCase(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _Char, _MaxLen));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindCharReverse(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		return fg_StrFindCharReverse(_Str1.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
+		inline_small aint fg_StrFindCharReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, t_CData2 _Char, mint _MaxLen)
 	{
 		return fg_StrFindCharReverseNoCase(_Str1.f_GetStr(), _Char, _MaxLen);
 	}
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChars(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
+		inline_small aint fg_StrFindChars(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
 	{
 		return fg_StrFindChars(_Str1.f_GetStr(), _Str1.f_GetLen(), _pChars);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
+		inline_small aint fg_StrFindCharsNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
 	{
 		return fg_StrFindCharsNoCase(_Str1.f_GetStr(), _pChars);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
+		inline_small aint fg_StrFindCharsReverse(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
 	{
 		return fg_StrFindCharsReverse(_Str1.f_GetStr(), _pChars);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
+		inline_small aint fg_StrFindCharsReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars)
 	{
 		return fg_StrFindCharsReverseNoCase(_Str1.f_GetStr(), _pChars);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChars(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
+		inline_small aint fg_StrFindChars(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		return fg_StrFindChars(_Str1.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		return fg_StrFindCharsNoCase(_Str1.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverse(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		return fg_StrFindCharsReverse(_Str1.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pChars, mint _MaxLen)
 	{
 		return fg_StrFindCharsReverseNoCase(_Str1.f_GetStr(), _pChars, _MaxLen);
 	}
 
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindChars(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars)
+		inline_small aint fg_StrFindChars(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindChars(_Str1.f_GetStr(), _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars)
+		inline_small aint fg_StrFindCharsNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsNoCase(_Str1.f_GetStr(), _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars)
+		inline_small aint fg_StrFindCharsReverse(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverse(_Str1.f_GetStr(), _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars)
+		inline_small aint fg_StrFindCharsReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverseNoCase(_Str1.f_GetStr(), _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindChars(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindChars(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindChars(_Str1.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsNoCase(_Str1.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverse(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverse(_Str1.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Chars, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverseNoCase(_Str1.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
@@ -3822,66 +3682,66 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChars(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars)
+		inline_small aint fg_StrFindChars(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars)
 	{
 		return fg_StrFindChars(_pStr1, _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars)
+		inline_small aint fg_StrFindCharsNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars)
 	{
 		return fg_StrFindCharsNoCase(_pStr1, _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars)
+		inline_small aint fg_StrFindCharsReverse(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars)
 	{
 		return fg_StrFindCharsReverse(_pStr1, _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars)
+		inline_small aint fg_StrFindCharsReverseNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars)
 	{
 		return fg_StrFindCharsReverseNoCase(_pStr1, _Chars.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindChars(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindChars(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars, mint _MaxLen)
 	{
 		return fg_StrFindChars(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars, mint _MaxLen)
 	{
 		return fg_StrFindCharsNoCase(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverse(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars, mint _MaxLen)
 	{
 		return fg_StrFindCharsReverse(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindCharsReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Chars, mint _MaxLen)
+		inline_small aint fg_StrFindCharsReverseNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Chars, mint _MaxLen)
 	{
 		return fg_StrFindCharsReverseNoCase(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFind(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFind(_Str1.f_GetStr(), _pStr2);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFind(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFind(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _pStr2));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFindNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFindNoCase(_Str1.f_GetStr(), _pStr2);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFindNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		if (_Start < 0)
 			return -1;
@@ -3889,24 +3749,24 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrFind(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrFind(_pStr1, _Str2.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrFindNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrFindNoCase(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFind(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFind(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFind(_Str1.f_GetStr(), _Str2.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFind(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFind(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		if (_Start < 0)
 			return -1;
@@ -3914,13 +3774,13 @@ EndArgSearch:
 		return fg_StrFind(_Start, _Str1, _Str2.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFindNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFindNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		if (_Start < 0)
 			return -1;
@@ -3930,36 +3790,36 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFindReverse<false, true, false>(_Str1.f_GetStr(), _pStr2, _Str1.f_GetLen(), 0);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrFindReverse<true, true, false>(_Str1.f_GetStr(), _pStr2, _Str1.f_GetLen(), 0);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrFindReverse<false, false, true>(_pStr1, _Str2.f_GetStr(), 0, _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrFindReverse<true, false, true>(_pStr1, _Str2.f_GetStr(), 0, _Str2.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), _Str1.f_GetLen(), _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _Str1.f_GetLen(), _Str2.f_GetLen());
@@ -3968,24 +3828,24 @@ EndArgSearch:
 	/////////
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFind(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFind(_Str1.f_GetStr(), _pStr2, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFind(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFind(_Str1.f_GetStr() + fg_Min(_Start, _Str1.f_GetLen()), _pStr2, _MaxLen));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFindNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFindNoCase(_Str1.f_GetStr(), _pStr2, _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFindNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -3993,24 +3853,24 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFind(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFind(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrFind(_pStr1, _Str2.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrFindNoCase(_pStr1, _Str2.f_GetStr(), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFind(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFind(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFind(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFind(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFind(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -4018,13 +3878,13 @@ EndArgSearch:
 		return fg_StrFind(_Start, _Str1, _Str2.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), _MaxLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindNoCase(aint _Start, const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindNoCase(aint _Start, const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -4034,70 +3894,70 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFindReverse<false, true, false>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), 0);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen)
 	{
 		return fg_StrFindReverse<true, true, false>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), 0);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), _FindLen);
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2, mint _MaxLen, mint _FindLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_Str1.f_GetStr(), _pStr2, fg_Min(_Str1.f_GetLen(), _MaxLen), _FindLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, _Str2.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverse(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, fg_Min(_Str2.f_GetLen(), _FindLen));
 	}
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverseNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2, mint _MaxLen, mint _FindLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_pStr1, _Str2.f_GetStr(), _MaxLen, fg_Min(_Str2.f_GetLen(), _FindLen));
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), _Str2.f_GetLen());
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), _Str2.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverse(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverse(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverse(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), fg_Min(_Str2.f_GetLen(), _FindLen));
 	}
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrFindReverseNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
+		inline_small aint fg_StrFindReverseNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2, mint _MaxLen, mint _FindLen)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverseNoCase(_Str1.f_GetStr(), _Str2.f_GetStr(), fg_Min(_Str1.f_GetLen(), _MaxLen), fg_Min(_Str2.f_GetLen(), _FindLen));
@@ -4105,38 +3965,38 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrStartsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrStartsWith(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrStartsWith(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrStartsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrStartsWithNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrStartsWithNoCase(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrStartsWith(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrStartsWith(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrStartsWith(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrStartsWithNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrStartsWithNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrStartsWithNoCase(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrStartsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrStartsWith(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrStartsWith(_Str1.f_GetStr(), _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrStartsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrStartsWithNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrStartsWithNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
@@ -4144,38 +4004,38 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrEndsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrEndsWith(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrEndsWith(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrEndsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
+		inline_small aint fg_StrEndsWithNoCase(const TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pStr2)
 	{
 		return fg_StrEndsWithNoCase(_Str1.f_GetStr(), _pStr2);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrEndsWith(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrEndsWith(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrEndsWith(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small aint fg_StrEndsWithNoCase(const t_CData2 *_pStr1, const TCStrAggregate<t_CTCStrTraits> &_Str2)
+		inline_small aint fg_StrEndsWithNoCase(const t_CData2 *_pStr1, const TCStr<t_CTCStrTraits> &_Str2)
 	{
 		return fg_StrEndsWithNoCase(_pStr1, _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrEndsWith(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrEndsWith(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrEndsWith(_Str1.f_GetStr(), _Str2.f_GetStr());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small aint fg_StrEndsWithNoCase(const TCStrAggregate<t_CTCStrTraits> &_Str1, const TCStrAggregate<t_CTCStrTraits2> &_Str2)
+		inline_small aint fg_StrEndsWithNoCase(const TCStr<t_CTCStrTraits> &_Str1, const TCStr<t_CTCStrTraits2> &_Str2)
 	{
 		static_assert(TCIsStrCompatible<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrEndsWithNoCase(_Str1.f_GetStr(), _Str2.f_GetStr());
@@ -4188,11 +4048,11 @@ EndArgSearch:
 	\************************************************************************************************/
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrUntabify(TCStrAggregate<t_CTCStrTraits> &_Str1, mint _TabSize)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrUntabify(TCStr<t_CTCStrTraits> &_Str1, mint _TabSize)
 	{
-		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+		using CChar = typename TCStr<t_CTCStrTraits>::CChar;
 
-		TCStrAggregate<t_CTCStrTraits> Temp(_Str1);
+		TCStr<t_CTCStrTraits> Temp(_Str1);
 		const CChar *pStr1 = Temp.f_GetStr();
 		mint NeededLen = 0;
 		mint Column = 0;
@@ -4294,16 +4154,16 @@ EndArgSearch:
 	\************************************************************************************************/
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData2 const *_pStrFind
 			, mint _LenFind
 			, t_CData3 const *_pStrReplace
 			, mint _LenReplace
 		)
 	{
-		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+		using CChar = typename TCStr<t_CTCStrTraits>::CChar;
 
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
@@ -4334,13 +4194,13 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplace(TCStr<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
 	{
 		return fg_StrReplace(_Str1, _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace));
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, TCStrAggregate<t_CTCStrTraits1> const &_StrFind, t_CData3 const *_pStrReplace)
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace(TCStr<t_CTCStrTraits> &_Str1, TCStr<t_CTCStrTraits1> const &_StrFind, t_CData3 const *_pStrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str1, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace));
@@ -4348,18 +4208,18 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData3 const *_pStrFind, TCStrAggregate<t_CTCStrTraits1> const &_StrReplace)
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace(TCStr<t_CTCStrTraits> &_Str1, t_CData3 const *_pStrFind, TCStr<t_CTCStrTraits1> const &_StrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str1, _pStrFind, fg_StrLen(_pStrFind), _StrReplace.f_GetStr(), _StrReplace.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
-			, TCStrAggregate<t_CTCStrTraits2> const &_StrReplace
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
+			, TCStr<t_CTCStrTraits2> const &_StrReplace
 		)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
@@ -4367,9 +4227,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData2 const *_pStrFind
 			, mint _LenFind
 			, t_CData3 const *_pStrReplace
@@ -4377,7 +4237,7 @@ EndArgSearch:
 			, mint _MaxLen
 		)
 	{
-		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+		using CChar = typename TCStr<t_CTCStrTraits>::CChar;
 
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFind(pStr1, _pStrFind));
@@ -4408,16 +4268,16 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplace(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplace(TCStr<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
 	{
 		return fg_StrReplace(_Str1, _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
 			, t_CData3 const *_pStrReplace
 			, mint _MaxLen
 		)
@@ -4428,11 +4288,11 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData3 const *_pStrFind
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrReplace
+			, TCStr<t_CTCStrTraits1> const &_StrReplace
 			, mint _MaxLen
 		)
 	{
@@ -4441,11 +4301,11 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplace
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplace
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
-			, TCStrAggregate<t_CTCStrTraits2> const &_StrReplace
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
+			, TCStr<t_CTCStrTraits2> const &_StrReplace
 			, mint _MaxLen
 		)
 	{
@@ -4454,16 +4314,16 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData2 const *_pStrFind
 			, mint _LenFind
 			, t_CData3 const *_pStrReplace
 			, mint _LenReplace
 		)
 	{
-		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+		using CChar = typename TCStr<t_CTCStrTraits>::CChar;
 
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
@@ -4494,13 +4354,13 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace)
 	{
 		return fg_StrReplaceNoCase(_Str1, _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace));
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, TCStrAggregate<t_CTCStrTraits1> const &_StrFind, t_CData3 const *_pStrReplace)
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<t_CTCStrTraits> &_Str1, TCStr<t_CTCStrTraits1> const &_StrFind, t_CData3 const *_pStrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str1, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace));
@@ -4508,18 +4368,18 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData3 const *_pStrFind, const TCStrAggregate<t_CTCStrTraits1> &_StrReplace)
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<t_CTCStrTraits> &_Str1, t_CData3 const *_pStrFind, const TCStr<t_CTCStrTraits1> &_StrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str1, _pStrFind, fg_StrLen(_pStrFind), _StrReplace.f_GetStr(), _StrReplace.f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
-			, TCStrAggregate<t_CTCStrTraits2> const &_StrReplace
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
+			, TCStr<t_CTCStrTraits2> const &_StrReplace
 		)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
@@ -4527,9 +4387,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData2 const *_pStrFind
 			, mint _LenFind
 			, t_CData3 const *_pStrReplace
@@ -4537,7 +4397,7 @@ EndArgSearch:
 			, mint _MaxLen
 		)
 	{
-		using CChar = typename TCStrAggregate<t_CTCStrTraits>::CChar;
+		using CChar = typename TCStr<t_CTCStrTraits>::CChar;
 
 		CChar const *pStr1 = _Str1.f_GetStr();
 		CChar const *pStrFind = fg_StrAdd(pStr1, fg_StrFindNoCase(pStr1, _pStrFind));
@@ -4568,16 +4428,16 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-	inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
+	inline_large TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<t_CTCStrTraits> &_Str1, t_CData2 const *_pStrFind, t_CData3 const *_pStrReplace, mint _MaxLen)
 	{
 		return fg_StrReplaceNoCase(_Str1, _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
 			, t_CData3 const *_pStrReplace
 			, mint _MaxLen
 		)
@@ -4588,11 +4448,11 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CData3>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
+			TCStr<t_CTCStrTraits> &_Str1
 			, t_CData3 const *_pStrFind
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrReplace
+			, TCStr<t_CTCStrTraits1> const &_StrReplace
 			, mint _MaxLen
 		)
 	{
@@ -4601,11 +4461,11 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits1, typename t_CTCStrTraits2>
-	inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceNoCase
+	inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceNoCase
 		(
-			TCStrAggregate<t_CTCStrTraits> &_Str1
-			, TCStrAggregate<t_CTCStrTraits1> const &_StrFind
-			, TCStrAggregate<t_CTCStrTraits2> const &_StrReplace
+			TCStr<t_CTCStrTraits> &_Str1
+			, TCStr<t_CTCStrTraits1> const &_StrFind
+			, TCStr<t_CTCStrTraits2> const &_StrReplace
 			, mint _MaxLen
 		)
 	{
@@ -4615,9 +4475,9 @@ EndArgSearch:
 
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceChar(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceChar(TCStr<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _Str1;
 
@@ -4626,9 +4486,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2, typename t_CData3>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrReplaceChar(TCStrAggregate<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrReplaceChar(TCStr<t_CTCStrTraits> &_Str1, t_CData2 _CharFind, t_CData3 _CharReplace, mint _MaxLen)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1)
 			return _Str1;
 		fg_StrReplaceChar(pStr1, _CharFind, _CharReplace, _MaxLen);
@@ -4642,7 +4502,7 @@ EndArgSearch:
 	\************************************************************************************************/
 
 	template <typename t_CTCStrTraits, typename t_CData3>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrInsert(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, const t_CData3 *_pStrInsert)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrInsert(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, const t_CData3 *_pStrInsert)
 	{
 		mint NeededSize = fg_StrLen(_Str1) + fg_StrLen(_pStrInsert);;
 		fg_StrInsert(_Str1.f_GetStr(NeededSize), _StartChar, _pStrInsert);
@@ -4651,7 +4511,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrInsert(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrInsert(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, const TCStr<t_CTCStrTraits2> &_StrInsert)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		mint NeededSize = fg_StrLen(_Str1) + fg_StrLen(_StrInsert);;
@@ -4661,7 +4521,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData3>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrInsert(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, const t_CData3 *_pStrInsert, mint _MaxLen)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrInsert(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, const t_CData3 *_pStrInsert, mint _MaxLen)
 	{
 		mint NeededSize = fg_Min(fg_StrLen(_Str1) + fg_StrLen(_pStrInsert), _MaxLen);
 		fg_StrInsert(_Str1.f_GetStr(NeededSize), _StartChar, _pStrInsert, _MaxLen);
@@ -4670,7 +4530,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CTCStrTraits2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrInsert(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, const TCStrAggregate<t_CTCStrTraits2> &_StrInsert, mint _MaxLen)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrInsert(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, const TCStr<t_CTCStrTraits2> &_StrInsert, mint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits, t_CTCStrTraits2>::mc_Value, "Not supported");
 		mint NeededSize = fg_Min(fg_StrLen(_Str1) + fg_StrLen(_StrInsert), _MaxLen);
@@ -4686,9 +4546,9 @@ EndArgSearch:
 	\***************************************************************************************************/
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrDelete(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, mint _nChars)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrDelete(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, mint _nChars)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 
@@ -4698,9 +4558,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrLeft(TCStrAggregate<t_CTCStrTraits> &_Str1, mint _nChars)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrLeft(TCStr<t_CTCStrTraits> &_Str1, mint _nChars)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrLeft(pStr1, _nChars);
@@ -4709,9 +4569,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrExtract(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar, mint _nChars)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrExtract(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar, mint _nChars)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrExtract(pStr1, _StartChar, _nChars);
@@ -4720,9 +4580,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrExtract(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _StartChar)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrExtract(TCStr<t_CTCStrTraits> &_Str1, aint _StartChar)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrExtract(pStr1, _StartChar);
@@ -4731,9 +4591,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrReverse(TCStrAggregate<t_CTCStrTraits> &_Str1)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrReverse(TCStr<t_CTCStrTraits> &_Str1)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrReverse(pStr1);
@@ -4742,9 +4602,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrRight(TCStrAggregate<t_CTCStrTraits> &_Str1, mint _nChars)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrRight(TCStr<t_CTCStrTraits> &_Str1, mint _nChars)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrRight(pStr1, _nChars);
@@ -4753,9 +4613,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrimLeft(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrimLeft(TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrimLeft(pStr1, _pCharsToTrim);
@@ -4764,9 +4624,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrimLeft(TCStrAggregate<t_CTCStrTraits> &_Str1)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrimLeft(TCStr<t_CTCStrTraits> &_Str1)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrimLeft(pStr1, g_lWhiteSpaceChars);
@@ -4775,9 +4635,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrimRight(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrimRight(TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrimRight(pStr1, _pCharsToTrim);
@@ -4786,9 +4646,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrimRight(TCStrAggregate<t_CTCStrTraits> &_Str1)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrimRight(TCStr<t_CTCStrTraits> &_Str1)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrimRight(pStr1, g_lWhiteSpaceChars);
@@ -4797,9 +4657,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrim(TCStrAggregate<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrim(TCStr<t_CTCStrTraits> &_Str1, const t_CData2 *_pCharsToTrim)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrim(pStr1, _pCharsToTrim);
@@ -4808,9 +4668,9 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits>
-		inline_large TCStrAggregate<t_CTCStrTraits> &fg_StrTrim(TCStrAggregate<t_CTCStrTraits> &_Str1)
+		inline_large TCStr<t_CTCStrTraits> &fg_StrTrim(TCStr<t_CTCStrTraits> &_Str1)
 	{
-		typename TCStrAggregate<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
+		typename TCStr<t_CTCStrTraits>::CChar *pStr1 = _Str1.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str1;
 		fg_StrTrim(pStr1, g_lWhiteSpaceChars);
@@ -4826,28 +4686,28 @@ EndArgSearch:
 	\***************************************************************************************************/
 
 	template <typename t_CTCStrTraits>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrClear(TCStrAggregate<t_CTCStrTraits> &_Str1)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrClear(TCStr<t_CTCStrTraits> &_Str1)
 	{
 		_Str1.f_Clear();
 		return _Str1;
 	}
 
 	template <typename t_CTCStrTraits, typename t_CData2>
-		inline_small TCStrAggregate<t_CTCStrTraits> &fg_StrSetAt(TCStrAggregate<t_CTCStrTraits> &_Str1, aint _Index, t_CData2 _Character)
+		inline_small TCStr<t_CTCStrTraits> &fg_StrSetAt(TCStr<t_CTCStrTraits> &_Str1, aint _Index, t_CData2 _Character)
 	{
 		_Str1.f_MakeUnique();
 		int MaxLen = _Str1.f_CreateWritableBuffer(_Index + 1, false);
 		if (_Index >= MaxLen)
 			return _Str1;
 
-		((typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar *)_Str1.f_GetStrWritable())[_Index] = (typename TCStrAggregate<t_CTCStrTraits>::CUnsignedChar)(NTraits::TCUnsigned<t_CData2>)(_Character);
+		((typename TCStr<t_CTCStrTraits>::CUnsignedChar *)_Str1.f_GetStrWritable())[_Index] = (typename TCStr<t_CTCStrTraits>::CUnsignedChar)(NTraits::TCUnsigned<t_CData2>)(_Character);
 		if (_Character == 0)
 			_Str1.f_SetModified();
 		return _Str1;
 	}
 
 	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStr(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 		using CUnsignedChar = NTraits::TCUnsigned<typename t_CTCStrTraits1::CStrTraits::CChar>;
@@ -4874,7 +4734,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1, typename t_CEscapeChar>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStr(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 
@@ -4910,7 +4770,7 @@ EndArgSearch:
 	}
 
 	template <typename t_CTCStrTraits0, typename t_CTCStrTraits1, typename t_CEscapeChar, typename t_CReplaceChars>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStr(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStr(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 
@@ -4946,7 +4806,7 @@ EndArgSearch:
 	}
 
 	template<typename t_CTCStrTraits0, typename t_CTCStrTraits1>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 
@@ -4974,7 +4834,7 @@ EndArgSearch:
 	}
 
 	template<typename t_CTCStrTraits0, typename t_CTCStrTraits1, typename t_CEscapeChar>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 
@@ -5010,7 +4870,7 @@ EndArgSearch:
 	}
 
 	template<typename t_CTCStrTraits0, typename t_CTCStrTraits1, typename t_CEscapeChar, typename t_CReplaceChars>
-		inline_small TCStrAggregate<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStrAggregate<t_CTCStrTraits0> &_StrDest, const TCStrAggregate<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
+		inline_small TCStr<t_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStr<t_CTCStrTraits0> &_StrDest, const TCStr<t_CTCStrTraits1> &_StrSource, const t_CEscapeChar *_pEscapedChars, const t_CReplaceChars *_pReplaceChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<t_CTCStrTraits0, t_CTCStrTraits1>::mc_Value, "Not supported");
 

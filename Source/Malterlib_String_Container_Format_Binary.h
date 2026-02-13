@@ -47,7 +47,7 @@ namespace NMib::NStr
 		using COptionsStatic = typename TICStrFormatType<t_CFormatter>::COptionsStatic;
 
 		template <typename t_COptions2>
-		inline_small static void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Value)
+		inline_small static void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const t_COptions2 &_Options, const CType &_Value)
 		{
 			uint8 OutValue = 0;
 			auto Temp = fg_FormatMaxLength<2>(fg_FormatMinLength<2>(fg_FormatFillOut<'0'>(fg_FormatIntFormat<16>(OutValue))));
@@ -65,7 +65,7 @@ namespace NMib::NStr
 
 		}
 
-		virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 		{
 			COptionsStatic Static;
 			COptions Options(Static);
@@ -79,13 +79,13 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, m_Value);
 		}
 
-		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value)
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value)
 		{
 			COptionsStatic Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
-		inline_small static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, COptionsStatic &_Options)
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CType &_Value, COptionsStatic &_Options)
 		{
 			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}

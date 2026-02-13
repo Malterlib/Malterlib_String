@@ -124,7 +124,7 @@ namespace NMib::NStr
 			return CSuper::f_ParseOption(_Args, _Option);
 		}
 
-		virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override
 		{
 			COptionsStr Options;
 
@@ -138,19 +138,19 @@ namespace NMib::NStr
 			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, m_pStr, m_StrLen);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue)
 		{
 			COptionsStr Options;
 			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue, COptionsStr &_Options)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue, COptionsStr &_Options)
 		{
 			fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, _Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 		}
 
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
-		static inline_small auto fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
+		static inline_small auto fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
 			-> TCEnableIf<tf_DestinationType == tf_SourceType, void>
 		{
 			if (_Options.m_Case)
@@ -209,7 +209,7 @@ namespace NMib::NStr
 		}
 
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
-		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen)
+		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen)
 		{
 			TCStr<CTStrTraits> Converted;
 

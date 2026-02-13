@@ -11,9 +11,6 @@ namespace NMib::NStr
 	template class TCStr<CStrTraits_CStr>;
 	template class TCStr<CStrTraits_CWStr>;
 	template class TCStr<CStrTraits_CUStr>;
-	template class TCStrAggregate<CStrTraits_CStr>;
-	template class TCStrAggregate<CStrTraits_CWStr>;
-	template class TCStrAggregate<CStrTraits_CUStr>;
 	template class TCFormat<CStrTraits_CStr>;
 	template class TCFormat<CStrTraits_CWStr>;
 	template class TCFormat<CStrTraits_CUStr>;
@@ -21,9 +18,6 @@ namespace NMib::NStr
 	template class TCStr<CStrTraits_CStrNonTracked>;
 	template class TCStr<CStrTraits_CWStrNonTracked>;
 	template class TCStr<CStrTraits_CUStrNonTracked>;
-	template class TCStrAggregate<CStrTraits_CStrNonTracked>;
-	template class TCStrAggregate<CStrTraits_CWStrNonTracked>;
-	template class TCStrAggregate<CStrTraits_CUStrNonTracked>;
 	template class TCFormat<CStrTraits_CStrNonTracked>;
 	template class TCFormat<CStrTraits_CWStrNonTracked>;
 	template class TCFormat<CStrTraits_CUStrNonTracked>;
@@ -31,9 +25,6 @@ namespace NMib::NStr
 	template class TCStr<CStrTraits_CStrVMem>;
 	template class TCStr<CStrTraits_CWStrVMem>;
 	template class TCStr<CStrTraits_CUStrVMem>;
-	template class TCStrAggregate<CStrTraits_CStrVMem>;
-	template class TCStrAggregate<CStrTraits_CWStrVMem>;
-	template class TCStrAggregate<CStrTraits_CUStrVMem>;
 
 	template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
 	template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
@@ -51,8 +42,8 @@ namespace NMib::NStr
 	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch16>;
 	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch32>;
 
-	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
-	template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
+	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStr<NMib::NStr::CStrTraits_CStr> const &);
+	template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
 
 #ifdef DMibDebug
 	CWStr g_DebugOutputTemp16;
@@ -609,7 +600,7 @@ namespace NMib::NStr
 			return fg_ReplaceSequenceUTF8(_String, _Flags);
 	}
 
-	void CParseError::f_Format(NStr::CStrAggregate &o_FormatInto) const
+	void CParseError::f_Format(NStr::CStr &o_FormatInto) const
 	{
 		o_FormatInto += CStr::CFormat("{} Error '{}'") << m_Location << m_Error;
 	}

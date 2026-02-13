@@ -1826,7 +1826,7 @@ namespace
 
 					struct CInlineFormat
 					{
-						void f_Format(CStrAggregate &o_String) const
+						void f_Format(CStr &o_String) const
 						{
 							o_String += CStr::CFormat("{} {}") << m_Integer << m_String;
 						}

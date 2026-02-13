@@ -28,14 +28,14 @@ namespace NMib::NStr
 
 		static_assert(t_CStrTraitsIn::CStrTraits::mc_Type == t_CParser::CStrTraits::mc_Type);
 
-		TCStrAggregate<t_CStrTraitsIn> *m_pTStr;
+		TCStr<t_CStrTraitsIn> *m_pTStr;
 
-		inline_small TCStrParseType_TStr(TCStrAggregate<t_CStrTraitsIn> &_Str):
+		inline_small TCStrParseType_TStr(TCStr<t_CStrTraitsIn> &_Str):
 		m_pTStr(&_Str)
 		{
 		}
 
-		inline_small TCStrParseType_TStr(TCStrAggregate<t_CStrTraitsIn> *_pStr):
+		inline_small TCStrParseType_TStr(TCStr<t_CStrTraitsIn> *_pStr):
 		m_pTStr(_pStr)
 		{
 		}
@@ -261,24 +261,6 @@ namespace NMib::NStr
 			return Ret;
 		}
 
-	};
-
-	template <typename t_CParser, typename t_CStrTraitsIn>
-	class TCStringParser<t_CParser, TCStrAggregate<t_CStrTraitsIn> >
-	{
-	public:
-		using CParseType = TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>;
-
-		static inline_large void f_CreateParse(t_CParser &_Formatter, TCStrAggregate<t_CStrTraitsIn> &_Data)
-		{
-			mint Flags;
-			void *pSpace = _Formatter.f_AllocSpace(sizeof(CParseType), Flags);
-
-			CParseType *pNew = new(pSpace) CParseType(_Data);
-			Flags |= (CParseType::mc_bNeedDelete ? 2 : 0);
-
-			_Formatter.fp_AddParse(pNew, Flags);
-		}
 	};
 
 	template <typename t_CParser, typename t_CStrTraitsIn>

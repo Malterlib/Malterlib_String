@@ -23,15 +23,15 @@ namespace NMib::NStr
 
 
 	template <typename t_CTStrTraits>
-	class TCStrImp_Virtual_PtrWrapper : public TCStrAggregate< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint> > >
+	class TCStrImp_Virtual_PtrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint> > >
 	{
 		constexpr const static bool mc_bInitConstStr = false;
 
-		TCStrAggregate<t_CTStrTraits> *m_pStr;
+		TCStr<t_CTStrTraits> *m_pStr;
 
 		enum
 		{
-			mc_AllocatesMemory = TCStrAggregate< t_CTStrTraits >::mc_AllocatesMemory
+			mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory
 		};
 
 		virtual void f_Destroy()

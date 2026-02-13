@@ -199,7 +199,7 @@ namespace NMib::NStr
 			return CSuper::f_ParseOption(_Args, _Option);
 		}
 
-		virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 		{
 			CLocalOptions Options;
 
@@ -213,19 +213,19 @@ namespace NMib::NStr
 
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value)
 		{
 			CLocalOptions Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value, CLocalOptions &_Options)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const t_CToFormat &_Value, CLocalOptions &_Options)
 		{
 			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}
 
 		template <typename tf_COptions, typename tf_CToFormat>
-		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const tf_CToFormat &_Value)
+		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const tf_CToFormat &_Value)
 		{
 			if (_Options.m_bSimpleAlign && !_Options.f_RestrictLength())
 			{
@@ -272,7 +272,7 @@ namespace NMib::NStr
 		}
 
 		template <typename tf_CToFormat>
-		static inline_small void fp_FormatInto(TCStrAggregate<CTStrTraits> &_String, const tf_CToFormat &_Value)
+		static inline_small void fp_FormatInto(TCStr<CTStrTraits> &_String, const tf_CToFormat &_Value)
 		{
 			if constexpr
 				(

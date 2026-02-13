@@ -39,7 +39,7 @@ namespace NMib::NStr
 		using CChar = typename CTStrTraits::CStrTraits::CChar;
 		using CInteger = typename CFloat::CInteger;
 		using CUnsignedInteger = typename CFloat::CUnsignedInteger;
-		using CStrAggregate = typename CSuper::CStrAggregate;
+		using CString = typename CSuper::CString;
 		using COptionsStatic = typename CSuper::COptionsStatic;
 		using CVisitor = typename CSuper::CVisitor;
 		using CStorage = TCConditional<t_bReference, CFloat const &, CFloat>;
@@ -337,7 +337,7 @@ namespace NMib::NStr
 			return TICStrFormatType<t_CFormatter>::f_ParseOption(_Args, _Option);
 		}
 		template <typename t_COptions>
-		static inline_small void fp_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFloat &_Number)
+		static inline_small void fp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, const CFloat &_Number)
 		{
 			CFloat Number = _Number;
 			bool bOptionsSign = _Options.m_bSign;
@@ -924,7 +924,7 @@ namespace NMib::NStr
 			}
 		}
 
-		virtual void f_AddToStr(CStrAggregate &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
+		virtual void f_AddToStr(CString &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 		{
 			COptionsFloat Options;
 
@@ -939,13 +939,13 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, Number);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CFloat &_Value)
+		static void fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, const CFloat &_Value)
 		{
 			COptionsFloat Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CFloat &_Value, COptionsFloat &_Options)
+		static void fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, const CFloat &_Value, COptionsFloat &_Options)
 		{
 			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}

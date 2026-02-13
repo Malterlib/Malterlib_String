@@ -32,7 +32,7 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 		}
 		template <typename t_CStrTraits>
-		TCStrIteratorUnicode(TCStrAggregate<t_CStrTraits> const &_String)
+		TCStrIteratorUnicode(TCStr<t_CStrTraits> const &_String)
 			: m_pBegin((CUnsignedChar const *)_String.f_GetStr())
 			, m_pEnd((CUnsignedChar const *)_String.f_GetStr() + _String.f_GetStrLen())
 		{
@@ -165,7 +165,7 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 		}
 		template <typename t_CStrTraits>
-		CStrIteratorUTF8(TCStrAggregate<t_CStrTraits> const &_String)
+		CStrIteratorUTF8(TCStr<t_CStrTraits> const &_String)
 			: m_pBegin((uch8 const *)_String.f_GetStr())
 			, m_pEnd((uch8 const *)_String.f_GetStr() + _String.f_GetStrLen())
 			, m_pInitialBegin((uch8 const *)_String.f_GetStr())
@@ -279,7 +279,7 @@ namespace NMib::NStr
 			m_Current = fp_Next();
 		}
 		template <typename t_CStrTraits>
-		CStrIteratorUTF16(TCStrAggregate<t_CStrTraits> const &_String)
+		CStrIteratorUTF16(TCStr<t_CStrTraits> const &_String)
 			: m_pBegin((uch16 const *)_String.f_GetStr())
 			, m_pEnd((uch16 const *)_String.f_GetStr() + _String.f_GetStrLen())
 		{

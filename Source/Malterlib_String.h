@@ -48,9 +48,6 @@ namespace NMib::NStr
 	extern template class TCStr<CStrTraits_CStr>;
 	extern template class TCStr<CStrTraits_CWStr>;
 	extern template class TCStr<CStrTraits_CUStr>;
-	extern template class TCStrAggregate< CStrTraits_CStr>;
-	extern template class TCStrAggregate< CStrTraits_CWStr>;
-	extern template class TCStrAggregate< CStrTraits_CUStr>;
 	extern template class TCFormat<CStrTraits_CStr>;
 	extern template class TCFormat<CStrTraits_CWStr>;
 	extern template class TCFormat<CStrTraits_CUStr>;
@@ -58,9 +55,6 @@ namespace NMib::NStr
 	extern template class TCStr<CStrTraits_CStrNonTracked>;
 	extern template class TCStr<CStrTraits_CWStrNonTracked>;
 	extern template class TCStr<CStrTraits_CUStrNonTracked>;
-	extern template class TCStrAggregate<CStrTraits_CStrNonTracked>;
-	extern template class TCStrAggregate<CStrTraits_CWStrNonTracked>;
-	extern template class TCStrAggregate<CStrTraits_CUStrNonTracked>;
 	extern template class TCFormat<CStrTraits_CStrNonTracked>;
 	extern template class TCFormat<CStrTraits_CWStrNonTracked>;
 	extern template class TCFormat<CStrTraits_CUStrNonTracked>;
@@ -68,16 +62,13 @@ namespace NMib::NStr
 	extern template class TCStr<CStrTraits_CStrVMem>;
 	extern template class TCStr<CStrTraits_CWStrVMem>;
 	extern template class TCStr<CStrTraits_CUStrVMem>;
-	extern template class TCStrAggregate<CStrTraits_CStrVMem>;
-	extern template class TCStrAggregate<CStrTraits_CWStrVMem>;
-	extern template class TCStrAggregate<CStrTraits_CUStrVMem>;
 
 	extern template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
 	extern template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
 	extern template class TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
 
-	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
-	extern template void NMib::NStr::TCStrAggregate<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStrAggregate<NMib::NStr::CStrTraits_CStr> const &);
+	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStr<NMib::NStr::CStrTraits_CStr> const &);
+	extern template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
 }
 
 #include "Malterlib_String_Container_Format_String.h"
@@ -189,7 +180,7 @@ namespace NMib::NStr
 	{
 		auto operator <=> (CParseError const &_Right) const = default;
 
-		void f_Format(NStr::CStrAggregate &o_FormatInto) const;
+		void f_Format(NStr::CStr &o_FormatInto) const;
 
 		template <typename tf_CStream>
 		void f_Stream(tf_CStream &_Stream) const

@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 #ifdef DMibDebuggerHelpers
 	template <typename t_CTCStrTraits>
-	TCStrAggregateTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStrAggregate<t_CTCStrTraits>::fs_TypeDebugHelper()
+	TCStrTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStr<t_CTCStrTraits>::fs_TypeDebugHelper()
 	{
 		return {};
 	}
@@ -16,7 +16,7 @@ namespace NMib::NStr
 	CStr fg_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
 
 	template <typename t_TCStrTraits>
-	inline_large TCStrAggregate<t_TCStrTraits> &TCStrAggregate<t_TCStrTraits>::operator +=(ch32 _ToAdd)
+	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator +=(ch32 _ToAdd)
 	{
 		f_AddChar(_ToAdd);
 		return *this;
@@ -24,7 +24,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bRemoveEmpty>
-	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitEscaped(CChar _Separator) const
+	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStr<t_CTCStrTraits>::f_SplitEscaped(CChar _Separator) const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
 
@@ -79,7 +79,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CContainer>
-	TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator)
+	TCStr<t_CTCStrTraits> TCStr<t_CTCStrTraits>::fs_JoinEscaped(tf_CContainer &&_Strings, CChar _Separator)
 	{
 		CChar EscapeChars[] = {'\\', _Separator, 0};
 		TCStr<t_CTCStrTraits> Return;
@@ -96,7 +96,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bRemoveEmpty, typename tf_CStrSeparator>
-	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_Split(tf_CStrSeparator const &_Separator) const
+	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStr<t_CTCStrTraits>::f_Split(tf_CStrSeparator const &_Separator) const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
 
@@ -136,7 +136,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bRemoveEmpty>
-	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStrAggregate<t_CTCStrTraits>::f_SplitLine() const
+	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStr<t_CTCStrTraits>::f_SplitLine() const
 	{
 		NContainer::TCVector<TCStr<t_CTCStrTraits>> Result;
 
@@ -180,7 +180,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CContainer, typename tf_CStrSeparator>
-	TCStr<t_CTCStrTraits> TCStrAggregate<t_CTCStrTraits>::fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator)
+	TCStr<t_CTCStrTraits> TCStr<t_CTCStrTraits>::fs_Join(tf_CContainer &&_Strings, tf_CStrSeparator const &_Separator)
 	{
 		TCStr<t_CTCStrTraits> Return;
 		bool bFirst = true;
@@ -195,7 +195,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
-	void TCStrAggregate<t_TCStrTraits>::f_AddUnicodeChar(ch32 _Character)
+	void TCStr<t_TCStrTraits>::f_AddUnicodeChar(ch32 _Character)
 	{
 		if constexpr (sizeof(CChar) == 1)
 		{
@@ -263,7 +263,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize == 1, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize == 1, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 1 && mc_Type == EStrType_UTF, "Lossy conversion");
 
@@ -311,7 +311,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize == 2, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize == 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 2 && mc_Type == EStrType_UTF, "Lossy conversion");
 		mint LenNeeded = _StrLen;
@@ -358,7 +358,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStrAggregate<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 4 && mc_Type == EStrType_Unicode, "Lossy conversion");
 		mint LenNeeded = _StrLen;
@@ -400,7 +400,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	inline_large TCStrAggregate<t_TCStrTraits> & TCStrAggregate<t_TCStrTraits>::operator += (const TCStrAggregate<t_CStrTraitsF> &_Str)
+	inline_large TCStr<t_TCStrTraits> & TCStr<t_TCStrTraits>::operator += (const TCStr<t_CStrTraitsF> &_Str)
 	{
 		if (f_IsEmpty())
 			f_SetStr(_Str);
@@ -412,14 +412,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	inline_large TCStrAggregate<t_TCStrTraits> &TCStrAggregate<t_TCStrTraits>::operator +=(const TCStr<t_CStrTraitsF> &_Str)
-	{
-		return operator += ((const TCStrAggregate<t_CStrTraitsF>&)_Str);
-	}
-
-	template <typename t_TCStrTraits>
-	template <typename t_CStrTraitsF>
-	void TCStrAggregate<t_TCStrTraits>::f_AddStr(TCStrAggregate<t_CStrTraitsF> const &_From)
+	void TCStr<t_TCStrTraits>::f_AddStr(TCStr<t_CStrTraitsF> const &_From)
 	{
 		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
@@ -461,7 +454,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	void TCStrAggregate<t_TCStrTraits>::f_SetStr(TCStrAggregate<t_CStrTraitsF> const &_From)
+	void TCStr<t_TCStrTraits>::f_SetStr(TCStr<t_CStrTraitsF> const &_From)
 	{
 		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
@@ -505,7 +498,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	TCEnableIf<t_CharSize == 1, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize == 1, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -543,7 +536,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	TCEnableIf<t_CharSize == 2, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize == 2, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -568,7 +561,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <int t_CharSize>
-	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStrAggregate<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type == EStrType_Unicode);
 	}
@@ -576,14 +569,14 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrDataType>
-	inline_large TCStrAggregate<t_TCStrTraits> &TCStrAggregate<t_TCStrTraits>::operator +=(const t_CStrDataType *_pToAdd)
+	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator +=(const t_CStrDataType *_pToAdd)
 	{
 		f_AddStr(_pToAdd);
 		return *this;
 	}
 
 	template <typename t_TCStrTraits>
-	inline_large TCStrAggregate<t_TCStrTraits> &TCStrAggregate<t_TCStrTraits>::operator +=(CFormat const &_Format)
+	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator +=(CFormat const &_Format)
 	{
 		_Format.f_FormatToStrConcat(*this);
 		return *this;
@@ -661,20 +654,20 @@ namespace NMib::NStream
 	}
 
 	template <typename t_CStream, typename t_TCStrTraitsIn>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStrAggregate<t_TCStrTraitsIn> >
+	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn> >
 	{
 	public:
-		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> const &_Data)
+		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();
 			uint64 LenStream = Len;
 			fg_StrEncodeLenType(LenStream, _Stream.f_LengthSize(), _Data.mc_Type);
 			fg_FeedLenToStream(_Stream, LenStream);
 			if (Len != 0)
-				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
+				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStr<t_TCStrTraitsIn>::CChar));
 		}
 
-		static constexpr void fs_Consume(t_CStream &_Stream, NStr::TCStrAggregate<t_TCStrTraitsIn> &_Data)
+		static constexpr void fs_Consume(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> &_Data)
 		{
 			uint64 Len;
 			fg_ConsumeLenFromStream(_Stream, Len);
@@ -684,7 +677,7 @@ namespace NMib::NStream
 
 			//NStr::TCStr<t_TCStrTraitsIn>
 
-			typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar *pStr = _Data.f_GetStr(Len + 1);
+			typename NStr::TCStr<t_TCStrTraitsIn>::CChar *pStr = _Data.f_GetStr(Len + 1);
 			auto Cleanup = g_OnScopeExit / [&]
 				{
 					_Data.f_Clear();
@@ -692,16 +685,11 @@ namespace NMib::NStream
 			;
 
 			if (Len != 0)
-				_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStrAggregate<t_TCStrTraitsIn>::CChar));
+				_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStr<t_TCStrTraitsIn>::CChar));
 			Cleanup.f_Clear();
 			pStr[Len] = 0;
 			_Data.f_SetStrLen(Len);
 			_Data.fp_ConvertFromType(Type);
 		}
-	};
-
-	template <typename t_CStream, typename t_TCStrTraitsIn>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn> > : public TCBinaryStreamTypeReference<t_CStream, NStr::TCStrAggregate<t_TCStrTraitsIn> >
-	{
 	};
 }

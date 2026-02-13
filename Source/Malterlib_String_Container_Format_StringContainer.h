@@ -29,8 +29,8 @@ namespace NMib::NStr
 
 		using CTStrTraits = typename t_CFormatter::CTStrTraits;
 		using CChar = typename CTStrTraits::CStrTraits::CChar;
-		using CStorageType = TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, TCStr<t_CStrTraitsIn>>;
-		using CReferenceType = TCConditional<t_bReference, const TCStrAggregate<t_CStrTraitsIn> &, const TCStr<t_CStrTraitsIn> &>;
+		using CStorageType = TCConditional<t_bReference, TCStr<t_CStrTraitsIn> const &, TCStr<t_CStrTraitsIn>>;
+		using CReferenceType = TCConditional<t_bReference, TCStr<t_CStrTraitsIn> const &, TCStr<t_CStrTraitsIn> const &>;
 
 		enum
 		{
@@ -39,20 +39,20 @@ namespace NMib::NStr
 
 		CStorageType m_TStr;
 
-		using CType = TCStrAggregate<t_CStrTraitsIn> const &;
+		using CType = TCStr<t_CStrTraitsIn> const &;
 		using CCharIn = typename t_CStrTraitsIn::CStrTraits::CChar;
 
-		inline_small TCStrFormatType_TStr(TCStrAggregate<t_CStrTraitsIn> const &_Str)
+		inline_small TCStrFormatType_TStr(TCStr<t_CStrTraitsIn> const &_Str)
 			: m_TStr(_Str)
 		{
 		}
 
-		inline_small TCStrFormatType_TStr(TCStrAggregate<t_CStrTraitsIn> &&_Str)
+		inline_small TCStrFormatType_TStr(TCStr<t_CStrTraitsIn> &&_Str)
 			: m_TStr(fg_Move(_Str))
 		{
 		}
 
-		inline_small TCStrFormatType_TStr(TCStrAggregate<t_CStrTraitsIn> const *_pStr)
+		inline_small TCStrFormatType_TStr(TCStr<t_CStrTraitsIn> const *_pStr)
 			: m_TStr(*_pStr)
 		{
 		}
@@ -117,7 +117,7 @@ namespace NMib::NStr
 			return CSuper::f_ParseOption(_Args, _Option);
 		}
 
-		virtual void f_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const override
 		{
 			COptionsStr Options;
 
@@ -129,19 +129,19 @@ namespace NMib::NStr
 			fp_AddToStr(_String, _CurrentStrLen, Options, m_TStr);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStrAggregate<t_CStrTraitsIn> &_Value)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStr<t_CStrTraitsIn> &_Value)
 		{
 			COptionsStr Options;
 			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		}
 
-		static void fs_AddToStrStatic(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStrAggregate<t_CStrTraitsIn> &_Value, COptionsStr &_Options)
+		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStr<t_CStrTraitsIn> &_Value, COptionsStr &_Options)
 		{
 			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		}
 
 		template <typename t_COptions>
-		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, const TCStrAggregate<CTStrTraits> &_Value)
+		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, const TCStr<CTStrTraits> &_Value)
 		{
 			DMibSafeCheck(reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value), "You cannot assign a format to string that is used by reference as an argument.");
 
@@ -149,7 +149,7 @@ namespace NMib::NStr
 
 			if (_Options.m_Case && TempLen > 0)
 			{
-				if constexpr (TCStrAggregate<CTStrTraits>::mc_Type == EStrType_Unicode || TCStrAggregate<CTStrTraits>::mc_Type == EStrType_Ansi)
+				if constexpr (TCStr<CTStrTraits>::mc_Type == EStrType_Unicode || TCStr<CTStrTraits>::mc_Type == EStrType_Ansi)
 				{
 					auto fAddStr = [&](CChar *_pTemp)
 						{
@@ -205,9 +205,9 @@ namespace NMib::NStr
 						<
 							typename TCStrTraits_ReplaceParams<ch32
 							, EStrType_Unicode
-							, TCStrAggregate<t_CStrTraitsIn>::CTraits::CStrTraits::mc_Type
-							, typename TCStrAggregate<t_CStrTraitsIn>::CImp
-							, typename TCStrAggregate<t_CStrTraitsIn>::CTraits::CStrTraits::CParams>::CType
+							, TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::mc_Type
+							, typename TCStr<t_CStrTraitsIn>::CImp
+							, typename TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::CParams>::CType
 						>
 					;
 
@@ -250,7 +250,7 @@ namespace NMib::NStr
 		}
 
 		template <typename t_COptions, typename tf_CStrTraitsIn>
-		static inline_small void fp_AddToStr(TCStrAggregate<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, const TCStrAggregate<tf_CStrTraitsIn> &_Value)
+		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, const TCStr<tf_CStrTraitsIn> &_Value)
 		{
 			TCStr<CTStrTraits> Value(_Value);
 			fp_AddToStr(_String, _CurrentStrLen, _Options, Value);
@@ -300,20 +300,6 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
-	class TCStringFormatter<t_CFormatter, TCStrAggregate<t_CStrTraitsIn> >
-	{
-	public:
-		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true>;
-
-		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStrAggregate<t_CStrTraitsIn> const&_Data)
-		{
-			_Formatter.template f_Alloc<CFormatType>(_Data);
-			return typename CFormatType::CStrFormatTypeClassifier();
-		}
-	};
-
-	template <typename t_CFormatter, typename t_CStrTraitsIn>
 	class TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn> >
 	{
 	public:
@@ -327,24 +313,6 @@ namespace NMib::NStr
 		}
 	};
 
-
-	template <typename t_CFormatter, typename t_CStrTraitsIn>
-	class TCStringFormatter<t_CFormatter, TCByValue<TCStrAggregate<t_CStrTraitsIn>> >
-	{
-	public:
-		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false>;
-
-		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat
-		(
-			t_CFormatter &_Formatter
-			, TCByValue<TCStrAggregate<t_CStrTraitsIn>> const&_Data
-		)
-		{
-			_Formatter.template f_Alloc<CFormatType>(*_Data);
-			return typename CFormatType::CStrFormatTypeClassifier();
-		}
-	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
 	class TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>> >

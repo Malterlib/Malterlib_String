@@ -84,28 +84,14 @@ namespace NMib::NStr
 	using CWStr = TCStr<CStrTraits_CWStr>;
 	using CUStr = TCStr<CStrTraits_CUStr>;
 
-	using CStrAggregate = TCStrAggregate<CStrTraits_CStr>;
-	using CAnsiStrAggregate = TCStrAggregate<CStrTraits_CStrAnsi>;
-	using CWStrAggregate = TCStrAggregate<CStrTraits_CWStr>;
-	using CUStrAggregate = TCStrAggregate<CStrTraits_CUStr>;
-
 	using CStrNonTracked = TCStr<CStrTraits_CStrNonTracked>;
 	using CAnsiStrNonTracked = TCStr<CStrTraits_CStrAnsiNonTracked>;
 	using CWStrNonTracked = TCStr<CStrTraits_CWStrNonTracked>;
 	using CUStrNonTracked = TCStr<CStrTraits_CUStrNonTracked>;
 
-	using CStrAggregateNonTracked = TCStrAggregate<CStrTraits_CStrNonTracked>;
-	using CAnsiStrAggregateNonTracked = TCStrAggregate<CStrTraits_CStrAnsiNonTracked>;
-	using CWStrAggregateNonTracked = TCStrAggregate<CStrTraits_CWStrNonTracked>;
-	using CUStrAggregateNonTracked = TCStrAggregate<CStrTraits_CUStrNonTracked>;
-
 	using CStrSecure = TCStr<CStrTraits_CStrSecure>;
 	using CWStrSecure = TCStr<CStrTraits_CWStrSecure>;
 	using CUStrSecure = TCStr<CStrTraits_CUStrSecure>;
-
-	using CStrSecureAggregate = TCStrAggregate<CStrTraits_CStrSecure>;
-	using CWStrSecureAggregate = TCStrAggregate<CStrTraits_CWStrSecure>;
-	using CUStrSecureAggregate = TCStrAggregate<CStrTraits_CUStrSecure>;
 
 #ifdef DMibSecureClearIOBuffers_Enable
 	using CStrIO = CStrSecure;
@@ -177,12 +163,6 @@ namespace NMib::NStr
 		using CType = TCStr<TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Fixed<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, t_NumChar>>>;
 	};
 
-	template <typename t_CCharType, aint t_NumChar, CStrTypeUnderlying t_Type>
-	struct TCFStrAggregate
-	{
-		using CType = TCStrAggregate<TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Fixed<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, t_NumChar>>>;
-	};
-
 	template <typename t_CCharType, CStrTypeUnderlying t_DesiredType, CStrTypeUnderlying t_Type, template <typename, aint t_DataLen> class t_TImpl, typename t_CParams, typename t_CCharType2, typename t_CParams2, aint t_DataLen>
 	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TImpl<TCStrTraits<t_CCharType2, t_Type, t_CParams2>, t_DataLen>, t_CParams>
 	{
@@ -196,42 +176,34 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	using CFStr16 = TCFStr<ch8, 16, EStrType_UTF>::CType;
-	using CFStrAggregate16 = TCFStrAggregate<ch8, 16, EStrType_UTF>::CType;
 	using CFStr16V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType>;
 	using CFStr16Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 16, EStrType_UTF>::CType>;
 
 	using CFStr24 = TCFStr<ch8, 24, EStrType_UTF>::CType;
-	using CFStrAggregate24 = TCFStrAggregate<ch8, 24, EStrType_UTF>::CType;
 	using CFStr24V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 24, EStrType_UTF>::CType>;
 	using CFStr24Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 24, EStrType_UTF>::CType>;
 
 	using CFStr32 = TCFStr<ch8, 32, EStrType_UTF>::CType;
-	using CFStrAggregate32 = TCFStrAggregate<ch8, 32, EStrType_UTF>::CType;
 	using CFStr32V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType >;
 	using CFStr32Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 32, EStrType_UTF>::CType>;
 
 	using CFStr64 = TCFStr<ch8, 64, EStrType_UTF>::CType;
-	using CFStrAggregate64 = TCFStrAggregate<ch8, 64, EStrType_UTF>::CType;
 	using CFStr64V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 64, EStrType_UTF>::CType >;
 	using CFStr64Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 64, EStrType_UTF>::CType>;
 
 	using CFStr128 = TCFStr<ch8, 128, EStrType_UTF>::CType;
-	using CFStrAggregate128 = TCFStrAggregate<ch8, 128, EStrType_UTF>::CType;
 	using CFStr128V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 128, EStrType_UTF>::CType >;
 	using CFStr128Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 128, EStrType_UTF>::CType>;
 
 	using CFStr256 = TCFStr<ch8, 256, EStrType_UTF>::CType;
-	using CFStrAggregate256 = TCFStrAggregate<ch8, 256, EStrType_UTF>::CType;
 	using CFStr256V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 256, EStrType_UTF>::CType >;
 	using CFStr256Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 256, EStrType_UTF>::CType>;
 
 	using CFStr512 = TCFStr<ch8, 512, EStrType_UTF>::CType;
-	using CFStrAggregate512 = TCFStrAggregate<ch8, 512, EStrType_UTF>::CType;
 	using CFStr512V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 512, EStrType_UTF>::CType >;
 	using CFStr512Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 512, EStrType_UTF>::CType>;
 
 	using CFStr1024 = TCFStr<ch8, 1024, EStrType_UTF>::CType;
-	using CFStrAggregate1024 = TCFStrAggregate<ch8, 1024, EStrType_UTF>::CType;
 	using CFStr1024V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch8, 1024, EStrType_UTF>::CType >;
 	using CFStr1024Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch8, 1024, EStrType_UTF>::CType>;
 
@@ -242,42 +214,34 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	using CFWStr16 = TCFStr<ch16, 16, EStrType_UTF>::CType;
-	using CFWStrAggregate16 = TCFStrAggregate<ch16, 16, EStrType_UTF>::CType;
 	using CFWStr16V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType >;
 	using CFWStr16Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 16, EStrType_UTF>::CType>;
 
 	using CFWStr24 = TCFStr<ch16, 24, EStrType_UTF>::CType;
-	using CFWStrAggregate24 = TCFStrAggregate<ch16, 24, EStrType_UTF>::CType;
 	using CFWStr24V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 24, EStrType_UTF>::CType >;
 	using CFWStr24Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 24, EStrType_UTF>::CType>;
 
 	using CFWStr32 = TCFStr<ch16, 32, EStrType_UTF>::CType;
-	using CFWStrAggregate32 = TCFStrAggregate<ch16, 32, EStrType_UTF>::CType;
 	using CFWStr32V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType >;
 	using CFWStr32Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 32, EStrType_UTF>::CType>;
 
 	using CFWStr64 = TCFStr<ch16, 64, EStrType_UTF>::CType;
-	using CFWStrAggregate64 = TCFStrAggregate<ch16, 64, EStrType_UTF>::CType;
 	using CFWStr64V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 64, EStrType_UTF>::CType >;
 	using CFWStr64Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 64, EStrType_UTF>::CType>;
 
 	using CFWStr128 = TCFStr<ch16, 128, EStrType_UTF>::CType;
-	using CFWStrAggregate128 = TCFStrAggregate<ch16, 128, EStrType_UTF>::CType;
 	using CFWStr128V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 128, EStrType_UTF>::CType >;
 	using CFWStr128Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 128, EStrType_UTF>::CType>;
 
 	using CFWStr256 = TCFStr<ch16, 256, EStrType_UTF>::CType;
-	using CFWStrAggregate256 = TCFStrAggregate<ch16, 256, EStrType_UTF>::CType;
 	using CFWStr256V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 256, EStrType_UTF>::CType >;
 	using CFWStr256Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 256, EStrType_UTF>::CType>;
 
 	using CFWStr512 = TCFStr<ch16, 512, EStrType_UTF>::CType;
-	using CFWStrAggregate512 = TCFStrAggregate<ch16, 512, EStrType_UTF>::CType;
 	using CFWStr512V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 512, EStrType_UTF>::CType >;
 	using CFWStr512Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 512, EStrType_UTF>::CType>;
 
 	using CFWStr1024 = TCFStr<ch16, 1024, EStrType_UTF>::CType;
-	using CFWStrAggregate1024 = TCFStrAggregate<ch16, 1024, EStrType_UTF>::CType;
 	using CFWStr1024V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch16, 1024, EStrType_UTF>::CType >;
 	using CFWStr1024Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch16, 1024, EStrType_UTF>::CType>;
 
@@ -288,42 +252,34 @@ namespace NMib::NStr
 	\***************************************************************************************************/
 
 	using CFUStr16 = TCFStr<ch32, 16, EStrType_Unicode>::CType;
-	using CFUStrAggregate16 = TCFStrAggregate<ch32, 16, EStrType_Unicode>::CType;
 	using CFUStr16V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType >;
 	using CFUStr16Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 16, EStrType_Unicode>::CType>;
 
 	using CFUStr24 = TCFStr<ch32, 24, EStrType_Unicode>::CType;
-	using CFUStrAggregate24 = TCFStrAggregate<ch32, 24, EStrType_Unicode>::CType;
 	using CFUStr24V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 24, EStrType_Unicode>::CType >;
 	using CFUStr24Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 24, EStrType_Unicode>::CType>;
 
 	using CFUStr32 = TCFStr<ch32, 32, EStrType_Unicode>::CType;
-	using CFUStrAggregate32 = TCFStrAggregate<ch32, 32, EStrType_Unicode>::CType;
 	using CFUStr32V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 32, EStrType_Unicode>::CType >;
 	using CFUStr32Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 32, EStrType_Unicode>::CType>;
 
 	using CFUStr64 = TCFStr<ch32, 64, EStrType_Unicode>::CType;
-	using CFUStrAggregate64 = TCFStrAggregate<ch32, 64, EStrType_Unicode>::CType;
 	using CFUStr64V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 64, EStrType_Unicode>::CType >;
 	using CFUStr64Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 64, EStrType_Unicode>::CType>;
 
 	using CFUStr128 = TCFStr<ch32, 128, EStrType_Unicode>::CType;
-	using CFUStrAggregate128 = TCFStrAggregate<ch32, 128, EStrType_Unicode>::CType;
 	using CFUStr128V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 128, EStrType_Unicode>::CType >;
 	using CFUStr128Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 128, EStrType_Unicode>::CType>;
 
 	using CFUStr256 = TCFStr<ch32, 256, EStrType_Unicode>::CType;
-	using CFUStrAggregate256 = TCFStrAggregate<ch32, 256, EStrType_Unicode>::CType;
 	using CFUStr256V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 256, EStrType_Unicode>::CType >;
 	using CFUStr256Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 256, EStrType_Unicode>::CType>;
 
 	using CFUStr512 = TCFStr<ch32, 512, EStrType_Unicode>::CType;
-	using CFUStrAggregate512 = TCFStrAggregate<ch32, 512, EStrType_Unicode>::CType;
 	using CFUStr512V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 512, EStrType_Unicode>::CType >;
 	using CFUStr512Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 512, EStrType_Unicode>::CType>;
 
 	using CFUStr1024 = TCFStr<ch32, 1024, EStrType_Unicode>::CType;
-	using CFUStrAggregate1024 = TCFStrAggregate<ch32, 1024, EStrType_Unicode>::CType;
 	using CFUStr1024V = TCStrImp_Virtual_TStrWrapper< TCFStr<ch32, 1024, EStrType_Unicode>::CType >;
 	using CFUStr1024Vp = TCStrImp_Virtual_PtrWrapper< TCFStr<ch32, 1024, EStrType_Unicode>::CType>;
 

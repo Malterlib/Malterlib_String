@@ -66,13 +66,6 @@ namespace NMib::NStr
 	};
 
 	template <typename tf_CStrTraits>
-	inline_large TCStrAggregate<tf_CStrTraits> &operator +=(TCStrAggregate<tf_CStrTraits> &_Dest, CMStrDeprecated const &_String)
-	{
-		_Dest += (CStr const &)_String;
-		return _Dest;
-	}
-
-	template <typename tf_CStrTraits>
 	inline_large TCStr<tf_CStrTraits> &operator += (TCStr<tf_CStrTraits> &_Dest, CMStrDeprecated const &_String)
 	{
 		_Dest += (CStr const &)_String;
