@@ -10,6 +10,7 @@
 #include <Mib/Core/EnableIf>
 
 #include "Malterlib_String_Container_Traits.h"
+#include "Malterlib_String_Container_Span.h"
 namespace NMib::NStr
 {
 	struct CStrInitGeneral
@@ -747,42 +748,6 @@ EndArgSearch:
 
 	template <typename t_CString>
 	struct TCStringAppender;
-
-	template <typename t_CStrTraitsTypes>
-	struct TCStrSpan
-	{
-		using CStrTraitsTypes = t_CStrTraitsTypes;
-		using CChar = typename t_CStrTraitsTypes::CChar;
-		using CUnsignedChar = NTraits::TCUnsigned<typename t_CStrTraitsTypes::CChar>;
-
-		TCStrSpan() = default;
-		TCStrSpan(TCStrSpan const &) = default;
-		TCStrSpan(TCStrSpan &&) = default;
-		TCStrSpan &operator = (TCStrSpan const &) = default;
-		TCStrSpan &operator = (TCStrSpan &&) = default;
-
-		TCStrSpan(CChar const *_pStr, mint _Length)
-			: m_pStr(_pStr)
-			, m_Length(_Length)
-		{
-		}
-
-		CChar const *f_GetStr() const
-		{
-			return m_pStr;
-		}
-
-		mint f_GetLen() const
-		{
-			return m_Length;
-		}
-
-	private:
-		static constexpr CChar const mc_EmptyStr[1] = {0};
-
-		CChar const *m_pStr = mc_EmptyStr;
-		mint m_Length = 0;
-	};
 
 	template <typename t_CTCStrTraits>
 	class TCStr : public t_CTCStrTraits::CImp
