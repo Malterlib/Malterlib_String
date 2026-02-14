@@ -11,16 +11,16 @@ namespace NMib::NStr
 	template class TCStr<CStrTraits_CStr>;
 	template class TCStr<CStrTraits_CWStr>;
 	template class TCStr<CStrTraits_CUStr>;
-	template class TCFormat<CStrTraits_CStr>;
-	template class TCFormat<CStrTraits_CWStr>;
-	template class TCFormat<CStrTraits_CUStr>;
+	template struct TCFormat<CStrTraits_CStr>;
+	template struct TCFormat<CStrTraits_CWStr>;
+	template struct TCFormat<CStrTraits_CUStr>;
 
 	template class TCStr<CStrTraits_CStrNonTracked>;
 	template class TCStr<CStrTraits_CWStrNonTracked>;
 	template class TCStr<CStrTraits_CUStrNonTracked>;
-	template class TCFormat<CStrTraits_CStrNonTracked>;
-	template class TCFormat<CStrTraits_CWStrNonTracked>;
-	template class TCFormat<CStrTraits_CUStrNonTracked>;
+	template struct TCFormat<CStrTraits_CStrNonTracked>;
+	template struct TCFormat<CStrTraits_CWStrNonTracked>;
+	template struct TCFormat<CStrTraits_CUStrNonTracked>;
 
 	template class TCStr<CStrTraits_CStrVMem>;
 	template class TCStr<CStrTraits_CWStrVMem>;

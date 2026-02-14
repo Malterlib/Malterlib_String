@@ -73,9 +73,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter>
-	class TCStringFormatter<t_CFormatter, CMStrDeprecated> : public TCStringFormatter<t_CFormatter, CStr>
+	struct TCStringFormatter<t_CFormatter, CMStrDeprecated> : public TCStringFormatter<t_CFormatter, CStr>
 	{
-	public:
 	};
 
 	template <typename t_CData0>

@@ -80,13 +80,13 @@ namespace NMib::NStr
 	class TCStrImp_Virtual_TStrWrapper;
 
 	template <typename t_CFormatter>
-	class TICStrFormatType;
+	struct TICStrFormatType;
 
 	template <typename t_CIntType>
-	class TCStrFormatType_Int_OptionsStatic;
+	struct TCStrFormatType_Int_OptionsStatic;
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions = TCStrFormatType_Int_OptionsStatic<t_CIntType> >
-	class TCStrFormatType_Int;
+	struct TCStrFormatType_Int;
 
 	template
 		<
@@ -106,7 +106,7 @@ namespace NMib::NStr
 	class TCStrFormatType_String;
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
-	class TCStrFormatType_TStr;
+	struct TCStrFormatType_TStr;
 
 
 	enum EStrTypeClass_Float

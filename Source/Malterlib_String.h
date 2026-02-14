@@ -48,16 +48,16 @@ namespace NMib::NStr
 	extern template class TCStr<CStrTraits_CStr>;
 	extern template class TCStr<CStrTraits_CWStr>;
 	extern template class TCStr<CStrTraits_CUStr>;
-	extern template class TCFormat<CStrTraits_CStr>;
-	extern template class TCFormat<CStrTraits_CWStr>;
-	extern template class TCFormat<CStrTraits_CUStr>;
+	extern template struct TCFormat<CStrTraits_CStr>;
+	extern template struct TCFormat<CStrTraits_CWStr>;
+	extern template struct TCFormat<CStrTraits_CUStr>;
 
 	extern template class TCStr<CStrTraits_CStrNonTracked>;
 	extern template class TCStr<CStrTraits_CWStrNonTracked>;
 	extern template class TCStr<CStrTraits_CUStrNonTracked>;
-	extern template class TCFormat<CStrTraits_CStrNonTracked>;
-	extern template class TCFormat<CStrTraits_CWStrNonTracked>;
-	extern template class TCFormat<CStrTraits_CUStrNonTracked>;
+	extern template struct TCFormat<CStrTraits_CStrNonTracked>;
+	extern template struct TCFormat<CStrTraits_CWStrNonTracked>;
+	extern template struct TCFormat<CStrTraits_CUStrNonTracked>;
 
 	extern template class TCStr<CStrTraits_CStrVMem>;
 	extern template class TCStr<CStrTraits_CWStrVMem>;
@@ -83,7 +83,7 @@ namespace NMib::NStr
 #include "Malterlib_String_Container_Parse_Float.h"
 #include "Malterlib_String_Container_Parse_StringContainer.h"
 
-#include "Malterlib_String_Container_Format.h"
+#include "Malterlib_String_Container_FormatHelpers.h"
 
 namespace NMib::NSys::NStr
 {
