@@ -8,23 +8,23 @@ namespace NMib::NStr
 {
 	DMibImpErrorClassImplement(CExceptionParse);
 
-	template class TCStr<CStrTraits_CStr>;
-	template class TCStr<CStrTraits_CWStr>;
-	template class TCStr<CStrTraits_CUStr>;
+	template struct TCStr<CStrTraits_CStr>;
+	template struct TCStr<CStrTraits_CWStr>;
+	template struct TCStr<CStrTraits_CUStr>;
 	template struct TCFormat<CStrTraits_CStr>;
 	template struct TCFormat<CStrTraits_CWStr>;
 	template struct TCFormat<CStrTraits_CUStr>;
 
-	template class TCStr<CStrTraits_CStrNonTracked>;
-	template class TCStr<CStrTraits_CWStrNonTracked>;
-	template class TCStr<CStrTraits_CUStrNonTracked>;
+	template struct TCStr<CStrTraits_CStrNonTracked>;
+	template struct TCStr<CStrTraits_CWStrNonTracked>;
+	template struct TCStr<CStrTraits_CUStrNonTracked>;
 	template struct TCFormat<CStrTraits_CStrNonTracked>;
 	template struct TCFormat<CStrTraits_CWStrNonTracked>;
 	template struct TCFormat<CStrTraits_CUStrNonTracked>;
 
-	template class TCStr<CStrTraits_CStrVMem>;
-	template class TCStr<CStrTraits_CWStrVMem>;
-	template class TCStr<CStrTraits_CUStrVMem>;
+	template struct TCStr<CStrTraits_CStrVMem>;
+	template struct TCStr<CStrTraits_CWStrVMem>;
+	template struct TCStr<CStrTraits_CUStrVMem>;
 
 	template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
 	template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
@@ -574,12 +574,12 @@ namespace NMib::NStr
 					if (_bValid)
 					{
 						CStr::CAddStrAgrs Args(Length, _Length);
-						Destination.fp_AddStrLengthAware(Args, (ch8 const *)_pStr);
+						Destination.f_AddStrLengthAware(Args, (ch8 const *)_pStr);
 					}
 					else
 					{
 						CStr::CAddStrAgrs Args(Length, Replacement.f_GetLen());
-						Destination.fp_AddStrLengthAware(Args, Replacement.f_GetStr());
+						Destination.f_AddStrLengthAware(Args, Replacement.f_GetStr());
 					}
 					return false;
 				}

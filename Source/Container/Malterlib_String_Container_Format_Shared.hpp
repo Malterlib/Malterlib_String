@@ -417,15 +417,15 @@ namespace NMib::NStr
 	{
 		ch8 const *pTmp = "| format specifier unknown (";
 		while (*pTmp)
-			_String.fp_AddCharLengthAware(_CurrentStrLen, (CChar)(*(pTmp++)));
+			_String.f_AddCharLengthAware(_CurrentStrLen, (CChar)(*(pTmp++)));
 
 		if (m_FormatTypes.m_Format1)
-			_String.fp_AddCharLengthAware(_CurrentStrLen, (CChar)m_FormatTypes.m_Format1);
+			_String.f_AddCharLengthAware(_CurrentStrLen, (CChar)m_FormatTypes.m_Format1);
 		if (m_FormatTypes.m_Format2)
-			_String.fp_AddCharLengthAware(_CurrentStrLen, (CChar)m_FormatTypes.m_Format2);
-		_String.fp_AddCharLengthAware(_CurrentStrLen, ')');
-		_String.fp_AddCharLengthAware(_CurrentStrLen, ' ');
-		_String.fp_AddCharLengthAware(_CurrentStrLen, '|');
+			_String.f_AddCharLengthAware(_CurrentStrLen, (CChar)m_FormatTypes.m_Format2);
+		_String.f_AddCharLengthAware(_CurrentStrLen, ')');
+		_String.f_AddCharLengthAware(_CurrentStrLen, ' ');
+		_String.f_AddCharLengthAware(_CurrentStrLen, '|');
 	}
 
 	template <typename t_CFormatter>
@@ -547,7 +547,7 @@ namespace NMib::NStr
 
 		if (PreAdd > 0 || PostAdd > 0)
 		{
-			_String.fp_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), PreAdd);
+			_String.f_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), PreAdd);
 
 			if (_Options.f_LeftAlign())
 			{
@@ -582,10 +582,10 @@ namespace NMib::NStr
 			}
 		}
 
-		_String.fp_AddStrLengthAwareInline(Args, pSubStr);
+		_String.f_AddStrLengthAwareInline(Args, pSubStr);
 
 		if (PostAdd > 0)
-			_String.fp_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), PostAdd);
+			_String.f_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), PostAdd);
 	}
 
 	template <typename t_CFormatter>
@@ -598,7 +598,7 @@ namespace NMib::NStr
 		{
 			if (_SubStrLen < _Options.f_MinLength())
 			{
-				_String.fp_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), _Options.f_MinLength() - _SubStrLen);
+				_String.f_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), _Options.f_MinLength() - _SubStrLen);
 			}
 			else
 			{
@@ -610,7 +610,7 @@ namespace NMib::NStr
 				}
 			}
 		}
-		_String.fp_AddStrLengthAwareInline(Args, pSubStr);
+		_String.f_AddStrLengthAwareInline(Args, pSubStr);
 	}
 
 	template <typename t_CFormatter>
@@ -619,7 +619,7 @@ namespace NMib::NStr
 	{
 		auto pStart = _pStr;
 		while (*_pStr && mint(_pStr - pStart) < _MaxLen)
-			_String.fp_AddCharLengthAware(_CurrentStrLen, (CChar)(*(_pStr++)));
+			_String.f_AddCharLengthAware(_CurrentStrLen, (CChar)(*(_pStr++)));
 	}
 
 	template <typename t_CFormatter>

@@ -15,7 +15,7 @@ namespace NMib::NStr
 
 
 	template <typename t_TCStrTraits>
-	class TCStr;
+	struct TCStr;
 
 	class CStrImp_Dynamic_ParamsDeflauts
 	{

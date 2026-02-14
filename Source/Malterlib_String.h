@@ -45,23 +45,23 @@ namespace NMib::NStr
 
 namespace NMib::NStr
 {
-	extern template class TCStr<CStrTraits_CStr>;
-	extern template class TCStr<CStrTraits_CWStr>;
-	extern template class TCStr<CStrTraits_CUStr>;
+	extern template struct TCStr<CStrTraits_CStr>;
+	extern template struct TCStr<CStrTraits_CWStr>;
+	extern template struct TCStr<CStrTraits_CUStr>;
 	extern template struct TCFormat<CStrTraits_CStr>;
 	extern template struct TCFormat<CStrTraits_CWStr>;
 	extern template struct TCFormat<CStrTraits_CUStr>;
 
-	extern template class TCStr<CStrTraits_CStrNonTracked>;
-	extern template class TCStr<CStrTraits_CWStrNonTracked>;
-	extern template class TCStr<CStrTraits_CUStrNonTracked>;
+	extern template struct TCStr<CStrTraits_CStrNonTracked>;
+	extern template struct TCStr<CStrTraits_CWStrNonTracked>;
+	extern template struct TCStr<CStrTraits_CUStrNonTracked>;
 	extern template struct TCFormat<CStrTraits_CStrNonTracked>;
 	extern template struct TCFormat<CStrTraits_CWStrNonTracked>;
 	extern template struct TCFormat<CStrTraits_CUStrNonTracked>;
 
-	extern template class TCStr<CStrTraits_CStrVMem>;
-	extern template class TCStr<CStrTraits_CWStrVMem>;
-	extern template class TCStr<CStrTraits_CUStrVMem>;
+	extern template struct TCStr<CStrTraits_CStrVMem>;
+	extern template struct TCStr<CStrTraits_CWStrVMem>;
+	extern template struct TCStr<CStrTraits_CUStrVMem>;
 
 	extern template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
 	extern template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
@@ -101,6 +101,7 @@ namespace NMib::NSys::NStr
 	void fg_SystemDecodeCodePageStr(ch8 const *_pIn, NMib::NStr::CStrNonTracked &_Out, uint32 _CodePage);
 }
 
+#include "Malterlib_String_Compare.h"
 #include "Malterlib_String_Container.hpp"
 #include "Malterlib_String_Container_ImpDynamic.hpp"
 

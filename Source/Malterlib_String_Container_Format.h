@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CTCStrTraits>
-	class TCStr;
+	struct TCStr;
 
 	enum class EStringFormatTypeFlag : uint8
 	{
@@ -173,6 +173,21 @@ namespace NMib::NStr
 
 	template <typename tf_CFormatter, typename tf_CData>
 	inline_small typename NPrivate::TCDetermineStringFormatterReturnType<tf_CFormatter, tf_CData>::CType fg_CreateStringFormatter(tf_CFormatter &_Formatter, tf_CData const &_Data);
+
+	template <typename tf_CFormat>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format);
+
+	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First);
+
+	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams &&...p_Params);
+
+	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
+	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params);
+
+	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
+	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams &&...p_Params);
 }
 
 #include "Container/Malterlib_String_Container_Format.hpp"

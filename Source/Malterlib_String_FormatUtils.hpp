@@ -27,7 +27,7 @@ namespace NMib::NStr
 			{
 				for (auto &Item : _Value)
 				{
-					typename t_CStr::CDynamicStr Formatted;
+					typename t_CStr::CString Formatted;
 					{
 						typename t_CStr::CAppender Appender(Formatted);
 						TCFormatUtilities Utils(Appender);

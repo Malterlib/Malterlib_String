@@ -11,7 +11,6 @@ namespace NMib::NStr
 	struct TCStringAppender
 	{
 		using CString = t_CString;
-		using CDynamicStr = t_CString;
 
 		TCStringAppender(t_CString &_String);
 		~TCStringAppender();

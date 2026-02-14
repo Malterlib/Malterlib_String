@@ -9,7 +9,7 @@ namespace NMib::NStr
 	struct TCStrSpan;
 
 	template <typename t_CTCStrTraits>
-	class TCStr;
+	struct TCStr;
 
 	class CStrTraits_CStr;
 	class CStrTraits_CWStr;

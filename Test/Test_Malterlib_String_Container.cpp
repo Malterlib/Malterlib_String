@@ -313,18 +313,18 @@ namespace
 						auto Iter = Vector.begin();
 						auto IterEnd = Vector.end();
 						aint StrLen = 0;
-						MalterlibStaticNoAllocResult.fp_AddCharLengthAware(StrLen, '[');
+						MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
 						{
 							CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							++Iter;
 							for(; Iter != IterEnd;++Iter)
 							{
-								MalterlibStaticNoAllocResult.fp_AddCharLengthAware(StrLen, ',');
+								MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, ',');
 								CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							}
 						}
-						MalterlibStaticNoAllocResult.fp_AddCharLengthAware(StrLen, ']');
+						MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticNoAllocResult.f_SetStrLen(StrLen);
 
 						MalterlibStaticNoAllocTime.f_Stop(VectorSize);
@@ -339,18 +339,18 @@ namespace
 						auto Iter = Vector.begin();
 						auto IterEnd = Vector.end();
 						aint StrLen = 0;
-						MalterlibStaticAllocResult.fp_AddCharLengthAware(StrLen, '[');
+						MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
 						{
 							CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							++Iter;
 							for(; Iter != IterEnd;++Iter)
 							{
-								MalterlibStaticAllocResult.fp_AddCharLengthAware(StrLen, ',');
+								MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, ',');
 								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							}
 						}
-						MalterlibStaticAllocResult.fp_AddCharLengthAware(StrLen, ']');
+						MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticAllocResult.f_SetStrLen(StrLen);
 
 						MalterlibStaticAllocTime.f_Stop(VectorSize);
@@ -366,18 +366,18 @@ namespace
 						auto Iter = Vector.begin();
 						auto IterEnd = Vector.end();
 						aint StrLen = 0;
-						MalterlibStaticAllocReserveResult.fp_AddCharLengthAware(StrLen, '[');
+						MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, '[');
 						if (Iter != IterEnd)
 						{
 							CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							++Iter;
 							for(; Iter != IterEnd;++Iter)
 							{
-								MalterlibStaticAllocReserveResult.fp_AddCharLengthAware(StrLen, ',');
+								MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, ',');
 								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*Iter), StrLen);
 							}
 						}
-						MalterlibStaticAllocReserveResult.fp_AddCharLengthAware(StrLen, ']');
+						MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, ']');
 						MalterlibStaticAllocReserveResult.f_SetStrLen(StrLen);
 
 						MalterlibStaticAllocReserveTime.f_Stop(VectorSize);

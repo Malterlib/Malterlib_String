@@ -3119,7 +3119,7 @@ namespace NMib::NStr
 		if (!_Str.f_IsEmpty())
 			_Str.f_AddChar(_Sep);
 		if (fg_StrIsEmpty(_ToAdd) || fg_StrFindChar(_ToAdd, _Sep) >= 0 || fg_StrFindChars(_ToAdd, _pNeedEscapeChars) >= 0)
-			_Str += typename t_CStrType0::CDynamicStr(_ToAdd).f_EscapeStr();
+			_Str += typename t_CStrType0::CString(_ToAdd).f_EscapeStr();
 		else
 			_Str += _ToAdd;
 	}

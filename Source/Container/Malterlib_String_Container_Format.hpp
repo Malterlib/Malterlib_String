@@ -442,7 +442,7 @@ namespace NMib::NStr
 				{
 					if ((*pFormat) == '{')
 					{
-						_ToStr.fp_AddCharLengthAware(CurrentStrLen, *pFormat);
+						_ToStr.f_AddCharLengthAware(CurrentStrLen, *pFormat);
 						SearchMode = 0;
 						++pFormat;
 						break;
@@ -475,7 +475,7 @@ namespace NMib::NStr
 							{
 								const ch8 *pTmp = "###format var out of range###";
 								while (*pTmp)
-									_ToStr.fp_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
+									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
 							}
 
@@ -493,14 +493,14 @@ namespace NMib::NStr
 							{
 								const ch8 *pTmp = "###format var parse error###";
 								while (*pTmp)
-									_ToStr.fp_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
+									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
 							}
 							else if (Variable < 0)
 							{
 								const ch8 *pTmp = "###format var out of range###";
 								while (*pTmp)
-									_ToStr.fp_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
+									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
 							}
 						}
@@ -508,7 +508,7 @@ namespace NMib::NStr
 						{
 							const ch8 *pTmp = DMibNewLine;
 							while (*pTmp)
-								_ToStr.fp_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
+								_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 							goto EndArgSearch;
 						}
 
@@ -522,7 +522,7 @@ namespace NMib::NStr
 							{
 								const ch8 *pTmp = "###format var out of range###";
 								while (*pTmp)
-									_ToStr.fp_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
+									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 							}
 						}
 
@@ -572,5 +572,44 @@ EndArgSearch:
 		m_iCurrentAlloc += Needed;
 
 		return pSpace;
+	}
+
+	template <typename tf_CFormat>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format)
+	{
+	}
+
+	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First)
+	{
+		_Format << fg_Forward<tf_CFirst>(_First);
+	}
+
+	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams &&...p_Params)
+	{
+		_Format << fg_Forward<tf_CFirst>(_First);
+		fg_AddFormatParams(_Format, fg_Forward<tfp_CParams>(p_Params)...);
+	}
+
+
+	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
+	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params)
+	{
+		typename tf_CReturnString::CFormat Formatter(_Format);
+
+		fg_AddFormatParams(Formatter, fg_Forward<tfp_CParams>(p_Params)...);
+
+		return Formatter;
+	}
+
+	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
+	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams &&...p_Params)
+	{
+		typename tf_CReturnString::CFormat Formatter(_Format);
+
+		fg_AddFormatParams(Formatter, fg_Forward<tfp_CParams>(p_Params)...);
+
+		_String += Formatter;
 	}
 }

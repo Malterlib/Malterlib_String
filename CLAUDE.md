@@ -98,7 +98,7 @@ enum EStrType {
 ```cpp
 // Strings use template-based storage implementations
 template <typename t_CStrTraits>
-class TCStr {
+struct TCStr {
     // Storage delegated to implementation class
     typename t_CStrTraits::CImpl m_Impl;
 };
