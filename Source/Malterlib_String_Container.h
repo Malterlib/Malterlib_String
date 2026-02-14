@@ -9,17 +9,11 @@
 #include <Mib/String/Algorithm>
 #include <Mib/Core/EnableIf>
 
+#include "Malterlib_String_Container_Traits.h"
 namespace NMib::NStr
 {
 	struct CStrInitGeneral
 	{
-	};
-
-	template <typename t_CChar, CStrTypeUnderlying t_Type>
-	struct TCStrTraitsTypes
-	{
-		using CChar = t_CChar;
-		constexpr static EStrType const mc_Type = (EStrType)t_Type;
 	};
 
 	struct CInitByRange
@@ -30,126 +24,6 @@ namespace NMib::NStr
 	{
 	};
 
-	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
-	class TCStrTraits
-	{
-	public:
-		using CChar = t_CChar;
-		constexpr static EStrType const mc_Type = (EStrType)t_Type;
-		using CTypes = TCStrTraitsTypes<t_CChar, t_Type>;
-		using CParams = t_CParams;
-		using CAllocator = typename t_CParams::CAllocator;
-
-		template <typename t_CData>
-			static inline_small bool fs_CharIsNumber(const t_CData _Character)
-		{
-			return fg_CharIsNumber(_Character);
-		}
-
-		template <typename t_CData>
-			static inline_small t_CData fs_CharUpperCase(t_CData _Character)
-		{
-			return fg_CharUpperCase(_Character);
-		}
-
-		template <typename t_CData>
-			static inline_small t_CData fs_CharLowerCase(t_CData _Character)
-		{
-			return fg_CharLowerCase(_Character);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToIntBase10ParseNoSign(const t_CData *&_pStr, t_CReturn _FailValue)
-		{
-			return fg_StrToIntBase10ParseNoSign(_pStr, _FailValue);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToIntBase10NoSign(const t_CData *_pStr, t_CReturn _FailValue)
-		{
-			return fg_StrToIntBase10NoSign(_pStr, _FailValue);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToIntBase10(const t_CData *_pStr, t_CReturn _FailValue)
-		{
-			return fg_StrToIntBase10(_pStr, _FailValue);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-		static inline_small t_CReturn fs_StrToIntParse(const t_CData *&_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr, bool _bDontFail = false, int32 _ParseMode = EStrToIntParseMode_Base10)
-		{
-			return fg_StrToIntParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, _ParseMode);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-		static inline_small t_CReturn fs_StrToIntParseHex(const t_CData *&_pStr, t_CReturn _FailValue)
-		{
-			return fg_StrToIntParseHex(_pStr, _FailValue, _FailValue);
-		}
-
-		template<typename t_CData, typename t_CReturn>
-		static inline_small t_CReturn fs_StrToIntParseHex(const t_CData *&_pStr, t_CReturn _FailValue, t_CData _Terminator)
-		{
-			return fg_StrToIntParseHex(_pStr, _FailValue);
-		}
-
-		template <typename t_CData>
-			static inline_small mint fs_StrLen(const t_CData *_pStr)
-		{
-			return fg_StrLen(_pStr);
-		}
-
-		template <typename t_CData>
-			static inline_small mint fs_StrLen(const t_CData *_pStr, mint _MaxLen)
-		{
-			return fg_StrLen(_pStr, _MaxLen);
-		}
-
-		template <typename t_CData1, typename t_CData2>
-			static inline_small t_CData1 *fs_StrUpperCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
-		{
-			DMibFastCheck((sizeof(CChar) > 1 || NTraits::cIsSame<CChar, ch8> && mc_Type == EStrType_UTF));
-			return fg_StrUpperCase(_pDest, _pSource, _SourceLen);
-		}
-
-		template <typename t_CData1, typename t_CData2>
-			static inline_small t_CData1 *fs_StrLowerCase(t_CData1 *_pDest, const t_CData2 *_pSource, aint _SourceLen)
-		{
-			DMibFastCheck((sizeof(CChar) > 1 || NTraits::cIsSame<CChar, ch8> && mc_Type == EStrType_UTF));
-			return fg_StrLowerCase(_pDest, _pSource, _SourceLen);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToInt(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr)
-		{
-			return fg_StrToInt(_pStr, _FailValue, _pStrTerminators);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToIntExact(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr)
-		{
-			return fg_StrToIntExact(_pStr, _FailValue, _pStrTerminators);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToFloat(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr)
-		{
-			return fg_StrToFloat(_pStr, _FailValue, _pStrTerminators);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToFloatExact(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators = nullptr)
-		{
-			return fg_StrToFloatExact(_pStr, _FailValue, _pStrTerminators);
-		}
-
-		template <typename t_CData, typename t_CReturn>
-			static inline_small t_CReturn fs_StrToFloatParse(const t_CData *_pStr, t_CReturn _FailValue, const t_CData *_pStrTerminators, bool _bDontFail = false)
-		{
-			return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail);
-		}
-	};
 
 
 	/*¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯*\
