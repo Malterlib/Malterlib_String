@@ -693,3 +693,6 @@ namespace NMib::NStream
 		}
 	};
 }
+
+#include "Container/Malterlib_String_Container_ParseType.hpp"
+#include "Container/Malterlib_String_Container_Parse.hpp"

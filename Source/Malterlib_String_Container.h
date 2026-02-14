@@ -387,7 +387,7 @@ namespace NMib::NStr
 		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, mint _Flags)
 		{
 			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)_pFormat | _Flags);
-			if (m_nFormats < EStaticFormats)
+			if (m_nFormats < mcp_StaticFormats)
 			{
 				m_plFormats[m_nFormats] = pFormat;
 				++m_nFormats;
@@ -821,18 +821,15 @@ EndArgSearch:
 		}
 
 	private:
-		enum
-		{
-			EStaticFormats = 16,
-			EStaticSpace = EStaticFormats*4
-		};
+		constexpr static mint mcp_StaticFormats = 16;
+		constexpr static mint mcp_StaticSpace = mcp_StaticFormats * 4;
 
 		uaint m_nFormats;
 		mutable aint m_iCurrentArgument;
 		TICStrFormatType<TCFormat> **m_pFormats;
 		const CChar *m_pFormatStr;
 
-		TICStrFormatType<TCFormat> *m_plFormats[EStaticFormats];
+		TICStrFormatType<TCFormat> *m_plFormats[mcp_StaticFormats];
 		NContainer::TCVector<TICStrFormatType<TCFormat> *, CAllocator> m_lFormats;
 
 		inline_small TICStrFormatType<TCFormat> **fp_GetFormatList() const
@@ -845,13 +842,13 @@ EndArgSearch:
 			return (TICStrFormatType<TCFormat> const *)((mint)m_pFormats[_iEntry] & (~((mint)0x3)));
 		}
 
-		aint m_AllocSpace[EStaticSpace];
+		aint m_AllocSpace[mcp_StaticSpace];
 		int m_iCurrentAlloc;
 
 		void *fp_AllocSpace(int _Bytes)
 		{
 			mint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
-			if (m_iCurrentAlloc + Needed > EStaticSpace)
+			if (m_iCurrentAlloc + Needed > mcp_StaticSpace)
 				return nullptr;
 
 			void *pSpace = (void *)(m_AllocSpace + m_iCurrentAlloc);
