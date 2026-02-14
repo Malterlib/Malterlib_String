@@ -78,35 +78,35 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CData0>
-	class TCChooseStrCompareType<CMStrDeprecated, TCStr<t_CData0> >
+	struct TCChooseStrCompareType<CMStrDeprecated, TCStr<t_CData0>>
 	{
 	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
-	class TCChooseStrCompareType<TCStr<t_CData0>, CMStrDeprecated>
+	struct TCChooseStrCompareType<TCStr<t_CData0>, CMStrDeprecated>
 	{
 	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
-	class TCChooseStrCompareType<CMStrDeprecated, t_CData0>
+	struct TCChooseStrCompareType<CMStrDeprecated, t_CData0>
 	{
 	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <typename t_CData0>
-	class TCChooseStrCompareType<t_CData0, CMStrDeprecated>
+	struct TCChooseStrCompareType<t_CData0, CMStrDeprecated>
 	{
 	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <>
-	class TCChooseStrCompareType<CMStrDeprecated, CMStrDeprecated>
+	struct TCChooseStrCompareType<CMStrDeprecated, CMStrDeprecated>
 	{
 	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<ch32, ch32>>>;

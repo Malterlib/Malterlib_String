@@ -2,17 +2,11 @@
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
-#include "Malterlib_String_Algorithm.h"
+
+#include "../Malterlib_String_Algorithm.h"
 
 namespace NMib::NStr
 {
-	/***************************************************************************************************\
-	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
-	| Upper case																						|
-	|___________________________________________________________________________________________________|
-	\***************************************************************************************************/
-
-
 	ch8 *fg_StrUpperCase(ch8 *_pStr)
 	{
 		return fg_StrUpperCase(_pStr, fg_StrLen(_pStr));
@@ -65,12 +59,12 @@ namespace NMib::NStr
 		return _pStr;
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource)
 	{
 		return fg_StrUpperCase(_pDest, _MaxDestLen, _pSource, fg_StrLen(_pSource));
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource, mint _SourceLen)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource, mint _SourceLen)
 	{
 		ch32 UpperComapre = 0xffu;
 
@@ -115,17 +109,10 @@ namespace NMib::NStr
 		return _pDest;
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, const ch8 *_pSource, mint _SourceLen)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, ch8 const *_pSource, mint _SourceLen)
 	{
 		return fg_StrUpperCase(_pDest, _SourceLen + 1, _pSource, _SourceLen);
 	}
-
-
-	/***************************************************************************************************\
-	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
-	| Lower case																						|
-	|___________________________________________________________________________________________________|
-	\***************************************************************************************************/
 
 	ch8 *fg_StrLowerCase(ch8 *_pStr)
 	{
@@ -178,8 +165,7 @@ namespace NMib::NStr
 		return _pStr;
 	}
 
-
-	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource, mint _SourceLen)
+	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource, mint _SourceLen)
 	{
 		CStrIteratorUTF8 iStr{_pSource, _SourceLen};
 
@@ -222,20 +208,15 @@ namespace NMib::NStr
 		return _pDest;
 	}
 
-	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, const ch8 *_pSource)
+	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource)
 	{
 		return fg_StrLowerCase(_pDest, _MaxDestLen, _pSource, fg_StrLen(_pSource));
 	}
+
 	ch8 *fg_StrLowerCase(ch8 *_pDest, ch8 const *_pSource, mint _SourceLen)
 	{
 		return fg_StrLowerCase(_pDest, _SourceLen + 1, _pSource, _SourceLen);
 	}
-	/***************************************************************************************************\
-	|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|
-	| Capitalize (Uppercase first char)																						|
-	|___________________________________________________________________________________________________|
-	\***************************************************************************************************/
-
 
 	ch8 *fg_StrCapitalize(ch8 *_pStr)
 	{
