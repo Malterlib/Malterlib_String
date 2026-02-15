@@ -1114,7 +1114,7 @@ namespace
 			int64 Test8 = 0x4444444444444444ll;
 			Test8 = NMib::fg_RoundPowerOfTwoDown(Test8);
 
-			DMibTrace("{nfh} {nfh} {nfh} {nfh} {nfh} {nfh} {nfh} {nfh}\r\n", Test << Test2 << Test3 << Test4 << Test5 << Test6 << Test7 << Test8);
+			DMibTrace("{nfh} {nfh} {nfh} {nfh} {nfh} {nfh} {nfh} {nfh}\r\n", Test, Test2, Test3, Test4, Test5, Test6, Test7, Test8);
 
 			{
 				uint32 Test = NMib::TCLimitsInt<uint32>::mc_Max;
@@ -1122,7 +1122,7 @@ namespace
 				uint32 TestM = NMib::TCLimitsInt<uint32>::mc_Min;
 				int32 TestMS = NMib::TCLimitsInt<int32>::mc_Min;
 				int32 TestMS1 = NMib::TCLimitsInt<int32>::mc_Min + 10;
-				DMibTrace("{} {} {} {}\r\n", Test << TestS << TestM << TestMS);
+				DMibTrace("{} {} {} {}\r\n", Test, TestS, TestM, TestMS);
 
 				DMibTrace("{}\r\n", TestMS);
 				DMibTrace("{}\r\n", TestMS1);
