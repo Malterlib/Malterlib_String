@@ -165,7 +165,7 @@ namespace NMib::NStr
 			case EStrType_Ansi:
 				{
 					CTempStr Decoded;
-					NSys::NStr::fg_SystemDecodeAnsiStr((ch8 const *)f_GetStr(), Decoded);
+					NStr::NPlatform::fg_SystemDecodeAnsiStr((ch8 const *)f_GetStr(), Decoded);
 					this->f_Clear();
 					TCStr<t_TCStrTraits> New;
 					aint Len = 0;

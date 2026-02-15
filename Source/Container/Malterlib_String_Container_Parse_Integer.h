@@ -16,9 +16,8 @@ namespace NMib::NStr
 		using COption = typename CSuper::COption;
 		using COptions = typename CSuper::COptions;
 
-		class COptionsInt : public COptions
+		struct COptionsInt : public COptions
 		{
-		public:
 			enum ENumberFormat
 			{
 				ENumberFormat_Base16 = 16

@@ -25,26 +25,24 @@ namespace NMib::NStr
 	{
 		using CStrTraits = typename t_CParser::CStrTraits;
 		using CChar = typename CStrTraits::CChar;
-		class COption
+		struct COption
 		{
-		public:
-			CChar const *m_pDataStart;
-
-			class CParseTypes
+			struct CParseTypes
 			{
-			public:
 				ch32 m_Parse1;
 				ch32 m_Parse2;
 			};
-
-			CParseTypes m_ParseTypes;
 
 			void f_GetData_Str(t_CParser const &_ArgData, CChar *_pDestStr, aint _MaxChars) const;
 			aint f_GetData_aint(t_CParser const &_ArgData, aint _FailValue) const;
 			aint f_GetData_aint_NotSigned(t_CParser const &_ArgData, aint _FailValue) const;
 			fp32 f_GetData_fp32(t_CParser const &_ArgData, fp32 _FailValue) const;
 			fp64 f_GetData_fp64(t_CParser const &_ArgData, fp64 _FailValue) const;
+
+			CChar const *m_pDataStart;
+			CParseTypes m_ParseTypes;
 		};
+
 		struct COptions
 		{
 			COptions() = default;

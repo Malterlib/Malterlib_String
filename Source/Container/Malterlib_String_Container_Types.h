@@ -42,19 +42,19 @@ namespace NMib::NStr
 		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>>>;
 	};
 
-	class CStrTraits_CStr : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
-	class CStrTraits_CStrAnsi : public TCStrTraits_Eval<ch8, EStrType_Ansi, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
-	class CStrTraits_CWStr : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
-	class CStrTraits_CUStr : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
+	struct CStrTraits_CStr : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
+	struct CStrTraits_CStrAnsi : public TCStrTraits_Eval<ch8, EStrType_Ansi, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
+	struct CStrTraits_CWStr : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
+	struct CStrTraits_CUStr : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType {};
 
-	class CStrTraits_CStrNonTracked : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
-	class CStrTraits_CStrAnsiNonTracked : public TCStrTraits_Eval<ch8, EStrType_Ansi, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
-	class CStrTraits_CWStrNonTracked : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
-	class CStrTraits_CUStrNonTracked : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
+	struct CStrTraits_CStrNonTracked : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
+	struct CStrTraits_CStrAnsiNonTracked : public TCStrTraits_Eval<ch8, EStrType_Ansi, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
+	struct CStrTraits_CWStrNonTracked : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
+	struct CStrTraits_CUStrNonTracked : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsNonTracked>::CType {};
 
-	class CStrTraits_CStrSecure : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
-	class CStrTraits_CWStrSecure : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
-	class CStrTraits_CUStrSecure : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
+	struct CStrTraits_CStrSecure : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
+	struct CStrTraits_CWStrSecure : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
+	struct CStrTraits_CUStrSecure : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsSecure>::CType {};
 
 	template <typename t_CCharType, CStrTypeUnderlying t_Type>
 	struct TCStrTraits_ReplaceParams<ch32, EStrType_Unicode, t_Type, TCStrImp_Dynamic<TCStrTraits<t_CCharType, t_Type, CStrImp_Dynamic_ParamsDeflauts>>, CStrImp_Dynamic_ParamsDeflauts>
@@ -114,9 +114,9 @@ namespace NMib::NStr
 		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>, TCStrImp_Ptr<TCStrTraits<t_CCharType, t_Type, CDefaultStrParams>>>;
 	};
 
-	class CStrTraitsPtr_CStr : public TCStrTraitsPtr<ch8, EStrType_UTF>::CType {};
-	class CStrTraitsPtr_CWStr : public TCStrTraitsPtr<ch16, EStrType_UTF>::CType {};
-	class CStrTraitsPtr_CUStr : public TCStrTraitsPtr<ch32, EStrType_Unicode>::CType {};
+	struct CStrTraitsPtr_CStr : public TCStrTraitsPtr<ch8, EStrType_UTF>::CType {};
+	struct CStrTraitsPtr_CWStr : public TCStrTraitsPtr<ch16, EStrType_UTF>::CType {};
+	struct CStrTraitsPtr_CUStr : public TCStrTraitsPtr<ch32, EStrType_Unicode>::CType {};
 
 	using CStrPtr = TCStr<CStrTraitsPtr_CStr>;
 	using CWStrPtr = TCStr<CStrTraitsPtr_CWStr>;
@@ -143,9 +143,9 @@ namespace NMib::NStr
 		using CType = CUStrPtr;
 	};
 
-	class CStrTraits_CStrVMem : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
-	class CStrTraits_CWStrVMem : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
-	class CStrTraits_CUStrVMem : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
+	struct CStrTraits_CStrVMem : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
+	struct CStrTraits_CWStrVMem : public TCStrTraits_Eval<ch16, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
+	struct CStrTraits_CUStrVMem : public TCStrTraits_Eval<ch32, EStrType_Unicode, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsVirtual>::CType {};
 
 	using CStrVMem = TCStr<CStrTraits_CStrVMem>;
 	using CWStrVMem = TCStr<CStrTraits_CWStrVMem>;

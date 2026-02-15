@@ -1,10 +1,19 @@
-// Copyright © 2015 Hansoft AB
+// Copyright © 2026 Unborken AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #pragma once
 
 namespace NMib::NStr
 {
+	template <typename tf_CStream>
+	void CParseError::f_Stream(tf_CStream &_Stream) const
+	{
+		_Stream % m_Error;
+		_Stream % m_Location;
+		_Stream % m_IndentDepth;
+		_Stream % m_bSeparator;
+	}
+
 	template <typename t_CStr, bool t_bIncludeExtra>
 	template <typename tf_CStr>
 	void TCParseLocation<t_CStr, t_bIncludeExtra>::f_Format(tf_CStr &o_FormatInto) const

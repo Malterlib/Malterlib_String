@@ -17,6 +17,15 @@ namespace NMib::NStr
 		, mc_NeedDealloc = fg_Bit(1)
 	};
 
+	namespace NPrivate
+	{
+		template <typename t_CDataToTest, typename t_CClassToTestAgainst>
+		struct TCHasFormatClassHelper;
+	}
+
+	template <typename t_CDataToTest, typename t_CClassToTestAgainst>
+	concept cHasFormatClass = NPrivate::TCHasFormatClassHelper<t_CDataToTest, t_CClassToTestAgainst>::mc_bValue;
+
 	template <typename t_CTCStrTraits>
 	struct TCFormat
 	{

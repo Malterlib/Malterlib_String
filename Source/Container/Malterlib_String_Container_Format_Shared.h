@@ -109,9 +109,8 @@ namespace NMib::NStr
 		using COptions = TICStrFormatType_Options<CChar>;
 		using COptionsStatic = CStrFormatType_StaticOptions;
 
-		class CVisitor
+		struct CVisitor
 		{
-		public:
 			virtual void operator () (uint32 _Value) = 0;
 			virtual void operator () (uint64 _Value) = 0;
 			virtual void operator () (int32 _Value) = 0;
@@ -122,17 +121,15 @@ namespace NMib::NStr
 			virtual void operator () () {}
 		};
 
-		class CVisitorInteger : public CVisitor
+		struct CVisitorInteger : public CVisitor
 		{
-		public:
 			virtual void operator () (fp32 _Value) {}
 			virtual void operator () (fp64 _Value) {}
 			virtual void operator () (CChar const *_pValue) {}
 		};
 
-		class CVisitorFloat : public CVisitor
+		struct CVisitorFloat : public CVisitor
 		{
-		public:
 			virtual void operator () (uint32 _Value) {}
 			virtual void operator () (uint64 _Value) {}
 			virtual void operator () (int32 _Value) {}
@@ -140,15 +137,13 @@ namespace NMib::NStr
 			virtual void operator () (CChar const *_pValue) {}
 		};
 
-		class CVisitorNumber : public CVisitor
+		struct CVisitorNumber : public CVisitor
 		{
-		public:
 			virtual void operator () (CChar const *_pValue) {}
 		};
 
-		class CVisitorString : public CVisitor
+		struct CVisitorString : public CVisitor
 		{
-		public:
 			virtual void operator () (uint32 _Value) {}
 			virtual void operator () (uint64 _Value) {}
 			virtual void operator () (int32 _Value) {}

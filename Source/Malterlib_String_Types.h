@@ -97,30 +97,12 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	struct TCStrFormatType_TStr;
 
-
-	enum EStrTypeClass_Float
-	{
-	};
-
-	enum EStrTypeClass_String
-	{
-	};
-
-	enum EStrTypeClass_Integer
-	{
-	};
-
-	enum EStrTypeClass_Binary
-	{
-	};
-
-	enum EStrTypeClass_Untyped
-	{
-	};
-
-	enum EStrTypeClass_Other
-	{
-	};
+	enum EStrTypeClass_Float {};
+	enum EStrTypeClass_String {};
+	enum EStrTypeClass_Integer {};
+	enum EStrTypeClass_Binary {};
+	enum EStrTypeClass_Untyped {};
+	enum EStrTypeClass_Other {};
 
 	struct CDefaultStrFormatTypeClassifier
 	{

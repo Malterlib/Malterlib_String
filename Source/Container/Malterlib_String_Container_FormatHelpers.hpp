@@ -30,16 +30,18 @@ namespace NMib::NStr
 namespace NMib::NStr::NPrivate
 {
 	template <typename t_CDataToTest, typename t_CClassToTestAgainst>
-	class TCHasFormatClassHelper
+	struct TCHasFormatClassHelper
 	{
-		static t_CDataToTest const &fs_GetData();
-		static t_CClassToTestAgainst &fs_GetFormatClass();
+	private:
+		static t_CDataToTest const &fps_GetData();
+		static t_CClassToTestAgainst &fps_GetFormatClass();
 		template <typename tf_CData>
-		static auto fs_CheckFormat(tf_CData const& data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).f_ClassifiedAs(fs_GetFormatClass()));
+		static auto fps_CheckFormat(tf_CData const& data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).f_ClassifiedAs(fps_GetFormatClass()));
 		template <typename tf_CData>
-		static auto fs_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
+		static auto fps_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
+
 	public:
-		constexpr static bool mc_bValue = sizeof(fs_CheckFormat(fs_GetData())) == sizeof(NTraits::CTrueBySize);
+		constexpr static bool mc_bValue = sizeof(fps_CheckFormat(fps_GetData())) == sizeof(NTraits::CTrueBySize);
 	};
 
 	static_assert(cHas_f_Format<NContainer::TCVector<uint32>>);

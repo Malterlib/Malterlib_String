@@ -12,10 +12,8 @@ namespace
 	using namespace NMib;
 	using namespace NMib::NStr;
 
-	class CMultiReplace_Tests : public NMib::NTest::CTest
+	struct CMultiReplace_Tests : public NMib::NTest::CTest
 	{
-	public:
-
 		template <bool tf_bCaseSensitive>
 		void fp_DoTests()
 		{

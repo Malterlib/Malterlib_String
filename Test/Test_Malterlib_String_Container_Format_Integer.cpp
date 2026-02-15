@@ -8,12 +8,8 @@ static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Othe
 
 namespace
 {
-	class CInt_Tests : public NMib::NTest::CTest
+	struct CInt_Tests : public NMib::NTest::CTest
 	{
-	public:
-
-		int m_Test;
-
 		void f_DoTests()
 		{
 			DMibTestSuite("General")
@@ -21,7 +17,6 @@ namespace
 				DMibTest(DMibExpr(0) == DMibExpr(0));
 			};
 		}
-
 	};
 
 	DMibTestRegister(CInt_Tests, Malterlib::String::Format);

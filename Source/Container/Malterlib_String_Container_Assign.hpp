@@ -81,7 +81,7 @@ namespace NMib::NStr
 		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
 			CTempStr Temp;
-			NSys::NStr::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
+			NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
 			f_SetStr(Temp);
 		}
 		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)

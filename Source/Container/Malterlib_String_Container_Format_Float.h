@@ -78,9 +78,8 @@ namespace NMib::NStr
 			CChar m_ThousandSeparator = 0;
 		};
 
-		class CXprImplementation
+		struct CXprImplementation
 		{
-		public:
 			inline_small static CFloat fs_DefaultValue();
 			inline_small static CFloat fs_Modulus(CFloat const &_Value, CFloat const &_Modulus);
 			inline_small static CFloat fs_BitwiseOr(CFloat const &_Left, CFloat const &_Right);

@@ -8,10 +8,8 @@ namespace
 	using namespace NMib;
 	using namespace NMib::NStr;
 
-	class CReplace_Tests : public NMib::NTest::CTest
+	struct CReplace_Tests : public NMib::NTest::CTest
 	{
-	public:
-
 		void fp_ShrinkingTests()
 		{
 			// Tests for shrinking replacement (_LenReplace < _LenFind)

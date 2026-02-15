@@ -18,9 +18,8 @@ namespace
 	}
 
 	template <typename t_CTest>
-	class TCTest
+	struct TCTest
 	{
-	public:
 		enum
 		{
 			ETest = sizeof(fg_TestValue(t_CTest())*1) == 4

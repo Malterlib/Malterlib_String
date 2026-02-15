@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <typename tf_CData1>
 	inline_small tf_CData1 *fg_StrTrimLeft(tf_CData1 *_pStr1)
 	{
-		return fg_StrTrimLeft(_pStr1, g_lWhiteSpaceChars);
+		return fg_StrTrimLeft(_pStr1, gc_WhiteSpaceChars);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -54,7 +54,7 @@ namespace NMib::NStr
 	template <typename tf_CData1>
 	inline_small tf_CData1 *fg_StrTrimRight(tf_CData1 *_pStr1)
 	{
-		return fg_StrTrimRight(_pStr1, g_lWhiteSpaceChars);
+		return fg_StrTrimRight(_pStr1, gc_WhiteSpaceChars);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -66,6 +66,6 @@ namespace NMib::NStr
 	template <typename tf_CData1>
 	inline_small tf_CData1 *fg_StrTrim(tf_CData1 *_pStr1)
 	{
-		return fg_StrTrim(_pStr1, g_lWhiteSpaceChars);
+		return fg_StrTrim(_pStr1, gc_WhiteSpaceChars);
 	}
 }

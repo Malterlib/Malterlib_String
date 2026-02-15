@@ -22,12 +22,8 @@ using namespace NMib::NStr;
 
 namespace
 {
-	class CStr_Tests : public NMib::NTest::CTest
+	struct CStr_Tests : public NMib::NTest::CTest
 	{
-	public:
-
-		int m_Test;
-
 		template <typename tf_CFormatFrom>
 		void fp_DoCapitalizeTestSource(ch8 const *_pFromName, tf_CFormatFrom const &_From)
 		{
@@ -54,7 +50,6 @@ namespace
 				fp_DoCapitalizeTest<CUStr>("CUStr");
 			};
 		}
-
 	};
 
 	DMibTestRegister(CStr_Tests, Malterlib::String::Format);

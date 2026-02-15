@@ -45,10 +45,8 @@ namespace
 		return str_utf32("");
 	}
 
-	class CMatchWildcard_Tests : public NMib::NTest::CTest
+	struct CMatchWildcard_Tests : public NMib::NTest::CTest
 	{
-	public:
-
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{

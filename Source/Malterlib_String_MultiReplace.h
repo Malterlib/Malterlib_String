@@ -9,9 +9,8 @@ namespace NMib::NStr
 	struct TCMultiReplace
 	{
 		using COrdering = TCConditional<t_bCaseSensitive, COrdering_Strong, COrdering_Weak>;
-		class CSort_Reverse
+		struct CSort_Reverse
 		{
-		public:
 			template <typename tf_CLeft, typename tf_CRight>
 			inline_small COrdering operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
 		};

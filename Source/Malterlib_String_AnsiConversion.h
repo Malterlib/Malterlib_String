@@ -30,7 +30,7 @@ namespace NMib::NStr
 
 		static ch32 fs_ToUnicode(ch32 _Char);
 
-		static CTableEntry ms_Table[];
+		static CTableEntry const ms_Table[];
 	};
 
 

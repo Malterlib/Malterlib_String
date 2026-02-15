@@ -11,8 +11,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
+
 		fg_StrTrimLeft(pStr1, _pCharsToTrim);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 
@@ -22,8 +24,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
-		fg_StrTrimLeft(pStr1, g_lWhiteSpaceChars);
+
+		fg_StrTrimLeft(pStr1, gc_WhiteSpaceChars);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 
@@ -33,8 +37,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
+
 		fg_StrTrimRight(pStr1, _pCharsToTrim);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 
@@ -44,8 +50,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
-		fg_StrTrimRight(pStr1, g_lWhiteSpaceChars);
+
+		fg_StrTrimRight(pStr1, gc_WhiteSpaceChars);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 
@@ -55,8 +63,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
+
 		fg_StrTrim(pStr1, _pCharsToTrim);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 
@@ -66,8 +76,10 @@ namespace NMib::NStr
 		typename TCStr<tf_CTCStrTraits>::CChar *pStr1 = _Str.f_GetStrUniqueWritable();
 		if (!pStr1 || !*pStr1)
 			return _Str;
-		fg_StrTrim(pStr1, g_lWhiteSpaceChars);
+
+		fg_StrTrim(pStr1, gc_WhiteSpaceChars);
 		_Str.f_SetModified();
+
 		return _Str;
 	}
 }

@@ -23,9 +23,8 @@ namespace NMib::NStr
 		using COptionsStatic = typename CSuper::COptionsStatic;
 		using CVisitor = typename CSuper::CVisitor;
 
-		class COptionsStr : public COptions
+		struct COptionsStr : public COptions
 		{
-		public:
 			enum ECase
 			{
 				ECase_Default = 0
@@ -35,9 +34,9 @@ namespace NMib::NStr
 				, ECase_Decapitalize
 			};
 
-			aint m_Case;
-
 			inline_small COptionsStr();
+
+			aint m_Case;
 		};
 
 		inline_medium TCStrFormatType_String(t_CStrDataType const *_pStr);

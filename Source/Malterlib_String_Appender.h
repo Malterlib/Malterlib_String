@@ -21,24 +21,22 @@ namespace NMib::NStr
 
 			CCommitted(TCStringAppender &_Appender);
 			~CCommitted();
+
 			void f_Abort();
+
 		private:
 			TCStringAppender *mp_pAppender;
 		};
 
 		void operator += (typename t_CString::CUnsignedChar _Character);
-
+		void operator += (t_CString const &_String);
 		template <typename tf_CChar, mint tf_ArrayLength>
 		void operator += (tf_CChar const (&_Array)[tf_ArrayLength]);
-
-		void operator += (t_CString const &_String);
-
 		template <typename tf_CStrTraits>
 		void operator += (NStr::TCStr<tf_CStrTraits> const &_String);
 
 		void f_AddUnicodeChar(ch32 _Character);
 		void f_AddChar(typename t_CString::CUnsignedChar _Character);
-
 		void f_AddString(typename t_CString::CChar const *_pString, mint _Len);
 
 		CCommitted f_Commit();

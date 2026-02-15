@@ -25,9 +25,8 @@ namespace NMib::NStr
 		using COptionsStatic = typename CSuper::COptionsStatic;
 		using CVisitor = typename CSuper::CVisitor;
 
-		class COptionsStr : public COptions
+		struct COptionsStr : public COptions
 		{
-		public:
 			enum ECase
 			{
 				ECase_Default = 0

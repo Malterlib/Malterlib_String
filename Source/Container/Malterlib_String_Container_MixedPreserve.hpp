@@ -137,7 +137,7 @@ namespace NMib::NStream
 					switch (StrType)
 					{
 					case NStr::EStrType_Ansi:
-						NSys::NStr::fg_SystemDecodeAnsiStr(NewStr.f_GetStr(), _Data);
+						NStr::NPlatform::fg_SystemDecodeAnsiStr(NewStr.f_GetStr(), _Data);
 						break;
 					case NStr::EStrType_Unicode:
 						{

@@ -33,10 +33,9 @@ namespace
 	char const* gc_AnsiTestString = (char const*)gc_AnsiTestStringSource;
 	char const* gc_AnsiTestStringUTF = str_utf8("abcdÆÅÖæåö");
 
-	class CGlobalFunctions_Tests : public NMib::NTest::CTest
+	struct CGlobalFunctions_Tests : public NMib::NTest::CTest
 	{
 	private:
-
 		template <typename t_CStr>
 		static void fsp_FindCharTestsTyped()
 		{
@@ -896,7 +895,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStr TestTo;
-								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
 								CStr FromResult(gc_AnsiTestStringUTF);
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -907,7 +906,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
-								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
 								CStr TestFrom(gc_AnsiTestStringUTF);
 								DMibTest(DMibExpr(TestFrom) == DMibExpr(TestTo));
 							}
@@ -924,7 +923,7 @@ namespace
 								DMibTestPath("UTF");
 								CStr TestTo;
 								CAnsiStr TestFrom(gc_AnsiTestString);
-								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CMStrDeprecated FromResult = CMStrDeprecated(TestFrom);
 								CMStrDeprecated ToResult = CMStrDeprecated(TestTo);
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -942,7 +941,7 @@ namespace
 								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
 								CAnsiStrNonTracked TestFrom(gc_AnsiTestString);
-								NMib::NSys::NStr::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CStr ToResult = TestTo;
 								CStr FromResult = TestFrom;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -962,7 +961,7 @@ namespace
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä")));
 								CStr TestFrom = TestString;
 
-								NMib::NSys::NStr::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
+								NMib::NStr::NPlatform::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
 								CStr FromResult = TestFrom;
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -972,7 +971,7 @@ namespace
 								CAnsiStr TestTo;
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴")));
 								CStr TestFrom = TestString;
-								NMib::NSys::NStr::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
+								NMib::NStr::NPlatform::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
 								CStr FromResultWithError(CWStr(str_utf16("abcdÅÄÖåöä????")));
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResultWithError) == DMibExpr(ToResult));
@@ -991,7 +990,7 @@ namespace
 								CAnsiStr TestTo;
 								CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä")));
 								CStrNonTracked TestFrom = TestString;
-								NMib::NSys::NStr::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
+								NMib::NStr::NPlatform::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
 								CStr FromResult = TestFrom;
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -1002,7 +1001,7 @@ namespace
 							CAnsiStr TestTo;
 							CStr TestString(CWStr(str_utf16("abcdÅÄÖåöä亜哀姐飴")));
 							CStrNonTracked TestFrom = TestString;
-							NMib::NSys::NStr::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
+							NMib::NStr::NPlatform::fg_SystemEncodeAnsiStr(TestFrom, TestTo, '?');
 							CStr FromResultWithError(CWStr(str_utf16("abcdÅÄÖåöä????")));
 							CStr ToResult = TestTo;
 							DMibTest(DMibExpr(FromResultWithError) == DMibExpr(ToResult));
@@ -1646,21 +1645,18 @@ namespace
 
 	 DMibTestRegister(CGlobalFunctions_Tests, Malterlib::String::Container);
 
-	class CFormat_Tests : public NMib::NTest::CTest
+	struct CFormat_Tests : public NMib::NTest::CTest
 	{
-	public:
-
 		void f_DoTests()
 		{
 			DMibTestSuite("CFormat Visitor")
 			{
-				class CTesting
+				struct CTesting
 				{
 				};
 
-				class CTestExtractor : public CStr::CFormatArgVisitor
+				struct CTestExtractor : public CStr::CFormatArgVisitor
 				{
-				public:
 					CTestExtractor()
 						: m_Extracted(0)
 					{
@@ -1738,18 +1734,17 @@ namespace
 
 			DMibTestSuite("Any formats")
 			{
-
-				class CData
+				struct CData
 				{
-					uint8 m_Test[4];
-				public:
 					CData()
 					{
-						m_Test[0] = 0xff;
-						m_Test[1] = 0xee;
-						m_Test[2] = 0xbb;
-						m_Test[3] = 0x00;
+						mp_Test[0] = 0xff;
+						mp_Test[1] = 0xee;
+						mp_Test[2] = 0xbb;
+						mp_Test[3] = 0x00;
 					}
+				private:
+					uint8 mp_Test[4];
 				};
 
 				CData Data;

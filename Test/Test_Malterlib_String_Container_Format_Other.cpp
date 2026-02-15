@@ -7,12 +7,8 @@ static_assert(!NMib::NStr::cHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NS
 
 namespace
 {
-	class COther_Tests : public NMib::NTest::CTest
+	struct COther_Tests : public NMib::NTest::CTest
 	{
-	public:
-
-		int m_Test;
-
 		void f_DoTests()
 		{
 			DMibTestSuite("General")
@@ -26,7 +22,6 @@ namespace
 				DMibTest(DMibExpr(0) == DMibExpr(0));
 			};
 		}
-
 	};
 
 	DMibTestRegister(COther_Tests, Malterlib::String::Format);

@@ -44,7 +44,7 @@ namespace
 	namespace karma = boost::spirit::karma;
 	namespace ascii = boost::spirit::ascii;
 
-	class CStr_Tests : public CTest
+	struct CStr_Tests : public CTest
 	{
 		template <bool t_bMemoryTests>
 		struct TCTests
