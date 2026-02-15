@@ -29,20 +29,20 @@ namespace NMib::NStr
 	concept cHasFormatClass = NPrivate::TCHasFormatClassHelper<t_CDataToTest, t_CClassToTestAgainst>::mc_bValue;
 }
 
-#include "Malterlib_String_Algorithm.hpp"
+#include "Algorithm/Malterlib_String_Algorithm.hpp"
 #include "Malterlib_String_Parse_Integer.h"
 #include "Malterlib_String_Parse_Float.h"
 
-#include "Malterlib_String_Container_Format_Shared.h"
-#include "Malterlib_String_Container_Parse.h"
+#include "Container/Malterlib_String_Container_Format_Shared.h"
+#include "Container/Malterlib_String_Container_Parse.h"
 
-#include "Malterlib_String_Container.h"
+#include "Container/Malterlib_String_Container.h"
 
 
-#include "Malterlib_String_Container_ImpVirtual.h"
-#include "Malterlib_String_Container_ImpDynamic.h"
-#include "Malterlib_String_Container_ImpFixed.h"
-#include "Malterlib_String_Container_ImpPtr.h"
+#include "Container/Malterlib_String_Container_ImpVirtual.h"
+#include "Container/Malterlib_String_Container_ImpDynamic.h"
+#include "Container/Malterlib_String_Container_ImpFixed.h"
+#include "Container/Malterlib_String_Container_ImpPtr.h"
 
 namespace NMib::NStr
 {
@@ -72,19 +72,19 @@ namespace NMib::NStr
 	extern template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
 }
 
-#include "Malterlib_String_Container_Format_String.h"
-#include "Malterlib_String_Container_Format_StringContainer.h"
-#include "Malterlib_String_Container_Format_Integer.h"
-#include "Malterlib_String_Container_Format_Float.h"
-#include "Malterlib_String_Container_Format_Binary.h"
-#include "Malterlib_String_Container_Format_Inline.h"
-#include "Malterlib_String_Container_Format_AutoClear.h"
+#include "Container/Malterlib_String_Container_Format_String.h"
+#include "Container/Malterlib_String_Container_Format_StringContainer.h"
+#include "Container/Malterlib_String_Container_Format_Integer.h"
+#include "Container/Malterlib_String_Container_Format_Float.h"
+#include "Container/Malterlib_String_Container_Format_Binary.h"
+#include "Container/Malterlib_String_Container_Format_Inline.h"
+#include "Container/Malterlib_String_Container_Format_AutoClear.h"
 
-#include "Malterlib_String_Container_Parse_Integer.h"
-#include "Malterlib_String_Container_Parse_Float.h"
-#include "Malterlib_String_Container_Parse_StringContainer.h"
+#include "Container/Malterlib_String_Container_Parse_Integer.h"
+#include "Container/Malterlib_String_Container_Parse_Float.h"
+#include "Container/Malterlib_String_Container_Parse_StringContainer.h"
 
-#include "Malterlib_String_Container_FormatHelpers.h"
+#include "Container/Malterlib_String_Container_FormatHelpers.h"
 
 namespace NMib::NSys::NStr
 {
@@ -103,7 +103,7 @@ namespace NMib::NSys::NStr
 }
 
 #include "Malterlib_String_Compare.h"
-#include "Malterlib_String_Container.hpp"
+#include "Container/Malterlib_String_Container.hpp"
 
 namespace NMib::NStr
 {

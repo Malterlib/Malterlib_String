@@ -52,4 +52,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_ImpVirtual.hpp"
+#include "Malterlib_String_Container_ImpVirtual.hpp"

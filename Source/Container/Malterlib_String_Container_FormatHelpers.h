@@ -15,4 +15,4 @@ namespace NMib::NStr
 	CStr fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params);
 }
 
-#include "Container/Malterlib_String_Container_FormatHelpers.hpp"
+#include "Malterlib_String_Container_FormatHelpers.hpp"

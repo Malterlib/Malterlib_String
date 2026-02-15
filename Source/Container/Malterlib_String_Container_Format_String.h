@@ -79,7 +79,7 @@ namespace NMib::NStr
 
 }
 
-#include "Container/Malterlib_String_Container_Format_String.hpp"
+#include "Malterlib_String_Container_Format_String.hpp"
 
 namespace NMib::NStr
 {

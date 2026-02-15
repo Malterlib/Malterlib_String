@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Container/Malterlib_String_Container_FormatPrivate.hpp"
+#include "Malterlib_String_Container_FormatPrivate.hpp"
 
 namespace NMib::NStr
 {
@@ -190,4 +190,4 @@ namespace NMib::NStr
 	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams &&...p_Params);
 }
 
-#include "Container/Malterlib_String_Container_Format.hpp"
+#include "Malterlib_String_Container_Format.hpp"

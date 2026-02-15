@@ -68,4 +68,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Traits.hpp"
+#include "Malterlib_String_Container_Traits.hpp"

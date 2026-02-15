@@ -50,7 +50,7 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Parse_Integer.hpp"
+#include "Malterlib_String_Container_Parse_Integer.hpp"
 
 DMibStrStringParserImplementInt(uint8);
 DMibStrStringParserImplementInt(int8);

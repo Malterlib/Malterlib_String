@@ -447,4 +447,4 @@ namespace NMib::NStr
 	constexpr typename TCFStr<tf_CChar, 2, sizeof(tf_CChar) >= 4 ? EStrType_Unicode : EStrType_UTF>::CType fg_CharToString(tf_CChar const &_Char);
 }
 
-#include "Container/Malterlib_String_Container_Algorithm.hpp"
+#include "Malterlib_String_Container_Algorithm.hpp"

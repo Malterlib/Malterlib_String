@@ -144,3 +144,17 @@ namespace NMib::NStr
 		return CUnicodeIterator(*this);
 	}
 }
+
+#include "Malterlib_String_Container_Stream.hpp"
+#include "Malterlib_String_Container_ParseType.hpp"
+#include "Malterlib_String_Container_Parse.hpp"
+#include "Malterlib_String_Container_Conversion.hpp"
+#include "Malterlib_String_Container_Lifetime.hpp"
+#include "Malterlib_String_Container_AlgorithmMethods.hpp"
+#include "Malterlib_String_Container_ParseTraits.hpp"
+#include "Malterlib_String_Container_Algorithm.hpp"
+#include "Malterlib_String_Container_AlgorithmMethods.hpp"
+#include "Malterlib_String_Container_Assign.hpp"
+#include "Malterlib_String_Container_Concat.hpp"
+#include "Malterlib_String_Container_Operator.hpp"
+#include "Malterlib_String_Container_ImpDynamic.hpp"

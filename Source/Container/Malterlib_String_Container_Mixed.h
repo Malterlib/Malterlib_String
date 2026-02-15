@@ -41,4 +41,4 @@ DMibTypeID(NMib::NStr::CMStrDeprecated, DMibCurrentTypeID + 27);
 
 DMibDeprecatedSuppressStop;
 
-#include "Container/Malterlib_String_Container_Mixed.hpp"
+#include "Malterlib_String_Container_Mixed.hpp"

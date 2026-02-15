@@ -29,4 +29,4 @@ namespace NMib::NStr
 	DMibDeprecatedSuppressStop;
 }
 
-#include "Container/Malterlib_String_Container_MixedPreserve.hpp"
+#include "Malterlib_String_Container_MixedPreserve.hpp"

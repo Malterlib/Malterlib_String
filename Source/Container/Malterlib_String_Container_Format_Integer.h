@@ -268,7 +268,7 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Format_Integer.hpp"
+#include "Malterlib_String_Container_Format_Integer.hpp"
 
 DMibStrStringFormatterImplementInt(uint8);
 DMibStrStringFormatterImplementInt(int8);

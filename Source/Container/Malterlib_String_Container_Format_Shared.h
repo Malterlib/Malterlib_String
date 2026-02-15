@@ -292,5 +292,5 @@ namespace NMib::NStr
 	;
 }
 
-#include "Container/Malterlib_String_Container_Format_Shared.hpp"
-#include "Container/Malterlib_String_Container_Format_Shared_Expression.hpp"
+#include "Malterlib_String_Container_Format_Shared.hpp"
+#include "Malterlib_String_Container_Format_Shared_Expression.hpp"

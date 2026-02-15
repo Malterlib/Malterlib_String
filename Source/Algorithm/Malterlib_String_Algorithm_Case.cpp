@@ -3,7 +3,7 @@
 
 #include <Mib/Core/Core>
 
-#include "../Malterlib_String_Algorithm.h"
+#include "Malterlib_String_Algorithm.h"
 
 namespace NMib::NStr
 {

@@ -47,4 +47,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_ImpPtr.hpp"
+#include "Malterlib_String_Container_ImpPtr.hpp"

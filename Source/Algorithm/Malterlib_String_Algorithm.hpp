@@ -3,9 +3,6 @@
 
 #pragma once
 
-#include <Mib/Core/Core>
-#include "Malterlib_String.h"
-
 namespace NMib::NStr
 {
 	template <typename tf_CData>
@@ -188,17 +185,17 @@ namespace NMib::NStr
 	}
 }
 
-#include "Algorithm/Malterlib_String_Algorithm_Case.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Character.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Compare.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Escape.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Find.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Hash.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Join.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Manipulate.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Parse.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Replace.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Sanitize.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Split.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Trim.hpp"
-#include "Algorithm/Malterlib_String_Algorithm_Wildcard.hpp"
+#include "Malterlib_String_Algorithm_Case.hpp"
+#include "Malterlib_String_Algorithm_Character.hpp"
+#include "Malterlib_String_Algorithm_Compare.hpp"
+#include "Malterlib_String_Algorithm_Escape.hpp"
+#include "Malterlib_String_Algorithm_Find.hpp"
+#include "Malterlib_String_Algorithm_Hash.hpp"
+#include "Malterlib_String_Algorithm_Join.hpp"
+#include "Malterlib_String_Algorithm_Manipulate.hpp"
+#include "Malterlib_String_Algorithm_Parse.hpp"
+#include "Malterlib_String_Algorithm_Replace.hpp"
+#include "Malterlib_String_Algorithm_Sanitize.hpp"
+#include "Malterlib_String_Algorithm_Split.hpp"
+#include "Malterlib_String_Algorithm_Trim.hpp"
+#include "Malterlib_String_Algorithm_Wildcard.hpp"

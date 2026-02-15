@@ -22,4 +22,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Format_AutoClear.hpp"
+#include "Malterlib_String_Container_Format_AutoClear.hpp"

@@ -55,4 +55,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Parse_StringContainer.hpp"
+#include "Malterlib_String_Container_Parse_StringContainer.hpp"

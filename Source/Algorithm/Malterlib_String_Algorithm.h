@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Malterlib_String_Defines.h"
+#include "../Malterlib_String_Defines.h"
 
 namespace NMib::NStr
 {

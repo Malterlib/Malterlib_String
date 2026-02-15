@@ -95,4 +95,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_Format_StringContainer.hpp"
+#include "Malterlib_String_Container_Format_StringContainer.hpp"

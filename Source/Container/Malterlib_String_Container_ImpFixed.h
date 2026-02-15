@@ -42,4 +42,4 @@ namespace NMib::NStr
 	};
 }
 
-#include "Container/Malterlib_String_Container_ImpFixed.hpp"
+#include "Malterlib_String_Container_ImpFixed.hpp"
