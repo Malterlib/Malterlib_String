@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CFormatter, typename t_CBinaryType>
-	class TCStrFormatType_Binary final : public TICStrFormatType<t_CFormatter>
+	struct TCStrFormatType_Binary final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
 		using CStrFormatTypeClassifier = TCConditional<NTraits::cIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary>;

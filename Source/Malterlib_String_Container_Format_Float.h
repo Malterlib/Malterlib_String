@@ -12,18 +12,18 @@
 namespace NMib::NStr
 {
 	template
-		<
-			typename t_CFormatter
-			, aint t_SignBits
-			, aint t_ExponentBits
-			, aint t_MantissaBits
-			, aint t_PaddingBits
-			, typename t_CImplicitFloat
-			, bool t_bDummyOptimize
-			, typename t_CIntegerStorage
-			, bool t_bReference
-		>
-	class TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
+	<
+		typename t_CFormatter
+		, aint t_SignBits
+		, aint t_ExponentBits
+		, aint t_MantissaBits
+		, aint t_PaddingBits
+		, typename t_CImplicitFloat
+		, bool t_bDummyOptimize
+		, typename t_CIntegerStorage
+		, bool t_bReference
+	>
+	struct TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
 		using CSuper = TICStrFormatType<t_CFormatter>;

@@ -8,62 +8,51 @@
 namespace NMib::NStr
 {
 	template <typename t_CStrTraits, aint t_DataLen>
-	class TCStrImp_Fixed;
+	struct TCStrImp_Fixed;
 
 	template <typename t_CStrTraits>
-	class TCStrImp_Ptr;
-
+	struct TCStrImp_Ptr;
 
 	template <typename t_TCStrTraits>
 	struct TCStr;
 
-	class CStrImp_Dynamic_ParamsDeflauts
+	struct CStrImp_Dynamic_ParamsDeflauts
 	{
-	public:
 		using CAllocator = NMemory::CAllocator_Heap;
-		enum
-		{
-			EMaxExtraChars = 32
-		};
+
+		constexpr static mint mc_MaxExtraChars = 32;
 	};
 
-	class CStrImp_Dynamic_ParamsNonTracked
+	struct CStrImp_Dynamic_ParamsNonTracked
 	{
-	public:
 		using CAllocator = NMemory::CAllocator_NonTrackedHeap;
-		enum
-		{
-			EMaxExtraChars = 32
-		};
+
+		constexpr static mint mc_MaxExtraChars = 32;
 	};
 
-	class CStrImp_Dynamic_ParamsVirtual : public CStrImp_Dynamic_ParamsDeflauts
+	struct CStrImp_Dynamic_ParamsVirtual : public CStrImp_Dynamic_ParamsDeflauts
 	{
-	public:
 		using CAllocator = NMemory::CAllocator_Virtual;
 	};
 
-	class CStrImp_Dynamic_ParamsSecure
+	struct CStrImp_Dynamic_ParamsSecure
 	{
-	public:
 		using CAllocator = NMemory::CAllocator_HeapSecure;
-		enum
-		{
-			EMaxExtraChars = 32
-		};
+
+		constexpr static mint mc_MaxExtraChars = 32;
 	};
 
 	using CStrTypeUnderlying = int32;
 	enum EStrType : int32;
 
 	template <typename t_CStrTraits>
-	class TCStrImp_Dynamic;
+	struct TCStrImp_Dynamic;
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
-	class TCStrTraits;
+	struct TCStrTraits;
 
 	template <typename t_CStrTraits, typename t_CImplementation>
-	class TCTCStrTraits
+	struct TCTCStrTraits
 	{
 	public:
 		using CStrTraits = t_CStrTraits;
@@ -71,13 +60,13 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CStrTraits, typename t_CImpParams>
-	class TICStrImp_Virtual;
+	struct TICStrImp_Virtual;
 
 	template <typename t_CTStrTraits>
-	class TCStrImp_Virtual_PtrWrapper;
+	struct TCStrImp_Virtual_PtrWrapper;
 
 	template <typename t_CTStrTraits>
-	class TCStrImp_Virtual_TStrWrapper;
+	struct TCStrImp_Virtual_TStrWrapper;
 
 	template <typename t_CFormatter>
 	struct TICStrFormatType;
@@ -85,25 +74,25 @@ namespace NMib::NStr
 	template <typename t_CIntType>
 	struct TCStrFormatType_Int_OptionsStatic;
 
-	template <typename t_CFormatter, typename t_CIntType, typename t_COptions = TCStrFormatType_Int_OptionsStatic<t_CIntType> >
+	template <typename t_CFormatter, typename t_CIntType, typename t_COptions = TCStrFormatType_Int_OptionsStatic<t_CIntType>>
 	struct TCStrFormatType_Int;
 
 	template
-		<
-			typename t_CFormatter
-			, aint t_SignBits
-			, aint t_ExponentBits
-			, aint t_MantissaBits
-			, aint t_PaddingBits
-			, typename t_CImplicitFloat
-			, bool t_bDummyOptimize
-			, typename t_CIntegerStorage
-			, bool t_bReference
-		>
-	class TCStrFormatType_Float;
+	<
+		typename t_CFormatter
+		, aint t_SignBits
+		, aint t_ExponentBits
+		, aint t_MantissaBits
+		, aint t_PaddingBits
+		, typename t_CImplicitFloat
+		, bool t_bDummyOptimize
+		, typename t_CIntegerStorage
+		, bool t_bReference
+	>
+	struct TCStrFormatType_Float;
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	class TCStrFormatType_String;
+	struct TCStrFormatType_String;
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	struct TCStrFormatType_TStr;
@@ -112,67 +101,64 @@ namespace NMib::NStr
 	enum EStrTypeClass_Float
 	{
 	};
+
 	enum EStrTypeClass_String
 	{
 	};
+
 	enum EStrTypeClass_Integer
 	{
 	};
+
 	enum EStrTypeClass_Binary
 	{
 	};
+
 	enum EStrTypeClass_Untyped
 	{
 	};
+
 	enum EStrTypeClass_Other
 	{
 	};
 
-	class CDefaultStrFormatTypeClassifier
+	struct CDefaultStrFormatTypeClassifier
 	{
-	public:
-
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Other _Value);
 	};
 
-	class CStrFormatTypeClassifier_String
+	struct CStrFormatTypeClassifier_String
 	{
-	public:
-
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_String _Value);
 	};
-	class CStrFormatTypeClassifier_Integer
-	{
-	public:
 
+	struct CStrFormatTypeClassifier_Integer
+	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Integer _Value);
 	};
-	class CStrFormatTypeClassifier_Untyped
-	{
-	public:
 
+	struct CStrFormatTypeClassifier_Untyped
+	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Untyped _Value);
 	};
-	class CStrFormatTypeClassifier_Binary
-	{
-	public:
 
+	struct CStrFormatTypeClassifier_Binary
+	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Binary _Value);
 	};
-	class CStrFormatTypeClassifier_Float
-	{
-	public:
 
+	struct CStrFormatTypeClassifier_Float
+	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
 		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Float _Value);

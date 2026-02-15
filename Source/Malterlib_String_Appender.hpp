@@ -50,7 +50,7 @@ namespace NMib::NStr
 			mp_StrLen = mp_String.f_GetStrLen();
 			mp_String.f_Reserve(mp_StrLen + 1);
 			mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-			mp_MaxLen = mp_String.f_GetLength() - 1;
+			mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 			mp_bChanged = false;
 
 			return;
@@ -115,7 +115,7 @@ namespace NMib::NStr
 					fp_Commit();
 					mp_String.f_Reserve(LenNeeded);
 					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-					mp_MaxLen = mp_String.f_GetLength() - 1;
+					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
 				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
@@ -172,7 +172,7 @@ namespace NMib::NStr
 					fp_Commit();
 					mp_String.f_Reserve(LenNeeded);
 					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-					mp_MaxLen = mp_String.f_GetLength() - 1;
+					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
 				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
@@ -222,7 +222,7 @@ namespace NMib::NStr
 					fp_Commit();
 					mp_String.f_Reserve(LenNeeded);
 					mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-					mp_MaxLen = mp_String.f_GetLength() - 1;
+					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
 				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
@@ -267,7 +267,7 @@ namespace NMib::NStr
 							fp_Commit();
 							mp_String.f_Reserve(NeededLen);
 							mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-							mp_MaxLen = mp_String.f_GetLength() - 1;
+							mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 							if (mp_MaxLen < NeededLen)
 								return nullptr; // Overflow
 						}
@@ -298,7 +298,7 @@ namespace NMib::NStr
 							fp_Commit();
 							mp_String.f_Reserve(NeededLen);
 							mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-							mp_MaxLen = mp_String.f_GetLength() - 1;
+							mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 							if (mp_MaxLen < NeededLen)
 								return nullptr; // Overflow
 						}
@@ -328,7 +328,7 @@ namespace NMib::NStr
 			fp_Commit();
 			mp_String.f_Reserve(mp_StrLen + 1);
 			mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-			mp_MaxLen = mp_String.f_GetLength() - 1;
+			mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 		}
 
 		*mp_pStrOut = _Character;
@@ -349,7 +349,7 @@ namespace NMib::NStr
 		mp_StrLen = mp_String.f_GetStrLen();
 		mp_String.f_Reserve(mp_StrLen + 1);
 		mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
-		mp_MaxLen = mp_String.f_GetLength() - 1;
+		mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 		mp_bChanged = false;
 	}
 

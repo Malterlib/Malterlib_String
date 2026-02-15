@@ -26,9 +26,9 @@ namespace NMib::NStr
 	template struct TCStr<CStrTraits_CWStrVMem>;
 	template struct TCStr<CStrTraits_CUStrVMem>;
 
-	template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
-	template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
-	template class TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
+	template struct TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
+	template struct TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
+	template struct TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
 
 	template struct TCStrImp_Dynamic_StringData<ch8>;
 	template struct TCStrImp_Dynamic_StringData<ch16>;

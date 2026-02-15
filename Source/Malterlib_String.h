@@ -42,6 +42,7 @@ namespace NMib::NStr
 #include "Malterlib_String_Container_ImpVirtual.h"
 #include "Malterlib_String_Container_ImpDynamic.h"
 #include "Malterlib_String_Container_ImpFixed.h"
+#include "Malterlib_String_Container_ImpPtr.h"
 
 namespace NMib::NStr
 {
@@ -63,9 +64,9 @@ namespace NMib::NStr
 	extern template struct TCStr<CStrTraits_CWStrVMem>;
 	extern template struct TCStr<CStrTraits_CUStrVMem>;
 
-	extern template class TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
-	extern template class TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
-	extern template class TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
+	extern template struct TCStrImp_Dynamic<CStrTraits_CStr::CStrTraits>;
+	extern template struct TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
+	extern template struct TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
 
 	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStr<NMib::NStr::CStrTraits_CStr> const &);
 	extern template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
@@ -103,7 +104,6 @@ namespace NMib::NSys::NStr
 
 #include "Malterlib_String_Compare.h"
 #include "Malterlib_String_Container.hpp"
-#include "Malterlib_String_Container_ImpDynamic.hpp"
 
 namespace NMib::NStr
 {

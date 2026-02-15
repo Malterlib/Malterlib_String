@@ -16,3 +16,4 @@
 #include "Container/Malterlib_String_Container_Assign.hpp"
 #include "Container/Malterlib_String_Container_Concat.hpp"
 #include "Container/Malterlib_String_Container_Operator.hpp"
+#include "Container/Malterlib_String_Container_ImpDynamic.hpp"

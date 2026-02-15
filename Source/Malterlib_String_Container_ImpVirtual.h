@@ -8,103 +8,48 @@
 namespace NMib::NStr
 {
 	template <typename t_CStrTraits, typename t_CImpParams>
-	class TICStrImp_Virtual
+	struct TICStrImp_Virtual
 	{
 	public:
 		virtual void f_Destroy() = 0;
 		virtual typename t_CStrTraits::CChar *f_GetStr() = 0;
 		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard) = 0;
-		virtual aint f_GetLength() = 0;
-		enum
-		{
-			mc_AllocatesMemory = true
-		};
+		virtual aint f_GetAllocLength() = 0;
+
+		constexpr static bool mc_AllocatesMemory = true;
 	};
 
-
 	template <typename t_CTStrTraits>
-	class TCStrImp_Virtual_PtrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint> > >
+	struct TCStrImp_Virtual_PtrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint>>>
 	{
-		constexpr const static bool mc_bInitConstStr = false;
+		virtual void f_Destroy();
+		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;
+		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
+		virtual aint f_GetAllocLength() const;
+		virtual bool f_FastLen();
+		virtual void f_Clear();
+
+		constexpr static bool mc_bInitConstStr = false;
+		constexpr static bool mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory;
 
 		TCStr<t_CTStrTraits> *m_pStr;
-
-		enum
-		{
-			mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory
-		};
-
-		virtual void f_Destroy()
-		{
-			m_pStr->f_Destroy();
-		}
-
-		virtual typename t_CTStrTraits::CStrTraits::CChar const*f_GetStr() const
-		{
-			return m_pStr->f_GetStr();
-		}
-
-		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
-		{
-			return m_pStr->f_CreateWritableBuffer(_Length, _bDiscard);
-		}
-
-		virtual aint f_GetLength() const
-		{
-			return m_pStr->f_GetLength();
-		}
-
-		virtual bool f_FastLen()
-		{
-			return m_pStr->f_FastLen();
-		}
-
-		virtual void f_Clear()
-		{
-			return m_pStr->f_Clear();
-		}
 	};
 
 	template <typename t_CTStrTraits>
-	class TCStrImp_Virtual_TStrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint> > >
+	struct TCStrImp_Virtual_TStrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint>>>
 	{
-		constexpr const static bool mc_bInitConstStr = false;
+		virtual void f_Destroy();
+		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;
+		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
+		virtual aint f_GetAllocLength() const;
+		virtual bool f_FastLen();
+		virtual void f_Clear();
 
-		TCStr< t_CTStrTraits > m_Str;
+		constexpr static bool mc_bInitConstStr = false;
+		constexpr static bool mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory;
 
-		enum
-		{
-			mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory
-		};
-
-		virtual void f_Destroy()
-		{
-			m_Str.f_Destroy();
-		}
-
-		virtual typename t_CTStrTraits::CStrTraits::CChar const*f_GetStr() const
-		{
-			return m_Str.f_GetStr();
-		}
-
-		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard)
-		{
-			return m_Str.f_CreateWritableBuffer(_Length, _bDiscard);
-		}
-
-		virtual aint f_GetLength() const
-		{
-			return m_Str.f_GetLength();
-		}
-
-		virtual bool f_FastLen()
-		{
-			return m_Str.f_FastLen();
-		}
-
-		virtual void f_Clear()
-		{
-			return m_Str.f_Clear();
-		}
+		TCStr<t_CTStrTraits> m_Str;
 	};
 }
+
+#include "Container/Malterlib_String_Container_ImpVirtual.hpp"

@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	class TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
+	struct TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
 	{
 	public:
 		static_assert(t_Type != EStrType_Ansi);
@@ -71,7 +71,6 @@ namespace NMib::NStr
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
 		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen);
 
-
 		inline static bool constexpr mcp_TypeID = false;
 
 		t_CStrDataType const *mp_pStr;
@@ -89,31 +88,24 @@ namespace NMib::NStr
 	DMibStrStringFormatterImplementStr(ch16, EStrType_UTF);
 #endif
 	DMibStrStringFormatterImplementStr(ch32, EStrType_Unicode);
-
 	DMibStrStringFormatterImplementStr(uint16, EStrType_UTF);
-
 	DMibStrStringFormatterImplementStr(const ch8, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
 	DMibStrStringFormatterImplementStr(const ch16, EStrType_UTF);
 #endif
 	DMibStrStringFormatterImplementStr(const ch32, EStrType_Unicode);
-
 	DMibStrStringFormatterImplementStr(const uint16, EStrType_UTF);
-
 
 	DMibStrStringFormatterImplementStrArray(ch8, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
 	DMibStrStringFormatterImplementStrArray(ch16, EStrType_UTF);
 #endif
 	DMibStrStringFormatterImplementStrArray(ch32, EStrType_Unicode);
-
 	DMibStrStringFormatterImplementStrArray(uint16, EStrType_UTF);
-
 	DMibStrStringFormatterImplementStrArray(const ch8, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
 	DMibStrStringFormatterImplementStrArray(const ch16, EStrType_UTF);
 #endif
 	DMibStrStringFormatterImplementStrArray(const ch32, EStrType_Unicode);
-
 	DMibStrStringFormatterImplementStrArray(const uint16, EStrType_UTF);
 }

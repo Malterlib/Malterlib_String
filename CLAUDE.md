@@ -105,7 +105,7 @@ struct TCStr {
 
 // Dynamic implementation example
 template <typename t_CStrTraits>
-class TCStrImp_Dynamic {
+struct TCStrImp_Dynamic {
     ch8* m_pData;
     mint m_Capacity;
     mint m_Length;
