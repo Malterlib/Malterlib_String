@@ -16,7 +16,7 @@ namespace NMib::NStr
 		inline_small void f_RefCountIncrease();
 		inline_small bool f_RefCountDecrease();
 
-		NAtomic::TCAtomicAggregate<mint> m_RefCount{1};
+		NAtomic::TCAtomicIndeterminate<mint> m_RefCount{1};
 		mint m_Len:sizeof(mint)*8-2 = 0;
 		mint m_bReserved:1 = 0;
 		mint m_bConstant:1 = 0;
