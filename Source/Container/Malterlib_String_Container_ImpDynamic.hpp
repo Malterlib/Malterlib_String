@@ -71,7 +71,7 @@ namespace NMib::NStr
 		if (m_bConstant)
 			return;
 
-		m_RefCount.f_FetchAdd(1, NAtomic::EMemoryOrder_Release);
+		m_RefCount.f_FetchAdd(1, NAtomic::gc_MemoryOrder_Release);
 	}
 
 	template <typename t_CChar>
@@ -80,7 +80,7 @@ namespace NMib::NStr
 		if (m_bConstant)
 			return false;
 
-		return m_RefCount.f_FetchSub(1, NAtomic::EMemoryOrder_AcquireRelease) == 1;
+		return m_RefCount.f_FetchSub(1, NAtomic::gc_MemoryOrder_AcquireRelease) == 1;
 	}
 
 	template <typename t_CStrTraits>
@@ -199,14 +199,14 @@ namespace NMib::NStr
 			return;
 		}
 
-		if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1 || m_pData->m_bConstant)
+		if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1 || m_pData->m_bConstant)
 		{
 			mint StrLen = f_GetStrLen();
 			mint Length = fg_Max(mint(m_pData->m_Len), mint(2));
 			f_CreateWritableBuffer(Length, false);
 			f_GetStrWritable()[StrLen] = 0;
 			DMibFastCheck(!m_pData->m_bConstant);
-			DMibFastCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1);
+			DMibFastCheck(m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1);
 		}
 
 		m_pData->m_UserData = _Data;
@@ -221,7 +221,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small auto TCStrImp_Dynamic<t_CStrTraits>::f_GetStrWritable() const ->CChar *
 	{
-		DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must own str");
+		DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1, "Must own str");
 		return m_pData->f_GetData(); // Return a const value if string is empty this will make application crash if it writes to this data
 	}
 
@@ -234,7 +234,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small mint TCStrImp_Dynamic<t_CStrTraits>::f_GetRefCount() const
 	{
-		return m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed);
+		return m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed);
 	}
 
 	template <typename t_CStrTraits>
@@ -280,7 +280,7 @@ namespace NMib::NStr
 
 		if (NewLen != CurLen)
 		{
-			DMibSafeCheck(!m_pData->m_bConstant && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1, "Must be no other having access to this data");
+			DMibSafeCheck(!m_pData->m_bConstant && m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1, "Must be no other having access to this data");
 			f_TrimSize(NewLen);
 		}
 	}
@@ -288,7 +288,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::f_MakeUnique()
 	{
-		if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
+		if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1)
 			f_CreateWritableBuffer(f_GetStrLen()+1, false);
 	}
 
@@ -339,7 +339,7 @@ namespace NMib::NStr
 			{
 				if (!f_IsDefault())
 				{
-					if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+					if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1)
 					{
 						mint CurrentSize = m_pData->f_GetMemorySize();
 
@@ -405,7 +405,7 @@ namespace NMib::NStr
 				CurLen = m_pData->m_Len;
 			}
 		}
-		else if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) > 1)
+		else if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1)
 		{
 			mint NewLen = fp_CalcNewSize(_Length);
 			CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
@@ -438,7 +438,7 @@ namespace NMib::NStr
 	inline aint TCStrImp_Dynamic<t_CStrTraits>::f_CreateWritableBuffer(aint _Length, bool _bDiscard)
 	{
 		aint CurLen = m_pData->m_Len;
-		if (CurLen >= _Length && m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+		if (CurLen >= _Length && m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1)
 			return CurLen;
 
 		return fp_CreateWritableBuffer(_Length, _bDiscard);
@@ -455,7 +455,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+			if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1)
 				m_pData->m_bReserved = false;
 		}
 	}
@@ -474,7 +474,7 @@ namespace NMib::NStr
 		}
 
 		DMibSafeCheck(!m_pData->m_bConstant, "Must be allocated here or something is wrong");
-		if (m_pData->m_RefCount.f_Load(NAtomic::EMemoryOrder_Relaxed) == 1)
+		if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1)
 		{
 			m_pData = (CData *)(CAllocator::f_Resize(m_pData, _NeededSize, m_pData->f_GetMemorySize()));
 			m_pData->f_SetLength(_NeededSize);
