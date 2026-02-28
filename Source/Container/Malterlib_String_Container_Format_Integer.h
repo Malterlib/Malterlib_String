@@ -70,7 +70,7 @@ namespace NMib::NStr
 		enum
 		{
 			ENumBits = sizeof(CIntType) * 8,
-			ENumBitsPerChar = gc_HighestBitSet<int32, t_Radix> - 1
+			ENumBitsPerChar = gc_HighestBitSet<t_Radix>
 		};
 
 	public:

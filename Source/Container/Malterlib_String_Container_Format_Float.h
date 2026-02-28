@@ -32,7 +32,7 @@ namespace NMib::NStr
 		using CFloatIn = NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
 
 		static constexpr aint mc_MantissaBits = t_MantissaBits + 8;
-		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<aint, mc_MantissaBits + (mc_MantissaBits - 1)> + 2;
+		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<mc_MantissaBits + (mc_MantissaBits - 1)> + 3;
 		static constexpr aint mc_ExponentBits = (t_ExponentBits > mc_MinExponentBits ? t_ExponentBits : mc_MinExponentBits);
 		using CFloat = CFloatIn;
 		using CChar = typename CTStrTraits::CStrTraits::CChar;

@@ -634,8 +634,8 @@ namespace NMib::NStr
 		{
 			if (_Options.f_ThousandSeparator())
 			{
-				if constexpr (1 << (gc_HighestBitSet<int32, tf_COptions::ERadix> - 1) == tf_COptions::ERadix)
-					fs_DoNumber_BitExactWithThousand<gc_HighestBitSet<int32, tf_COptions::ERadix> - 1>(_Options, Number, pStrPlace);
+				if constexpr (1 << gc_HighestBitSet<tf_COptions::ERadix> == tf_COptions::ERadix)
+					fs_DoNumber_BitExactWithThousand<gc_HighestBitSet<tf_COptions::ERadix>>(_Options, Number, pStrPlace);
 				else if constexpr (tf_COptions::ERadix > 10)
 					fs_DoNumber_Above10StaticWithThousand<tf_COptions::ERadix>(_Options, Number, pStrPlace);
 				else
@@ -643,8 +643,8 @@ namespace NMib::NStr
 			}
 			else
 			{
-				if constexpr (1 << (gc_HighestBitSet<int32, tf_COptions::ERadix> - 1) == tf_COptions::ERadix)
-					fs_DoNumber_BitExact<gc_HighestBitSet<int32, tf_COptions::ERadix> - 1>(_Options, Number, pStrPlace);
+				if constexpr (1 << gc_HighestBitSet<tf_COptions::ERadix> == tf_COptions::ERadix)
+					fs_DoNumber_BitExact<gc_HighestBitSet<tf_COptions::ERadix>>(_Options, Number, pStrPlace);
 				else if constexpr (tf_COptions::ERadix > 10)
 					fs_DoNumber_Above10Static<tf_COptions::ERadix>(_Options, Number, pStrPlace);
 				else
