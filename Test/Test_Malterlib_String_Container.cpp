@@ -22,8 +22,9 @@
 #include <boost/algorithm/string/find.hpp>
 #include <sstream>
 
-#include <Mib/Test/Test>
 #include <Mib/Test/Memory>
+#include <Mib/Test/Test>
+#include <Mib/Time/PerfTimeMeasure>
 
 using namespace NMib;
 using namespace NMib::NTime;
@@ -42,7 +43,6 @@ namespace
 	using namespace NMib::NStorage;
 	namespace qi = boost::spirit::qi;
 	namespace karma = boost::spirit::karma;
-	namespace ascii = boost::spirit::ascii;
 
 	struct CStr_Tests : public CTest
 	{
@@ -646,7 +646,7 @@ namespace
 						};
 						CMeasureType MalterlibCStrPtrTime("Malterlib CStrPtr");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							ch8 ResultData[12];
 							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
@@ -680,7 +680,7 @@ namespace
 	#if defined(DPlatformFamily_Windows)
 						CMeasureType ItoaTime("itoa");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
 							for(mint j = 0; j < nTests; ++j)
 							{
@@ -730,7 +730,7 @@ namespace
 						CMeasureType KarmaTime("Karma");
 						{
 							using karma::int_;
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							for(mint j = 0; j < nTests; ++j)
 							{
@@ -750,7 +750,7 @@ namespace
 						};
 						CMeasureType MalterlibCStrTime("Malterlib CStr");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
 							for(mint j = 0; j < nTests; ++j)
 							{
@@ -766,7 +766,7 @@ namespace
 						};
 						CMeasureType StringStreamTime("stringstream");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							std::stringstream Stream;
 							for(mint j = 0; j < nTests/10; ++j)
@@ -813,7 +813,7 @@ namespace
 						CMeasureType KarmaTime("Karma");
 						{
 							using karma::int_;
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							Result.reserve(12);
 							for(mint j = 0; j < nTests; ++j)
@@ -835,7 +835,7 @@ namespace
 						};
 						CMeasureType MalterlibCStrTime("Malterlib CStr");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
 							Result.f_Reserve(12);
 							for(mint j = 0; j < nTests; ++j)
@@ -853,7 +853,7 @@ namespace
 						};
 						CMeasureType StringStreamTime("stringstream");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							Result.reserve(12);
 							std::stringstream Stream;
@@ -952,7 +952,7 @@ namespace
 						};
 						CMeasureType SprintfTime("sprintf");
 						{
-							CCyclesMin Time;
+							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
 							for(mint j = 0; j < nTests; ++j)
 							{
