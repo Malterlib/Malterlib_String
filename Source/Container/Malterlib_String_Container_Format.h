@@ -63,7 +63,7 @@ namespace NMib::NStr
 
 		void f_ClearFormats();
 
-		bool operator == (TCFormat const &_Right) const;
+		bool operator == (TCFormat const &_Right) const noexcept;
 
 		inline_small void f_FormatToStr(TCStr<t_CTCStrTraits> &_Str) const;
 		inline_small void f_FormatToStrConcat(TCStr<t_CTCStrTraits> &_Str) const;

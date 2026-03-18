@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -36,7 +36,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -66,7 +66,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2)
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		if constexpr (NTraits::cIsSame<tf_CData1, tf_CData2>)
 		{
@@ -78,7 +78,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2)
+	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2) noexcept
 	{
 		while (_Str1 && _Str2)
 		{
@@ -103,7 +103,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2)
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -134,7 +134,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2)
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		if constexpr (NTraits::cIsSame<tf_CData1, tf_CData2>)
 		{
@@ -146,7 +146,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen)
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -180,7 +180,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen)
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
 	{
 		if (_MaxLen == 0)
 			return 0;
@@ -195,7 +195,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen)
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -229,7 +229,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen)
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
 	{
 		if (_MaxLen == 0)
 			return 0;

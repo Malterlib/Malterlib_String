@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <typename t_CStr, bool t_bIncludeExtra>
 	struct TCParseLocation
 	{
-		auto operator <=> (TCParseLocation const &_Right) const = default;
+		auto operator <=> (TCParseLocation const &_Right) const noexcept = default;
 
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
@@ -27,7 +27,7 @@ namespace NMib::NStr
 	template <typename t_CStr>
 	struct TCParseLocation<t_CStr, false>
 	{
-		auto operator <=> (TCParseLocation const &_Right) const = default;
+		auto operator <=> (TCParseLocation const &_Right) const noexcept = default;
 
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
@@ -45,7 +45,7 @@ namespace NMib::NStr
 
 	struct CParseError
 	{
-		auto operator <=> (CParseError const &_Right) const = default;
+		auto operator <=> (CParseError const &_Right) const noexcept = default;
 
 		void f_Format(NStr::CStr &o_FormatInto) const;
 		bool f_IsSeparator() const;

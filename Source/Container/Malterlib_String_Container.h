@@ -622,16 +622,16 @@ namespace NMib::NStr
 		bool operator ! ();
 
 		template <typename tf_CTCStrTraits>
-		bool operator == (TCStr<tf_CTCStrTraits> const &_Right) const;
+		bool operator == (TCStr<tf_CTCStrTraits> const &_Right) const noexcept;
 
 		template <typename tf_CData>
-		bool operator == (tf_CData const *_pRight) const;
+		bool operator == (tf_CData const *_pRight) const noexcept;
 
 		template <typename tf_CTCStrTraits>
-		COrdering_Strong operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const;
+		COrdering_Strong operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const noexcept;
 
 		template <typename tf_CData>
-		COrdering_Strong operator <=> (tf_CData const *_pRight) const;
+		COrdering_Strong operator <=> (tf_CData const *_pRight) const noexcept;
 
 		inline_small CChar &operator [] (aint _Index);
 		inline_small CChar const &operator [] (aint _Index) const;

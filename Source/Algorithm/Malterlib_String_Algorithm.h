@@ -91,17 +91,17 @@ namespace NMib::NStr
 	inline_large tf_CData *fg_StrCapitalize(tf_CData *_pStr, mint _MaxLen);
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen);
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen);
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2);
+	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2) noexcept;
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindChar(tf_CData1 const *_pStr1, tf_CData2 _Char);

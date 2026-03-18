@@ -138,7 +138,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	bool TCStr<t_CTCStrTraits>::operator == (TCStr<tf_CTCStrTraits> const &_Right) const
+	bool TCStr<t_CTCStrTraits>::operator == (TCStr<tf_CTCStrTraits> const &_Right) const noexcept
 	{
 		if (f_GetLen() != _Right.f_GetLen())
 			return false;
@@ -148,21 +148,21 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	bool TCStr<t_CTCStrTraits>::operator == (tf_CData const *_pRight) const
+	bool TCStr<t_CTCStrTraits>::operator == (tf_CData const *_pRight) const noexcept
 	{
 		return fg_StrCmp(this->f_GetStr(), _pRight) == 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const
+	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const noexcept
 	{
 		return fg_StrCmp(this->f_GetStr(), _Right.f_GetStr()) <=> 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (tf_CData const *_pRight) const
+	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (tf_CData const *_pRight) const noexcept
 	{
 		return fg_StrCmp(this->f_GetStr(), _pRight) <=> 0;
 	}

@@ -199,7 +199,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	bool TCFormat<t_CTCStrTraits>::operator == (TCFormat const &_Right) const
+	bool TCFormat<t_CTCStrTraits>::operator == (TCFormat const &_Right) const noexcept
 	{
 		if (fg_StrCmp(m_pFormatStr, _Right.m_pFormatStr) != 0)
 			return false;
