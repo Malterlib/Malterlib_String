@@ -51,14 +51,14 @@ namespace NMib::NStr
 
 		void f_MoveFormats(TCFormat &&_Other);
 		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags);
-		inline_medium void *f_AllocSpace(mint _Size, EStringFormatTypeFlag &_Flags);
+		inline_medium void *f_AllocSpace(umint _Size, EStringFormatTypeFlag &_Flags);
 
 		template <typename tf_CType, typename ...tfp_CParams>
 		inline_medium tf_CType *f_Alloc(tfp_CParams && ...p_Params);
 
 		inline_medium const TICStrFormatType<TCFormat> *f_GetArg(aint _iArgument) const;
 
-		mint f_GetNumArgs() const;
+		umint f_GetNumArgs() const;
 		bool f_IsEmpty() const;
 
 		void f_ClearFormats();
@@ -71,7 +71,7 @@ namespace NMib::NStr
 		inline_small void f_FormatArgumentsToStrConcat(TCStr<t_CTCStrTraits> &_Str) const;
 		void f_SetFormatStr(const CChar *_pFormatStr);
 		TCStr<t_CTCStrTraits> f_GetStr() const;
-		TCStr<t_CTCStrTraits> operator ^ (mint _nCopies) const;
+		TCStr<t_CTCStrTraits> operator ^ (umint _nCopies) const;
 
 		template <typename tf_CStr>
 		void f_Format(tf_CStr &o_FormatInto) const;
@@ -122,8 +122,8 @@ namespace NMib::NStr
 		inline_small TICStrFormatType<TCFormat> const *fp_GetFormatEntry(aint _iEntry) const;
 		void *fp_AllocSpace(int _Bytes);
 
-		constexpr static mint mcp_StaticFormats = 16;
-		constexpr static mint mcp_StaticSpace = mcp_StaticFormats * 4;
+		constexpr static umint mcp_StaticFormats = 16;
+		constexpr static umint mcp_StaticSpace = mcp_StaticFormats * 4;
 
 		uaint m_nFormats;
 		mutable aint m_iCurrentArgument;
@@ -141,14 +141,14 @@ namespace NMib::NStr
 	{
 		template <typename tf_CType>
 		CStrFormatBinaryWrapper(tf_CType const &_Data);
-		CStrFormatBinaryWrapper(void const *_pData, mint _Size);
+		CStrFormatBinaryWrapper(void const *_pData, umint _Size);
 
 		void const *f_GetArray() const;
-		mint f_GetSize() const;
+		umint f_GetSize() const;
 
 	private:
 		const void *mp_pData;
-		mint mp_Size;
+		umint mp_Size;
 	};
 
 	struct CStrFormatBinaryWrapperUntyped : public CStrFormatBinaryWrapper

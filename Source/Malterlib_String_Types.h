@@ -20,14 +20,14 @@ namespace NMib::NStr
 	{
 		using CAllocator = NMemory::CAllocator_Heap;
 
-		constexpr static mint mc_MaxExtraChars = 32;
+		constexpr static umint mc_MaxExtraChars = 32;
 	};
 
 	struct CStrImp_Dynamic_ParamsNonTracked
 	{
 		using CAllocator = NMemory::CAllocator_NonTrackedHeap;
 
-		constexpr static mint mc_MaxExtraChars = 32;
+		constexpr static umint mc_MaxExtraChars = 32;
 	};
 
 	struct CStrImp_Dynamic_ParamsVirtual : public CStrImp_Dynamic_ParamsDeflauts
@@ -39,7 +39,7 @@ namespace NMib::NStr
 	{
 		using CAllocator = NMemory::CAllocator_HeapSecure;
 
-		constexpr static mint mc_MaxExtraChars = 32;
+		constexpr static umint mc_MaxExtraChars = 32;
 	};
 
 	using CStrTypeUnderlying = int32;

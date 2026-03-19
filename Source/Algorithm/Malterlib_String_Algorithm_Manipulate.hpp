@@ -19,14 +19,14 @@ namespace NMib::NStr
 			--_StartChar;
 		}
 
-		mint Str2Len = fg_StrLen(_pStr2);
+		umint Str2Len = fg_StrLen(_pStr2);
 		fg_StrMove(pStr1 + Str2Len, pStr1);
 		NMemory::fg_MemCopy(pStr1, _pStr2, Str2Len * sizeof(tf_CData1));
 		return _pStr1;
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrInsert(tf_CData1 *_pStr1, aint _StartChar, tf_CData2 const *_pStr2, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrInsert(tf_CData1 *_pStr1, aint _StartChar, tf_CData2 const *_pStr2, umint _MaxLen)
 	{
 		if (_StartChar < 0)
 			return _pStr1;
@@ -40,18 +40,18 @@ namespace NMib::NStr
 			--_StartChar;
 		}
 
-		mint Str2Len = fg_StrLen(_pStr2);
+		umint Str2Len = fg_StrLen(_pStr2);
 		aint MaxLen = _MaxLen - ((pStr1 + Str2Len) - _pStr1) + 1;
 		if (MaxLen > 0)
 			fg_StrMove(pStr1 + Str2Len, pStr1, MaxLen);
-		mint MaxLen2 = fg_Min(Str2Len, _MaxLen - (pStr1 - _pStr1));
+		umint MaxLen2 = fg_Min(Str2Len, _MaxLen - (pStr1 - _pStr1));
 		NMemory::fg_MemCopy(pStr1, _pStr2, MaxLen2 * sizeof(tf_CData1));
 		pStr1[fg_Max(MaxLen2, (MaxLen + Str2Len))] = 0;
 		return _pStr1;
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrDelete(tf_CData1 *_pStr1, aint _StartChar, mint _nChars)
+	inline_large tf_CData1 *fg_StrDelete(tf_CData1 *_pStr1, aint _StartChar, umint _nChars)
 	{
 		if (_StartChar < 0)
 			return _pStr1;
@@ -86,7 +86,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrLeft(tf_CData1 *_pStr1, mint _nChars)
+	inline_large tf_CData1 *fg_StrLeft(tf_CData1 *_pStr1, umint _nChars)
 	{
 		tf_CData1 *pStr1 = _pStr1;
 		while (_nChars)
@@ -103,7 +103,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrExtract(tf_CData1 *_pStr1, aint _StartChar, mint _nChars)
+	inline_large tf_CData1 *fg_StrExtract(tf_CData1 *_pStr1, aint _StartChar, umint _nChars)
 	{
 		if (_StartChar < 0)
 			return _pStr1;
@@ -143,7 +143,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrRight(tf_CData1 *_pStr1, mint _nChars)
+	inline_large tf_CData1 *fg_StrRight(tf_CData1 *_pStr1, umint _nChars)
 	{
 		return fg_StrExtract(_pStr1, fg_StrLen(_pStr1) - _nChars);
 	}

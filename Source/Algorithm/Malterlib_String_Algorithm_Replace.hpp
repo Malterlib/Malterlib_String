@@ -29,7 +29,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	inline_large tf_CData1 *fg_StrReplaceChar(tf_CData1 *_pStr1, tf_CData2 _CharFind, tf_CData3 _CharReplace, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrReplaceChar(tf_CData1 *_pStr1, tf_CData2 _CharFind, tf_CData3 _CharReplace, umint _MaxLen)
 	{
 		tf_CData1 *pStr1 = _pStr1;
 		tf_CData1 *pStr1End = _pStr1 + _MaxLen;
@@ -53,7 +53,7 @@ namespace NMib::NStr
 	}
 
 	template <bool tf_bNoCase, bool tf_bUseCount = false, typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	inline tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, mint _Len, tf_CData2 const *_pStrFind, mint _LenFind, tf_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen, mint _Count = 0)
+	inline tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count = 0)
 	{
 		--_MaxLen; // Reserve space for null terminator
 
@@ -73,14 +73,14 @@ namespace NMib::NStr
 			{
 				for (;;)
 				{
-					mint SearchLen = pEnd - pRead;
+					umint SearchLen = pEnd - pRead;
 					aint MatchPos = fg_StrFind<tf_bNoCase, true>(pRead, _pStrFind, SearchLen);
 					if (MatchPos < 0)
 						break;
 
 					tf_CData1 const *pMatch = pRead + MatchPos;
 
-					mint SegLen = pMatch - pRead;
+					umint SegLen = pMatch - pRead;
 					if (pWrite != pRead)
 						NMemory::fg_MemMove(pWrite, pRead, SegLen * sizeof(tf_CData1));
 					pWrite += SegLen;
@@ -95,7 +95,7 @@ namespace NMib::NStr
 
 				if (pRead < pEnd)
 				{
-					mint RemainLen = pEnd - pRead;
+					umint RemainLen = pEnd - pRead;
 					if (pWrite != pRead)
 						NMemory::fg_MemMove(pWrite, pRead, RemainLen * sizeof(tf_CData1));
 					pWrite += RemainLen;
@@ -109,7 +109,7 @@ namespace NMib::NStr
 
 				for (;;)
 				{
-					mint SearchLen = pEnd - pRead;
+					umint SearchLen = pEnd - pRead;
 					if (SearchLen <= 0)
 						break;
 
@@ -119,8 +119,8 @@ namespace NMib::NStr
 
 					tf_CData1 const *pMatch = pRead + MatchPos;
 
-					mint SegLen = pMatch - pRead;
-					mint WriteLen = fg_Min(SegLen, pWriteEnd - pWrite);
+					umint SegLen = pMatch - pRead;
+					umint WriteLen = fg_Min(SegLen, pWriteEnd - pWrite);
 					if (WriteLen > 0)
 					{
 						if (pWrite != pRead)
@@ -146,7 +146,7 @@ namespace NMib::NStr
 
 				if (pWrite < pWriteEnd && pRead < pEnd)
 				{
-					mint RemainLen = fg_Min(pEnd - pRead, pWriteEnd - pWrite);
+					umint RemainLen = fg_Min(pEnd - pRead, pWriteEnd - pWrite);
 					if (RemainLen > 0 && pWrite != pRead)
 						NMemory::fg_MemMove(pWrite, pRead, RemainLen * sizeof(tf_CData1));
 					pWrite += RemainLen;
@@ -159,7 +159,7 @@ namespace NMib::NStr
 		{
 			tf_CData1 const *pLenEnd = _pStr1 + _Len;
 
-			mint nCount;
+			umint nCount;
 			if constexpr (tf_bUseCount)
 				nCount = _Count;
 			else
@@ -168,7 +168,7 @@ namespace NMib::NStr
 				tf_CData1 const *pScan = _pStr1;
 				for (;;)
 				{
-					mint SearchLen = pLenEnd - pScan;
+					umint SearchLen = pLenEnd - pScan;
 					if (SearchLen <= 0)
 						break;
 					aint MatchPos = fg_StrFind<tf_bNoCase, true>(pScan, _pStrFind, SearchLen);
@@ -181,21 +181,21 @@ namespace NMib::NStr
 
 			if (nCount == 0)
 			{
-				mint NewLen = fg_Min(_Len, _MaxLen);
+				umint NewLen = fg_Min(_Len, _MaxLen);
 				_pStr1[NewLen] = 0;
 				return _pStr1;
 			}
 
-			mint LenDiff = _LenReplace - _LenFind;
-			mint ProcessedNewLen = _Len + nCount * LenDiff;
-			mint NewLen = fg_Min(ProcessedNewLen, _MaxLen);
-			mint SkipRemaining = ProcessedNewLen - NewLen; // Amount to truncate from right
+			umint LenDiff = _LenReplace - _LenFind;
+			umint ProcessedNewLen = _Len + nCount * LenDiff;
+			umint NewLen = fg_Min(ProcessedNewLen, _MaxLen);
+			umint SkipRemaining = ProcessedNewLen - NewLen; // Amount to truncate from right
 
 			tf_CData1 *pWrite = _pStr1 + NewLen;
 			*pWrite = 0;
 
 			tf_CData1 const *pReadEnd = pLenEnd;
-			mint SearchLen = _Len;
+			umint SearchLen = _Len;
 			for
 			(
 				aint MatchPos = fg_StrFindReverse<tf_bNoCase, true, true>(_pStr1, _pStrFind, SearchLen, _LenFind)
@@ -208,12 +208,12 @@ namespace NMib::NStr
 
 				if (pReadEnd > pAfterMatch)
 				{
-					mint SegLen = pReadEnd - pAfterMatch;
+					umint SegLen = pReadEnd - pAfterMatch;
 					if (SkipRemaining >= SegLen)
 						SkipRemaining -= SegLen;
 					else
 					{
-						mint WriteLen = SegLen - SkipRemaining;
+						umint WriteLen = SegLen - SkipRemaining;
 						pWrite -= WriteLen;
 						NMemory::fg_MemMove(pWrite, pAfterMatch, WriteLen * sizeof(tf_CData1));
 						SkipRemaining = 0;
@@ -224,7 +224,7 @@ namespace NMib::NStr
 					SkipRemaining -= _LenReplace;
 				else
 				{
-					mint WriteLen = _LenReplace - SkipRemaining;
+					umint WriteLen = _LenReplace - SkipRemaining;
 					pWrite -= WriteLen;
 					if constexpr (sizeof(tf_CData1) == sizeof(tf_CData3))
 						NMemory::fg_MemCopy(pWrite, _pStrReplace, WriteLen * sizeof(tf_CData1));
@@ -239,10 +239,10 @@ namespace NMib::NStr
 
 			if (pReadEnd > _pStr1)
 			{
-				mint SegLen = pReadEnd - _pStr1;
+				umint SegLen = pReadEnd - _pStr1;
 				if (SkipRemaining < SegLen)
 				{
-					mint WriteLen = SegLen - SkipRemaining;
+					umint WriteLen = SegLen - SkipRemaining;
 					pWrite -= WriteLen;
 					if (pWrite != _pStr1)
 						NMemory::fg_MemMove(pWrite, _pStr1, WriteLen * sizeof(tf_CData1));
@@ -254,32 +254,32 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, mint _Len, tf_CData2 const *_pStrFind, mint _LenFind, tf_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
+	tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen)
 	{
 		return fg_StrReplace<false, false>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, 0);
 	}
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, tf_CData2 const *_pStrFind, tf_CData3 const *_pStrReplace, mint _MaxLen)
+	tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, tf_CData2 const *_pStrFind, tf_CData3 const *_pStrReplace, umint _MaxLen)
 	{
 		return fg_StrReplace<false, false>(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen, 0);
 	}
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplaceNoCase(tf_CData1 *_pStr1, mint _Len, tf_CData2 const *_pStrFind, mint _LenFind, tf_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen)
+	tf_CData1 *fg_StrReplaceNoCase(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen)
 	{
 		return fg_StrReplace<true, false>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, 0);
 	}
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplaceNoCase(tf_CData1 *_pStr1, tf_CData2 const *_pStrFind, tf_CData3 const *_pStrReplace, mint _MaxLen)
+	tf_CData1 *fg_StrReplaceNoCase(tf_CData1 *_pStr1, tf_CData2 const *_pStrFind, tf_CData3 const *_pStrReplace, umint _MaxLen)
 	{
 		return fg_StrReplace<true, false>(_pStr1, fg_StrLen(_pStr1, _MaxLen), _pStrFind, fg_StrLen(_pStrFind), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen, 0);
 	}
 
 	// Convenience overloads that accept a pre-computed match count
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplaceWithCount(tf_CData1 *_pStr1, mint _Len, tf_CData2 const *_pStrFind, mint _LenFind, tf_CData3 const *_pStrReplace, mint _LenReplace, mint _MaxLen, mint _Count)
+	tf_CData1 *fg_StrReplaceWithCount(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count)
 	{
 		return fg_StrReplace<false, true>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, _Count);
 	}
@@ -288,12 +288,12 @@ namespace NMib::NStr
 	tf_CData1 *fg_StrReplaceNoCaseWithCount
 		(
 			tf_CData1 *_pStr1
-			, mint _Len, tf_CData2 const *_pStrFind
-			, mint _LenFind
+			, umint _Len, tf_CData2 const *_pStrFind
+			, umint _LenFind
 			, tf_CData3 const *_pStrReplace
-			, mint _LenReplace
-			, mint _MaxLen
-			, mint _Count
+			, umint _LenReplace
+			, umint _MaxLen
+			, umint _Count
 		)
 	{
 		return fg_StrReplace<true, true>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, _Count);

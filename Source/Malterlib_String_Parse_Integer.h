@@ -35,7 +35,7 @@ namespace NMib::NStr
 	template <typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, t_CReturn _FailValue);
 	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, mint _MaxLen, t_CReturn _FailValue);
+	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue);
 
 	template <typename t_CData, typename t_CReturn>
 	inline_small t_CReturn fg_StrToIntBase10(t_CData const *_pStr, t_CReturn _FailValue);

@@ -107,8 +107,8 @@ struct TCStr {
 template <typename t_CStrTraits>
 struct TCStrImp_Dynamic {
     ch8* m_pData;
-    mint m_Capacity;
-    mint m_Length;
+    umint m_Capacity;
+    umint m_Length;
 };
 ```
 

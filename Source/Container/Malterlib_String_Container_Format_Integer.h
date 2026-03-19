@@ -135,7 +135,7 @@ namespace NMib::NStr
 		inline_small t_CIntType const &f_GetValue() const;
 		inline_small t_COptions const &f_GetOptions() const;
 
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual void f_Move(t_CFormatter &_Formatter) override;
 		virtual aint f_Get_aint() const override;
 		virtual fp32 f_Get_fp32() const override;
@@ -251,7 +251,7 @@ namespace NMib::NStr
 	{
 		struct CPtrOptions;
 
-		using CFormatType = TCStrFormatType_Int<t_CFormatter, mint, CPtrOptions>;
+		using CFormatType = TCStrFormatType_Int<t_CFormatter, umint, CPtrOptions>;
 
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data);
@@ -309,7 +309,7 @@ DMibStrStringFormatterImplementInt(int16384);
 
 
 #ifdef DMibPUniqueType_mint
-DMibStrStringFormatterImplementInt(mint);
+DMibStrStringFormatterImplementInt(umint);
 #endif
 #ifdef DMibPUniqueType_smint
 DMibStrStringFormatterImplementInt(smint);

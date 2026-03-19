@@ -52,8 +52,8 @@ namespace NMib::NStr
 
 			return
 				{
-					.m_nCharsParsed = mint(nCharsParsed)
-					, .m_nVariablesParsed = mint(nParsed)
+					.m_nCharsParsed = umint(nCharsParsed)
+					, .m_nVariablesParsed = umint(nParsed)
 				}
 			;
 		}

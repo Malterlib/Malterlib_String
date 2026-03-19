@@ -10,14 +10,14 @@ namespace NMib::NStr
 		return false;
 	}
 
-	constexpr inline_small mint CStrFormatType_StaticOptions::f_MinLength()
+	constexpr inline_small umint CStrFormatType_StaticOptions::f_MinLength()
 	{
 		return 0;
 	}
 
-	constexpr inline_small mint CStrFormatType_StaticOptions::f_MaxLength()
+	constexpr inline_small umint CStrFormatType_StaticOptions::f_MaxLength()
 	{
-		return TCLimitsInt<mint>::mc_Max;
+		return TCLimitsInt<umint>::mc_Max;
 	}
 
 	constexpr inline_small aint CStrFormatType_StaticOptions::f_Align()
@@ -40,37 +40,37 @@ namespace NMib::NStr
 		return ' ';
 	}
 
-	template <mint t_MinLength, typename t_CParent>
+	template <umint t_MinLength, typename t_CParent>
 	inline_small TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::TICStrFormatType_StaticOptions_MinLength(t_CParent const &_Parent)
 		: t_CParent(_Parent)
 	{
 	}
 
-	template <mint t_MinLength, typename t_CParent>
-	constexpr inline_small mint TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_MinLength()
+	template <umint t_MinLength, typename t_CParent>
+	constexpr inline_small umint TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_MinLength()
 	{
 		return t_MinLength;
 	}
 
-	template <mint t_MinLength, typename t_CParent>
+	template <umint t_MinLength, typename t_CParent>
 	constexpr inline_small bool TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_RestrictLength()
 	{
 		return true;
 	}
 
-	template <mint t_MaxLength, typename t_CParent>
+	template <umint t_MaxLength, typename t_CParent>
 	inline_small TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::TICStrFormatType_StaticOptions_MaxLength(t_CParent const &_Parent)
 		: t_CParent(_Parent)
 	{
 	}
 
-	template <mint t_MaxLength, typename t_CParent>
-	constexpr inline_small mint TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_MaxLength()
+	template <umint t_MaxLength, typename t_CParent>
+	constexpr inline_small umint TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_MaxLength()
 	{
 		return t_MaxLength;
 	}
 
-	template <mint t_MaxLength, typename t_CParent>
+	template <umint t_MaxLength, typename t_CParent>
 	constexpr inline_small bool TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_RestrictLength()
 	{
 		return true;
@@ -119,7 +119,7 @@ namespace NMib::NStr
 		return m_Int;
 	}
 
-	template <mint t_MinLength, typename t_CValueType>
+	template <umint t_MinLength, typename t_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMinLength(t_CValueType const &_Value)
 	{
 		return TCValueWithOptions
@@ -135,7 +135,7 @@ namespace NMib::NStr
 		;
 	}
 
-	template <mint t_MinLength, typename t_CValueType, typename t_COldOptions>
+	template <umint t_MinLength, typename t_CValueType, typename t_COldOptions>
 	inline_small auto fg_FormatMinLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>, t_CValueType>
 	{
@@ -153,7 +153,7 @@ namespace NMib::NStr
 	}
 
 
-	template <mint t_MaxLength, typename t_CValueType>
+	template <umint t_MaxLength, typename t_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMaxLength(t_CValueType const &_Value)
 	{
 		return TCValueWithOptions
@@ -169,7 +169,7 @@ namespace NMib::NStr
 		;
 	}
 
-	template <mint t_MaxLength, typename t_CValueType, typename t_COldOptions>
+	template <umint t_MaxLength, typename t_CValueType, typename t_COldOptions>
 	inline_small auto fg_FormatMaxLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>, t_CValueType>
 	{
@@ -234,17 +234,17 @@ namespace NMib::NStr
 	template <typename t_CChar>
 	constexpr inline_small bool TICStrFormatType_Options<t_CChar>::f_RestrictLength() const
 	{
-		return m_MinLength != 0 || m_MaxLength != TCLimitsInt<mint>::mc_Max;
+		return m_MinLength != 0 || m_MaxLength != TCLimitsInt<umint>::mc_Max;
 	}
 
 	template <typename t_CChar>
-	constexpr inline_small mint TICStrFormatType_Options<t_CChar>::f_MinLength() const
+	constexpr inline_small umint TICStrFormatType_Options<t_CChar>::f_MinLength() const
 	{
 		return m_MinLength;
 	}
 
 	template <typename t_CChar>
-	constexpr inline_small mint TICStrFormatType_Options<t_CChar>::f_MaxLength() const
+	constexpr inline_small umint TICStrFormatType_Options<t_CChar>::f_MaxLength() const
 	{
 		return m_MaxLength;
 	}
@@ -352,7 +352,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (mint)_FailValue);
+			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (umint)_FailValue);
 		}
 	}
 
@@ -518,7 +518,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_COptions>
-	void TICStrFormatType<t_CFormatter>::fs_AddSubStrToStr(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, mint _SubStrLen, aint _SubStrStart)
+	void TICStrFormatType<t_CFormatter>::fs_AddSubStrToStr(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, umint _SubStrLen, aint _SubStrStart)
 	{
 		aint PreAdd;
 		aint PostAdd;
@@ -590,7 +590,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_COptions>
-	inline_small void TICStrFormatType<t_CFormatter>::fs_AddSubStrToStrSimple(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, mint _SubStrLen)
+	inline_small void TICStrFormatType<t_CFormatter>::fs_AddSubStrToStrSimple(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, umint _SubStrLen)
 	{
 		typename CString::CAddStrAgrs Args(_CurrentStrLen, _SubStrLen);
 		CChar const *pSubStr = _pSubStr;
@@ -615,10 +615,10 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_CChar>
-	void TICStrFormatType<t_CFormatter>::fp_ReportParseError(CString &_String, aint &_CurrentStrLen, tf_CChar const *_pStr, mint _MaxLen) const
+	void TICStrFormatType<t_CFormatter>::fp_ReportParseError(CString &_String, aint &_CurrentStrLen, tf_CChar const *_pStr, umint _MaxLen) const
 	{
 		auto pStart = _pStr;
-		while (*_pStr && mint(_pStr - pStart) < _MaxLen)
+		while (*_pStr && umint(_pStr - pStart) < _MaxLen)
 			_String.f_AddCharLengthAware(_CurrentStrLen, (CChar)(*(_pStr++)));
 	}
 

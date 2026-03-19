@@ -48,7 +48,7 @@ namespace NMib::NStr
 		using COptions = typename TICStrFormatType<t_CFormatter>::COptions;
 
 		inline_small TCStrFormatType_Float(CFloatIn const &_Value);
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual void f_Move(t_CFormatter &_Formatter) override;
 
 		struct COptionsFloat : public COptions

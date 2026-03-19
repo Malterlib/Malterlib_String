@@ -27,7 +27,7 @@ namespace NMib::NStr
 #endif
 
 	template <typename t_TCStrTraits>
-	TCStr<t_TCStrTraits>::CAddStrAgrs::CAddStrAgrs(aint &_StrLen, mint _Len)
+	TCStr<t_TCStrTraits>::CAddStrAgrs::CAddStrAgrs(aint &_StrLen, umint _Len)
 		: m_StrLen(_StrLen)
 		, m_Len(_Len)
 	{
@@ -96,10 +96,10 @@ namespace NMib::NStr
 	};
 
 	template <typename t_TCStrTraits>
-	inline_large auto TCStr<t_TCStrTraits>::f_GetStr(mint _MaxLength) -> CChar *
+	inline_large auto TCStr<t_TCStrTraits>::f_GetStr(umint _MaxLength) -> CChar *
 	{
-		mint CurrentLen = f_GetLen();
-		mint MaxLen = CImp::f_CreateWritableBuffer((CurrentLen + 1) > (_MaxLength + 1) ? (CurrentLen + 1) : (_MaxLength + 1), false);
+		umint CurrentLen = f_GetLen();
+		umint MaxLen = CImp::f_CreateWritableBuffer((CurrentLen + 1) > (_MaxLength + 1) ? (CurrentLen + 1) : (_MaxLength + 1), false);
 		if (MaxLen < _MaxLength)
 			return nullptr;
 		else
@@ -124,7 +124,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
-	inline_small mint TCStr<t_TCStrTraits>::f_GetSize() const /// Returns the memory size needed to save the string and its null terminator character in memory
+	inline_small umint TCStr<t_TCStrTraits>::f_GetSize() const /// Returns the memory size needed to save the string and its null terminator character in memory
 	{
 		return (f_GetLen() + 1) * sizeof(CChar);
 	}

@@ -30,7 +30,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
-	mint TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Destruct()
+	umint TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_TStr();
@@ -161,7 +161,7 @@ namespace NMib::NStr
 	{
 		DMibSafeCheck(reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value), "You cannot assign a format to string that is used by reference as an argument.");
 
-		mint TempLen = _Value.f_GetLen();
+		umint TempLen = _Value.f_GetLen();
 
 		if (_Options.m_Case && TempLen > 0)
 		{
@@ -203,7 +203,7 @@ namespace NMib::NStr
 				}
 				else
 				{
-					mint AllocLen = sizeof(CChar) * (TempLen + 1);
+					umint AllocLen = sizeof(CChar) * (TempLen + 1);
 					CChar *pTempStr = (CChar *)CTStrTraits::CStrTraits::CAllocator::f_Alloc(AllocLen);
 
 					if (!pTempStr)

@@ -20,19 +20,19 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseEntry(aint _iEntry) -> TICStrParseType<TCStrParse> *
 	{
-		return (TICStrParseType<TCStrParse> *)((mint)m_pParses[_iEntry] & (~((mint)0x3)));
+		return (TICStrParseType<TCStrParse> *)((umint)m_pParses[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseEntry(aint _iEntry) const -> TICStrParseType<TCStrParse> const *
 	{
-		return (TICStrParseType<TCStrParse> const *)((mint)m_pParses[_iEntry] & (~((mint)0x3)));
+		return (TICStrParseType<TCStrParse> const *)((umint)m_pParses[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CStrTraits>
 	void *TCStrParse<t_CStrTraits>::fp_AllocSpace(int _Bytes)
 	{
-		mint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
+		umint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
 		if (m_iCurrentAlloc + Needed > mcp_StaticSpace)
 			return nullptr;
 
@@ -46,7 +46,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	void TCStrParse<t_CStrTraits>::fp_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags)
 	{
-		TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((mint)_pParse | static_cast<mint>(_Flags));
+		TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)_pParse | static_cast<umint>(_Flags));
 		if (m_nParses < mcp_StaticParses)
 		{
 			m_plParses[m_nParses] = pParse;
@@ -70,9 +70,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_medium void *TCStrParse<t_CStrTraits>::f_AllocSpace(mint _Size, EStringParseTypeFlag &_Flags)
+	inline_medium void *TCStrParse<t_CStrTraits>::f_AllocSpace(umint _Size, EStringParseTypeFlag &_Flags)
 	{
-		mint nNeeded = _Size;
+		umint nNeeded = _Size;
 		_Flags = EStringParseTypeFlag::mc_None;
 
 		void *pSpace = fp_AllocSpace(nNeeded);
@@ -115,12 +115,12 @@ namespace NMib::NStr
 
 		for (uaint i = 0; i < m_nParses; ++i)
 		{
-			EStringParseTypeFlag Flags = static_cast<EStringParseTypeFlag>(((mint)pParseList[i] & 0x3));
-			TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((mint)pParseList[i] & (~((mint)0x3)));
+			EStringParseTypeFlag Flags = static_cast<EStringParseTypeFlag>(((umint)pParseList[i] & 0x3));
+			TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)pParseList[i] & (~((umint)0x3)));
 
 			if (fg_IsSet(Flags, EStringParseTypeFlag::mc_NeedDealloc))
 			{
-				mint Size = pParse->f_Destruct();
+				umint Size = pParse->f_Destruct();
 				CStrTraits::CAllocator::f_Free(pParse, Size);
 			}
 			else if (fg_IsSet(Flags, EStringParseTypeFlag::mc_NeedDestruct))

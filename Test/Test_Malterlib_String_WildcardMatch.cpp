@@ -9,10 +9,10 @@ namespace
 	using namespace NMib::NStr;
 
 	template <typename tf_CChar>
-	tf_CChar const *fg_GetToWildcardMatch(mint _Type);
+	tf_CChar const *fg_GetToWildcardMatch(umint _Type);
 
 	template <>
-	ch8 const *fg_GetToWildcardMatch<ch8>(mint _Type)
+	ch8 const *fg_GetToWildcardMatch<ch8>(umint _Type)
 	{
 		switch (_Type)
 		{
@@ -23,7 +23,7 @@ namespace
 		return str_utf8("");
 	}
 	template <>
-	ch16 const *fg_GetToWildcardMatch<ch16>(mint _Type)
+	ch16 const *fg_GetToWildcardMatch<ch16>(umint _Type)
 	{
 		switch (_Type)
 		{
@@ -34,7 +34,7 @@ namespace
 		return str_utf16("");
 	}
 	template <>
-	ch32 const *fg_GetToWildcardMatch<ch32>(mint _Type)
+	ch32 const *fg_GetToWildcardMatch<ch32>(umint _Type)
 	{
 		switch (_Type)
 		{

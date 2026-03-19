@@ -107,7 +107,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::operator ^ (mint _nCopies) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::operator ^ (umint _nCopies) const -> TCStr
 	{
 		if (!_nCopies)
 			return {};

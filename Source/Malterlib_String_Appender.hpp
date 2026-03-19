@@ -41,7 +41,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CString>
-	void TCStringAppender<t_CString>::f_AddString(typename t_CString::CChar const *_pString, mint _Len)
+	void TCStringAppender<t_CString>::f_AddString(typename t_CString::CChar const *_pString, umint _Len)
 	{
 		if (mp_StrLen + _Len > mp_MaxLen)
 		{
@@ -69,7 +69,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CString>
-	template <typename tf_CChar, mint tf_ArrayLength>
+	template <typename tf_CChar, umint tf_ArrayLength>
 	void TCStringAppender<t_CString>::operator += (tf_CChar const (&_Array)[tf_ArrayLength])
 	{
 		f_AddString(_Array, tf_ArrayLength - 1);
@@ -93,8 +93,8 @@ namespace NMib::NStr
 			{
 				static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
 
-				mint LenNeeded = mp_StrLen;
-				auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch8 *
+				umint LenNeeded = mp_StrLen;
+				auto fCalcLen = [&](umint _nChars) inline_always_lambda -> ch8 *
 					{
 						LenNeeded += _nChars;
 						return nullptr;
@@ -118,13 +118,13 @@ namespace NMib::NStr
 					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
-				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+				umint MaxAddedLen = mp_MaxLen - mp_StrLen;
 
 				auto *pOut = mp_pStrOut;
 				auto *pOutStart = pOut;
 				auto *pOutMax = pOut + MaxAddedLen - 1;
 
-				auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch8 *
+				auto fAddChars = [&](umint _nChars) inline_always_lambda -> ch8 *
 					{
 						if (pOut + _nChars > pOutMax)
 							return nullptr;
@@ -150,8 +150,8 @@ namespace NMib::NStr
 			{
 				static_assert(t_CString::mc_Type == EStrType_UTF, "Lossy conversion");
 
-				mint LenNeeded = mp_StrLen;
-				auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch16 *
+				umint LenNeeded = mp_StrLen;
+				auto fCalcLen = [&](umint _nChars) inline_always_lambda -> ch16 *
 					{
 						LenNeeded += _nChars;
 						return nullptr;
@@ -175,13 +175,13 @@ namespace NMib::NStr
 					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
-				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+				umint MaxAddedLen = mp_MaxLen - mp_StrLen;
 
 				auto *pOut = mp_pStrOut;
 				auto *pOutStart = pOut;
 				auto *pOutMax = pOut + MaxAddedLen - 1;
 
-				auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch16 *
+				auto fAddChars = [&](umint _nChars) inline_always_lambda -> ch16 *
 					{
 						if (pOut + _nChars > pOutMax)
 							return nullptr;
@@ -207,7 +207,7 @@ namespace NMib::NStr
 			{
 				static_assert(t_CString::mc_Type == EStrType_Unicode, "Lossy conversion");
 
-				mint LenNeeded = mp_StrLen;
+				umint LenNeeded = mp_StrLen;
 				auto iSource = _String.f_GetUnicodeIterator();
 				while (iSource)
 				{
@@ -225,7 +225,7 @@ namespace NMib::NStr
 					mp_MaxLen = mp_String.f_GetAllocLength() - 1;
 				}
 
-				mint MaxAddedLen = mp_MaxLen - mp_StrLen;
+				umint MaxAddedLen = mp_MaxLen - mp_StrLen;
 
 				auto *pOut = mp_pStrOut;
 				auto *pOutStart = pOut;
@@ -259,9 +259,9 @@ namespace NMib::NStr
 			fg_EncodeUTF8Char<true>
 				(
 					_Character
-					, [&](mint _nChars) inline_always_lambda ->typename t_CString::CUnsignedChar *
+					, [&](umint _nChars) inline_always_lambda ->typename t_CString::CUnsignedChar *
 					{
-						mint NeededLen = mp_StrLen + _nChars;
+						umint NeededLen = mp_StrLen + _nChars;
 						if (NeededLen > mp_MaxLen)
 						{
 							fp_Commit();
@@ -290,9 +290,9 @@ namespace NMib::NStr
 			fg_EncodeUTF16Char<true>
 				(
 					_Character
-					, [&](mint _nChars) inline_always_lambda -> typename t_CString::CUnsignedChar *
+					, [&](umint _nChars) inline_always_lambda -> typename t_CString::CUnsignedChar *
 					{
-						mint NeededLen = mp_StrLen + _nChars;
+						umint NeededLen = mp_StrLen + _nChars;
 						if (mp_MaxLen < NeededLen)
 						{
 							fp_Commit();
@@ -374,7 +374,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CString>
-	mint TCStringAppender<t_CString>::f_GetStrLen() const
+	umint TCStringAppender<t_CString>::f_GetStrLen() const
 	{
 		return mp_StrLen;
 	}

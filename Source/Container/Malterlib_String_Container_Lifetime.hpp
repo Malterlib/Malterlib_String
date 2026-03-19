@@ -27,7 +27,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(tf_CStrDataType const *_pStr, mint _Len)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(tf_CStrDataType const *_pStr, umint _Len)
 		requires (CImp::mc_bInitConstStr)
 		: CImp(_pStr, _Len)
 	{
@@ -42,7 +42,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(tf_CStrDataType const *_pStr, mint _Len)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(tf_CStrDataType const *_pStr, umint _Len)
 		requires (!CImp::mc_bInitConstStr)
 	{
 		if (!_Len)
@@ -55,7 +55,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(CAllowNUL, tf_CStrDataType const *_pStr, mint _Len)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(CAllowNUL, tf_CStrDataType const *_pStr, umint _Len)
 		requires (!CImp::mc_bInitConstStr)
 	{
 		if (!_Len)

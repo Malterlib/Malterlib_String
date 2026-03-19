@@ -131,10 +131,10 @@ namespace NMib::NStr
 			bool bSuccess = fg_EncodeUTF8Char<true>
 				(
 					_Character
-					, [&](mint _nChars) inline_always_lambda -> CChar *
+					, [&](umint _nChars) inline_always_lambda -> CChar *
 					{
-						mint NeededLen = CurrentLength + _nChars + 1;
-						mint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
+						umint NeededLen = CurrentLength + _nChars + 1;
+						umint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
 
 						if (MaxLen < NeededLen)
 							return nullptr;
@@ -161,10 +161,10 @@ namespace NMib::NStr
 			bool bSuccess = fg_EncodeUTF16Char<true>
 				(
 					_Character
-					, [&](mint _nChars) inline_always_lambda -> CChar *
+					, [&](umint _nChars) inline_always_lambda -> CChar *
 					{
-						mint NeededLen = CurrentLength + _nChars + 1;
-						mint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
+						umint NeededLen = CurrentLength + _nChars + 1;
+						umint MaxLen = CImp::f_CreateWritableBuffer(NeededLen, false);
 
 						if (MaxLen < NeededLen)
 							return nullptr;
@@ -192,8 +192,8 @@ namespace NMib::NStr
 	{
 		static_assert(sizeof(CChar) == 1 && mc_Type == EStrType_UTF, "Lossy conversion");
 
-		mint LenNeeded = _StrLen;
-		auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch8 *
+		umint LenNeeded = _StrLen;
+		auto fCalcLen = [&](umint _nChars) inline_always_lambda -> ch8 *
 			{
 				LenNeeded += _nChars;
 				return nullptr;
@@ -205,14 +205,14 @@ namespace NMib::NStr
 			fg_EncodeUTF8Char<true>(*Iter, fCalcLen);
 			++Iter;
 		}
-		mint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
+		umint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
 		auto *pOut = CImp::f_GetStrWritable();
 		auto *pOutStart = pOut;
 		auto *pOutMax = pOut + MaxLen - 1;
 
 		pOut += _StrLen;
 
-		auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch8 *
+		auto fAddChars = [&](umint _nChars) inline_always_lambda -> ch8 *
 			{
 				if (pOut + _nChars > pOutMax)
 					return nullptr;
@@ -239,8 +239,8 @@ namespace NMib::NStr
 	TCEnableIf<t_CharSize == 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 2 && mc_Type == EStrType_UTF, "Lossy conversion");
-		mint LenNeeded = _StrLen;
-		auto fCalcLen = [&](mint _nChars) inline_always_lambda -> ch16 *
+		umint LenNeeded = _StrLen;
+		auto fCalcLen = [&](umint _nChars) inline_always_lambda -> ch16 *
 			{
 				LenNeeded += _nChars;
 				return nullptr;
@@ -252,14 +252,14 @@ namespace NMib::NStr
 			fg_EncodeUTF16Char<true>(*Iter, fCalcLen);
 			++Iter;
 		}
-		mint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
+		umint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
 		auto *pOut = CImp::f_GetStrWritable();
 		auto *pOutStart = pOut;
 		auto *pOutMax = pOut + MaxLen - 1;
 
 		pOut += _StrLen;
 
-		auto fAddChars = [&](mint _nChars) inline_always_lambda -> ch16 *
+		auto fAddChars = [&](umint _nChars) inline_always_lambda -> ch16 *
 			{
 				if (pOut + _nChars > pOutMax)
 					return nullptr;
@@ -286,14 +286,14 @@ namespace NMib::NStr
 	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 4 && mc_Type == EStrType_Unicode, "Lossy conversion");
-		mint LenNeeded = _StrLen;
+		umint LenNeeded = _StrLen;
 		auto Iter = _From;
 		while (Iter)
 		{
 			++LenNeeded;
 			++Iter;
 		}
-		mint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
+		umint MaxLen = CImp::f_CreateWritableBuffer(LenNeeded + 1, false);
 		auto *pOut = CImp::f_GetStrWritable();
 		auto *pOutStart = pOut;
 		auto *pOutMax = pOut + MaxLen - 1;
@@ -338,7 +338,7 @@ namespace NMib::NStr
 
 		CUnsignedChar const *pStr = (CUnsignedChar const *)_pStr;
 		CUnsignedChar *pWrite = pWritable + _Args.m_StrLen;
-		mint AddLen = MaxLen - _Args.m_StrLen;
+		umint AddLen = MaxLen - _Args.m_StrLen;
 		CUnsignedChar *pEnd = pWrite + AddLen;
 		DMibFastCheck(AddLen <= _Args.m_Len);
 		while (pWrite < pEnd)

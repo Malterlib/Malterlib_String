@@ -32,7 +32,7 @@ namespace NMib::NStr
 				if ((ToTest & 0xC0) == 0xC0)
 				{
 					++pParse;
-					mint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(ToTest)) & 0xFF) | 1u);
+					umint nChars = 7 - fg_GetHighestBitSetNoZero(((~uint32(ToTest)) & 0xFF) | 1u);
 					DestChar = ToTest & ((1 << (8 - (nChars + 1))) - 1);
 					--nChars;
 					while (pParse < mp_pEnd && *pParse && nChars && (*pParse & 0xC0) == 0x80)
@@ -81,7 +81,7 @@ namespace NMib::NStr
 		return DestChar;
 	}
 
-	CStrIteratorUTF8::CStrIteratorUTF8(ch8 const *_pStr, mint _StrLen)
+	CStrIteratorUTF8::CStrIteratorUTF8(ch8 const *_pStr, umint _StrLen)
 		: mp_pBegin((uch8 const *)_pStr)
 		, mp_pEnd((uch8 const *)_pStr + _StrLen)
 		, mp_pInitialBegin((uch8 const *)_pStr)
@@ -93,7 +93,7 @@ namespace NMib::NStr
 		mp_Current = fp_Next();
 	}
 
-	mint CStrIteratorUTF8::f_GetLastWholeCodePointPos() const
+	umint CStrIteratorUTF8::f_GetLastWholeCodePointPos() const
 	{
 		return mp_pLastValidBegin - mp_pInitialBegin;
 	}
@@ -157,7 +157,7 @@ namespace NMib::NStr
 		return DestChar;
 	}
 
-	CStrIteratorUTF16::CStrIteratorUTF16(ch16 const *_pStr, mint _StrLen)
+	CStrIteratorUTF16::CStrIteratorUTF16(ch16 const *_pStr, umint _StrLen)
 		: mp_pBegin((uch16 const *)_pStr)
 		, mp_pEnd((uch16 const *)_pStr + _StrLen)
 	{

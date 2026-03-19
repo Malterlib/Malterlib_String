@@ -2,7 +2,7 @@
 
 namespace NMib::NStr
 {
-	CStrFormatBinaryWrapper::CStrFormatBinaryWrapper(void const *_pData, mint _Size)
+	CStrFormatBinaryWrapper::CStrFormatBinaryWrapper(void const *_pData, umint _Size)
 		: mp_pData(_pData)
 		, mp_Size(_Size)
 	{
@@ -13,7 +13,7 @@ namespace NMib::NStr
 		return mp_pData;
 	}
 
-	mint CStrFormatBinaryWrapper::f_GetSize() const
+	umint CStrFormatBinaryWrapper::f_GetSize() const
 	{
 		return mp_Size;
 	}

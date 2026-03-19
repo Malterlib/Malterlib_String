@@ -139,7 +139,7 @@ namespace
 			auto fLowerCaseMaxLen = [](auto &_String)
 				{
 					tf_CStr Output;
-					mint Len = _String.f_GetLen();
+					umint Len = _String.f_GetLen();
 					fg_StrLowerCase(Output.f_GetStr(Len + 1), Len + 1, _String.f_GetStr(), Len);
 					return Output;
 				}
@@ -148,7 +148,7 @@ namespace
 			auto fUpperCaseMaxLen = [](auto &_String)
 				{
 					tf_CStr Output;
-					mint Len = _String.f_GetLen();
+					umint Len = _String.f_GetLen();
 					fg_StrUpperCase(Output.f_GetStr(Len + 1), Len + 1, _String.f_GetStr(), Len);
 					return Output;
 				}
@@ -373,11 +373,11 @@ namespace
 					{
 
 						CStr Out;
-						mint Len = 0;
+						umint Len = 0;
 						auto fl_AddChars
-							= [&](mint _nChars) -> ch8 *
+							= [&](umint _nChars) -> ch8 *
 							{
-								mint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
+								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
 									return nullptr;
 								ch8 *pOut = Out.f_GetStrWritable() + Len;
@@ -423,11 +423,11 @@ namespace
 					{
 
 						CWStr Out;
-						mint Len = 0;
+						umint Len = 0;
 						auto fl_AddChars
-							= [&](mint _nChars) -> ch16 *
+							= [&](umint _nChars) -> ch16 *
 							{
-								mint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
+								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
 									return nullptr;
 								ch16 *pOut = Out.f_GetStrWritable() + Len;
@@ -1550,11 +1550,11 @@ namespace
 		{
 			DMibTestSuite("UserData")
 			{
-				for (mint i = 0; i < 2; ++i)
+				for (umint i = 0; i < 2; ++i)
 				{
 					DMibTestPath(i == 0 ? "Non-Empty" : "Empty");
 
-					for (mint TestValue = 0; TestValue < 4; ++TestValue)
+					for (umint TestValue = 0; TestValue < 4; ++TestValue)
 					{
 						DMibTestPath("{}"_f << TestValue);
 

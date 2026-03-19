@@ -61,7 +61,7 @@ namespace NMib::NStr
 
 		for (uaint i = 0; i < _Other.m_nFormats; ++i)
 		{
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
 			pFormat->f_Move(*this);
 		}
 	}
@@ -80,7 +80,7 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	void TCFormat<t_CTCStrTraits>::fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags)
 	{
-		TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)_pFormat | static_cast<mint>(_Flags));
+		TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)_pFormat | static_cast<umint>(_Flags));
 		if (m_nFormats < mcp_StaticFormats)
 		{
 			m_plFormats[m_nFormats] = pFormat;
@@ -104,9 +104,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	inline_medium void *TCFormat<t_CTCStrTraits>::f_AllocSpace(mint _Size, EStringFormatTypeFlag &_Flags)
+	inline_medium void *TCFormat<t_CTCStrTraits>::f_AllocSpace(umint _Size, EStringFormatTypeFlag &_Flags)
 	{
-		mint nNeeded = _Size;
+		umint nNeeded = _Size;
 		_Flags = EStringFormatTypeFlag::mc_None;
 
 		void *pSpace = fp_AllocSpace(nNeeded);
@@ -144,7 +144,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	mint TCFormat<t_CTCStrTraits>::f_GetNumArgs() const
+	umint TCFormat<t_CTCStrTraits>::f_GetNumArgs() const
 	{
 		return m_nFormats;
 	}
@@ -181,12 +181,12 @@ namespace NMib::NStr
 
 		for (uaint i = 0; i < m_nFormats; ++i)
 		{
-			EStringFormatTypeFlag Flags = static_cast<EStringFormatTypeFlag>((mint)pFormatList[i] & 0x3);
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
+			EStringFormatTypeFlag Flags = static_cast<EStringFormatTypeFlag>((umint)pFormatList[i] & 0x3);
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
 
 			if (fg_IsSet(Flags, EStringFormatTypeFlag::mc_NeedDealloc))
 			{
-				mint Size = pFormat->f_Destruct();
+				umint Size = pFormat->f_Destruct();
 				t_CTCStrTraits::CStrTraits::CAllocator::f_Free(pFormat, Size);
 			}
 			else if (fg_IsSet(Flags, EStringFormatTypeFlag::mc_NeedDestruct))
@@ -212,8 +212,8 @@ namespace NMib::NStr
 
 		for (uaint i = 0; i < m_nFormats; ++i)
 		{
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((mint)pFormatList[i] & (~((mint)0x3)));
-			TICStrFormatType<TCFormat> *pFormatRight = (TICStrFormatType<TCFormat> *)((mint)pFormatListRight[i] & (~((mint)0x3)));
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
+			TICStrFormatType<TCFormat> *pFormatRight = (TICStrFormatType<TCFormat> *)((umint)pFormatListRight[i] & (~((umint)0x3)));
 
 			if (pFormat->f_GetTypeID() != pFormatRight->f_GetTypeID())
 				return false;
@@ -268,7 +268,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::operator ^ (mint _nCopies) const
+	TCStr<t_CTCStrTraits> TCFormat<t_CTCStrTraits>::operator ^ (umint _nCopies) const
 	{
 		if (!_nCopies)
 			return {};
@@ -357,8 +357,8 @@ namespace NMib::NStr
 			*(_ToStr.f_GetStrWritable()) = 0;
 		}
 
-		mint nFormats = _Format.m_nFormats;
-		for (mint i = 0; i < nFormats; ++i)
+		umint nFormats = _Format.m_nFormats;
+		for (umint i = 0; i < nFormats; ++i)
 		{
 			const TICStrFormatType<TCFormat> *pFormatVar = _Format.fp_GetFormatEntry(i);
 			pFormatVar->f_AddToStr(_ToStr, CurrentStrLen, nullptr, _Format);
@@ -557,13 +557,13 @@ EndArgSearch:
 	template <typename t_CTCStrTraits>
 	inline_small auto TCFormat<t_CTCStrTraits>::fp_GetFormatEntry(aint _iEntry) const -> TICStrFormatType<TCFormat> const *
 	{
-		return (TICStrFormatType<TCFormat> const *)((mint)m_pFormats[_iEntry] & (~((mint)0x3)));
+		return (TICStrFormatType<TCFormat> const *)((umint)m_pFormats[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CTCStrTraits>
 	void *TCFormat<t_CTCStrTraits>::fp_AllocSpace(int _Bytes)
 	{
-		mint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
+		umint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
 		if (m_iCurrentAlloc + Needed > mcp_StaticSpace)
 			return nullptr;
 

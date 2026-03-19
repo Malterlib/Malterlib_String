@@ -5,22 +5,22 @@
 
 namespace NMib::NStr
 {
-	template <mint t_nChars, typename t_CChar>
+	template <umint t_nChars, typename t_CChar>
 	constexpr TCStrConstData<t_nChars, t_CChar>::TCStrConstData(t_CChar const (&_String)[t_nChars], uint8 _UserData)
 		: TCStrImp_Dynamic_StringData<t_CChar>
 		{
-			.m_RefCount = {TCLimitsInt<mint>::mc_Max}
+			.m_RefCount = {TCLimitsInt<umint>::mc_Max}
 			, .m_Len = t_nChars
 			, .m_bConstant = true
 			, .m_StrLen = t_nChars - 1
 			, .m_UserData = _UserData
 		}
 	{
-		for (mint i = 0; i < t_nChars; ++i)
+		for (umint i = 0; i < t_nChars; ++i)
 			m_Data[i] = _String[i];
 	}
 
-	template <mint t_nChars, typename t_CChar>
+	template <umint t_nChars, typename t_CChar>
 	inline_always constexpr auto TCStrConstData<t_nChars, t_CChar>::f_SetUserData(uint8 _UserData) -> TCStrConstData &
 	{
 		this->m_UserData = _UserData;
@@ -32,7 +32,7 @@ namespace NMib::NStr
 	constexpr TCStrImp_Dynamic_EmptyStringData<t_CChar>::TCStrImp_Dynamic_EmptyStringData()
 		: TCStrImp_Dynamic_StringData<t_CChar>
 		{
-			.m_RefCount = {TCLimitsInt<mint>::mc_Max}
+			.m_RefCount = {TCLimitsInt<umint>::mc_Max}
 			, .m_Len = 1
 			, .m_bConstant = true
 			, .m_StrLen = 0
@@ -54,13 +54,13 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	inline_small void TCStrImp_Dynamic_StringData<t_CChar>::f_SetLength(mint _MemoryLen)
+	inline_small void TCStrImp_Dynamic_StringData<t_CChar>::f_SetLength(umint _MemoryLen)
 	{
 		m_Len = (_MemoryLen - sizeof(*this)) / sizeof(t_CChar);
 	}
 
 	template <typename t_CChar>
-	inline_small mint TCStrImp_Dynamic_StringData<t_CChar>::f_GetMemorySize() const
+	inline_small umint TCStrImp_Dynamic_StringData<t_CChar>::f_GetMemorySize() const
 	{
 		return m_Len * sizeof(t_CChar) + sizeof(*this);
 	}
@@ -201,8 +201,8 @@ namespace NMib::NStr
 
 		if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1 || m_pData->m_bConstant)
 		{
-			mint StrLen = f_GetStrLen();
-			mint Length = fg_Max(mint(m_pData->m_Len), mint(2));
+			umint StrLen = f_GetStrLen();
+			umint Length = fg_Max(umint(m_pData->m_Len), umint(2));
 			f_CreateWritableBuffer(Length, false);
 			f_GetStrWritable()[StrLen] = 0;
 			DMibFastCheck(!m_pData->m_bConstant);
@@ -232,7 +232,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small mint TCStrImp_Dynamic<t_CStrTraits>::f_GetRefCount() const
+	inline_small umint TCStrImp_Dynamic<t_CStrTraits>::f_GetRefCount() const
 	{
 		return m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed);
 	}
@@ -246,7 +246,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	constexpr inline_medium aint TCStrImp_Dynamic<t_CStrTraits>::f_GetStrLen() const
 	{
-		mint Len = m_pData->m_StrLen;
+		umint Len = m_pData->m_StrLen;
 		if (Len == CData::mc_InvalidStrLen)
 			m_pData->m_StrLen = Len = t_CStrTraits::fs_StrLen(m_pData->f_GetData());
 		return Len;
@@ -295,23 +295,23 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_never void TCStrImp_Dynamic<t_CStrTraits>::fs_ThrowLengthException()
 	{
-		DMibError("String size would exceed maximum size that can be held in a mint");
+		DMibError("String size would exceed maximum size that can be held in a umint");
 	}
 
 	template <typename t_CStrTraits>
-	mint TCStrImp_Dynamic<t_CStrTraits>::fp_CalcNewSize(mint _Length)
+	umint TCStrImp_Dynamic<t_CStrTraits>::fp_CalcNewSize(umint _Length)
 	{
 		if (_Length >= mc_MaxStrLen)
 			fs_ThrowLengthException();
 
-		_Length = fg_Max(_Length, fg_Max(sizeof(CData) / (2u * sizeof(CChar)), mint(2u)));
+		_Length = fg_Max(_Length, fg_Max(sizeof(CData) / (2u * sizeof(CChar)), umint(2u)));
 
-		mint Size = sizeof(CData) + _Length * sizeof(CChar);
+		umint Size = sizeof(CData) + _Length * sizeof(CChar);
 
-		Size = CAllocator::f_SizePadded(mint(2) << NMib::fg_GetHighestBitSetNoZero(Size - 1));
+		Size = CAllocator::f_SizePadded(umint(2) << NMib::fg_GetHighestBitSetNoZero(Size - 1));
 
 #			if DMibEnableSafeCheck > 0
-			mint nChars = (Size - sizeof(CData)) / sizeof(CChar);
+			umint nChars = (Size - sizeof(CData)) / sizeof(CChar);
 			DMibFastCheck(nChars >= _Length);
 #			endif
 
@@ -319,7 +319,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	mint TCStrImp_Dynamic<t_CStrTraits>::fp_GetOldAllocSize()
+	umint TCStrImp_Dynamic<t_CStrTraits>::fp_GetOldAllocSize()
 	{
 		return m_pData->m_Len * sizeof(CChar) + sizeof(CData);
 	}
@@ -341,11 +341,11 @@ namespace NMib::NStr
 				{
 					if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1)
 					{
-						mint CurrentSize = m_pData->f_GetMemorySize();
+						umint CurrentSize = m_pData->f_GetMemorySize();
 
 						if (_bDiscard)
 						{
-							mint Len = fp_CalcNewSize(_Length);
+							umint Len = fp_CalcNewSize(_Length);
 							auto OldReserved = m_pData->m_bReserved;
 							auto OldUserData = m_pData->m_UserData;
 							m_pData = new(CAllocator::f_Realloc(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded)) CData();
@@ -355,7 +355,7 @@ namespace NMib::NStr
 						}
 						else
 						{
-							mint Len = fp_CalcNewSize(_Length);
+							umint Len = fp_CalcNewSize(_Length);
 							m_pData = (CData *)(CAllocator::f_Resize(m_pData, Len, CurrentSize, EAllocationFlag_SizeNotNeeded));
 							m_pData->f_SetLength(Len);
 						}
@@ -364,7 +364,7 @@ namespace NMib::NStr
 					else
 					{
 						aint OldLen = CurLen;
-						mint NewLen = fp_CalcNewSize(_Length);
+						umint NewLen = fp_CalcNewSize(_Length);
 						CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 						pNew->m_StrLen = m_pData->m_StrLen;
 						pNew->m_bReserved = m_pData->m_bReserved;
@@ -376,7 +376,7 @@ namespace NMib::NStr
 						CurLen = m_pData->m_Len;
 						if (!_bDiscard)
 						{
-							mint CopyLen = fg_Min(CurLen, OldLen);
+							umint CopyLen = fg_Min(CurLen, OldLen);
 							if (pNew->m_StrLen != CData::mc_InvalidStrLen)
 								CopyLen = fg_Min(CurLen, (aint)pNew->m_StrLen + 1);
 
@@ -388,7 +388,7 @@ namespace NMib::NStr
 				}
 				else
 				{
-					mint NewLen = fp_CalcNewSize(_Length);
+					umint NewLen = fp_CalcNewSize(_Length);
 					m_pData = new(CAllocator::f_Alloc(NewLen)) CData();
 					DMibFastCheck(m_pData);
 					m_pData->f_SetLength(NewLen);
@@ -407,7 +407,7 @@ namespace NMib::NStr
 		}
 		else if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1)
 		{
-			mint NewLen = fp_CalcNewSize(_Length);
+			umint NewLen = fp_CalcNewSize(_Length);
 			CData *pNew = new(CAllocator::f_Alloc(NewLen)) CData();
 			pNew->m_StrLen = m_pData->m_StrLen;
 			pNew->m_bReserved = m_pData->m_bReserved;
@@ -421,7 +421,7 @@ namespace NMib::NStr
 
 			if (!_bDiscard)
 			{
-				mint CopyLen = fg_Min(CurLen, OldLen);
+				umint CopyLen = fg_Min(CurLen, OldLen);
 				if (pNew->m_StrLen != CData::mc_InvalidStrLen)
 					CopyLen = fg_Min(CurLen, (aint)pNew->m_StrLen + 1);
 				NMemory::fg_MemCopy(m_pData->f_GetData(), pOld->f_GetData(), CopyLen * sizeof(CChar));
@@ -445,7 +445,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	void TCStrImp_Dynamic<t_CStrTraits>::f_Reserve(mint _Len)
+	void TCStrImp_Dynamic<t_CStrTraits>::f_Reserve(umint _Len)
 	{
 		if (_Len)
 		{
@@ -461,7 +461,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	void TCStrImp_Dynamic<t_CStrTraits>::fp_TrimSize(mint _Length, mint _NeededSize)
+	void TCStrImp_Dynamic<t_CStrTraits>::fp_TrimSize(umint _Length, umint _NeededSize)
 	{
 		DMibSafeCheck(_Length > 0, "Have to have place for a nullptr character");
 		if (_Length == 1 && m_pData->m_UserData == 0)
@@ -491,7 +491,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Dynamic<t_CStrTraits>::f_TrimSize(mint _Length, mint _MaxExtraChars)
+	inline_small void TCStrImp_Dynamic<t_CStrTraits>::f_TrimSize(umint _Length, umint _MaxExtraChars)
 	{
 		DMibSafeCheck(_Length > 0, "Have to have place for a nullptr character");
 
@@ -502,44 +502,44 @@ namespace NMib::NStr
 			return fp_TrimSize(_Length, _MaxExtraChars);
 
 		// Threshold
-		mint NewSize = fp_CalcNewSize(_Length + _MaxExtraChars + 1);
-		mint OldSize = fp_GetOldAllocSize();
+		umint NewSize = fp_CalcNewSize(_Length + _MaxExtraChars + 1);
+		umint OldSize = fp_GetOldAllocSize();
 
 		if (NewSize < OldSize)
 			fp_TrimSize(_Length, NewSize);
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch8>::operator NStr::CStr const &() const
 	{
 		return m_Str;
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch8>::operator TCStrConst<NStr::CStr> () const
 	{
 		return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch16>::operator NStr::CWStr const &() const
 	{
 		return m_Str;
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch16>::operator TCStrConst<NStr::CWStr> () const
 	{
 		return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch32>::operator NStr::CUStr const &() const
 	{
 		return m_Str;
 	}
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	constexpr TCStrConstDataAndStr<t_nChars, ch32>::operator TCStrConst<NStr::CUStr> () const
 	{
 		return {.m_Str = m_Str, .m_pStr = m_StrData.m_Data};

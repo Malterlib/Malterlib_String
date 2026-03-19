@@ -20,7 +20,7 @@ namespace
 					DMibTestPath("SingleMatch");
 					ch8 Buffer[14];  // "HelloXXXWorld" (13) + null
 					fg_StrCopy(Buffer, "HelloXXXWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 14);
 					DMibExpect(CStr(Buffer), ==, "HelloYWorld");
 				}
@@ -28,7 +28,7 @@ namespace
 					DMibTestPath("MultipleMatches");
 					ch8 Buffer[14];  // "aXXXbXXXcXXXd" (13) + null
 					fg_StrCopy(Buffer, "aXXXbXXXcXXXd");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 14);
 					DMibExpect(CStr(Buffer), ==, "aYbYcYd");
 				}
@@ -36,7 +36,7 @@ namespace
 					DMibTestPath("AdjacentMatches");
 					ch8 Buffer[7];  // "XXXXXX" (6) + null
 					fg_StrCopy(Buffer, "XXXXXX");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XX", 2, "Y", 1, 7);
 					DMibExpect(CStr(Buffer), ==, "YYY");
 				}
@@ -44,7 +44,7 @@ namespace
 					DMibTestPath("MatchAtStart");
 					ch8 Buffer[9];  // "XXXHello" (8) + null
 					fg_StrCopy(Buffer, "XXXHello");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 9);
 					DMibExpect(CStr(Buffer), ==, "YHello");
 				}
@@ -52,7 +52,7 @@ namespace
 					DMibTestPath("MatchAtEnd");
 					ch8 Buffer[9];  // "HelloXXX" (8) + null
 					fg_StrCopy(Buffer, "HelloXXX");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 9);
 					DMibExpect(CStr(Buffer), ==, "HelloY");
 				}
@@ -60,7 +60,7 @@ namespace
 					DMibTestPath("NoMatch");
 					ch8 Buffer[11];  // "HelloWorld" (10) + null
 					fg_StrCopy(Buffer, "HelloWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 11);
 					DMibExpect(CStr(Buffer), ==, "HelloWorld");
 				}
@@ -68,7 +68,7 @@ namespace
 					DMibTestPath("ReplaceToEmpty");
 					ch8 Buffer[8];  // "aXXbXXc" (7) + null
 					fg_StrCopy(Buffer, "aXXbXXc");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XX", 2, "", 0, 8);
 					DMibExpect(CStr(Buffer), ==, "abc");
 				}
@@ -85,7 +85,7 @@ namespace
 					DMibTestPath("SingleMatch");
 					ch8 Buffer[14];  // "HelloXXXWorld" (13) + null
 					fg_StrCopy(Buffer, "HelloXXXWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XXX", 3, "YYY", 3, 14);
 					DMibExpect(CStr(Buffer), ==, "HelloYYYWorld");
 				}
@@ -93,7 +93,7 @@ namespace
 					DMibTestPath("MultipleMatches");
 					ch8 Buffer[11];  // "aXXbXXcXXd" (10) + null
 					fg_StrCopy(Buffer, "aXXbXXcXXd");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "XX", 2, "YY", 2, 11);
 					DMibExpect(CStr(Buffer), ==, "aYYbYYcYYd");
 				}
@@ -110,7 +110,7 @@ namespace
 					DMibTestPath("SingleMatch");
 					ch8 Buffer[14];  // "HelloYYYWorld" (13) + null
 					fg_StrCopy(Buffer, "HelloXWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 14);
 					DMibExpect(CStr(Buffer), ==, "HelloYYYWorld");
 				}
@@ -118,7 +118,7 @@ namespace
 					DMibTestPath("MultipleMatches");
 					ch8 Buffer[14];  // "aYYYbYYYcYYYd" (13) + null
 					fg_StrCopy(Buffer, "aXbXcXd");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 14);
 					DMibExpect(CStr(Buffer), ==, "aYYYbYYYcYYYd");
 				}
@@ -126,7 +126,7 @@ namespace
 					DMibTestPath("MatchAtStart");
 					ch8 Buffer[9];  // "YYYHello" (8) + null
 					fg_StrCopy(Buffer, "XHello");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 9);
 					DMibExpect(CStr(Buffer), ==, "YYYHello");
 				}
@@ -134,7 +134,7 @@ namespace
 					DMibTestPath("MatchAtEnd");
 					ch8 Buffer[9];  // "HelloYYY" (8) + null
 					fg_StrCopy(Buffer, "HelloX");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 9);
 					DMibExpect(CStr(Buffer), ==, "HelloYYY");
 				}
@@ -142,7 +142,7 @@ namespace
 					DMibTestPath("AdjacentMatches");
 					ch8 Buffer[7];  // "YYYYYY" (6) + null
 					fg_StrCopy(Buffer, "XXX");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YY", 2, 7);
 					DMibExpect(CStr(Buffer), ==, "YYYYYY");
 				}
@@ -150,7 +150,7 @@ namespace
 					DMibTestPath("NoMatch");
 					ch8 Buffer[11];  // "HelloWorld" (10) + null
 					fg_StrCopy(Buffer, "HelloWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 11);
 					DMibExpect(CStr(Buffer), ==, "HelloWorld");
 				}
@@ -184,7 +184,7 @@ namespace
 					DMibTestPath("Shrinking");
 					ch8 Buffer[14];  // "HelloXxXWorld" (13) + null
 					fg_StrCopy(Buffer, "HelloXxXWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplaceNoCase(Buffer, Len, "XXX", 3, "Y", 1, 14);
 					DMibExpect(CStr(Buffer), ==, "HelloYWorld");
 				}
@@ -192,7 +192,7 @@ namespace
 					DMibTestPath("SameSize");
 					ch8 Buffer[14];  // "HelloXxXWorld" (13) + null
 					fg_StrCopy(Buffer, "HelloXxXWorld");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplaceNoCase(Buffer, Len, "xxx", 3, "YYY", 3, 14);
 					DMibExpect(CStr(Buffer), ==, "HelloYYYWorld");
 				}
@@ -200,7 +200,7 @@ namespace
 					DMibTestPath("Growing");
 					ch8 Buffer[14];  // "aYYYbYYYCYYYD" (13) + null
 					fg_StrCopy(Buffer, "aXbxCxD");
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					fg_StrReplaceNoCase(Buffer, Len, "X", 1, "YYY", 3, 14);
 					DMibExpect(CStr(Buffer), ==, "aYYYbYYYCYYYD");
 				}
@@ -218,7 +218,7 @@ namespace
 					DMibTestPath("Growing/TruncateResult");
 					ch8 Buffer[10];  // _MaxLen = 10
 					fg_StrCopy(Buffer, "aXbXcXd");  // Length 7, 3 X's
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace X with YYY: result would be "aYYYbYYYcYYYd" (13 chars)
 					// But _MaxLen = 10, so should truncate from right
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 10);
@@ -228,7 +228,7 @@ namespace
 					DMibTestPath("Growing/TruncateInMiddleOfReplacement");
 					ch8 Buffer[8];  // _MaxLen = 8
 					fg_StrCopy(Buffer, "aXbXc");  // Length 5, 2 X's
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace X with YYYY: result would be "aYYYYbYYYYc" (11 chars)
 					// But _MaxLen = 8, should truncate
 					fg_StrReplace(Buffer, Len, "X", 1, "YYYY", 4, 8);
@@ -240,7 +240,7 @@ namespace
 					DMibTestPath("Shrinking/NormalFit");
 					ch8 Buffer[10];  // "aXXXbXXXc" (9) + null
 					fg_StrCopy(Buffer, "aXXXbXXXc");  // Length 9
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace XXX with Y: result is "aYbYc" (5 chars)
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 10);
 					DMibExpect(CStr(Buffer), ==, "aYbYc");
@@ -249,7 +249,7 @@ namespace
 					DMibTestPath("Shrinking/TruncateResult");
 					ch8 Buffer[14];  // "aXXXbXXXcXXXd" (13) + null
 					fg_StrCopy(Buffer, "aXXXbXXXcXXXd");  // Length 13
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace XXX with Y: full result would be "aYbYcYd" (7 chars)
 					// But _MaxLen = 5, so truncate to "aYbY" (4 chars + null)
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 5);
@@ -259,7 +259,7 @@ namespace
 					DMibTestPath("Shrinking/TruncateInSegment");
 					ch8 Buffer[16];  // "abcXXXdefXXXghi" (15) + null
 					fg_StrCopy(Buffer, "abcXXXdefXXXghi");  // Length 15
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace XXX with Y: full result would be "abcYdefYghi" (11 chars)
 					// But _MaxLen = 7, truncate to "abcYde" (6 chars + null)
 					fg_StrReplace(Buffer, Len, "XXX", 3, "Y", 1, 7);
@@ -271,7 +271,7 @@ namespace
 					DMibTestPath("SameSize/ExactFit");
 					ch8 Buffer[8];  // "aXXbXXc" (7) + null
 					fg_StrCopy(Buffer, "aXXbXXc");  // Length 7
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace XX with YY: result is "aYYbYYc" (7 chars)
 					fg_StrReplace(Buffer, Len, "XX", 2, "YY", 2, 8);
 					DMibExpect(CStr(Buffer), ==, "aYYbYYc");
@@ -282,7 +282,7 @@ namespace
 					DMibTestPath("Growing/ExactFit");
 					ch8 Buffer[6];  // _MaxLen = 6, result "aYYYb" (5) + null
 					fg_StrCopy(Buffer, "aXb");  // Length 3
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace X with YYY: result is "aYYYb" (5 chars)
 					// _MaxLen = 6 allows exactly 5 chars + null
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 6);
@@ -294,7 +294,7 @@ namespace
 					DMibTestPath("Growing/TruncateLastReplacement");
 					ch8 Buffer[5];  // _MaxLen = 5, result "aYYY" (4) + null
 					fg_StrCopy(Buffer, "aXbX");  // Length 4, 2 X's
-					mint Len = fg_StrLen(Buffer);
+					umint Len = fg_StrLen(Buffer);
 					// Replace X with YYY: result would be "aYYYbYYY" (8 chars)
 					// _MaxLen = 5, should get "aYYY" (4 chars + null)
 					fg_StrReplace(Buffer, Len, "X", 1, "YYY", 3, 5);

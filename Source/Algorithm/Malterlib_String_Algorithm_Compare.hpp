@@ -146,7 +146,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -180,7 +180,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept
 	{
 		if (_MaxLen == 0)
 			return 0;
@@ -195,7 +195,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -229,7 +229,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, mint _MaxLen) noexcept
+	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept
 	{
 		if (_MaxLen == 0)
 			return 0;

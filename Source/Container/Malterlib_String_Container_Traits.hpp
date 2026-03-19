@@ -77,14 +77,14 @@ namespace NMib::NStr
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData>
-	inline_small mint TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrLen(tf_CData const *_pStr)
+	inline_small umint TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrLen(tf_CData const *_pStr)
 	{
 		return fg_StrLen(_pStr);
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData>
-	inline_small mint TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrLen(tf_CData const *_pStr, mint _MaxLen)
+	inline_small umint TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrLen(tf_CData const *_pStr, umint _MaxLen)
 	{
 		return fg_StrLen(_pStr, _MaxLen);
 	}

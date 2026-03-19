@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 	// Static functions
 	template <typename tf_CTCStrTraits>
-	inline_small mint fg_StrLen(TCStr<tf_CTCStrTraits> const &_Str)
+	inline_small umint fg_StrLen(TCStr<tf_CTCStrTraits> const &_Str)
 	{
 		return _Str.f_GetLen();
 	}
@@ -38,7 +38,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits>
-	inline_small uint32 fg_StrIsAnsi(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen)
+	inline_small uint32 fg_StrIsAnsi(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen)
 	{
 		return fg_StrIsAnsi(_Str.f_GetStr(), _MaxLen);
 	}
@@ -86,14 +86,14 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CData>
-	inline_small tf_CData *fg_StrCopy(tf_CData *_pTo, TCStr<tf_CTCStrTraits1> const &_From, mint _MaxLen)
+	inline_small tf_CData *fg_StrCopy(tf_CData *_pTo, TCStr<tf_CTCStrTraits1> const &_From, umint _MaxLen)
 	{
 		fg_StrCopy(_pTo, _From.f_GetStr(), _MaxLen);
 		return _pTo;
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits1> &fg_StrCopy(TCStr<tf_CTCStrTraits1> &_To, tf_CData const *_pFrom, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits1> &fg_StrCopy(TCStr<tf_CTCStrTraits1> &_To, tf_CData const *_pFrom, umint _MaxLen)
 	{
 		_To.f_Clear();
 		_To.f_AddStr(_pFrom, fg_Min(_MaxLen, fg_StrLen(_pFrom, _MaxLen)));
@@ -101,7 +101,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits1> &fg_StrCopy(TCStr<tf_CTCStrTraits1> &_To, TCStr<tf_CTCStrTraits2> const &_From, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits1> &fg_StrCopy(TCStr<tf_CTCStrTraits1> &_To, TCStr<tf_CTCStrTraits2> const &_From, umint _MaxLen)
 	{
 		_To.f_Clear();
 		_To.f_AddStr(_From.f_GetStr(), fg_Min(_MaxLen, fg_StrLen(_From)));
@@ -130,13 +130,13 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CData>
-	inline_small tf_CData *fg_StrMove(tf_CData *_pTo, TCStr<tf_CTCStrTraits1> const &_From, mint _MaxLen)
+	inline_small tf_CData *fg_StrMove(tf_CData *_pTo, TCStr<tf_CTCStrTraits1> const &_From, umint _MaxLen)
 	{
 		return fg_StrCopy(_pTo, _From, _MaxLen);
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits1> &fg_StrMove(TCStr<tf_CTCStrTraits1> &_To, tf_CData const *_pFrom, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits1> &fg_StrMove(TCStr<tf_CTCStrTraits1> &_To, tf_CData const *_pFrom, umint _MaxLen)
 	{
 		TCStr<tf_CTCStrTraits1> Temp;
 		fg_StrCopy(Temp, _pFrom, _MaxLen);
@@ -145,7 +145,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits1> &fg_StrMove(TCStr<tf_CTCStrTraits1> &_To, TCStr<tf_CTCStrTraits2> const &_From, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits1> &fg_StrMove(TCStr<tf_CTCStrTraits1> &_To, TCStr<tf_CTCStrTraits2> const &_From, umint _MaxLen)
 	{
 		return fg_StrCopy(_To, _From, _MaxLen);
 	}
@@ -184,14 +184,14 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits>
-	inline_large TCStr<tf_CTCStrTraits> &fg_StrUntabify(TCStr<tf_CTCStrTraits> &_Str, mint _TabSize)
+	inline_large TCStr<tf_CTCStrTraits> &fg_StrUntabify(TCStr<tf_CTCStrTraits> &_Str, umint _TabSize)
 	{
 		using CChar = typename TCStr<tf_CTCStrTraits>::CChar;
 
 		TCStr<tf_CTCStrTraits> Temp(_Str);
 		CChar const *pStr1 = Temp.f_GetStr();
-		mint NeededLen = 0;
-		mint Column = 0;
+		umint NeededLen = 0;
+		umint Column = 0;
 
 		while (*pStr1)
 		{
@@ -199,7 +199,7 @@ namespace NMib::NStr
 
 			if (Char == '\t')
 			{
-				mint OldColumn = Column;
+				umint OldColumn = Column;
 				Column = ((Column + _TabSize) / _TabSize) * _TabSize;
 				NeededLen += Column - OldColumn;
 			}
@@ -242,10 +242,10 @@ namespace NMib::NStr
 			CChar Char = *pStr1;
 			if (Char == '\t')
 			{
-				mint OldColumn = Column;
+				umint OldColumn = Column;
 				Column = ((Column + _TabSize) / _TabSize) * _TabSize;
-				mint nFill = Column - OldColumn;
-				for (mint i = 0; i < nFill; ++i)
+				umint nFill = Column - OldColumn;
+				for (umint i = 0; i < nFill; ++i)
 					*(pWrite++) = ' ';
 			}
 			else if (Char == '\r')
@@ -276,7 +276,7 @@ namespace NMib::NStr
 		}
 		*(pWrite++) = 0;
 
-		DMibSafeCheck((mint(pWrite - pWriteStart) <= MaxLen), "Memory overwritten");
+		DMibSafeCheck((umint(pWrite - pWriteStart) <= MaxLen), "Memory overwritten");
 
 
 		_Str.f_SetModified();

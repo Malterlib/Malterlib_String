@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CParser, typename t_CIntType>
-	mint TCStrParseType_Int<t_CParser, t_CIntType>::f_Destruct()
+	umint TCStrParseType_Int<t_CParser, t_CIntType>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrParseType_Int();

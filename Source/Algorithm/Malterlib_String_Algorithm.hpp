@@ -23,7 +23,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData>
-	constexpr inline_medium mint fg_StrLen(tf_CData const *_pStr)
+	constexpr inline_medium umint fg_StrLen(tf_CData const *_pStr)
 	{
 		tf_CData const *pStr = _pStr;
 
@@ -34,7 +34,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData>
-	constexpr inline_medium mint fg_StrLen(tf_CData const *_pStr, mint _MaxLen)
+	constexpr inline_medium umint fg_StrLen(tf_CData const *_pStr, umint _MaxLen)
 	{
 		tf_CData const *pStr = _pStr;
 		tf_CData const *pEnd = pStr + _MaxLen;
@@ -57,7 +57,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrCopy(tf_CData1 *_pTo, tf_CData2 const *_pFrom, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrCopy(tf_CData1 *_pTo, tf_CData2 const *_pFrom, umint _MaxLen)
 	{
 		tf_CData1 const *_pEnd = _pTo + _MaxLen - 1;
 		while (*_pFrom && _pTo < _pEnd)
@@ -71,7 +71,7 @@ namespace NMib::NStr
 	{
 		if constexpr (sizeof(tf_CData1) == sizeof(tf_CData2))
 		{
-			mint Len = fg_StrLen(_pFrom) + 1;
+			umint Len = fg_StrLen(_pFrom) + 1;
 			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(tf_CData2));
 			return _pTo;
 		}
@@ -80,11 +80,11 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrMove(tf_CData1 *_pTo, tf_CData2 const *_pFrom, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrMove(tf_CData1 *_pTo, tf_CData2 const *_pFrom, umint _MaxLen)
 	{
 		if constexpr (sizeof(tf_CData1) == sizeof(tf_CData2))
 		{
-			mint Len = fg_Min(fg_StrLen(_pFrom, _MaxLen), _MaxLen - 1);
+			umint Len = fg_Min(fg_StrLen(_pFrom, _MaxLen), _MaxLen - 1);
 			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(tf_CData2));
 			_pTo[Len] = 0;
 			return _pTo;
@@ -94,7 +94,7 @@ namespace NMib::NStr
 	}
 
 	template <bool tf_bCheckLen, typename tf_CData1>
-	constexpr inline_large bool fg_StrIsAnsi(tf_CData1 const *_pStr1, mint _Len)
+	constexpr inline_large bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _Len)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		CData1 const *pStr1Start = (CData1 const *)_pStr1;
@@ -124,7 +124,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1, mint _Len)
+	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _Len)
 	{
 			return fg_StrIsAnsi<1>(_pStr1, _Len);
 	}

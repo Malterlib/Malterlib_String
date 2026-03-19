@@ -52,7 +52,7 @@ namespace
 			using CMeasureType = TCConditional<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure>;
 			using CTestType = TCConditional<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance>;
 
-			const static mint VectorSize = 512;
+			const static umint VectorSize = 512;
 			static CStr fs_GenerateHexList()
 			{
 				using CValue = int32;
@@ -78,7 +78,7 @@ namespace
 
 				// Test 100 times and pick the fastest
 
-				mint NeededCharSize = VectorSize * 5 + 3;
+				umint NeededCharSize = VectorSize * 5 + 3;
 				CStr MalterlibAllocResult;
 				CStr MalterlibAllocReserveResult;
 				CStr MalterlibStaticAllocResult;
@@ -594,26 +594,26 @@ namespace
 			void f_FormatInt()
 			{
 	#ifdef DMibDebug
-				const static mint nTestsGlobal = 10;
+				const static umint nTestsGlobal = 10;
 	#else
-				const static mint nTestsGlobal = 1000;
+				const static umint nTestsGlobal = 1000;
 	#endif
 				const static int32 nLoopsGlobal = 10000;
 				// Do
 
 				DMibTestCategory("Static")
 				{
-					const static mint nTestsPropagate = nTestsGlobal;
+					const static umint nTestsPropagate = nTestsGlobal;
 					const static int32 nLoopsPropagate = nLoopsGlobal;
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CMeasureType MalterlibTime("Malterlib CFStr16");
 						CFStr16 MalterlibResult;
 
 						CMeasureType MalterlibCFStr16InplaceTime("Malterlib CFStr16 inplace");
 						{
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16InplaceTime.f_Start();
 
@@ -628,7 +628,7 @@ namespace
 						{
 							using karma::int_;
 							ch8 Result[16];
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
 
@@ -650,7 +650,7 @@ namespace
 							ch8 ResultData[12];
 							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrPtrTime.f_Start();
 
@@ -665,7 +665,7 @@ namespace
 						CMeasureType MalterlibCFStr16Time("Malterlib CFStr16");
 						{
 							CFStr16 Result;
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
 
@@ -682,7 +682,7 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								ItoaTime.f_Start();
 
@@ -709,12 +709,12 @@ namespace
 					};
 
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CStr MalterlibResult;
 						CMeasureType MalterlibCStrInplaceTime("Malterlib CStr inplace");
 						{
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
 
@@ -732,7 +732,7 @@ namespace
 							using karma::int_;
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
 
@@ -752,7 +752,7 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrTime.f_Start();
 
@@ -769,7 +769,7 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							std::stringstream Stream;
-							for(mint j = 0; j < nTests/10; ++j)
+							for(umint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
 
@@ -794,13 +794,13 @@ namespace
 						DMibTest(DMibExpr(Alloc)) (ETest_ExpectFail); // We need a CStr that has storage interally when possible
 					};
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CStr MalterlibResult;
 						CMeasureType MalterlibCStrInplaceTime("Malterlib CStr inplace");
 						{
 							MalterlibResult.f_Reserve(12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrInplaceTime.f_Start();
 
@@ -816,7 +816,7 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							Result.reserve(12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								KarmaTime.f_Start();
 
@@ -838,7 +838,7 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
 							Result.f_Reserve(12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrTime.f_Start();
 								for(int i=0;i<nLoops;++i)
@@ -857,7 +857,7 @@ namespace
 							std::string Result;
 							Result.reserve(12);
 							std::stringstream Stream;
-							for(mint j = 0; j < nTests/10; ++j)
+							for(umint j = 0; j < nTests/10; ++j)
 							{
 								StringStreamTime.f_Start();
 
@@ -886,15 +886,15 @@ namespace
 
 				DMibTestCategory("Dynamic")
 				{
-					const static mint nTestsPropagate = nTestsGlobal;
+					const static umint nTestsPropagate = nTestsGlobal;
 					const static int32 nLoopsPropagate = nLoopsGlobal;
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CFStr16 MalterlibResult;
 						CMeasureType MalterlibCFStrOptTime("Malterlib CFStr16 Opt");
 						{
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStrOptTime.f_Start();
 
@@ -915,7 +915,7 @@ namespace
 							ch8 ResultData[12];
 							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCStrPtrOptTime.f_Start();
 
@@ -937,7 +937,7 @@ namespace
 						CMeasureType MalterlibCFStr16Time("Malterlib CFStr16");
 						{
 							CFStr16 Result;
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibCFStr16Time.f_Start();
 
@@ -954,7 +954,7 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								SprintfTime.f_Start();
 
@@ -977,12 +977,12 @@ namespace
 					};
 
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CMeasureType MalterlibOptTime("Malterlib Opt");
 						CStr MalterlibResult;
 						{
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibOptTime.f_Start();
 
@@ -1002,7 +1002,7 @@ namespace
 						CMeasureType MalterlibTime("Malterlib");
 						{
 							CStr Result;
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
 
@@ -1024,13 +1024,13 @@ namespace
 						DMibTest(DMibExpr(Alloc));
 					}
 					{
-						const static mint nTests = nTestsPropagate;
+						const static umint nTests = nTestsPropagate;
 						const static int32 nLoops = nLoopsPropagate;
 						CMeasureType MalterlibOptTime("Malterlib Opt");
 						CStr MalterlibResult;
 						{
 							MalterlibResult.f_Reserve(12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibOptTime.f_Start();
 
@@ -1050,7 +1050,7 @@ namespace
 						{
 							CStr Result;
 							Result.f_Reserve(12);
-							for(mint j = 0; j < nTests; ++j)
+							for(umint j = 0; j < nTests; ++j)
 							{
 								MalterlibTime.f_Start();
 

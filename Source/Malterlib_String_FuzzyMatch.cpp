@@ -16,7 +16,7 @@ namespace NMib::NStr
 		};
 
 		template <bool tf_bNoCase, bool tf_bCheckLen, typename tf_CData1, typename tf_CData2>
-		aint fg_StrFindPartial(const tf_CData1 *_pStr1, const tf_CData2 *_pStr2, mint _Len, mint &_Found)
+		aint fg_StrFindPartial(const tf_CData1 *_pStr1, const tf_CData2 *_pStr2, umint _Len, umint &_Found)
 		{
 			using CData1 = NTraits::TCUnsigned<tf_CData1>;
 			using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -125,14 +125,14 @@ namespace NMib::NStr
 		{
 			const ch8 *pParse0 = pParse0Start;
 
-			mint Found;
+			umint Found;
 			aint iFind = fg_StrFindPartial<true, false>(pParse0, pParse1, 0, Found);
 			while (iFind >= 0 && Found > 0)
 			{
 				++iMatchingID;
 				aint iStart = (pParse0 - pParse0Start) + iFind;
 				bool bLarger = true;
-				for (mint i = 0; i < Found; ++i)
+				for (umint i = 0; i < Found; ++i)
 				{
 					if (aint(Found) < Matchings[iStart + i].m_nMatched)
 					{
@@ -225,7 +225,7 @@ namespace NMib::NStr
 			LastMatched = Matching.m_MatichID;
 		}
 
-		mint nUnmatchedSource = 0;
+		umint nUnmatchedSource = 0;
 		for (aint i = 0; i < nSource; ++i)
 		{
 			auto &Matching = SourceMatchings[i];

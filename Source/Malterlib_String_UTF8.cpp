@@ -5,13 +5,13 @@
 
 namespace NMib::NStr
 {
-	mint fg_GetExpectedUTF8SequenceLength(uch8 _Char)
+	umint fg_GetExpectedUTF8SequenceLength(uch8 _Char)
 	{
 		DMibFastCheck((_Char & 0xC0) == 0xC0);
 		return 7 - fg_GetHighestBitSetNoZero(((~uint32(_Char)) & 0xFF) | 1u);
 	}
 
-	mint fg_GetRequiredUTF8SequenceLength(ch32 _Codepoint)
+	umint fg_GetRequiredUTF8SequenceLength(ch32 _Codepoint)
 	{
 
 		if (_Codepoint > 0x3FFFFFF)
@@ -32,7 +32,7 @@ namespace NMib::NStr
 		return (_Codepoint >= 0xD800) && (_Codepoint <= 0xDFFF);
 	}
 
-	bool fg_IsOverlongUTF8Sequence(ch32 _Codepoint, mint _Length)
+	bool fg_IsOverlongUTF8Sequence(ch32 _Codepoint, umint _Length)
 	{
 		return _Length > fg_GetRequiredUTF8SequenceLength(_Codepoint);
 	}
@@ -54,7 +54,7 @@ namespace NMib::NStr
 		return false;
 	}
 
-	bool fg_IsValidSequence(ch32 _CodePoint, mint _Length, EValidateUTF8Flag _Flags)
+	bool fg_IsValidSequence(ch32 _CodePoint, umint _Length, EValidateUTF8Flag _Flags)
 	{
 		if (fg_IsUTF16Surrogate(_CodePoint))
 			return false;
@@ -69,7 +69,7 @@ namespace NMib::NStr
 	}
 
 	template<typename tf_FProcess, typename tf_CString>
-	inline_always bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr, mint _Len, EValidateUTF8Flag _Flags)
+	inline_always bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr, umint _Len, EValidateUTF8Flag _Flags)
 	{
 		// BOM
 		if (_Len >= 3 && _pStr[0] == 0xEF && _pStr[1] == 0xBB && _pStr[2] == 0xBF)
@@ -78,7 +78,7 @@ namespace NMib::NStr
 				return false;
 			_pStr += 3;
 		}
-		mint nOneByteCodepointsProcessed = 0;
+		umint nOneByteCodepointsProcessed = 0;
 		tf_CString *pOneByteCodepoints = nullptr;
 
 		auto pEnd = _pStr + _Len;
@@ -98,7 +98,7 @@ namespace NMib::NStr
 
 				if (ToTest & 0x40)
 				{
-					mint SequenceLengthExpected = fg_GetExpectedUTF8SequenceLength(ToTest);
+					umint SequenceLengthExpected = fg_GetExpectedUTF8SequenceLength(ToTest);
 					if (SequenceLengthExpected < 2)
 					{
 						if (_fFunctor(_pStr, 1, false))
@@ -108,7 +108,7 @@ namespace NMib::NStr
 					else
 					{
 						tf_CString *pSequenceStart = _pStr;
-						mint SequenceLengthParsed = 1;
+						umint SequenceLengthParsed = 1;
 						++_pStr;
 
 						ch32 CodePoint = ToTest & ((1 << (8 - (SequenceLengthExpected + 1))) - 1);
@@ -173,12 +173,12 @@ namespace NMib::NStr
 		return true;
 	}
 
-	bool fg_IsValidUTF8(ch8 const *_pStr, mint _Len, EValidateUTF8Flag _Flags)
+	bool fg_IsValidUTF8(ch8 const *_pStr, umint _Len, EValidateUTF8Flag _Flags)
 	{
-		mint nValidChars = 0;
+		umint nValidChars = 0;
 		bool bReturn = fg_ProcessUTF8
 			(
-				[&](uch8 const *, mint _Len, bool _bValid) inline_always_lambda -> bool
+				[&](uch8 const *, umint _Len, bool _bValid) inline_always_lambda -> bool
 				{
 					nValidChars += _Len;
 					return !_bValid;
@@ -207,7 +207,7 @@ namespace NMib::NStr
 
 		fg_ProcessUTF8
 			(
-				[&](uch8* pStr, mint _Length, bool _bValid) inline_always_lambda -> bool
+				[&](uch8* pStr, umint _Length, bool _bValid) inline_always_lambda -> bool
 				{
 					if (!_bValid)
 					{
@@ -238,7 +238,7 @@ namespace NMib::NStr
 
 		fg_ProcessUTF8
 			(
-				[&](uch8* _pStr, mint _Length, bool _bValid) inline_always_lambda -> bool
+				[&](uch8* _pStr, umint _Length, bool _bValid) inline_always_lambda -> bool
 				{
 					if (_bValid)
 					{

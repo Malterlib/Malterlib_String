@@ -50,7 +50,7 @@ namespace NMib::NStr
 
 		TICStrParseType const *f_GetPtr() const;
 
-		virtual mint f_Destruct() = 0;
+		virtual umint f_Destruct() = 0;
 		virtual aint f_Get_aint() const = 0;
 		virtual fp32 f_Get_fp32() const = 0;
 		virtual fp64 f_Get_fp64() const = 0;
@@ -80,7 +80,7 @@ namespace NMib::NStr
 		~TCStrParse();
 
 		void fp_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags);
-		inline_medium void *f_AllocSpace(mint _Size, EStringParseTypeFlag &_Flags);
+		inline_medium void *f_AllocSpace(umint _Size, EStringParseTypeFlag &_Flags);
 		inline_small CChar const *f_Parse(CChar const *_pToParse, aint &_nParsed, EParseFlag _ParseFlags = EParseFlag_None);
 		inline_small CChar const *f_Parse(CChar const *_pToParse, EParseFlag _ParseFlags = EParseFlag_None);
 
@@ -96,8 +96,8 @@ namespace NMib::NStr
 		inline_small TICStrParseType<TCStrParse> const *fp_GetParseEntry(aint _iEntry) const;
 		void *fp_AllocSpace(int _Bytes);
 
-		static constexpr mint mcp_StaticParses = 16;
-		static constexpr mint mcp_StaticSpace = mcp_StaticParses * 4;
+		static constexpr umint mcp_StaticParses = 16;
+		static constexpr umint mcp_StaticSpace = mcp_StaticParses * 4;
 
 		uaint m_nParses;
 		mutable aint m_iCurrentArgument;

@@ -14,7 +14,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 3;
+		umint NeededSize = 3;
 		while (*pParse)
 		{
 			if (*pParse == '\"' || *pParse == '\\')
@@ -43,7 +43,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 3;
+		umint NeededSize = 3;
 		while (*pParse)
 		{
 			CUnsignedEscapeChar const *pEscape = (CUnsignedEscapeChar const *)_pEscapedChars;
@@ -85,7 +85,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 3;
+		umint NeededSize = 3;
 		while (*pParse)
 		{
 			CUnsignedEscapeChar const *pEscape = (CUnsignedEscapeChar const *)_pEscapedChars;
@@ -120,7 +120,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 1;
+		umint NeededSize = 1;
 		while (*pParse)
 		{
 			if (*pParse == '\"' || *pParse == '\\')
@@ -149,7 +149,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 1;
+		umint NeededSize = 1;
 		while (*pParse)
 		{
 			CUnsignedEscapeChar const *pEscape = (CUnsignedEscapeChar const *)_pEscapedChars;
@@ -191,7 +191,7 @@ namespace NMib::NStr
 		CUnsignedChar const *pSource = (CUnsignedChar const *)_StrSource.f_GetStr();
 		CUnsignedChar const *pParse = (CUnsignedChar const *)pSource;
 
-		mint NeededSize = 1;
+		umint NeededSize = 1;
 		while (*pParse)
 		{
 			CUnsignedEscapeChar const *pEscape = (CUnsignedEscapeChar const *)_pEscapedChars;

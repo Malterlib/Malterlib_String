@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CParser, typename t_CStrTraitsIn>
-	mint TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>::f_Destruct()
+	umint TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrParseType_TStr();
@@ -80,7 +80,7 @@ namespace NMib::NStr
 			++pEndNext;
 		}
 
-		mint NextLen = pEndNext - pStartNext;
+		umint NextLen = pEndNext - pStartNext;
 
 		CChar const *pParse = _pString;
 		CChar const *pParseStart = pParse;
@@ -167,7 +167,7 @@ namespace NMib::NStr
 					}
 					if (NextLen)
 					{
-						if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<mint>::mc_Max, NextLen))
+						if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<umint>::mc_Max, NextLen))
 							break;
 					}
 				}
@@ -187,7 +187,7 @@ namespace NMib::NStr
 			{
 				while (*pParse)
 				{
-					if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<mint>::mc_Max, NextLen))
+					if (fg_StrStartsWith(pParse, pStartNext, TCLimitsInt<umint>::mc_Max, NextLen))
 						break;
 					++pParse;
 				}

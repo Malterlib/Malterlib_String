@@ -33,7 +33,7 @@ namespace NMib::NStr
 		TCStrParseType_Int(TCStrParseType_Int const &_Value) = delete;
 		TCStrParseType_Int &operator = (TCStrParseType_Int const &_Value) = delete;
 
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const override;
 		virtual aint f_Get_aint() const override;
 		virtual fp32 f_Get_fp32() const override;
@@ -89,7 +89,7 @@ DMibStrStringParserImplementInt(uint16384);
 DMibStrStringParserImplementInt(int16384);
 
 #ifdef DMibPUniqueType_mint
-DMibStrStringParserImplementInt(mint);
+DMibStrStringParserImplementInt(umint);
 #endif
 #ifdef DMibPUniqueType_smint
 DMibStrStringParserImplementInt(smint);

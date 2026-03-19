@@ -20,7 +20,7 @@ namespace NMib::NStr
 			// UTF-32 encoding
 			_Stream.f_SetPosition(Pos + 4);
 
-			mint StrSize = ((Size-4) >> 2);
+			umint StrSize = ((Size-4) >> 2);
 			CUStr NewStr;
 			ch32 *pStr = NewStr.f_GetStr(StrSize + 1);
 			_Stream.f_ConsumeBytes(pStr, StrSize << 2);
@@ -43,7 +43,7 @@ namespace NMib::NStr
 			// UTF-32 encoding
 			_Stream.f_SetPosition(Pos + 4);
 
-			mint StrSize = ((Size-4) >> 2);
+			umint StrSize = ((Size-4) >> 2);
 			CUStr NewStr;
 			ch32 *pStr = NewStr.f_GetStr(StrSize + 1);
 			_Stream.f_ConsumeBytes(pStr, StrSize << 2);
@@ -65,7 +65,7 @@ namespace NMib::NStr
 		{
 			// UTF-8 encoding
 			_Stream.f_SetPosition(Pos + 3);
-			mint StrSize = Size-3;
+			umint StrSize = Size-3;
 			CStr NewStr;
 			ch8 *pStr = NewStr.f_GetStr(StrSize + 1);
 			_Stream.f_ConsumeBytes(pStr, StrSize);
@@ -79,7 +79,7 @@ namespace NMib::NStr
 			// UTF-16 encoding
 			_Stream.f_SetPosition(Pos + 2);
 
-			mint StrSize = ((Size-2) >> 1);
+			umint StrSize = ((Size-2) >> 1);
 			CWStr NewStr;
 			ch16 *pStr = NewStr.f_GetStr(StrSize + 1);
 			_Stream.f_ConsumeBytes(pStr, StrSize << 1);
@@ -114,7 +114,7 @@ namespace NMib::NStr
 		{
 			_Stream.f_SetPosition(Pos);
 
-			mint StrSize = Size;
+			umint StrSize = Size;
 			CStr NewStr;
 			ch8 *pStr = NewStr.f_GetStr(StrSize + 1);
 			_Stream.f_ConsumeBytes(pStr, StrSize);

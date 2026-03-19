@@ -17,7 +17,7 @@ namespace NMib::NStr
 		for (auto &Error : _Errors)
 		{
 			CStr Indent;
-			for (mint i = 0; i < Error.m_IndentDepth; ++i)
+			for (umint i = 0; i < Error.m_IndentDepth; ++i)
 				Indent += DMibPFileLineFormatIndent;
 			if (Error.f_IsSeparator())
 			{

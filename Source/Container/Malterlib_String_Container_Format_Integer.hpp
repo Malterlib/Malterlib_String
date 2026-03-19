@@ -116,7 +116,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-	mint TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::f_Destruct()
+	umint TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_Int();
@@ -580,7 +580,7 @@ namespace NMib::NStr
 	template <typename tf_COptions>
 	void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer)
 	{
-		mint Length;
+		umint Length;
 		CChar const *pValue;
 		if (_Integer == 0)
 		{
@@ -856,10 +856,10 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CData>
-	struct TCStringFormatter<t_CFormatter, t_CData *>::CPtrOptions : public TCStrFormatType_Int_OptionsStatic_Radix<16, TCStrFormatType_Int_OptionsStatic<mint>>
+	struct TCStringFormatter<t_CFormatter, t_CData *>::CPtrOptions : public TCStrFormatType_Int_OptionsStatic_Radix<16, TCStrFormatType_Int_OptionsStatic<umint>>
 	{
 		CPtrOptions()
-			: TCStrFormatType_Int_OptionsStatic_Radix<16, TCStrFormatType_Int_OptionsStatic<mint>>(TCStrFormatType_Int_OptionsStatic<mint>())
+			: TCStrFormatType_Int_OptionsStatic_Radix<16, TCStrFormatType_Int_OptionsStatic<umint>>(TCStrFormatType_Int_OptionsStatic<umint>())
 		{
 		}
 
@@ -868,14 +868,14 @@ namespace NMib::NStr
 			return true;
 		}
 
-		constexpr inline_small static mint f_MinLength()
+		constexpr inline_small static umint f_MinLength()
 		{
-			return sizeof(mint)*2;
+			return sizeof(umint)*2;
 		}
 
-		constexpr inline_small static mint f_MaxLength()
+		constexpr inline_small static umint f_MaxLength()
 		{
-			return sizeof(mint)*2;
+			return sizeof(umint)*2;
 		}
 
 		inline_small static ch8 f_Fillout()
@@ -888,7 +888,7 @@ namespace NMib::NStr
 	template <typename tf_CTypeWithConst>
 	inline_large auto TCStringFormatter<t_CFormatter, t_CData *>::fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
 	{
-		mint Data = (mint)_Data;
+		umint Data = (umint)_Data;
 		_Formatter.template f_Alloc<CFormatType>(Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
 	}

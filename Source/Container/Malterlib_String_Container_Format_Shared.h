@@ -10,29 +10,29 @@ namespace NMib::NStr
 	struct CStrFormatType_StaticOptions
 	{
 		constexpr inline_small static bool f_RestrictLength();
-		constexpr inline_small static mint f_MinLength();
-		constexpr inline_small static mint f_MaxLength();
+		constexpr inline_small static umint f_MinLength();
+		constexpr inline_small static umint f_MaxLength();
 		constexpr inline_small static aint f_Align();
 		constexpr inline_small static bool f_LeftAlign();
 		constexpr inline_small static bool f_SimpleAlign();
 		constexpr inline_small static ch8 f_Fillout();
 	};
 
-	template <mint t_MinLength, typename t_CParent>
+	template <umint t_MinLength, typename t_CParent>
 	struct TICStrFormatType_StaticOptions_MinLength : public t_CParent
 	{
 		inline_small TICStrFormatType_StaticOptions_MinLength(t_CParent const &_Parent);
 
-		constexpr inline_small static mint f_MinLength();
+		constexpr inline_small static umint f_MinLength();
 		constexpr inline_small static bool f_RestrictLength();
 	};
 
-	template <mint t_MaxLength, typename t_CParent>
+	template <umint t_MaxLength, typename t_CParent>
 	struct TICStrFormatType_StaticOptions_MaxLength : public t_CParent
 	{
 		inline_small TICStrFormatType_StaticOptions_MaxLength(t_CParent const &_Parent);
 
-		constexpr inline_small static mint f_MaxLength();
+		constexpr inline_small static umint f_MaxLength();
 		constexpr inline_small static bool f_RestrictLength();
 	};
 
@@ -66,14 +66,14 @@ namespace NMib::NStr
 		inline_medium TICStrFormatType_Options(tf_CInitializer const &_Init);
 
 		constexpr inline_small bool f_RestrictLength() const;
-		constexpr inline_small mint f_MinLength() const;
-		constexpr inline_small mint f_MaxLength() const;
+		constexpr inline_small umint f_MinLength() const;
+		constexpr inline_small umint f_MaxLength() const;
 		constexpr inline_small aint f_Align() const;
 		constexpr inline_small bool f_LeftAlign() const;
 		constexpr inline_small bool f_SimpleAlign() const;
 		constexpr inline_small t_CChar f_Fillout() const;
 
-		mint m_MaxLength;
+		umint m_MaxLength;
 		aint m_Align;
 		uint32 m_MinLength:30;
 		uint32 m_bLeftAlign:1;
@@ -215,7 +215,7 @@ namespace NMib::NStr
 			aint m_Precedence;
 		};
 
-		virtual mint f_Destruct() = 0;
+		virtual umint f_Destruct() = 0;
 		virtual void f_Move(t_CFormatter &_Formatter) = 0;
 		virtual void f_AddToStr(CString &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const = 0;
 		virtual aint f_Get_aint() const = 0;
@@ -235,16 +235,16 @@ namespace NMib::NStr
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
 		template <typename tf_COptions>
-		static void fs_AddSubStrToStr(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, mint _SubStrLen, aint _SubStrStart);
+		static void fs_AddSubStrToStr(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, umint _SubStrLen, aint _SubStrStart);
 
 		template <typename tf_COptions>
-		static inline_small void fs_AddSubStrToStrSimple(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, mint _SubStrLen);
+		static inline_small void fs_AddSubStrToStrSimple(CString &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CChar const *_pSubStr, umint _SubStrLen);
 
 	protected:
 		inline_small void fp_GetNextFormat(COption &_NewFormat, CChar const * &_pFormat) const;
 
 		template <typename tf_CChar>
-		void fp_ReportParseError(CString &_String, aint &_CurrentStrLen, tf_CChar const *_pStr, mint _MaxLen = TCLimitsInt<mint>::mc_Max) const;
+		void fp_ReportParseError(CString &_String, aint &_CurrentStrLen, tf_CChar const *_pStr, umint _MaxLen = TCLimitsInt<umint>::mc_Max) const;
 
 		template <typename tf_CImplementation, typename tf_CData, typename tf_CFormatType, typename tf_COptions>
 		inline_never void fp_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const *_pParse) const;
@@ -261,19 +261,19 @@ namespace NMib::NStr
 	};
 
 
-	template <mint tf_MinLength, typename tf_CValueType>
+	template <umint tf_MinLength, typename tf_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMinLength(tf_CValueType const &_Value);
 
-	template <mint tf_MinLength, typename tf_CValueType, typename tf_COldOptions>
+	template <umint tf_MinLength, typename tf_CValueType, typename tf_COldOptions>
 	inline_small auto fg_FormatMinLength(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, tf_COldOptions>, tf_CValueType>
 	;
 
 
-	template <mint tf_MaxLength, typename tf_CValueType>
+	template <umint tf_MaxLength, typename tf_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMaxLength(tf_CValueType const &_Value);
 
-	template <mint tf_MaxLength, typename tf_CValueType, typename tf_COldOptions>
+	template <umint tf_MaxLength, typename tf_CValueType, typename tf_COldOptions>
 	inline_small auto fg_FormatMaxLength(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, tf_COldOptions>, tf_CValueType>
 	;

@@ -494,7 +494,7 @@ Return:
 	}
 
 	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, mint _MaxLen, t_CReturn _FailValue)
+	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue)
 	{
 		t_CReturn DestNumber = 0;
 

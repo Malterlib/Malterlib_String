@@ -20,7 +20,7 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CTStrTraits>
-	struct TCStrImp_Virtual_PtrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint>>>
+	struct TCStrImp_Virtual_PtrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, umint>>>
 	{
 		virtual void f_Destroy();
 		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;
@@ -36,7 +36,7 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CTStrTraits>
-	struct TCStrImp_Virtual_TStrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, mint>>>
+	struct TCStrImp_Virtual_TStrWrapper : public TCStr< TCTCStrTraits<typename t_CTStrTraits::CStrTraits, TICStrImp_Virtual<typename t_CTStrTraits::CStrTraits, umint>>>
 	{
 		virtual void f_Destroy();
 		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;

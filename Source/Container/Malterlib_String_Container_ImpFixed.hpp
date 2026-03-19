@@ -15,17 +15,17 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small TCStrImp_Fixed<t_CStrTraits, t_DataLen>::TCStrImp_Fixed(TCStrImp_Fixed const &_Str)
 	{
-		mint Len = _Str.f_GetStrLen();
+		umint Len = _Str.f_GetStrLen();
 		m_Len = Len;
 		//NMib::NMemory::fg_ObjectCopy((CChar *)m_lData, (CChar const*)_Str.m_lData, Len+1);
 		NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len+1) * sizeof(CChar));
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
-	inline_small constexpr TCStrImp_Fixed<t_CStrTraits, t_DataLen>::TCStrImp_Fixed(CChar const *_pString, mint _Len)
+	inline_small constexpr TCStrImp_Fixed<t_CStrTraits, t_DataLen>::TCStrImp_Fixed(CChar const *_pString, umint _Len)
 	{
-		mint nChars = fg_Min(t_DataLen - 1, _Len);
-		for (mint i = 0; i < nChars; ++i)
+		umint nChars = fg_Min(t_DataLen - 1, _Len);
+		for (umint i = 0; i < nChars; ++i)
 			m_lData[i] = _pString[i];
 		m_Len = nChars;
 	}
@@ -33,7 +33,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_medium void TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_Assign(TCStrImp_Fixed const &_Str)
 	{
-		mint Len = _Str.f_GetStrLen();
+		umint Len = _Str.f_GetStrLen();
 		m_Len = Len;
 		//NMib::NMemory::fg_ObjectCopy((CChar *)m_lData, (CChar const*)_Str.m_lData, Len+1);
 		NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len+1) * sizeof(CChar));

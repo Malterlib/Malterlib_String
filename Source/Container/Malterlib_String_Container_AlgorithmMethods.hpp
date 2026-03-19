@@ -35,28 +35,28 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small auto TCStr<t_CTCStrTraits>::f_Cmp(tf_CData const *_pStr, mint _MaxLen) const -> typename TCChooseStrCompareType<CChar, tf_CData>::CType
+	inline_small auto TCStr<t_CTCStrTraits>::f_Cmp(tf_CData const *_pStr, umint _MaxLen) const -> typename TCChooseStrCompareType<CChar, tf_CData>::CType
 	{
 		return fg_StrCmp(*this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits2>
-	inline_small auto TCStr<t_CTCStrTraits>::f_Cmp(TCStr<tf_CTCStrTraits2> const &_Str, mint _MaxLen) const -> typename TCChooseStrCompareType<CChar, TCStr<tf_CTCStrTraits2>>::CType
+	inline_small auto TCStr<t_CTCStrTraits>::f_Cmp(TCStr<tf_CTCStrTraits2> const &_Str, umint _MaxLen) const -> typename TCChooseStrCompareType<CChar, TCStr<tf_CTCStrTraits2>>::CType
 	{
 		return fg_StrCmp(*this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small auto TCStr<t_CTCStrTraits>::f_CmpNoCase(tf_CData const *_pStr, mint _MaxLen) const -> typename TCChooseStrCompareType<CChar, tf_CData>::CType
+	inline_small auto TCStr<t_CTCStrTraits>::f_CmpNoCase(tf_CData const *_pStr, umint _MaxLen) const -> typename TCChooseStrCompareType<CChar, tf_CData>::CType
 	{
 		return fg_StrCmpNoCase(*this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits2>
-	inline_small auto TCStr<t_CTCStrTraits>::f_CmpNoCase(TCStr<tf_CTCStrTraits2> const &_Str, mint _MaxLen) const -> typename TCChooseStrCompareType<CChar, TCStr<tf_CTCStrTraits2>>::CType
+	inline_small auto TCStr<t_CTCStrTraits>::f_CmpNoCase(TCStr<tf_CTCStrTraits2> const &_Str, umint _MaxLen) const -> typename TCChooseStrCompareType<CChar, TCStr<tf_CTCStrTraits2>>::CType
 	{
 		return fg_StrCmpNoCase(*this, _Str, _MaxLen);
 	}
@@ -105,42 +105,42 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindChar(tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindChar(tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindChar(*this, _Char, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharOffset(aint _Start, tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharOffset(aint _Start, tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindChar(_Start, *this, _Char, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharNoCase(tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharNoCase(tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindCharNoCase(*this, _Char, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharNoCaseOffset(aint _Start, tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharNoCaseOffset(aint _Start, tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindCharNoCase(_Start, *this, _Char, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharReverse(tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharReverse(tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindCharReverse(*this, _Char, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharReverseNoCase(tf_CData _Char, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharReverseNoCase(tf_CData _Char, umint _MaxLen) const
 	{
 		return fg_StrFindCharReverseNoCase(*this, _Char, _MaxLen);
 	}
@@ -175,28 +175,28 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindChars(tf_CData const *_pChars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindChars(tf_CData const *_pChars, umint _MaxLen) const
 	{
 		return fg_StrFindChars(*this, _pChars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsNoCase(tf_CData const *_pChars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsNoCase(tf_CData const *_pChars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsNoCase(*this, _pChars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverse(tf_CData const *_pChars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverse(tf_CData const *_pChars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsReverse(*this, _pChars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverseNoCase(tf_CData const *_pChars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverseNoCase(tf_CData const *_pChars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsReverseNoCase(*this, _pChars, _MaxLen);
 	}
@@ -232,28 +232,28 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindChars(TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindChars(TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen) const
 	{
 		return fg_StrFindChars(*this, _Chars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsNoCase(*this, _Chars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverse(TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverse(TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsReverse(*this, _Chars, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen) const
 	{
 		return fg_StrFindCharsReverseNoCase(*this, _Chars, _MaxLen);
 	}
@@ -347,112 +347,112 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_Find(tf_CData const *_pStr, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_Find(tf_CData const *_pStr, umint _MaxLen) const
 	{
 		return fg_StrFind(*this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_Find(aint _Start, tf_CData const *_pStr, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_Find(aint _Start, tf_CData const *_pStr, umint _MaxLen) const
 	{
 		return fg_StrFind(_Start, *this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(tf_CData const *_pStr, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(tf_CData const *_pStr, umint _MaxLen) const
 	{
 		return fg_StrFindNoCase(*this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(aint _Start, tf_CData const *_pStr, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(aint _Start, tf_CData const *_pStr, umint _MaxLen) const
 	{
 		return fg_StrFindNoCase(_Start, *this, _pStr, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_Find(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_Find(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFind(*this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_Find(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_Find(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFind(_Start, *this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFindNoCase(*this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFindNoCase(_Start, *this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(tf_CData const *_pStr1, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(tf_CData const *_pStr1, umint _MaxLen) const
 	{
 		return fg_StrFindReverse(*this, _pStr1, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(tf_CData const *_pStr1, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(tf_CData const *_pStr1, umint _MaxLen) const
 	{
 		return fg_StrFindReverseNoCase(*this, _pStr1, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(tf_CData const *_pStr1, mint _MaxLen, mint _FindLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(tf_CData const *_pStr1, umint _MaxLen, umint _FindLen) const
 	{
 		return fg_StrFindReverse(*this, _pStr1, _MaxLen, _FindLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(tf_CData const *_pStr1, mint _MaxLen, mint _FindLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(tf_CData const *_pStr1, umint _MaxLen, umint _FindLen) const
 	{
 		return fg_StrFindReverseNoCase(*this, _pStr1, _MaxLen, _FindLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFindReverse(*this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen) const
 	{
 		return fg_StrFindReverseNoCase(*this, _Str, _MaxLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen, mint _FindLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverse(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen, umint _FindLen) const
 	{
 		return fg_StrFindReverse(*this, _Str, _MaxLen, _FindLen);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, mint _MaxLen, mint _FindLen) const
+	inline_small aint TCStr<t_CTCStrTraits>::f_FindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen, umint _FindLen) const
 	{
 		return fg_StrFindReverseNoCase(*this, _Str, _MaxLen, _FindLen);
 	}
@@ -742,7 +742,7 @@ namespace NMib::NStr
 
 		auto const *pParse = this->f_GetStr();
 		auto const *pParseEnd = pParse + this->f_GetLen();
-		mint SeparatorLen = fg_StrLen(_Separator);
+		umint SeparatorLen = fg_StrLen(_Separator);
 
 		while (pParse < pParseEnd)
 		{
@@ -843,7 +843,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_UpperCase(mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_UpperCase(umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrUpperCase(Temp, _MaxLen);
@@ -859,7 +859,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_LowerCase(mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_LowerCase(umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrLowerCase(Temp, _MaxLen);
@@ -867,7 +867,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Untabify(mint _TabLength) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Untabify(umint _TabLength) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrUntabify(Temp, _TabLength);
@@ -962,7 +962,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
-	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, tf_CData2 const *_pStrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, tf_CData2 const *_pStrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplace(Temp, _pStrFind, _pStrReplace, _MaxLen);
@@ -971,7 +971,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	auto TCStr<t_CTCStrTraits>::f_Replace(TCStr<tf_CTCStrTraits> const &_StrFind, tf_CData const *_pStrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Replace(TCStr<tf_CTCStrTraits> const &_StrFind, tf_CData const *_pStrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplace(Temp, _StrFind, _pStrReplace, _MaxLen);
@@ -981,7 +981,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplace(Temp, _pStrFind, _StrReplace, _MaxLen);
@@ -990,7 +990,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	auto TCStr<t_CTCStrTraits>::f_Replace(TCStr<tf_CTCStrTraits> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Replace(TCStr<tf_CTCStrTraits> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplace(Temp, _StrFind, _StrReplace, _MaxLen);
@@ -1000,7 +1000,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
-	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, tf_CData2 const *_pStrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, tf_CData2 const *_pStrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplaceNoCase(Temp, _pStrFind, _pStrReplace, _MaxLen);
@@ -1009,7 +1009,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData2>
-	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(TCStr<tf_CTCStrTraits> const &_StrFind, tf_CData2 const *_pStrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(TCStr<tf_CTCStrTraits> const &_StrFind, tf_CData2 const *_pStrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
@@ -1019,7 +1019,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplaceNoCase(Temp, _pStrFind, _StrReplace, _MaxLen);
@@ -1028,7 +1028,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(TCStr<tf_CTCStrTraits> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(TCStr<tf_CTCStrTraits> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplaceNoCase(Temp, _StrFind, _StrReplace, _MaxLen);
@@ -1037,7 +1037,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
-	auto TCStr<t_CTCStrTraits>::f_ReplaceChar(tf_CData _CharFind, tf_CData2 _CharReplace, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_ReplaceChar(tf_CData _CharFind, tf_CData2 _CharReplace, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrReplaceChar(Temp, _CharFind, _CharReplace, _MaxLen);
@@ -1065,7 +1065,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData2>
-	auto TCStr<t_CTCStrTraits>::f_Insert(aint _StartChar, tf_CData2 const *_pStrInsert, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Insert(aint _StartChar, tf_CData2 const *_pStrInsert, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrInsert(Temp, _StartChar, _pStrInsert, _MaxLen);
@@ -1074,7 +1074,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Insert(aint _StartChar, TCStr<tf_CTCStrTraits> const &_StrInsert, mint _MaxLen) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Insert(aint _StartChar, TCStr<tf_CTCStrTraits> const &_StrInsert, umint _MaxLen) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrInsert(Temp, _StartChar, _StrInsert, _MaxLen);
@@ -1135,7 +1135,7 @@ namespace NMib::NStr
 
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Delete(aint _StartChar, mint _nChars) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Delete(aint _StartChar, umint _nChars) const -> TCStr
 	{
 		TCStr Temp = *this;
 		fg_StrDelete(Temp, _StartChar, _nChars);
@@ -1143,11 +1143,11 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Left(mint _nChars) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Left(umint _nChars) const -> TCStr
 	{
 		TCStr Temp;
-		mint Length = this->f_GetLen();
-		mint nChars = fg_Min(_nChars, Length);
+		umint Length = this->f_GetLen();
+		umint nChars = fg_Min(_nChars, Length);
 		if (nChars == Length)
 			return *this;
 		Temp.f_AddStr(this->f_GetStr(), nChars);
@@ -1155,16 +1155,16 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Extract(aint _StartChar, mint _nChars) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Extract(aint _StartChar, umint _nChars) const -> TCStr
 	{
 		if (_StartChar < 0)
 			return *this;
 		TCStr Temp;
-		mint Length = this->f_GetLen();
+		umint Length = this->f_GetLen();
 		if (_StartChar == 0 && _nChars == Length)
 			return *this;
-		mint Start = fg_Min(mint(_StartChar), Length);
-		mint nChars = fg_Min(Length - Start, _nChars);
+		umint Start = fg_Min(umint(_StartChar), Length);
+		umint nChars = fg_Min(Length - Start, _nChars);
 		Temp.f_AddStr(this->f_GetStr() + Start, nChars);
 		return Temp;
 	}
@@ -1175,8 +1175,8 @@ namespace NMib::NStr
 		if (_StartChar <= 0)
 			return *this;
 		TCStr Temp;
-		mint Length = this->f_GetLen();
-		mint Start = fg_Min(mint(_StartChar), Length);
+		umint Length = this->f_GetLen();
+		umint Start = fg_Min(umint(_StartChar), Length);
 		Temp.f_AddStr(this->f_GetStr() + Start, Length - Start);
 		return Temp;
 	}
@@ -1194,9 +1194,9 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	auto TCStr<t_CTCStrTraits>::f_Slice(aint _iStart, aint _iEnd) const -> TCStr
 	{
-		mint Length = this->f_GetLen();
-		mint Start;
-		mint End;
+		umint Length = this->f_GetLen();
+		umint Start;
+		umint End;
 
 		// Find first & last unit in slice
 		if (_iStart < 0)
@@ -1221,7 +1221,7 @@ namespace NMib::NStr
 			return *this;
 
 		TCStr Temp;
-		mint nChars = End - Start;
+		umint nChars = End - Start;
 		Temp.f_AddStr(this->f_GetStr() + Start, nChars);
 		return Temp;
 	}
@@ -1235,11 +1235,11 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCStr<t_CTCStrTraits>::f_Right(mint _nChars) const -> TCStr
+	auto TCStr<t_CTCStrTraits>::f_Right(umint _nChars) const -> TCStr
 	{
 		TCStr Temp;
-		mint Length = this->f_GetLen();
-		mint nChars = fg_Min(Length, _nChars);
+		umint Length = this->f_GetLen();
+		umint nChars = fg_Min(Length, _nChars);
 		Temp.f_AddStr(this->f_GetStr() + (Length - nChars), nChars);
 		return Temp;
 	}

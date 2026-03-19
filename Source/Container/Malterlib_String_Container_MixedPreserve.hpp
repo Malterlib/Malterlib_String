@@ -47,7 +47,7 @@ namespace NMib::NStream
 							for (auto iUnicode = _Data.f_GetUnicodeIterator(); iUnicode; ++iUnicode)
 								Unicode.f_AddChar(*iUnicode);
 
-							mint UnicodeLen = Unicode.f_GetLen();
+							umint UnicodeLen = Unicode.f_GetLen();
 							if (UnicodeLen != 0)
 								_Stream.f_FeedBytes(Unicode.f_GetStr(), UnicodeLen * sizeof(ch8));
 						}
@@ -74,7 +74,7 @@ namespace NMib::NStream
 							for (auto iUnicode = String.f_GetUnicodeIterator(); iUnicode; ++iUnicode)
 								Unicode.f_AddChar(*iUnicode);
 
-							mint UnicodeLen = Unicode.f_GetLen();
+							umint UnicodeLen = Unicode.f_GetLen();
 							if (UnicodeLen != 0)
 								_Stream.f_FeedBytes(Unicode.f_GetStr(), UnicodeLen * sizeof(ch16));
 						}
@@ -83,7 +83,7 @@ namespace NMib::NStream
 					default:
 						{
 							NStr::CWStr String = _Data;
-							mint StringLen = String.f_GetLen();
+							umint StringLen = String.f_GetLen();
 							if (StringLen != 0)
 								_Stream.f_FeedBytes(String.f_GetStr(), StringLen * sizeof(ch16));
 						}
@@ -99,7 +99,7 @@ namespace NMib::NStream
 					default:
 						{
 							NStr::CUStr String = _Data;
-							mint StringLen = String.f_GetLen();
+							umint StringLen = String.f_GetLen();
 							if (StringLen != 0)
 								_Stream.f_FeedBytes(String.f_GetStr(), StringLen * sizeof(ch32));
 						}

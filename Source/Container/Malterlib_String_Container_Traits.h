@@ -48,9 +48,9 @@ namespace NMib::NStr
 		template<typename tf_CData, typename tf_CReturn>
 		static inline_small tf_CReturn fs_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator);
 		template <typename tf_CData>
-		static inline_small mint fs_StrLen(tf_CData const *_pStr);
+		static inline_small umint fs_StrLen(tf_CData const *_pStr);
 		template <typename tf_CData>
-		static inline_small mint fs_StrLen(tf_CData const *_pStr, mint _MaxLen);
+		static inline_small umint fs_StrLen(tf_CData const *_pStr, umint _MaxLen);
 		template <typename tf_CData1, typename tf_CData2>
 		static inline_small tf_CData1 *fs_StrUpperCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, aint _SourceLen);
 		template <typename tf_CData1, typename tf_CData2>

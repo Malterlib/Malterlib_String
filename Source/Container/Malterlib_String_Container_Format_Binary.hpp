@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CFormatter, typename t_CBinaryType>
-	mint TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::f_Destruct()
+	umint TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_Binary();
@@ -35,9 +35,9 @@ namespace NMib::NStr
 		using CFormatType = typename TCStringFormatter<t_CFormatter, decltype(Temp)>::CFormatType;
 
 		uint8 const *pValue = (uint8 const *)_Value.f_GetArray();
-		mint nBytes = _Value.f_GetSize();
+		umint nBytes = _Value.f_GetSize();
 
-		for (mint i = 0; i < nBytes; ++i)
+		for (umint i = 0; i < nBytes; ++i)
 		{
 			NMemory::fg_MemCopy(&OutValue, pValue + i, 1);
 			CFormatType::fs_AddToStrStatic(_String, _CurrentStrLen, Temp);

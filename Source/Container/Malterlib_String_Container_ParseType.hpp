@@ -122,7 +122,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (mint)_FailValue);
+			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (umint)_FailValue);
 		}
 	}
 

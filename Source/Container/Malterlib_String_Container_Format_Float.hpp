@@ -53,7 +53,7 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	mint TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_Destruct()
+	umint TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_Float();
@@ -549,7 +549,7 @@ namespace NMib::NStr
 		{
 			// Make a temporary buffer that can
 			static constexpr CChar c_NumberCharAdd = '0';
-			static constexpr mint c_NumTempChar =
+			static constexpr umint c_NumTempChar =
 				((fg_MaxConstexpr(sizeof(Exponent), sizeof(FormatNumber)) * 8) / 3) // Approximation of log10(2) * nBits
 				+ 1 // +- Sign
 			;
@@ -587,14 +587,14 @@ namespace NMib::NStr
 			aint NumberSize = aint(c_NumTempChar) - ((pStrPlace - TempStr) + 1) - nRemoved;
 			aint DecimalPlacement = NumberSize - (DecimalDisplacement + DecimalDisplacementConst);
 
-			static constexpr mint c_nNeededCharacters =
+			static constexpr umint c_nNeededCharacters =
 				c_NumTempChar // The number
 				+ (sizeof(Exponent) * 8) / 3
 				+ 32 // Extra space
 			;
 
-			static constexpr mint c_NumTempChar2 = c_nNeededCharacters;
-			static constexpr mint c_NumTempCharReal = c_NumTempChar2 > 1024 ? 1 : c_NumTempChar2;
+			static constexpr umint c_NumTempChar2 = c_nNeededCharacters;
+			static constexpr umint c_NumTempCharReal = c_NumTempChar2 > 1024 ? 1 : c_NumTempChar2;
 
 			if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Shortest || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ShortestLowerCase)
 			{
@@ -602,7 +602,7 @@ namespace NMib::NStr
 					_Options.m_FloatFormat -= 2;
 			}
 
-			mint nRealNeeded = 0;
+			umint nRealNeeded = 0;
 			{
 				if (bOptionsSign)
 					nRealNeeded += 1;
@@ -725,7 +725,7 @@ namespace NMib::NStr
 			CChar *pAlloc = nullptr;
 			CChar TempStr2[c_NumTempCharReal];
 			CChar *pDestStart;
-			mint nDest = c_NumTempCharReal;
+			umint nDest = c_NumTempCharReal;
 			if (nRealNeeded > c_NumTempCharReal)
 			{
 				nDest = nRealNeeded;
@@ -991,7 +991,7 @@ namespace NMib::NStr
 				fOutput('r');
 				fOutput('m');
 			}
-			mint nOutput = pDest - pDestStartConst;
+			umint nOutput = pDest - pDestStartConst;
 			(void)nOutput;
 			DMibFastCheck(nRealNeeded >= nOutput);
 

@@ -43,7 +43,7 @@ namespace NMib::NStr
 		inline_small TCStrFormatType_String(t_CStrDataType const *_pStr, aint _StrLen);
 		inline_small TCStrFormatType_String(t_CStrDataType const *_pStr, aint _StrLen, bool _bCheckSize);
 
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual void f_Move(t_CFormatter &_Formatter) override;
 		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override;
 		virtual aint f_Get_aint() const override;
@@ -63,17 +63,17 @@ namespace NMib::NStr
 
 	private:
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
-		static inline_small auto fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
+		static inline_small auto fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, umint _StrLen)
 			-> TCEnableIf<tf_DestinationType == tf_SourceType, void>
 		;
 
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
-		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen);
+		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, umint _StrLen);
 
 		inline static bool constexpr mcp_TypeID = false;
 
 		t_CStrDataType const *mp_pStr;
-		mint mp_StrLen;
+		umint mp_StrLen;
 	};
 
 }

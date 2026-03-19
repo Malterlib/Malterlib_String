@@ -40,36 +40,36 @@ namespace NMib::NStr
 		return fg_StrFindCharReverseNoCase(_Str.f_GetStr(), _Char);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindChar(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindChar(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		return fg_StrFindChar(_Str.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindChar(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindChar(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindChar(_Str.f_GetStr() + fg_Min(_Start, _Str.f_GetLen()), _Char, _MaxLen));
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindCharNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		return fg_StrFindCharNoCase(_Str.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindCharNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFindCharNoCase(_Str.f_GetStr() + fg_Min(_Start, _Str.f_GetLen()), _Char, _MaxLen));
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindCharReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		return fg_StrFindCharReverse(_Str.f_GetStr(), _Char, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, mint _MaxLen)
+	inline_small aint fg_StrFindCharReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData _Char, umint _MaxLen)
 	{
 		return fg_StrFindCharReverseNoCase(_Str.f_GetStr(), _Char, _MaxLen);
 	}
@@ -96,22 +96,22 @@ namespace NMib::NStr
 		return fg_StrFindCharsReverseNoCase(_Str.f_GetStr(), _pChars);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindChars(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, mint _MaxLen)
+	inline_small aint fg_StrFindChars(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, umint _MaxLen)
 	{
 		return fg_StrFindChars(_Str.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, umint _MaxLen)
 	{
 		return fg_StrFindCharsNoCase(_Str.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, umint _MaxLen)
 	{
 		return fg_StrFindCharsReverse(_Str.f_GetStr(), _pChars, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pChars, umint _MaxLen)
 	{
 		return fg_StrFindCharsReverseNoCase(_Str.f_GetStr(), _pChars, _MaxLen);
 	}
@@ -142,25 +142,25 @@ namespace NMib::NStr
 		return fg_StrFindCharsReverseNoCase(_Str.f_GetStr(), _Chars.f_GetStr());
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindChars(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindChars(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindChars(_Str.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsNoCase(_Str.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindCharsReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverse(_Str.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_Chars, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindCharsReverseNoCase(_Str.f_GetStr(), _Chars.f_GetStr(), _MaxLen);
@@ -188,22 +188,22 @@ namespace NMib::NStr
 		return fg_StrFindCharsReverseNoCase(_pStr1, _Chars.f_GetStr());
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindChars(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindChars(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen)
 	{
 		return fg_StrFindChars(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen)
 	{
 		return fg_StrFindCharsNoCase(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen)
 	{
 		return fg_StrFindCharsReverse(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindCharsReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, mint _MaxLen)
+	inline_small aint fg_StrFindCharsReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_Chars, umint _MaxLen)
 	{
 		return fg_StrFindCharsReverseNoCase(_pStr1, _Chars.f_GetStr(), _MaxLen);
 	}
@@ -313,24 +313,24 @@ namespace NMib::NStr
 
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFind(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFind(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		return fg_StrFind(_Str.f_GetStr(), _pToFind, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFind(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFind(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
 		return fg_StrAdd(_Start, fg_StrFind(_Str.f_GetStr() + fg_Min(_Start, _Str.f_GetLen()), _pToFind, _MaxLen));
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFindNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		return fg_StrFindNoCase(_Str.f_GetStr(), _pToFind, _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -338,24 +338,24 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFind(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFind(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen)
 	{
 		return fg_StrFind(_pStr1, _ToFind.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen)
 	{
 		return fg_StrFindNoCase(_pStr1, _ToFind.f_GetStr(), _MaxLen);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFind(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFind(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFind(_Str.f_GetStr(), _ToFind.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFind(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFind(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -363,13 +363,13 @@ namespace NMib::NStr
 		return fg_StrFind(_Start, _Str, _ToFind.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindNoCase(_Str.f_GetStr(), _ToFind.f_GetStr(), _MaxLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindNoCase(aint _Start, TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		if (_Start < 0)
 			return -1;
@@ -379,70 +379,70 @@ namespace NMib::NStr
 
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		return fg_StrFindReverse<false, true, false>(_Str.f_GetStr(), _pToFind, fg_Min(_Str.f_GetLen(), _MaxLen), 0);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen)
 	{
 		return fg_StrFindReverse<true, true, false>(_Str.f_GetStr(), _pToFind, fg_Min(_Str.f_GetLen(), _MaxLen), 0);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen, umint _FindLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_Str.f_GetStr(), _pToFind, fg_Min(_Str.f_GetLen(), _MaxLen), _FindLen);
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, tf_CData const *_pToFind, umint _MaxLen, umint _FindLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_Str.f_GetStr(), _pToFind, fg_Min(_Str.f_GetLen(), _MaxLen), _FindLen);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_pStr1, _ToFind.f_GetStr(), _MaxLen, _ToFind.f_GetLen());
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_pStr1, _ToFind.f_GetStr(), _MaxLen, _ToFind.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverse(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen, umint _FindLen)
 	{
 		return fg_StrFindReverse<false, true, true>(_pStr1, _ToFind.f_GetStr(), _MaxLen, fg_Min(_ToFind.f_GetLen(), _FindLen));
 	}
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small aint fg_StrFindReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverseNoCase(tf_CData const *_pStr1, TCStr<tf_CTCStrTraits> const &_ToFind, umint _MaxLen, umint _FindLen)
 	{
 		return fg_StrFindReverse<true, true, true>(_pStr1, _ToFind.f_GetStr(), _MaxLen, fg_Min(_ToFind.f_GetLen(), _FindLen));
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverse(_Str.f_GetStr(), _ToFind.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen), _ToFind.f_GetLen());
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen)
+	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverseNoCase(_Str.f_GetStr(), _ToFind.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen), _ToFind.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverse(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen, umint _FindLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverse(_Str.f_GetStr(), _ToFind.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen), fg_Min(_ToFind.f_GetLen(), _FindLen));
 	}
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, mint _MaxLen, mint _FindLen)
+	inline_small aint fg_StrFindReverseNoCase(TCStr<tf_CTCStrTraits> const &_Str, TCStr<tf_CTCStrTraits2> const &_ToFind, umint _MaxLen, umint _FindLen)
 	{
 		static_assert(TCIsStrCompatible<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrFindReverseNoCase(_Str.f_GetStr(), _ToFind.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen), fg_Min(_ToFind.f_GetLen(), _FindLen));

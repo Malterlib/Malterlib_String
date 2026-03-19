@@ -12,7 +12,7 @@ namespace NMib::NStr
 	{
 		using CUnsignedChar = NTraits::TCUnsigned<t_CChar>;
 
-		TCStrIteratorUnicode(t_CChar const *_pStr, mint _StrLen);
+		TCStrIteratorUnicode(t_CChar const *_pStr, umint _StrLen);
 
 		template <typename tf_CStrTraits>
 		TCStrIteratorUnicode(TCStr<tf_CStrTraits> const &_String);
@@ -34,11 +34,11 @@ namespace NMib::NStr
 
 	struct CStrIteratorUTF8
 	{
-		CStrIteratorUTF8(ch8 const *_pStr, mint _StrLen);
+		CStrIteratorUTF8(ch8 const *_pStr, umint _StrLen);
 		template <typename tf_CStrTraits>
 		CStrIteratorUTF8(TCStr<tf_CStrTraits> const &_String);
 
-		mint f_GetLastWholeCodePointPos() const;
+		umint f_GetLastWholeCodePointPos() const;
 		bool f_IsWholeCodePoint() const;
 		bool f_IsBroken() const;
 
@@ -64,7 +64,7 @@ namespace NMib::NStr
 
 	struct CStrIteratorUTF16
 	{
-		CStrIteratorUTF16(ch16 const *_pStr, mint _StrLen);
+		CStrIteratorUTF16(ch16 const *_pStr, umint _StrLen);
 		template <typename tf_CStrTraits>
 		CStrIteratorUTF16(TCStr<tf_CStrTraits> const &_String);
 
@@ -84,14 +84,14 @@ namespace NMib::NStr
 		ch32 mp_Current;
 	};
 
-	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	TCEnableIf<sizeof(tf_CChar) == 1, CStrIteratorUTF8> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len);
+	template <typename tf_CChar, umint tf_Size = sizeof(tf_CChar)>
+	TCEnableIf<sizeof(tf_CChar) == 1, CStrIteratorUTF8> fg_GetUnicodeIterator(tf_CChar const *_pStr, umint _Len);
 
-	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	TCEnableIf<sizeof(tf_CChar) == 2, CStrIteratorUTF16> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len);
+	template <typename tf_CChar, umint tf_Size = sizeof(tf_CChar)>
+	TCEnableIf<sizeof(tf_CChar) == 2, CStrIteratorUTF16> fg_GetUnicodeIterator(tf_CChar const *_pStr, umint _Len);
 
-	template <typename tf_CChar, mint tf_Size = sizeof(tf_CChar)>
-	TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>> fg_GetUnicodeIterator(tf_CChar const *_pStr, mint _Len);
+	template <typename tf_CChar, umint tf_Size = sizeof(tf_CChar)>
+	TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>> fg_GetUnicodeIterator(tf_CChar const *_pStr, umint _Len);
 
 	template <typename t_FOutFunctor>
 	bool fg_EncodeUTF8BOM(t_FOutFunctor &&_OutFunctor);

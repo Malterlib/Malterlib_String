@@ -23,7 +23,7 @@ namespace NMib::NStr
 
 		inline_small TCStrFormatType_Binary(t_CBinaryType const &_Value);
 
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual void f_Move(t_CFormatter &_Formatter) override;
 		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override;
 		virtual aint f_Get_aint() const override;

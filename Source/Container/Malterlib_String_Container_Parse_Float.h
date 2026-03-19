@@ -26,7 +26,7 @@ namespace NMib::NStr
 		TCStrParseType_Float(TCStrParseType_Float const &_Value) = delete;
 		TCStrParseType_Float &operator = (TCStrParseType_Float const &_Value) = delete;
 
-		virtual mint f_Destruct() override;
+		virtual umint f_Destruct() override;
 		virtual bool f_ParseData(CChar const * &_pString, CChar const *_pFormat, t_CParser const &_ArgData) const override;
 		virtual aint f_Get_aint() const override;
 		virtual fp32 f_Get_fp32() const override;

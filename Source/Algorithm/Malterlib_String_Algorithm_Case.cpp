@@ -12,7 +12,7 @@ namespace NMib::NStr
 		return fg_StrUpperCase(_pStr, fg_StrLen(_pStr));
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pStr, mint _MaxLen)
+	ch8 *fg_StrUpperCase(ch8 *_pStr, umint _MaxLen)
 	{
 		ch32 UpperComapre = 0xffu;
 		CStrIteratorUTF8 iStr{_pStr, _MaxLen};
@@ -28,7 +28,7 @@ namespace NMib::NStr
 				fg_EncodeUTF8Char<false>
 					(
 						_Char
-						, [&](mint _nChars)
+						, [&](umint _nChars)
 						{
 							DMibFastCheck(_nChars == (pNext - pLast));
 							return pLast;
@@ -59,12 +59,12 @@ namespace NMib::NStr
 		return _pStr;
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource)
 	{
 		return fg_StrUpperCase(_pDest, _MaxDestLen, _pSource, fg_StrLen(_pSource));
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource, mint _SourceLen)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource, umint _SourceLen)
 	{
 		ch32 UpperComapre = 0xffu;
 
@@ -78,9 +78,9 @@ namespace NMib::NStr
 				return fg_EncodeUTF8Char<true>
 					(
 						_Char
-						, [&](mint _nChars) -> ch8 *
+						, [&](umint _nChars) -> ch8 *
 						{
-							if (_nChars > mint(pOutputEnd - pOutput))
+							if (_nChars > umint(pOutputEnd - pOutput))
 								return nullptr;
 							auto pRet = pOutput;
 							pOutput += _nChars;
@@ -109,7 +109,7 @@ namespace NMib::NStr
 		return _pDest;
 	}
 
-	ch8 *fg_StrUpperCase(ch8 *_pDest, ch8 const *_pSource, mint _SourceLen)
+	ch8 *fg_StrUpperCase(ch8 *_pDest, ch8 const *_pSource, umint _SourceLen)
 	{
 		return fg_StrUpperCase(_pDest, _SourceLen + 1, _pSource, _SourceLen);
 	}
@@ -119,7 +119,7 @@ namespace NMib::NStr
 		return fg_StrLowerCase(_pStr, fg_StrLen(_pStr));
 	}
 
-	ch8 *fg_StrLowerCase(ch8 *_pStr, mint _MaxLen)
+	ch8 *fg_StrLowerCase(ch8 *_pStr, umint _MaxLen)
 	{
 		CStrIteratorUTF8 iStr{_pStr, _MaxLen};
 
@@ -134,7 +134,7 @@ namespace NMib::NStr
 				fg_EncodeUTF8Char<false>
 					(
 						_Char
-						, [&](mint _nChars)
+						, [&](umint _nChars)
 						{
 							DMibFastCheck(_nChars == (pNext - pLast));
 							return pLast;
@@ -165,7 +165,7 @@ namespace NMib::NStr
 		return _pStr;
 	}
 
-	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource, mint _SourceLen)
+	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource, umint _SourceLen)
 	{
 		CStrIteratorUTF8 iStr{_pSource, _SourceLen};
 
@@ -177,9 +177,9 @@ namespace NMib::NStr
 				return fg_EncodeUTF8Char<true>
 					(
 						_Char
-						, [&](mint _nChars) -> ch8 *
+						, [&](umint _nChars) -> ch8 *
 						{
-							if (_nChars > mint(pOutputEnd - pOutput))
+							if (_nChars > umint(pOutputEnd - pOutput))
 								return nullptr;
 							auto pRet = pOutput;
 							pOutput += _nChars;
@@ -208,12 +208,12 @@ namespace NMib::NStr
 		return _pDest;
 	}
 
-	ch8 *fg_StrLowerCase(ch8 *_pDest, mint _MaxDestLen, ch8 const *_pSource)
+	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource)
 	{
 		return fg_StrLowerCase(_pDest, _MaxDestLen, _pSource, fg_StrLen(_pSource));
 	}
 
-	ch8 *fg_StrLowerCase(ch8 *_pDest, ch8 const *_pSource, mint _SourceLen)
+	ch8 *fg_StrLowerCase(ch8 *_pDest, ch8 const *_pSource, umint _SourceLen)
 	{
 		return fg_StrLowerCase(_pDest, _SourceLen + 1, _pSource, _SourceLen);
 	}
@@ -235,7 +235,7 @@ namespace NMib::NStr
 				fg_EncodeUTF8Char<false>
 					(
 						_Char
-						, [&](mint _nChars)
+						, [&](umint _nChars)
 						{
 							DMibFastCheck(_nChars == (pNext - pLast));
 							return pLast;

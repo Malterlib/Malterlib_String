@@ -56,7 +56,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small tf_CData *fg_StrUpperCase(tf_CData *_pTo, TCStr<tf_CTCStrTraits> const &_Source, mint _MaxLen)
+	inline_small tf_CData *fg_StrUpperCase(tf_CData *_pTo, TCStr<tf_CTCStrTraits> const &_Source, umint _MaxLen)
 	{
 		static_assert
 			(
@@ -71,7 +71,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, umint _MaxLen)
 	{
 		static_assert
 			(
@@ -89,7 +89,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, tf_CData const *_pSource, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, tf_CData const *_pSource, umint _MaxLen)
 	{
 		_To = _pSource;
 		fg_StrUpperCase(_To, _MaxLen);
@@ -97,7 +97,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, TCStr<tf_CTCStrTraits2> const &_Source, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrUpperCase(TCStr<tf_CTCStrTraits> &_To, TCStr<tf_CTCStrTraits2> const &_Source, umint _MaxLen)
 	{
 		_To = _Source;
 		fg_StrUpperCase(_To, _MaxLen);
@@ -153,7 +153,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small tf_CData *fg_StrLowerCase(tf_CData *_pTo, TCStr<tf_CTCStrTraits> const &_Source, mint _MaxLen)
+	inline_small tf_CData *fg_StrLowerCase(tf_CData *_pTo, TCStr<tf_CTCStrTraits> const &_Source, umint _MaxLen)
 	{
 		static_assert
 			(
@@ -168,7 +168,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, umint _MaxLen)
 	{
 		static_assert
 			(
@@ -186,7 +186,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, tf_CData const *_pSource, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, tf_CData const *_pSource, umint _MaxLen)
 	{
 		_To = _pSource;
 		fg_StrLowerCase(_To, _MaxLen);
@@ -194,7 +194,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, TCStr<tf_CTCStrTraits2> const &_Source, mint _MaxLen)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrLowerCase(TCStr<tf_CTCStrTraits> &_To, TCStr<tf_CTCStrTraits2> const &_Source, umint _MaxLen)
 	{
 		_To = _Source;
 		fg_StrLowerCase(_To, _MaxLen);

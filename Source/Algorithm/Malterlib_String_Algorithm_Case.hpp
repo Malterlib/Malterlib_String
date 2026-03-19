@@ -27,7 +27,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pStr, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pStr, umint _MaxLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		CData1 *pStr = (CData1 *)_pStr;
@@ -48,7 +48,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, mint _MaxDestLen, tf_CData2 const *_pSource)
+	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, umint _MaxDestLen, tf_CData2 const *_pSource)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -74,7 +74,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, mint _MaxDestLen, tf_CData2 const *_pSource, mint _SourceLen)
+	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, umint _MaxDestLen, tf_CData2 const *_pSource, umint _SourceLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -101,7 +101,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, mint _SourceLen)
+	inline_large tf_CData1 *fg_StrUpperCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, umint _SourceLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -146,7 +146,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pStr, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pStr, umint _MaxLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 
@@ -166,7 +166,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, mint _MaxDestLen, tf_CData2 const *_pSource)
+	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, umint _MaxDestLen, tf_CData2 const *_pSource)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -191,7 +191,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, mint _MaxDestLen, tf_CData2 const *_pSource, mint _SourceLen)
+	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, umint _MaxDestLen, tf_CData2 const *_pSource, umint _SourceLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -217,7 +217,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, mint _SourceLen)
+	inline_large tf_CData1 *fg_StrLowerCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, umint _SourceLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -264,7 +264,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1>
-	inline_large tf_CData1 *fg_StrCapitalize(tf_CData1 *_pStr, mint _MaxLen)
+	inline_large tf_CData1 *fg_StrCapitalize(tf_CData1 *_pStr, umint _MaxLen)
 	{
 		return fg_StrCapitalize(_pStr);
 	}

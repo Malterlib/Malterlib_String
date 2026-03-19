@@ -14,7 +14,7 @@ namespace NMib::NStr
 
 		inline_small constexpr TCStrImp_Fixed();
 		inline_small TCStrImp_Fixed(TCStrImp_Fixed const &_Str);
-		inline_small constexpr TCStrImp_Fixed(CChar const *_pString, mint _Len);
+		inline_small constexpr TCStrImp_Fixed(CChar const *_pString, umint _Len);
 
 		inline_medium void f_Assign(TCStrImp_Fixed const &_Str);
 		inline_small constexpr void f_Destroy();
@@ -34,10 +34,10 @@ namespace NMib::NStr
 
 		constexpr static bool mc_bInitConstStr = false;
 		constexpr static bool mc_bNothrowAssign = true;
-		constexpr static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
+		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
 		constexpr static bool mc_AllocatesMemory = false;
 
-		mint m_Len;
+		umint m_Len;
 		CChar m_lData[t_DataLen];
 	};
 }

@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
-	mint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Destruct()
+	umint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_Inline();
@@ -171,7 +171,7 @@ namespace NMib::NStr
 			else
 				_Value.f_Format(Temp);
 
-			mint TempLen = Temp.f_GetLen();
+			umint TempLen = Temp.f_GetLen();
 
 			if (_Options.m_bSimpleAlign)
 				CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, Temp.f_GetStr(), TempLen);

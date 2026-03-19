@@ -11,22 +11,22 @@ namespace NMib::NStr
 	struct TCStrImp_Dynamic_StringData
 	{
 		inline_small t_CChar *f_GetData() const;
-		inline_small mint f_GetMemorySize() const;
-		inline_small void f_SetLength(mint _MemoryLen);
+		inline_small umint f_GetMemorySize() const;
+		inline_small void f_SetLength(umint _MemoryLen);
 		inline_small void f_RefCountIncrease();
 		inline_small bool f_RefCountDecrease();
 
-		NAtomic::TCAtomicIndeterminate<mint> m_RefCount{1};
-		mint m_Len:sizeof(mint)*8-2 = 0;
-		mint m_bReserved:1 = 0;
-		mint m_bConstant:1 = 0;
-		mint m_StrLen:sizeof(mint)*8-2 = mc_InvalidStrLen;
-		mint m_UserData:2 = 0;
+		NAtomic::TCAtomicIndeterminate<umint> m_RefCount{1};
+		umint m_Len:sizeof(umint)*8-2 = 0;
+		umint m_bReserved:1 = 0;
+		umint m_bConstant:1 = 0;
+		umint m_StrLen:sizeof(umint)*8-2 = mc_InvalidStrLen;
+		umint m_UserData:2 = 0;
 
-		constexpr static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
+		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
 	};
 
-	template <mint t_nChars, typename t_CChar>
+	template <umint t_nChars, typename t_CChar>
 	struct TCStrConstData : public TCStrImp_Dynamic_StringData<t_CChar>
 	{
 		using CChar = t_CChar;
@@ -35,7 +35,7 @@ namespace NMib::NStr
 
 		inline_always constexpr TCStrConstData &f_SetUserData(uint8 _UserData);
 
-		constexpr static mint mc_nChars = t_nChars;
+		constexpr static umint mc_nChars = t_nChars;
 
 		t_CChar m_Data[t_nChars];
 	};
@@ -102,7 +102,7 @@ namespace NMib::NStr
 		constexpr inline_small CChar const *f_GetStr() const;
 		inline_small CChar *f_GetStrWritable() const;
 
-		inline_small mint f_GetRefCount() const;
+		inline_small umint f_GetRefCount() const;
 
 		constexpr inline_medium aint f_GetStrLen() const;
 		inline_medium void f_SetStrLen(aint _Len);
@@ -110,27 +110,27 @@ namespace NMib::NStr
 		constexpr inline_small aint f_GetAllocLength() const;
 		constexpr static inline_small bool f_FastLen();
 
-		void f_Reserve(mint _Len);
+		void f_Reserve(umint _Len);
 		inline_small void f_MakeUnique();
 		aint fp_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		inline aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
-		inline_small void f_TrimSize(mint _Length, mint _MaxExtraChars = mc_MaxExtraChars);
+		inline_small void f_TrimSize(umint _Length, umint _MaxExtraChars = mc_MaxExtraChars);
 
 		inline_never static void fs_ThrowLengthException();
 
-		constexpr static mint mc_MaxAllocChars = (TCLimitsInt<mint>::mc_Max - sizeof(CData)) / sizeof(CChar);
-		constexpr static mint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
+		constexpr static umint mc_MaxAllocChars = (TCLimitsInt<umint>::mc_Max - sizeof(CData)) / sizeof(CChar);
+		constexpr static umint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
 		constexpr static bool mc_bNothrowAssign = true;
 		constexpr static bool mc_AllocatesMemory = true;
 		constexpr static bool mc_bInitConstStr = false;
-		constexpr static mint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;
+		constexpr static umint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;
 
 		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));
 
 	private:
-		mint fp_CalcNewSize(mint _Length);
-		mint fp_GetOldAllocSize();
-		void fp_TrimSize(mint _Length, mint _NeededSize);
+		umint fp_CalcNewSize(umint _Length);
+		umint fp_GetOldAllocSize();
+		void fp_TrimSize(umint _Length, umint _NeededSize);
 	};
 
 	template <typename t_CStr>
@@ -140,10 +140,10 @@ namespace NMib::NStr
 		t_CStr::CChar const *m_pStr;
 	};
 
-	template <mint t_nChars, typename t_CChar>
+	template <umint t_nChars, typename t_CChar>
 	struct TCStrConstDataAndStr;
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch8>
 	{
 		constexpr operator NStr::CStr const &() const;
@@ -153,7 +153,7 @@ namespace NMib::NStr
 		CStr const m_Str{CStrInitGeneral(), m_StrData};
 	};
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch16>
 	{
 		constexpr operator NStr::CWStr const &() const;
@@ -163,7 +163,7 @@ namespace NMib::NStr
 		CWStr const m_Str{CStrInitGeneral(), m_StrData};
 	};
 
-	template <mint t_nChars>
+	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch32>
 	{
 		constexpr operator NStr::CUStr const &() const;

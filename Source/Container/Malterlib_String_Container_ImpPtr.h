@@ -13,14 +13,14 @@ namespace NMib::NStr
 		inline_small TCStrImp_Ptr();
 		inline_small TCStrImp_Ptr(TCStrImp_Ptr &&_Str);
 		inline_small TCStrImp_Ptr(TCStrImp_Ptr const &_Str);
-		inline_small TCStrImp_Ptr(CChar *_pString, mint _Len);
-		inline_small TCStrImp_Ptr(CChar const *_pString, mint _Len);
+		inline_small TCStrImp_Ptr(CChar *_pString, umint _Len);
+		inline_small TCStrImp_Ptr(CChar const *_pString, umint _Len);
 
 		inline_small void f_Assign(TCStrImp_Ptr &&_Str);
 		inline_small void f_Assign(TCStrImp_Ptr const &_Str);
 
-		inline_small void f_SetPtr(CChar *_pString, mint _Len);
-		inline_small void f_SetConstPtr(CChar const *_pString, mint _Len);
+		inline_small void f_SetPtr(CChar *_pString, umint _Len);
+		inline_small void f_SetConstPtr(CChar const *_pString, umint _Len);
 
 		inline_small CChar const *f_GetStr() const;
 		inline_small CChar *f_GetStrWritable();
@@ -39,11 +39,11 @@ namespace NMib::NStr
 
 		constexpr static bool mc_bInitConstStr = true;
 		constexpr static bool mc_bNothrowAssign = true;
-		constexpr static mint mc_InvalidStrLen = ((mint(1) << (sizeof(mint)*8-2))) - 1;
+		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
 
 		CChar *m_pData;
-		mint m_MaxLen;
-		mint m_Len;
+		umint m_MaxLen;
+		umint m_Len;
 	};
 }
 

@@ -8,7 +8,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CParser, typename t_CFloatType>
-	mint TCStrParseType_Float<t_CParser, t_CFloatType>::f_Destruct()
+	umint TCStrParseType_Float<t_CParser, t_CFloatType>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrParseType_Float();

@@ -15,19 +15,19 @@ namespace NMib::NStr
 		TCStrSpan() = default;
 		TCStrSpan(TCStrSpan const &) = default;
 		TCStrSpan(TCStrSpan &&) = default;
-		TCStrSpan(CChar const *_pStr, mint _Length);
+		TCStrSpan(CChar const *_pStr, umint _Length);
 
 		TCStrSpan &operator = (TCStrSpan const &) = default;
 		TCStrSpan &operator = (TCStrSpan &&) = default;
 
 		CChar const *f_GetStr() const;
-		mint f_GetLen() const;
+		umint f_GetLen() const;
 
 	private:
 		static constexpr CChar const mc_EmptyStr[1] = {0};
 
 		CChar const *m_pStr = mc_EmptyStr;
-		mint m_Length = 0;
+		umint m_Length = 0;
 	};
 }
 

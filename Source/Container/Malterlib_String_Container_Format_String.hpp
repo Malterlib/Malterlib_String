@@ -35,7 +35,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	mint TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Destruct()
+	umint TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Destruct()
 	{
 		if constexpr (mc_bNeedDestruct)
 			this->~TCStrFormatType_String();
@@ -168,7 +168,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
 	inline_small auto TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, mint _StrLen)
+		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, umint _StrLen)
 		-> TCEnableIf<tf_DestinationType == tf_SourceType, void>
 	{
 		if (_Options.m_Case)
@@ -209,7 +209,7 @@ namespace NMib::NStr
 			}
 			else
 			{
-				mint AllocLen = sizeof(CChar) * (_StrLen + 1);
+				umint AllocLen = sizeof(CChar) * (_StrLen + 1);
 				CChar *pTempStr = (CChar *)CTStrTraits::CStrTraits::CAllocator::f_Alloc(AllocLen);
 				if (!pTempStr)
 					return;
@@ -229,7 +229,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
 	inline_small void TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, mint _StrLen)
+		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, umint _StrLen)
 	{
 		TCStr<CTStrTraits> Converted;
 

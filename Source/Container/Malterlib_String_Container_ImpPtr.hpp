@@ -30,13 +30,13 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small TCStrImp_Ptr<t_CStrTraits>::TCStrImp_Ptr(CChar *_pString, mint _Len)
+	inline_small TCStrImp_Ptr<t_CStrTraits>::TCStrImp_Ptr(CChar *_pString, umint _Len)
 	{
 		f_SetPtr(_pString, _Len);
 	}
 
 	template <typename t_CStrTraits>
-	inline_small TCStrImp_Ptr<t_CStrTraits>::TCStrImp_Ptr(CChar const *_pString, mint _Len)
+	inline_small TCStrImp_Ptr<t_CStrTraits>::TCStrImp_Ptr(CChar const *_pString, umint _Len)
 	{
 		f_SetConstPtr(_pString, _Len);
 	}
@@ -59,7 +59,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Ptr<t_CStrTraits>::f_SetPtr(CChar *_pString, mint _Len)
+	inline_small void TCStrImp_Ptr<t_CStrTraits>::f_SetPtr(CChar *_pString, umint _Len)
 	{
 		m_pData = _pString;
 		m_MaxLen = _Len;
@@ -68,7 +68,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small void TCStrImp_Ptr<t_CStrTraits>::f_SetConstPtr(CChar const *_pString, mint _Len)
+	inline_small void TCStrImp_Ptr<t_CStrTraits>::f_SetConstPtr(CChar const *_pString, umint _Len)
 	{
 		m_pData = (CChar *)_pString;
 		m_MaxLen = 0;
