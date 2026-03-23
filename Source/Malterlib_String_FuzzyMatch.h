@@ -5,5 +5,19 @@
 
 namespace NMib::NStr
 {
-	fp64 fg_FuzzyMatchString(CStr _Str0, CStr _Str1);
+	struct CFuzzyMatchRange
+	{
+		aint m_iStart = 0;
+		aint m_iEnd = 0;
+	};
+
+	struct CFuzzyMatchResult
+	{
+		fp64 m_Score = -1.0;
+		NContainer::TCVector<CFuzzyMatchRange> m_Matches;
+
+		explicit operator bool() const { return m_Score >= 0.0; }
+	};
+
+	CFuzzyMatchResult fg_FuzzyMatchString(CStr const &_Str0, CStr const &_Str1);
 }
