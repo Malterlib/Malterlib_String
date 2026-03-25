@@ -11,11 +11,17 @@ namespace NMib::NStr
 		using CData = NTraits::TCUnsigned<tf_CData>;
 
 		CData Char = (CData) _Character;
-		CData UpperComapre = 0xffu;
+
 		if (Char >= 'a' && Char <= 'z')
-			Char -= 'a' - 'A';
-		if (Char >= 0xe0 && Char <= UpperComapre)
-			Char -= 0xe0 - 0xc0;
+			Char -= 0x20;
+
+		// Latin-1 Supplement: only safe for ch16/ch32 where codepoints map 1:1.
+		// For ch8 (UTF-8) these byte values are lead bytes, not codepoints.
+		if constexpr (sizeof(tf_CData) > 1)
+		{
+			if (Char >= 0xe0 && Char <= 0xfe && Char != 0xf7)
+				Char -= 0x20;
+		}
 
 		return (tf_CData)Char;
 	}
@@ -28,10 +34,16 @@ namespace NMib::NStr
 		CData Char = (CData) _Character;
 
 		if (Char >= 'A' && Char <= 'Z')
-			Char += 'a' - 'A';
+			Char += 0x20;
 
-		if (Char >= 0xc0 && Char <= 0xdf)
-			Char += 0xe0 - 0xc0;
+		// Latin-1 Supplement: only safe for ch16/ch32 where codepoints map 1:1.
+		// For ch8 (UTF-8) these byte values are lead bytes, not codepoints.
+		if constexpr (sizeof(tf_CData) > 1)
+		{
+			if (Char >= 0xc0 && Char <= 0xde && Char != 0xd7)
+				Char += 0x20;
+		}
+
 		return (tf_CData)Char;
 	}
 
@@ -83,7 +95,7 @@ namespace NMib::NStr
 		if (Char >= 'a' && Char <= 'z')
 			return true;
 
-		if (Char >= 0x7fu)
+		if (Char >= 0x80u)
 			return true;
 
 		return false;

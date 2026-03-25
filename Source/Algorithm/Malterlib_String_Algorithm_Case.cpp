@@ -14,7 +14,6 @@ namespace NMib::NStr
 
 	ch8 *fg_StrUpperCase(ch8 *_pStr, umint _MaxLen)
 	{
-		ch32 UpperComapre = 0xffu;
 		CStrIteratorUTF8 iStr{_pStr, _MaxLen};
 
 		ch8 *pLast = _pStr;
@@ -43,12 +42,12 @@ namespace NMib::NStr
 			ch32 Char = *iStr;
 			if (Char >= 'a' && Char <= 'z')
 			{
-				Char -= 'a' - 'A';
+				Char -= 0x20;
 				fSetChar(Char);
 			}
-			else if (Char >= 0xe0u && Char <= UpperComapre)
+			else if (Char >= 0xe0u && Char <= 0xfeu && Char != 0xf7u)
 			{
-				Char -= 0xe0u - 0xc0u;
+				Char -= 0x20;
 				fSetChar(Char);
 			}
 			ch8 *pNext = _pStr + iStr.f_GetLastWholeCodePointPos();
@@ -66,8 +65,6 @@ namespace NMib::NStr
 
 	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource, umint _SourceLen)
 	{
-		ch32 UpperComapre = 0xffu;
-
 		CStrIteratorUTF8 iStr{_pSource, _SourceLen};
 
 		ch8 *pOutput = _pDest;
@@ -95,9 +92,9 @@ namespace NMib::NStr
 		{
 			ch32 Char = *iStr;
 			if (Char >= 'a' && Char <= 'z')
-				Char -= 'a' - 'A';
-			if (Char >= 0xe0u && Char <= UpperComapre)
-				Char -= 0xe0u - 0xc0u;
+				Char -= 0x20;
+			if (Char >= 0xe0u && Char <= 0xfeu && Char != 0xf7u)
+				Char -= 0x20;
 
 			if (!fAddChar(Char))
 				break;
@@ -152,7 +149,7 @@ namespace NMib::NStr
 				Char += 'a' - 'A';
 				fSetChar(Char);
 			}
-			else if (Char >= 0xc0u && Char <= 0xdfu)
+			else if (Char >= 0xc0u && Char <= 0xdeu && Char != 0xd7u)
 			{
 				Char += 0xe0u - 0xc0u;
 				fSetChar(Char);
@@ -195,7 +192,7 @@ namespace NMib::NStr
 			ch32 Char = *iStr;
 			if (Char >= 'A' && Char <= 'Z')
 				Char += 'a' - 'A';
-			if (Char >= 0xc0u && Char <= 0xdfu)
+			if (Char >= 0xc0u && Char <= 0xdeu && Char != 0xd7u)
 				Char += 0xe0u - 0xc0u;
 
 			if (!fAddChar(Char))
@@ -220,8 +217,6 @@ namespace NMib::NStr
 
 	ch8 *fg_StrCapitalize(ch8 *_pStr)
 	{
-		ch32 UpperComapre = 0xffu;
-
 		CStrIteratorUTF8 iStr{_pStr, fg_StrLen(_pStr)};
 
 		ch8 *pLast = _pStr;
@@ -250,12 +245,12 @@ namespace NMib::NStr
 			ch32 Char = *iStr;
 			if (Char >= 'a' && Char <= 'z')
 			{
-				Char -= 'a' - 'A';
+				Char -= 0x20;
 				fSetChar(Char);
 			}
-			else if (Char >= 0xe0u && Char <= UpperComapre)
+			else if (Char >= 0xe0u && Char <= 0xfeu && Char != 0xf7u)
 			{
-				Char -= 0xe0u - 0xc0u;
+				Char -= 0x20;
 				fSetChar(Char);
 			}
 		}

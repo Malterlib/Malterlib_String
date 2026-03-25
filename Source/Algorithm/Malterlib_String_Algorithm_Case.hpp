@@ -10,15 +10,14 @@ namespace NMib::NStr
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		CData1 *pStr = (CData1 *)_pStr;
-		CData1 UpperComapre = 0xffu;
 
 		while (*pStr)
 		{
 			if (*pStr >= 'a' && *pStr <= 'z')
-				*pStr -= 'a' - 'A';
+				*pStr -= 0x20;
 
-			if (*pStr >= 0xe0u && *pStr <= UpperComapre)
-				*pStr -= 0xe0u - 0xc0u;
+			if (*pStr >= 0xe0u && *pStr <= 0xfeu && *pStr != 0xf7u)
+				*pStr -= 0x20;
 
 			++pStr;
 		}
@@ -32,15 +31,14 @@ namespace NMib::NStr
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		CData1 *pStr = (CData1 *)_pStr;
 		CData1 const *pStrEnd = pStr + _MaxLen;
-		CData1 UpperComapre = 0xffu;
 
 		while (*pStr && pStr < pStrEnd)
 		{
 			if (*pStr >= 'a' && *pStr <= 'z')
-				*pStr -= 'a' - 'A';
+				*pStr -= 0x20;
 
-			if (*pStr >= 0xe0u && *pStr <= UpperComapre)
-				*pStr -= 0xe0u - 0xc0u;
+			if (*pStr >= 0xe0u && *pStr <= 0xfeu && *pStr != 0xf7u)
+				*pStr -= 0x20;
 
 			++pStr;
 		}
@@ -56,14 +54,13 @@ namespace NMib::NStr
 		CData1 *pDest = (CData1 *)_pDest;
 		CData1 const *pDestEnd = pDest + (_MaxDestLen - 1);
 		CData2 const *pSource = (CData2 const *)_pSource;
-		CData2 UpperComapre = 0xffu;
 
 		while (*pSource && pDest < pDestEnd)
 		{
 			if (*pSource >= 'a' && *pSource <= 'z')
-				*(pDest++) = (tf_CData1)(*(pSource++) - ('a' - 'A'));
-			else if (*pSource >= 0xe0u && *pSource <= UpperComapre)
-				*(pDest++) = (tf_CData1)(*(pSource++) - (0xe0u - 0xc0u));
+				*(pDest++) = (tf_CData1)(*(pSource++) - 0x20);
+			else if (*pSource >= 0xe0u && *pSource <= 0xfeu && *pSource != 0xf7u)
+				*(pDest++) = (tf_CData1)(*(pSource++) - 0x20);
 			else
 				*(pDest++) = (tf_CData1)(*(pSource++));
 		}
@@ -83,14 +80,13 @@ namespace NMib::NStr
 		CData1 const *pDestEnd = pDest + (_MaxDestLen - 1);
 		CData2 const *pSource = (CData2 const *)_pSource;
 		CData2 const *pSourceEnd = pSource + _SourceLen;
-		CData2 UpperComapre = 0xffu;
 
 		while (*pSource && pSource < pSourceEnd && pDest < pDestEnd)
 		{
 			if (*pSource >= 'a' && *pSource <= 'z')
-				*(pDest++) = (tf_CData1)(*(pSource++) - ('a' - 'A'));
-			else if (*pSource >= 0xe0u && *pSource <= UpperComapre)
-				*(pDest++) = (tf_CData1)(*(pSource++) - (0xe0u - 0xc0u));
+				*(pDest++) = (tf_CData1)(*(pSource++) - 0x20);
+			else if (*pSource >= 0xe0u && *pSource <= 0xfeu && *pSource != 0xf7u)
+				*(pDest++) = (tf_CData1)(*(pSource++) - 0x20);
 			else
 				*(pDest++) = (tf_CData1)(*(pSource++));
 		}
@@ -109,14 +105,13 @@ namespace NMib::NStr
 		CData1 *pDest = (CData1 *)_pDest;
 		CData2 const *pSource = (CData2 const *)_pSource;
 		CData2 const *pSourceEnd = pSource + _SourceLen;
-		CData2 UpperComapre = 0xffu;
 
 		while (*pSource && pSource < pSourceEnd)
 		{
 			if (*pSource >= 'a' && *pSource <= 'z')
-				*(pDest++) = (CData1)(*(pSource++) - ('a' - 'A'));
-			else if (*pSource >= 0xe0u && *pSource <= UpperComapre)
-				*(pDest++) = (CData1)(*(pSource++) - (0xe0u - 0xc0u));
+				*(pDest++) = (CData1)(*(pSource++) - 0x20);
+			else if (*pSource >= 0xe0u && *pSource <= 0xfeu && *pSource != 0xf7u)
+				*(pDest++) = (CData1)(*(pSource++) - 0x20);
 			else
 				*(pDest++) = (CData1)*(pSource++);
 		}
@@ -137,7 +132,7 @@ namespace NMib::NStr
 		{
 			if (*pStr >= 'A' && *pStr <= 'Z')
 				*pStr += 'a' - 'A';
-			if (*pStr >= 0xc0u && *pStr <= 0xdfu)
+			if (*pStr >= 0xc0u && *pStr <= 0xdeu && *pStr != 0xd7u)
 				*pStr += 0xe0u - 0xc0u;
 			++pStr;
 		}
@@ -157,7 +152,7 @@ namespace NMib::NStr
 		{
 			if (*pStr >= 'A' && *pStr <= 'Z')
 				*pStr += 'a' - 'A';
-			if (*pStr >= 0xc0u && *pStr <= 0xdfu)
+			if (*pStr >= 0xc0u && *pStr <= 0xdeu && *pStr != 0xd7u)
 				*pStr += 0xe0u - 0xc0u;
 			++pStr;
 		}
@@ -179,7 +174,7 @@ namespace NMib::NStr
 		{
 			if (*pSource >= 'A' && *pSource <= 'Z')
 				*(pDest++) = (tf_CData1)(*(pSource++) + ('a' - 'A'));
-			else if (*pSource >= 0xc0u && *pSource <= 0xdfu)
+			else if (*pSource >= 0xc0u && *pSource <= 0xdeu && *pSource != 0xd7u)
 				*(pDest++) = (tf_CData1)(*(pSource++) + (0xe0u - 0xc0u));
 			else
 				*(pDest++) = (tf_CData1)(*(pSource++));
@@ -205,7 +200,7 @@ namespace NMib::NStr
 		{
 			if (*pSource >= 'A' && *pSource <= 'Z')
 				*(pDest++) = (tf_CData1)(*(pSource++) + ('a' - 'A'));
-			else if (*pSource >= 0xc0u && *pSource <= 0xdfu)
+			else if (*pSource >= 0xc0u && *pSource <= 0xdeu && *pSource != 0xd7u)
 				*(pDest++) = (tf_CData1)(*(pSource++) + (0xe0u - 0xc0u));
 			else
 				*(pDest++) = (tf_CData1)(*(pSource++));
@@ -230,7 +225,7 @@ namespace NMib::NStr
 		{
 			if (*pSource >= 'A' && *pSource <= 'Z')
 				*(pDest++) = (tf_CData1)(*(pSource++) + ('a' - 'A'));
-			else if (*pSource >= 0xc0u && *pSource <= 0xdfu)
+			else if (*pSource >= 0xc0u && *pSource <= 0xdeu && *pSource != 0xd7u)
 				*(pDest++) = (tf_CData1)(*(pSource++) + (0xe0u - 0xc0u));
 			else
 				*(pDest++) = (tf_CData1)(*(pSource++));
@@ -247,15 +242,14 @@ namespace NMib::NStr
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 
 		CData1 *pStr = (CData1 *)_pStr;
-		CData1 UpperComapre = 0xffu;
 
 		if (*pStr)
 		{
 			if (*pStr >= 'a' && *pStr <= 'z')
-				*pStr -= 'a' - 'A';
+				*pStr -= 0x20;
 
-			if (*pStr >= 0xe0u && *pStr <= UpperComapre)
-				*pStr -= 0xe0u - 0xc0u;
+			if (*pStr >= 0xe0u && *pStr <= 0xfeu && *pStr != 0xf7u)
+				*pStr -= 0x20;
 
 			++pStr;
 		}
