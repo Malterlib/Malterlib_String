@@ -449,7 +449,6 @@ namespace NMib::NStr
 					}
 					else
 					{
-						//						static const CChar Terminators[] = {' ', '}', ','};
 						// Parse a variable
 						aint Variable = -1;
 						if (*pFormat == '*')

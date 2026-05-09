@@ -519,7 +519,7 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAnsi() const
 	{
-		return fg_StrIsAnsi(f_GetStr());
+		return fg_StrIsAnsiLengthAware(f_GetStr(), f_GetLen());
 	}
 
 
@@ -527,7 +527,8 @@ namespace NMib::NStr
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAlphaNumeric() const
 	{
 		CChar const *pStr = *this;
-		while (*pStr)
+		CChar const *pEndStr = pStr + f_GetLen();
+		while (pStr < pEndStr)
 		{
 			if (!fg_CharIsAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
 				return false;
@@ -540,7 +541,8 @@ namespace NMib::NStr
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAnsiAlphaNumeric() const
 	{
 		CChar const *pStr = *this;
-		while (*pStr)
+		CChar const *pEndStr = pStr + f_GetLen();
+		while (pStr < pEndStr)
 		{
 			if (!fg_CharIsAnsiAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
 				return false;
@@ -556,7 +558,8 @@ namespace NMib::NStr
 			return false;
 
 		CChar const *pStr = *this;
-		while (*pStr)
+		CChar const *pEndStr = pStr + f_GetLen();
+		while (pStr < pEndStr)
 		{
 			if (!fg_CharIsNumber(*pStr))
 				return false;
@@ -568,10 +571,14 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsIdentifierStatement() const
 	{
+		if (f_IsEmpty())
+			return false;
+
 		CChar const *pStr = *this;
+		CChar const *pEndStr = pStr + f_GetLen();
 		if (!(fg_CharIsAlphabetical(*pStr) || *pStr == '_'))
 			return false;
-		while (*pStr)
+		while (pStr < pEndStr)
 		{
 			if (!fg_CharIsAlphabetical(*pStr) && !fg_CharIsNumber(*pStr) && *pStr != '_')
 				return false;
@@ -583,10 +590,14 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAlphaNumericStatement() const
 	{
+		if (f_IsEmpty())
+			return false;
+
 		CChar const *pStr = *this;
+		CChar const *pEndStr = pStr + f_GetLen();
 		if (!fg_CharIsAlphabetical(*pStr))
 			return false;
-		while (*pStr)
+		while (pStr < pEndStr)
 		{
 			if (!fg_CharIsAlphabetical(*pStr) && !fg_CharIsNumber(*pStr))
 				return false;
@@ -598,25 +609,25 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	constexpr uint32 TCStr<t_CTCStrTraits>::f_Hash() const
 	{
-		return fg_StrHash(CImp::f_GetStr());
+		return fg_StrHash(CImp::f_GetStr(), f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits>
 	constexpr uint32 TCStr<t_CTCStrTraits>::f_HashDJB2() const
 	{
-		return fg_StrHashDJB2(CImp::f_GetStr());
+		return fg_StrHashDJB2(CImp::f_GetStr(), f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits>
 	constexpr uint32 TCStr<t_CTCStrTraits>::f_HashSDBM() const
 	{
-		return fg_StrHashSDBM(CImp::f_GetStr());
+		return fg_StrHashSDBM(CImp::f_GetStr(), f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small auto TCStr<t_CTCStrTraits>::f_LargestChar() -> CChar
 	{
-		return fg_StrLargestChar(f_GetStr());
+		return fg_StrLargestChar(f_GetStr(), f_GetLen());
 	}
 
 	template <typename t_CTCStrTraits>
@@ -629,7 +640,7 @@ namespace NMib::NStr
 
 		while (pParse < pParseEnd)
 		{
-			auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
+			auto iSplitPoint = fg_StrFindCharsLengthAware<false, false>(pParse, pParseEnd - pParse, "\r\n");
 			if (iSplitPoint < 0)
 			{
 				if (Return.f_IsEmpty() && !_bIndentFirst)
@@ -743,10 +754,19 @@ namespace NMib::NStr
 		auto const *pParse = this->f_GetStr();
 		auto const *pParseEnd = pParse + this->f_GetLen();
 		umint SeparatorLen = fg_StrLen(_Separator);
+		auto const *pSeparator = [&]() inline_always_lambda
+			{
+				if constexpr (requires { _Separator.f_GetStr(); })
+					return _Separator.f_GetStr();
+				else
+					return _Separator;
+			}
+			()
+		;
 
 		while (pParse < pParseEnd)
 		{
-			auto iSplitPoint = fg_StrFind(pParse, _Separator, pParseEnd - pParse);
+			auto iSplitPoint = fg_StrFindLengthAware<false>(pParse, pParseEnd - pParse, pSeparator, SeparatorLen);
 			if (iSplitPoint < 0)
 			{
 				if constexpr (tf_bRemoveEmpty)
@@ -785,7 +805,7 @@ namespace NMib::NStr
 
 		while (pParse < pParseEnd)
 		{
-			auto iSplitPoint = fg_StrFindChars(pParse, "\r\n", pParseEnd - pParse);
+			auto iSplitPoint = fg_StrFindCharsLengthAware<false, false>(pParse, pParseEnd - pParse, "\r\n");
 			if (iSplitPoint < 0)
 			{
 				if constexpr (tf_bRemoveEmpty)

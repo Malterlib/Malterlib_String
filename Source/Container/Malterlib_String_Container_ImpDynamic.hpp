@@ -144,6 +144,12 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
+	constexpr inline_small bool TCStrImp_Dynamic<t_CStrTraits>::f_IsEmpty() const
+	{
+		return *f_GetStr() == 0;
+	}
+
+	template <typename t_CStrTraits>
 	inline_medium void TCStrImp_Dynamic<t_CStrTraits>::f_Assign(TCStrImp_Dynamic const &_From)
 	{
 		_From.m_pData->f_RefCountIncrease();
@@ -249,6 +255,7 @@ namespace NMib::NStr
 		umint Len = m_pData->m_StrLen;
 		if (Len == CData::mc_InvalidStrLen)
 			m_pData->m_StrLen = Len = t_CStrTraits::fs_StrLen(m_pData->f_GetData());
+
 		return Len;
 	}
 

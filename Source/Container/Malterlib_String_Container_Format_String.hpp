@@ -67,19 +67,19 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	aint TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Get_aint() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToInt(mp_pStr, (aint)0);
+		return CTStrTraits::CStrTraits::fs_StrToInt(mp_pStr, mp_StrLen, (aint)0);
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	fp32 TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Get_fp32() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, fp32::fs_0());
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp32::fs_0());
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	fp64 TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Get_fp64() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, fp64::fs_0());
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp64::fs_0());
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>

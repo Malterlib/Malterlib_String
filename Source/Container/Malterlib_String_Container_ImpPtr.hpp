@@ -88,6 +88,15 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
+	constexpr inline_small bool TCStrImp_Ptr<t_CStrTraits>::f_IsEmpty() const
+	{
+		if (m_Len == mc_InvalidStrLen)
+			return m_pData[0] == 0;
+
+		return m_Len == 0;
+	}
+
+	template <typename t_CStrTraits>
 	inline_small aint TCStrImp_Ptr<t_CStrTraits>::f_GetAllocLength() const
 	{
 		return m_MaxLen;

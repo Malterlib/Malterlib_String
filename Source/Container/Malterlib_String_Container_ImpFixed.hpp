@@ -27,6 +27,7 @@ namespace NMib::NStr
 		umint nChars = fg_Min(t_DataLen - 1, _Len);
 		for (umint i = 0; i < nChars; ++i)
 			m_lData[i] = _pString[i];
+		m_lData[nChars] = 0;
 		m_Len = nChars;
 	}
 
@@ -52,6 +53,15 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
+	constexpr inline_small bool TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_IsEmpty() const
+	{
+		if (m_Len == mc_InvalidStrLen)
+			return m_lData[0] == 0;
+
+		return m_Len == 0;
+	}
+
+	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small aint TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_GetAllocLength() const
 	{
 		return t_DataLen;
@@ -61,9 +71,7 @@ namespace NMib::NStr
 	inline_medium aint TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_GetStrLen() const
 	{
 		if (m_Len == mc_InvalidStrLen)
-		{
 			const_cast<TCStrImp_Fixed*>(this)->m_Len = t_CStrTraits::fs_StrLen(m_lData);
-		}
 
 		return m_Len;
 	}
@@ -85,7 +93,10 @@ namespace NMib::NStr
 		if (_Len < 0)
 			m_Len = mc_InvalidStrLen;
 		else
+		{
 			m_Len = _Len;
+			m_lData[_Len] = 0;
+		}
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>

@@ -39,7 +39,7 @@ namespace NMib::NStr
 		tf_CData const *pStr = _pStr;
 		tf_CData const *pEnd = pStr + _MaxLen;
 
-		while (*pStr && pStr < pEnd)
+		while (pStr < pEnd && *pStr)
 			++pStr;
 
 		return pStr - _pStr;
@@ -93,7 +93,7 @@ namespace NMib::NStr
 			return fg_StrCopy(_pTo, _pFrom, _MaxLen);
 	}
 
-	template <bool tf_bCheckLen, typename tf_CData1>
+	template <bool tf_bCheckLen, bool tf_bAuthoritativeLen, typename tf_CData1>
 	constexpr inline_large bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _Len)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -101,11 +101,17 @@ namespace NMib::NStr
 		CData1 const *pStr1 = pStr1Start;
 		CData1 const *pStr1End = pStr1Start + _Len;
 
-		while (*pStr1)
+		while (true)
 		{
 			if constexpr (tf_bCheckLen)
 			{
 				if (pStr1 >= pStr1End)
+					return true;
+			}
+
+			if constexpr (!tf_bAuthoritativeLen)
+			{
+				if (!(*pStr1))
 					return true;
 			}
 
@@ -114,19 +120,24 @@ namespace NMib::NStr
 
 			++pStr1;
 		}
-		return true;
 	}
 
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1)
 	{
-			return fg_StrIsAnsi<0>(_pStr1, 0);
+			return fg_StrIsAnsi<false, false>(_pStr1, 0);
 	}
 
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _Len)
 	{
-			return fg_StrIsAnsi<1>(_pStr1, _Len);
+			return fg_StrIsAnsi<true, false>(_pStr1, _Len);
+	}
+
+	template <typename tf_CData1>
+	constexpr inline_small bool fg_StrIsAnsiLengthAware(tf_CData1 const *_pStr1, umint _Len)
+	{
+			return fg_StrIsAnsi<true, true>(_pStr1, _Len);
 	}
 
 	template <typename tf_CStr>
@@ -159,6 +170,21 @@ namespace NMib::NStr
 			{
 				Largest = *pStr1;
 			}
+			++pStr1;
+		}
+		return Largest;
+	}
+
+	template <typename tf_CData1>
+	inline_small NTraits::TCUnsigned<tf_CData1> fg_StrLargestChar(tf_CData1 const *_pStr1, umint _Len)
+	{
+		NTraits::TCUnsigned<tf_CData1> Largest = 0;
+		NTraits::TCUnsigned<tf_CData1> const *pStr1 = (NTraits::TCUnsigned<tf_CData1> const *)_pStr1;
+		NTraits::TCUnsigned<tf_CData1> const *pEndStr1 = pStr1 + _Len;
+		while (pStr1 < pEndStr1)
+		{
+			if (*pStr1 > Largest)
+				Largest = *pStr1;
 			++pStr1;
 		}
 		return Largest;

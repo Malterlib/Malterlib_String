@@ -5,8 +5,8 @@
 
 namespace NMib::NStr
 {
-	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	template <bool t_bUseMaxLen, typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
+	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
 	{
 		t_CReturn DestNumber = t_CReturn::fs_0();
 		t_CReturn DestDecimals = t_CReturn::fs_0();
@@ -17,6 +17,9 @@ namespace NMib::NStr
 		using CTerm = NTraits::TCUnsigned<t_CTerm>;
 
 		CData const *pParseStr = (CData const *)_pStr;
+		CData const *pEndStr = nullptr;
+		if constexpr (t_bUseMaxLen)
+			pEndStr = pParseStr + _MaxLen;
 		static t_CReturn const Ten = fg_Convert<t_CReturn>(10);
 
 		aint SearchMode = 0;
@@ -25,7 +28,7 @@ namespace NMib::NStr
 		aint bFoundNum = false;
 
 		// Parse for characters, and end if str terminator is found
-		while ((*pParseStr))
+		while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 		{
 			if (_pStrTerminators)
 			{
@@ -225,6 +228,18 @@ Return:
 		}
 	}
 
+	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
+	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	{
+		return fg_StrToFloatParse<false>(_pStr, 0, _FailValue, _pStrTerminators, _bDontFail, _pPoints);
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
+	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	{
+		return fg_StrToFloatParse<true>(_pStr, _MaxLen, _FailValue, _pStrTerminators, _bDontFail, _pPoints);
+	}
+
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail)
 	{
@@ -234,6 +249,12 @@ Return:
 	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, true, (ch8 const *)nullptr);
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	t_CReturn fg_StrToFloat(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	{
+		return fg_StrToFloatParse(_pStr, _MaxLen, _FailValue, _pStrTerminators, true, (ch8 const *)nullptr);
 	}
 
 	template <typename t_CData, typename t_CReturn>
@@ -266,6 +287,12 @@ Return:
 	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, false, (ch8 const *)nullptr);
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	{
+		return fg_StrToFloatParse(_pStr, _MaxLen, _FailValue, _pStrTerminators, false, (ch8 const *)nullptr);
 	}
 
 	template <typename t_CData, typename t_CReturn>

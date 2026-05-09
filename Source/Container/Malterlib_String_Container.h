@@ -179,8 +179,8 @@ namespace NMib::NStr
 		inline_small CChar *f_GetStrUniqueWritable();
 		inline_small operator CChar const * () const;
 
-		inline_small bool f_IsEmpty () const;
-		inline_small explicit operator bool () const;
+		constexpr inline_small bool f_IsEmpty () const;
+		constexpr inline_small explicit operator bool () const;
 
 		TCStrSpan<typename CStrTraits::CTypes> f_Span() const;
 
@@ -190,7 +190,7 @@ namespace NMib::NStr
 
 		void f_ConvertFromType(EStrType _Type);
 
-		inline_small aint f_GetLen() const;
+		constexpr inline_small aint f_GetLen() const;
 		inline_small umint f_GetSize() const;
 
 		template <typename tf_CStrDataType>

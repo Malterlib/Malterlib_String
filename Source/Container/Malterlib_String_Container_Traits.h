@@ -56,15 +56,15 @@ namespace NMib::NStr
 		template <typename tf_CData1, typename tf_CData2>
 		static inline_small tf_CData1 *fs_StrLowerCase(tf_CData1 *_pDest, tf_CData2 const *_pSource, aint _SourceLen);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
+		static inline_small tf_CReturn fs_StrToInt(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
+		static inline_small tf_CReturn fs_StrToIntExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToFloat(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
+		static inline_small tf_CReturn fs_StrToFloat(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToFloatExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
+		static inline_small tf_CReturn fs_StrToFloatExactNullTerminated(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToFloatParse(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators, bool _bDontFail = false);
+		static inline_small tf_CReturn fs_StrToFloatExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 	};
 }
 

@@ -143,28 +143,28 @@ namespace NMib::NStr
 		if (f_GetLen() != _Right.f_GetLen())
 			return false;
 
-		return fg_StrCmp(*this, _Right, f_GetLen()) == 0;
+		return fg_StrCmp(f_GetStr(), f_GetLen(), _Right.f_GetStr(), _Right.f_GetLen()) == 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
 	bool TCStr<t_CTCStrTraits>::operator == (tf_CData const *_pRight) const noexcept
 	{
-		return fg_StrCmp(this->f_GetStr(), _pRight) == 0;
+		return fg_StrCmp(f_GetStr(), f_GetLen(), _pRight) == 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
 	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (TCStr<tf_CTCStrTraits> const &_Right) const noexcept
 	{
-		return fg_StrCmp(this->f_GetStr(), _Right.f_GetStr()) <=> 0;
+		return fg_StrCmp(f_GetStr(), f_GetLen(), _Right.f_GetStr(), _Right.f_GetLen()) <=> 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
 	COrdering_Strong TCStr<t_CTCStrTraits>::operator <=> (tf_CData const *_pRight) const noexcept
 	{
-		return fg_StrCmp(this->f_GetStr(), _pRight) <=> 0;
+		return fg_StrCmp(f_GetStr(), f_GetLen(), _pRight) <=> 0;
 	}
 
 }

@@ -78,15 +78,15 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
-	inline_small TCStr<t_TCStrTraits>::operator bool () const
+	constexpr inline_small TCStr<t_TCStrTraits>::operator bool () const
 	{
 		return !f_IsEmpty();
 	}
 
 	template <typename t_TCStrTraits>
-	inline_small bool TCStr<t_TCStrTraits>::f_IsEmpty () const
+	constexpr inline_small bool TCStr<t_TCStrTraits>::f_IsEmpty () const
 	{
-		return (*CImp::f_GetStr()) == 0;
+		return CImp::f_IsEmpty();
 	}
 
 	template <typename t_TCStrTraits>
@@ -118,7 +118,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
-	inline_small aint TCStr<t_TCStrTraits>::f_GetLen() const
+	constexpr inline_small aint TCStr<t_TCStrTraits>::f_GetLen() const
 	{
 		return CImp::f_GetStrLen();
 	}

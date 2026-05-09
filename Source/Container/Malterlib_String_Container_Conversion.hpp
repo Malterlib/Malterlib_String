@@ -165,7 +165,20 @@ namespace NMib::NStr
 			case EStrType_Ansi:
 				{
 					CTempStr Decoded;
-					NStr::NPlatform::fg_SystemDecodeAnsiStr((ch8 const *)f_GetStr(), Decoded);
+					if constexpr (CImp::mc_bIsNullTerminated)
+						NStr::NPlatform::fg_SystemDecodeAnsiStr((ch8 const *)f_GetStr(), Decoded);
+					else
+					{
+						using CTempAnsiStr = TCConditional
+							<
+								NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
+								, CAnsiStrNonTracked
+								, CAnsiStr
+							>
+						;
+						CTempAnsiStr Ansi((ch8 const *)f_GetStr(), f_GetLen());
+						NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Decoded);
+					}
 					this->f_Clear();
 					TCStr<t_TCStrTraits> New;
 					aint Len = 0;
@@ -244,75 +257,75 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	int32 TCStr<t_CTCStrTraits>::f_ToInt() const
 	{
-		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), int32(0));
+		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), f_GetLen(), int32(0));
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToInt(tf_CReturn _FailValue) const
 	{
-		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), _FailValue);
+		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), f_GetLen(), _FailValue);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn, typename tf_CTerm>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToInt(tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators) const
 	{
-		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), _FailValue, _pStrTerminators);
+		return CStrTraits::fs_StrToInt(CImp::f_GetStr(), f_GetLen(), _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CTCStrTraits>
 	int32 TCStr<t_CTCStrTraits>::f_ToIntExact() const
 	{
-		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), int32(0));
+		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), f_GetLen(), int32(0));
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToIntExact(tf_CReturn _FailValue) const
 	{
-		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), _FailValue);
+		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), f_GetLen(), _FailValue);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn, typename tf_CTerm>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToIntExact(tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators) const
 	{
-		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), _FailValue, _pStrTerminators);
+		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), f_GetLen(), _FailValue, _pStrTerminators);
 	}
 
 
 	template <typename t_CTCStrTraits>
 	fp32 TCStr<t_CTCStrTraits>::f_ToFloat() const
 	{
-		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), fp32(0.0));
+		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), f_GetLen(), fp32(0.0));
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToFloat(tf_CReturn _FailValue) const
 	{
-		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), _FailValue);
+		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), f_GetLen(), _FailValue);
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn, typename tf_CTerm>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToFloat(tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators) const
 	{
-		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), _FailValue, _pStrTerminators);
+		return CStrTraits::fs_StrToFloat(CImp::f_GetStr(), f_GetLen(), _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CTCStrTraits>
 	fp32 TCStr<t_CTCStrTraits>::f_ToFloatExact() const
 	{
-		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), fp32(0.0));
+		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), f_GetLen(), fp32(0.0));
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToFloatExact(tf_CReturn _FailValue) const
 	{
-		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), _FailValue);
+		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), f_GetLen(), _FailValue);
 	}
 
 
@@ -320,6 +333,6 @@ namespace NMib::NStr
 	template <typename tf_CReturn, typename tf_CTerm>
 	tf_CReturn TCStr<t_CTCStrTraits>::f_ToFloatExact(tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators) const
 	{
-		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), _FailValue, _pStrTerminators);
+		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), f_GetLen(), _FailValue, _pStrTerminators);
 	}
 }

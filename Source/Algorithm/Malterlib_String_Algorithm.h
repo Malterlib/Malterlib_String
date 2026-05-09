@@ -37,14 +37,22 @@ namespace NMib::NStr
 	template <typename tf_CData>
 	constexpr inline_large uint32 fg_StrHashDJB2(tf_CData const *_pStr);
 	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHashDJB2(tf_CData const *_pStr, umint _Len);
+	template <typename tf_CData>
 	constexpr inline_large uint32 fg_StrHashSDBM(tf_CData const *_pStr);
 	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHashSDBM(tf_CData const *_pStr, umint _Len);
+	template <typename tf_CData>
 	constexpr inline_large uint32 fg_StrHash(tf_CData const *_pStr);
+	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHash(tf_CData const *_pStr, umint _Len);
 
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1);
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _MaxLen);
+	template <typename tf_CData1>
+	constexpr inline_small bool fg_StrIsAnsiLengthAware(tf_CData1 const *_pStr1, umint _Len);
 
 	template <typename t_CStr>
 	constexpr bool fg_StrIsEmpty(t_CStr const *_pStr);
@@ -99,6 +107,16 @@ namespace NMib::NStr
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2) noexcept;
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2) noexcept;
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2) noexcept;
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2) noexcept;
+	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept;
+	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2) noexcept;
@@ -107,6 +125,8 @@ namespace NMib::NStr
 	constexpr inline_large aint fg_StrFindChar(tf_CData1 const *_pStr1, tf_CData2 _Char);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindChar(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _MaxLen);
+	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharLengthAware(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _Len);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharNoCase(tf_CData1 const *_pStr1, tf_CData2 _Char);
@@ -117,6 +137,8 @@ namespace NMib::NStr
 	constexpr inline_large aint fg_StrFindCharReverse(tf_CData1 const *_pStr1, tf_CData2 _Char);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharReverse(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _MaxLen);
+	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharReverseLengthAware(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _Len);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharReverseNoCase(tf_CData1 const *_pStr1, tf_CData2 _Char);
@@ -129,26 +151,52 @@ namespace NMib::NStr
 	constexpr inline_large aint fg_StrFindChars(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindChars(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindChars(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars, umint _CharsLen);
+	template <bool t_bNoCase, bool t_bReverse, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindChars(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen, umint _CharsLen);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsNoCase(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars, umint _CharsLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen, umint _CharsLen);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverse(tf_CData1 const *_pStr1, tf_CData2 const *_pChars);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverse(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverse(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars, umint _CharsLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverse(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen, umint _CharsLen);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverseNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsReverseNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars, umint _CharsLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindCharsReverseNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen, umint _CharsLen);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFind(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFind(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen);
+	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2);
+	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2, umint _FindLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFind(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2, umint _FindLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFind(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen, umint _FindLen);
 
 	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindIterator(tf_CData1 &_Str1, tf_CData2 &_Str2);
@@ -157,6 +205,10 @@ namespace NMib::NStr
 	constexpr inline_large aint fg_StrFindNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindNoCase(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2, umint _FindLen);
+	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large aint fg_StrFindNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen, umint _FindLen);
 
 	// Returns first character for searched string
 	template <typename tf_CData1, typename tf_CData2>
@@ -179,6 +231,8 @@ namespace NMib::NStr
 	constexpr inline_large bool fg_StrStartsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len);
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large bool fg_StrStartsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len, umint _Len2);
+	template <bool tf_bNoCase, bool tf_bCheckLen, bool tf_bAuthoritativeLen, bool tf_bCheckLen2, bool tf_bAuthoritativeLen2, typename tf_CData1, typename tf_CData2>
+	constexpr inline_large bool fg_StrStartsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len, umint _Len2);
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large bool fg_StrStartsWithNoCase(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2);
@@ -192,6 +246,8 @@ namespace NMib::NStr
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large bool fg_StrEndsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len);
 	template <typename tf_CData1, typename tf_CData2>
+	constexpr inline_large bool fg_StrEndsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len, umint _Len2);
+	template <bool tf_bNoCase, bool tf_bCheckLen, bool tf_bAuthoritativeLen, bool tf_bCheckLen2, bool tf_bAuthoritativeLen2, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large bool fg_StrEndsWith(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _Len, umint _Len2);
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -317,6 +373,8 @@ namespace NMib::NStr
 
 	template <typename tf_CData1>
 	inline_small NTraits::TCUnsigned<tf_CData1> fg_StrLargestChar(tf_CData1 const *_pStr1);
+	template <typename tf_CData1>
+	inline_small NTraits::TCUnsigned<tf_CData1> fg_StrLargestChar(tf_CData1 const *_pStr1, umint _Len);
 
 	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrEscapeStr(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource);
@@ -446,5 +504,3 @@ namespace NMib::NStr
 #ifndef DMibPNoShortCuts
 	using namespace NMib::NStr;
 #endif
-
-

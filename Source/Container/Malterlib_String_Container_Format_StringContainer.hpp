@@ -63,19 +63,19 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	aint TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Get_aint() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToInt(mp_TStr.f_GetStr(), (aint)0);
+		return CTStrTraits::CStrTraits::fs_StrToInt(mp_TStr.f_GetStr(), mp_TStr.f_GetLen(), (aint)0);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	fp32 TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Get_fp32() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_TStr.f_GetStr(), (fp32)0);
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_TStr.f_GetStr(), mp_TStr.f_GetLen(), (fp32)0);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	fp64 TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Get_fp64() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_TStr.f_GetStr(), (fp64)0);
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_TStr.f_GetStr(), mp_TStr.f_GetLen(), (fp64)0);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>

@@ -107,36 +107,36 @@ namespace NMib::NStr
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
+	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToInt(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
 	{
-		return fg_StrToInt(_pStr, _FailValue, _pStrTerminators);
+		return fg_StrToInt(_pStr, _MaxLen, _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
+	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
 	{
-		return fg_StrToIntExact(_pStr, _FailValue, _pStrTerminators);
+		return fg_StrToIntExact(_pStr, _MaxLen, _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloat(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
+	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloat(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
 	{
-		return fg_StrToFloat(_pStr, _FailValue, _pStrTerminators);
+		return fg_StrToFloat(_pStr, _MaxLen, _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloatExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
+	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloatExactNullTerminated(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
 	{
 		return fg_StrToFloatExact(_pStr, _FailValue, _pStrTerminators);
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloatParse(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators, bool _bDontFail)
+	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToFloatExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators)
 	{
-		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail);
+		return fg_StrToFloatExact(_pStr, _MaxLen, _FailValue, _pStrTerminators);
 	}
 }

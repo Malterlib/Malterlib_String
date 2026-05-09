@@ -23,6 +23,18 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHashDJB2(tf_CData const *_pStr, umint _Len)
+	{
+		uint32 Hash = 5381;
+		tf_CData const *pStr = _pStr;
+		tf_CData const *pEndStr = pStr + _Len;
+		while (pStr < pEndStr)
+			Hash = Hash * 33 + *(pStr++);
+
+		return Hash;
+	}
+
+	template <typename tf_CData>
 	constexpr inline_large uint32 fg_StrHashSDBM(tf_CData const *_pStr)
 	{
 		uint32 Hash = 0;
@@ -40,8 +52,29 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHashSDBM(tf_CData const *_pStr, umint _Len)
+	{
+		uint32 Hash = 0;
+		tf_CData const *pStr = _pStr;
+		tf_CData const *pEndStr = pStr + _Len;
+		while (pStr < pEndStr)
+		{
+			uint32 Char = *(pStr++);
+			Hash = Char + (Hash << 6) + (Hash << 16) - Hash;
+		}
+
+		return Hash;
+	}
+
+	template <typename tf_CData>
 	constexpr inline_large uint32 fg_StrHash(tf_CData const *_pStr)
 	{
 		return fg_StrHashDJB2(_pStr);
+	}
+
+	template <typename tf_CData>
+	constexpr inline_large uint32 fg_StrHash(tf_CData const *_pStr, umint _Len)
+	{
+		return fg_StrHashDJB2(_pStr, _Len);
 	}
 }

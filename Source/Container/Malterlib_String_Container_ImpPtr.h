@@ -24,6 +24,7 @@ namespace NMib::NStr
 
 		inline_small CChar const *f_GetStr() const;
 		inline_small CChar *f_GetStrWritable();
+		constexpr inline_small bool f_IsEmpty() const;
 
 		inline_medium aint f_GetStrLen() const;
 		static inline_small bool f_FastLen();
@@ -39,6 +40,7 @@ namespace NMib::NStr
 
 		constexpr static bool mc_bInitConstStr = true;
 		constexpr static bool mc_bNothrowAssign = true;
+		constexpr static bool mc_bIsNullTerminated = false;
 		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
 
 		CChar *m_pData;

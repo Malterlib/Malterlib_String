@@ -34,13 +34,13 @@ namespace NMib::NStr
 	template <typename tf_CTCStrTraits>
 	inline_small uint32 fg_StrIsAnsi(TCStr<tf_CTCStrTraits> const &_Str)
 	{
-		return fg_StrIsAnsi(_Str.f_GetStr());
+		return fg_StrIsAnsiLengthAware(_Str.f_GetStr(), _Str.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits>
 	inline_small uint32 fg_StrIsAnsi(TCStr<tf_CTCStrTraits> const &_Str, umint _MaxLen)
 	{
-		return fg_StrIsAnsi(_Str.f_GetStr(), _MaxLen);
+		return fg_StrIsAnsiLengthAware(_Str.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen));
 	}
 
 
@@ -59,7 +59,7 @@ namespace NMib::NStr
 	template <typename tf_CTCStrTraits>
 	inline_small NTraits::TCUnsigned<typename TCStr<tf_CTCStrTraits>::CMaxChar> fg_StrLargestChar(TCStr<tf_CTCStrTraits> const &_Str)
 	{
-		return fg_StrLargestChar(_Str.f_GetStr());
+		return _Str.f_LargestChar();
 	}
 
 

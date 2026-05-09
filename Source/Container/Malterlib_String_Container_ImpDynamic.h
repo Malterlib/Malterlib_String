@@ -95,6 +95,7 @@ namespace NMib::NStr
 
 		inline_always bool f_IsSameWeak(TCStrImp_Dynamic const &_Right) const;
 		inline_always bool f_IsConstant() const;
+		constexpr inline_small bool f_IsEmpty() const;
 
 		void f_SetUserData(uint8 _Data);
 		uint8 f_GetUserData() const;
@@ -123,6 +124,7 @@ namespace NMib::NStr
 		constexpr static bool mc_bNothrowAssign = true;
 		constexpr static bool mc_AllocatesMemory = true;
 		constexpr static bool mc_bInitConstStr = false;
+		constexpr static bool mc_bIsNullTerminated = true;
 		constexpr static umint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;
 
 		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));

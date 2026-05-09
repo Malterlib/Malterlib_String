@@ -5,10 +5,11 @@
 
 namespace NMib::NStr
 {
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	template <bool t_bUseMaxLen, typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToIntParse
 		(
 			t_CData const * &_pStr
+			, umint _MaxLen
 			, t_CReturn _FailValue
 			, t_CTerm const *_pStrTerminators
 			, bool _bDontFail
@@ -23,6 +24,9 @@ namespace NMib::NStr
 		using CTerm = NTraits::TCUnsigned<t_CTerm>;
 
 		CData const *pParseStr = (CData const *)_pStr;
+		CData const *pEndStr = nullptr;
+		if constexpr (t_bUseMaxLen)
+			pEndStr = pParseStr + _MaxLen;
 
 		uint32 ParseMode;
 		if (_ParseMode < 0)
@@ -36,7 +40,7 @@ namespace NMib::NStr
 		aint bFoundNum = false;
 
 		// Parse for characters, and end if str terminator is found
-		while ((*pParseStr))
+		while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 		{
 			if (_pStrTerminators)
 
@@ -66,7 +70,7 @@ namespace NMib::NStr
 					}
 					else if (fg_CharIsNumber((*pParseStr)) || (ParseMode == EStrToIntParseMode_Hex && (((*pParseStr) >= 'a' && (*pParseStr) <= 'f') || ((*pParseStr) >= 'A' && (*pParseStr) <= 'F'))))
 					{
-						if (fg_CharIsAlphabetical((*(pParseStr+1))))
+						if ((!t_bUseMaxLen || pParseStr + 1 < pEndStr) && fg_CharIsAlphabetical((*(pParseStr+1))))
 						{
 							if ((*pParseStr) == '0' && (((*(pParseStr + 1)) == 'x') || ((*(pParseStr + 1)) == 'X')))
 							{
@@ -119,7 +123,7 @@ namespace NMib::NStr
 					{
 					case EStrToIntParseMode_Base10:
 						{
-							while ((*pParseStr) && (*pParseStr) >= '0' && (*pParseStr) <= '9')
+							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= '9')
 							{
 								DestNumber *= 10;
 								DestNumber += (*pParseStr) - '0';
@@ -134,7 +138,7 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Hex:
 						// Hex
 						{
-							while ((*pParseStr))
+							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 							{
 								aint Num;
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
@@ -166,7 +170,7 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Binary:
 						// Binary
 						{
-							while ((*pParseStr))
+							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 							{
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '1')
 								{
@@ -193,7 +197,7 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Octal:
 						// Octal
 						{
-							while ((*pParseStr))
+							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 							{
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '7')
 								{
@@ -222,7 +226,7 @@ namespace NMib::NStr
 							if (ParseMode <= 10)
 							{
 								uint8 EndChar = '0' + (ParseMode-1);
-								while ((*pParseStr) && (*pParseStr) >= '0' && (*pParseStr) <= EndChar)
+								while ((!t_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= EndChar)
 								{
 									DestNumber *= ParseMode;
 									DestNumber += (*pParseStr) - '0';
@@ -234,7 +238,7 @@ namespace NMib::NStr
 							{
 								uint8 EndChar0 = 'a' + (ParseMode - 11);
 								uint8 EndChar1 = 'A' + (ParseMode - 11);
-								while ((*pParseStr))
+								while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
 								{
 									if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 									{
@@ -295,7 +299,7 @@ namespace NMib::NStr
 
 		}
 
-Return:
+	Return:
 		_pStr = (t_CData const *)pParseStr;
 
 		if (bFoundNum)
@@ -306,6 +310,35 @@ Return:
 				*_pFailed = true;
 			return _FailValue;
 		}
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	t_CReturn fg_StrToIntParse
+		(
+			t_CData const * &_pStr
+			, t_CReturn _FailValue
+			, t_CTerm const *_pStrTerminators
+			, bool _bDontFail
+			, int32 _ParseMode
+			, bool *_pFailed
+		)
+	{
+		return fg_StrToIntParse<false>(_pStr, 0, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	t_CReturn fg_StrToIntParse
+		(
+			t_CData const * &_pStr
+			, umint _MaxLen
+			, t_CReturn _FailValue
+			, t_CTerm const *_pStrTerminators
+			, bool _bDontFail
+			, int32 _ParseMode
+			, bool *_pFailed
+		)
+	{
+		return fg_StrToIntParse<true>(_pStr, _MaxLen, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
 	}
 
 	template<typename t_CData, typename t_CReturn>
@@ -623,6 +656,13 @@ Return:
 		return fg_StrToIntParse(pStr, _FailValue, _pStrTerminators, true);
 	}
 
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	{
+		t_CData const *pStr = _pStr;
+		return fg_StrToIntParse(pStr, _MaxLen, _FailValue, _pStrTerminators, true);
+	}
+
 	template <typename t_CData, typename t_CReturn>
 	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue)
 	{
@@ -641,6 +681,13 @@ Return:
 	{
 		t_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _FailValue, _pStrTerminators, false);
+	}
+
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	{
+		t_CData const *pStr = _pStr;
+		return fg_StrToIntParse(pStr, _MaxLen, _FailValue, _pStrTerminators, false);
 	}
 
 	template <typename t_CData, typename t_CReturn>

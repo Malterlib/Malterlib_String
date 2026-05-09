@@ -148,9 +148,9 @@ namespace NMib::NStr
 		}
 		else
 		{
-			static CChar const Terminators[] = {',','}',0};
+			constexpr static CChar const c_Terminators[] = {',','}',0};
 
-			return CStrTraits::fs_StrToFloatExact(m_pDataStart, _FailValue, Terminators);
+			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
 	}
 
@@ -176,9 +176,9 @@ namespace NMib::NStr
 		}
 		else
 		{
-			static CChar const Terminators[] = {',','}',0};
+			constexpr static CChar const c_Terminators[] = {',','}',0};
 
-			return CStrTraits::fs_StrToFloatExact(m_pDataStart, _FailValue, Terminators);
+			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
 	}
 

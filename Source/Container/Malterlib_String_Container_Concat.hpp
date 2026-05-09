@@ -77,7 +77,20 @@ namespace NMib::NStr
 		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
 			CTempStr Temp;
-			NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
+			if constexpr (t_CStrTraitsF::CImp::mc_bIsNullTerminated)
+				NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
+			else
+			{
+				using CTempAnsiStr = TCConditional
+					<
+						NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
+						, CAnsiStrNonTracked
+						, CAnsiStr
+					>
+				;
+				CTempAnsiStr Ansi(_From.f_GetStr(), _From.f_GetLen());
+				NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Temp);
+			}
 			f_AddStr(Temp);
 		}
 		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)

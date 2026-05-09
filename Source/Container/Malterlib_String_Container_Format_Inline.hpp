@@ -206,7 +206,7 @@ namespace NMib::NStr
 	{
 		TCStr<CTStrTraits> Temp;
 		fp_FormatInto(Temp, mp_ToFormat);
-		return CTStrTraits::CStrTraits::fs_StrToInt(Temp.f_GetStr(), (aint)0);
+		return CTStrTraits::CStrTraits::fs_StrToInt(Temp.f_GetStr(), Temp.f_GetLen(), (aint)0);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
@@ -214,7 +214,7 @@ namespace NMib::NStr
 	{
 		TCStr<CTStrTraits> Temp;
 		fp_FormatInto(Temp, mp_ToFormat);
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), (fp32)0);
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), Temp.f_GetLen(), (fp32)0);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
@@ -222,7 +222,7 @@ namespace NMib::NStr
 	{
 		TCStr<CTStrTraits> Temp;
 		fp_FormatInto(Temp, mp_ToFormat);
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), (fp64)0);
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), Temp.f_GetLen(), (fp64)0);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>

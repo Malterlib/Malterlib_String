@@ -13,10 +13,12 @@ namespace NMib::NStr
 	public:
 		virtual void f_Destroy() = 0;
 		virtual typename t_CStrTraits::CChar *f_GetStr() = 0;
+		virtual bool f_IsEmpty() = 0;
 		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard) = 0;
 		virtual aint f_GetAllocLength() = 0;
 
 		constexpr static bool mc_AllocatesMemory = true;
+		constexpr static bool mc_bIsNullTerminated = false;
 	};
 
 	template <typename t_CTStrTraits>
@@ -24,6 +26,7 @@ namespace NMib::NStr
 	{
 		virtual void f_Destroy();
 		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;
+		virtual bool f_IsEmpty();
 		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		virtual aint f_GetAllocLength() const;
 		virtual bool f_FastLen();
@@ -31,6 +34,7 @@ namespace NMib::NStr
 
 		constexpr static bool mc_bInitConstStr = false;
 		constexpr static bool mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory;
+		constexpr static bool mc_bIsNullTerminated = false;
 
 		TCStr<t_CTStrTraits> *m_pStr;
 	};
@@ -40,6 +44,7 @@ namespace NMib::NStr
 	{
 		virtual void f_Destroy();
 		virtual typename t_CTStrTraits::CStrTraits::CChar const *f_GetStr() const;
+		virtual bool f_IsEmpty();
 		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		virtual aint f_GetAllocLength() const;
 		virtual bool f_FastLen();
@@ -47,6 +52,7 @@ namespace NMib::NStr
 
 		constexpr static bool mc_bInitConstStr = false;
 		constexpr static bool mc_AllocatesMemory = TCStr< t_CTStrTraits >::mc_AllocatesMemory;
+		constexpr static bool mc_bIsNullTerminated = false;
 
 		TCStr<t_CTStrTraits> m_Str;
 	};

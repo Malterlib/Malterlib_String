@@ -26,6 +26,18 @@ namespace NMib::NStr
 			, bool *_pFailed = nullptr
 		)
 	;
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	t_CReturn fg_StrToIntParse
+		(
+			t_CData const * &_pStr
+			, umint _MaxLen
+			, t_CReturn _FailValue
+			, t_CTerm const *_pStrTerminators = nullptr
+			, bool _bDontFail = false
+			, int32 _ParseMode = EStrToIntParseMode_Base10
+			, bool *_pFailed = nullptr
+		)
+	;
 
 	template<typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue);
@@ -52,6 +64,8 @@ namespace NMib::NStr
 	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue);
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
 
 	template <typename t_CData, typename t_CReturn>
 	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, t_CReturn _FailValue);
@@ -60,6 +74,8 @@ namespace NMib::NStr
 	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue);
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
+	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
 
 	template <typename t_CData, typename t_CReturn>
 	t_CReturn fg_StrToIntParseExact(t_CData const * &_pStr, t_CReturn _FailValue);
