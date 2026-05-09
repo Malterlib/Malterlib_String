@@ -69,8 +69,64 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CString>
-	template <typename tf_CChar, umint tf_ArrayLength>
-	void TCStringAppender<t_CString>::operator += (tf_CChar const (&_Array)[tf_ArrayLength])
+	void TCStringAppender<t_CString>::f_AddNullTerminatedString(typename t_CString::CChar const *_pString)
+	{
+		while (true)
+		{
+			if (mp_StrLen >= mp_MaxLen)
+			{
+				fp_Commit();
+				mp_String.f_Reserve(fg_Max(mp_StrLen + 32, mp_StrLen * 2 + 1));
+				mp_pStrOut = (typename t_CString::CUnsignedChar *)(mp_String.f_GetStrWritable() + mp_StrLen);
+				mp_MaxLen = mp_String.f_GetAllocLength() - 1;
+			}
+
+			auto pWritable = mp_pStrOut - mp_StrLen;
+			auto pTo = mp_pStrOut;
+			auto pEnd = pWritable + mp_MaxLen;
+
+			while (pTo < pEnd)
+			{
+				auto Character = *_pString++;
+				if (!Character)
+				{
+					mp_pStrOut = pTo;
+					mp_StrLen = pTo - pWritable;
+					mp_bChanged = true;
+					return;
+				}
+
+				*pTo++ = (typename t_CString::CUnsignedChar)Character;
+			}
+
+			mp_pStrOut = pTo;
+			mp_StrLen = pTo - pWritable;
+			mp_bChanged = true;
+		}
+	}
+
+	template <typename t_CString>
+	template <typename tf_CPointer>
+	requires
+	(
+		NTraits::cIsPointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
+		&& NTraits::cIsSame
+		<
+			NTraits::TCRemoveReferenceAndQualifiers
+			<
+				NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
+			>
+			, typename t_CString::CChar
+		>
+	)
+	void TCStringAppender<t_CString>::operator += (tf_CPointer const &_pString)
+	{
+		f_AddNullTerminatedString(_pString);
+	}
+
+	template <typename t_CString>
+	template <umint tf_ArrayLength>
+	void TCStringAppender<t_CString>::operator += (typename t_CString::CChar const (&_Array)[tf_ArrayLength])
 	{
 		f_AddString(_Array, tf_ArrayLength - 1);
 	}

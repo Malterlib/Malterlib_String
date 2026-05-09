@@ -30,14 +30,30 @@ namespace NMib::NStr
 
 		void operator += (typename t_CString::CUnsignedChar _Character);
 		void operator += (t_CString const &_String);
-		template <typename tf_CChar, umint tf_ArrayLength>
-		void operator += (tf_CChar const (&_Array)[tf_ArrayLength]);
+		template <umint tf_ArrayLength>
+		void operator += (typename t_CString::CChar const (&_Array)[tf_ArrayLength]);
 		template <typename tf_CStrTraits>
 		void operator += (NStr::TCStr<tf_CStrTraits> const &_String);
+
+		template <typename tf_CPointer>
+		requires
+		(
+			NTraits::cIsPointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
+			&& NTraits::cIsSame
+			<
+				NTraits::TCRemoveReferenceAndQualifiers
+				<
+					NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
+				>
+				, typename t_CString::CChar
+			>
+		)
+		void operator += (tf_CPointer const &_pString);
 
 		void f_AddUnicodeChar(ch32 _Character);
 		void f_AddChar(typename t_CString::CUnsignedChar _Character);
 		void f_AddString(typename t_CString::CChar const *_pString, umint _Len);
+		void f_AddNullTerminatedString(typename t_CString::CChar const *_pString);
 
 		CCommitted f_Commit();
 		umint f_GetStrLen() const;
