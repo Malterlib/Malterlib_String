@@ -7,6 +7,12 @@ namespace NMib::NStr
 {
 	struct CFuzzyMatchRange
 	{
+		template <typename tf_CStr>
+		void f_Format(tf_CStr &o_Str) const
+		{
+			o_Str += typename tf_CStr::CFormat("{} -> {}") << m_iStart << m_iEnd;
+		}
+
 		aint m_iStart = 0;
 		aint m_iEnd = 0;
 	};

@@ -20,22 +20,15 @@ namespace NMib::NStr
 		constexpr static fp64 gc_WeightUnmatched = 0.1;
 		constexpr static fp64 gc_WeightMatchPercent = 1.0 - (gc_WeightUnmatchedQuery.f_Get() + gc_WeightUnmatched.f_Get());
 
-		auto fg_BuildContiguousMatchResult(ch8 const *_pCandidate, ch8 const *_pQuery, aint _CandidateLen, aint _QueryLen, aint _iStart) -> CFuzzyMatchResult
+		auto fg_BuildContiguousMatchResult(aint _CandidateLen, aint _QueryLen, aint _iStart, aint _nCaseMismatches) -> CFuzzyMatchResult
 		{
-			aint nCaseMismatches = 0;
-			for (aint iChar = 0; iChar < _QueryLen; ++iChar)
-			{
-				if (_pCandidate[_iStart + iChar] != _pQuery[iChar])
-					++nCaseMismatches;
-			}
-
 			CFuzzyMatchResult Result;
 			Result.m_Matches.f_Reserve(1);
 			auto &Range = Result.m_Matches.f_Insert();
 			Range.m_iStart = _iStart;
 			Range.m_iEnd = _iStart + _QueryLen;
 
-			fp64 MatchedPercentQuery = fp64(nCaseMismatches) * 0.5 / fp64(_QueryLen * _QueryLen);
+			fp64 MatchedPercentQuery = fp64(_nCaseMismatches) * 0.5 / fp64(_QueryLen * _QueryLen);
 			fp64 UnmatchedPercent = fp64(_CandidateLen - _QueryLen) / fp64(_CandidateLen);
 
 			Result.m_Score
@@ -50,21 +43,32 @@ namespace NMib::NStr
 		{
 			using CMatching = TCFuzzyMatching<tf_CIndex>;
 			constexpr tf_CIndex c_Unset = TCLimitsInt<tf_CIndex>::mc_Max;
+			struct CMatchRun
+			{
+				tf_CIndex m_nMatched{0};
+				tf_CIndex m_iQuery{0};
+				tf_CIndex m_iCandidate{0};
+				tf_CIndex m_nCaseMismatches{0};
+				umint m_iNextRun{0};
+			};
 
 			// Single aligned allocation for all temporary buffers
-			// Layout: [pLowerBuf | padding | pMatchings | pNextPos | pQueryMatchings | pQueryChainNext]
-			constexpr umint c_Align = alignof(CMatching);
+			// Layout: [pLowerBuf | padding | pQueryNext | pQueryMatchings | pBucketHeads | pBucketTails | pSelectedRuns]
+			constexpr umint c_Align = alignof(CMatchRun);
 
 			umint LowerBufSize = umint(_CandidateLen) + umint(_QueryLen);
-			umint MatchingsOffset = fg_AlignUp(LowerBufSize, c_Align);
-			umint NextPosOffset = MatchingsOffset + fg_AlignUp(umint(_CandidateLen) * sizeof(CMatching), c_Align);
-			umint QueryMatchingsOffset = NextPosOffset + fg_AlignUp(umint(_CandidateLen) * sizeof(tf_CIndex), c_Align);
-			umint QueryChainOffset = QueryMatchingsOffset + fg_AlignUp(umint(_QueryLen) * sizeof(CMatching), c_Align);
-			umint TotalSize = QueryChainOffset + umint(_QueryLen) * sizeof(tf_CIndex);
+			umint BucketStride = umint(_QueryLen) + 1;
+			umint BucketLen = BucketStride * BucketStride;
+			umint QueryNextOffset = fg_AlignUp(LowerBufSize, c_Align);
+			umint QueryMatchingsOffset = QueryNextOffset + fg_AlignUp(umint(_QueryLen) * sizeof(tf_CIndex), c_Align);
+			umint BucketHeadsOffset = QueryMatchingsOffset + fg_AlignUp(umint(_QueryLen) * sizeof(CMatching), c_Align);
+			umint BucketTailsOffset = BucketHeadsOffset + fg_AlignUp(BucketLen * sizeof(umint), c_Align);
+			umint SelectedRunsOffset = BucketTailsOffset + fg_AlignUp(BucketLen * sizeof(umint), c_Align);
+			umint TotalSize = SelectedRunsOffset + umint(_QueryLen) * sizeof(CMatchRun);
 
 			// Use stack buffer for small allocations, heap for large ones
 			constexpr umint c_StackBufSize = 4096;
-			alignas(alignof(CMatching)) uch8 StackBuf[c_StackBufSize];
+			alignas(c_Align) uch8 StackBuf[c_StackBufSize];
 
 			uch8 *pScratch;
 			umint AllocSize = 0;
@@ -87,8 +91,8 @@ namespace NMib::NStr
 			for (tf_CIndex iQuery = 0; iQuery < _QueryLen; ++iQuery)
 				pLowerBuf[umint(_CandidateLen) + umint(iQuery)] = (uch8)fg_CharLowerCase((uch8)_pQuery[iQuery]);
 
-			bool bCaseSensitiveExact = _CandidateLen == _QueryLen;
 			bool bCaseInsensitiveExact = _CandidateLen == _QueryLen;
+			aint nExactCaseMismatches = 0;
 
 			for (tf_CIndex iCandidate = 0; iCandidate < _CandidateLen; ++iCandidate)
 			{
@@ -98,64 +102,118 @@ namespace NMib::NStr
 				if (iCandidate < _QueryLen)
 				{
 					if (_pCandidate[iCandidate] != _pQuery[iCandidate])
-						bCaseSensitiveExact = false;
+						++nExactCaseMismatches;
 
 					if (LowerChar != pLowerBuf[umint(_CandidateLen) + umint(iCandidate)])
 						bCaseInsensitiveExact = false;
 				}
 			}
 
-			if (bCaseSensitiveExact)
-				return fg_BuildContiguousMatchResult(_pCandidate, _pQuery, aint(_CandidateLen), aint(_QueryLen), 0);
-
 			if (bCaseInsensitiveExact)
-				return fg_BuildContiguousMatchResult(_pCandidate, _pQuery, aint(_CandidateLen), aint(_QueryLen), 0);
+				return fg_BuildContiguousMatchResult(aint(_CandidateLen), aint(_QueryLen), 0, nExactCaseMismatches);
+
+			if (_CandidateLen > _QueryLen)
+			{
+				tf_CIndex iBestContiguous = c_Unset;
+				int nBestContiguousMismatches = int(_QueryLen) + 1;
+				for (tf_CIndex iStart = 0; iStart <= _CandidateLen - _QueryLen; ++iStart)
+				{
+					if (pLowerBuf[iStart] != pLowerBuf[umint(_CandidateLen)])
+						continue;
+
+					tf_CIndex Found = 1;
+					while (Found < _QueryLen && pLowerBuf[iStart + Found] == pLowerBuf[umint(_CandidateLen) + umint(Found)])
+						++Found;
+
+					if (Found != _QueryLen)
+						continue;
+
+					int nMismatches = 0;
+					for (tf_CIndex iChar = 0; iChar < _QueryLen; ++iChar)
+					{
+						if (_pCandidate[iStart + iChar] != _pQuery[iChar])
+							++nMismatches;
+					}
+
+					if (nMismatches == 0)
+						return fg_BuildContiguousMatchResult(aint(_CandidateLen), aint(_QueryLen), aint(iStart), 0);
+
+					if (nMismatches < nBestContiguousMismatches)
+					{
+						iBestContiguous = iStart;
+						nBestContiguousMismatches = nMismatches;
+					}
+				}
+
+				if (iBestContiguous != c_Unset)
+					return fg_BuildContiguousMatchResult(aint(_CandidateLen), aint(_QueryLen), aint(iBestContiguous), nBestContiguousMismatches);
+			}
 
 			// Construct matching structures within the scratch buffer
-			CMatching *pMatchings = reinterpret_cast<CMatching *>(pScratch + MatchingsOffset);
-			tf_CIndex *pNextPos = reinterpret_cast<tf_CIndex *>(pScratch + NextPosOffset);
-			tf_CIndex *pQueryChainNext = reinterpret_cast<tf_CIndex *>(pScratch + QueryChainOffset);
+			tf_CIndex *pQueryNext = reinterpret_cast<tf_CIndex *>(pScratch + QueryNextOffset);
+			umint *pBucketHeads = reinterpret_cast<umint *>(pScratch + BucketHeadsOffset);
+			umint *pBucketTails = reinterpret_cast<umint *>(pScratch + BucketTailsOffset);
+			CMatchRun *pSelectedRuns = reinterpret_cast<CMatchRun *>(pScratch + SelectedRunsOffset);
 
-			// Build character position index: linked list per lowercase character
-			tf_CIndex CharHead[256];
-			NMemory::fg_ObjectSet(CharHead, TCLimitsInt<tf_CIndex>::mc_Max, 256);
+			// Build query character position index: linked list per lowercase character
+			tf_CIndex QueryHead[256];
+			NMemory::fg_ObjectSet(QueryHead, TCLimitsInt<tf_CIndex>::mc_Max, 256);
 
-			for (tf_CIndex iCandidate = _CandidateLen - 1; ; --iCandidate)
+			for (tf_CIndex iQuery = _QueryLen - 1; ; --iQuery)
 			{
-				pNextPos[iCandidate] = CharHead[pLowerBuf[iCandidate]];
-				CharHead[pLowerBuf[iCandidate]] = iCandidate;
-				if (iCandidate == 0)
+				pQueryNext[iQuery] = QueryHead[pLowerBuf[umint(_CandidateLen) + umint(iQuery)]];
+				QueryHead[pLowerBuf[umint(_CandidateLen) + umint(iQuery)]] = iQuery;
+				if (iQuery == 0)
 					break;
 			}
 
-			// Early exit: if no query character exists in the candidate, no match is possible
+			// Early exit: if no candidate character exists in the query, no match is possible
 			{
-				bool bAnyQueryCharExists = false;
-				for (tf_CIndex iQuery = 0; iQuery < _QueryLen; ++iQuery)
+				bool bAnyCandidateCharExists = false;
+				for (tf_CIndex iCandidate = 0; iCandidate < _CandidateLen; ++iCandidate)
 				{
-					if (CharHead[pLowerBuf[umint(_CandidateLen) + umint(iQuery)]] != c_Unset)
+					if (QueryHead[pLowerBuf[iCandidate]] != c_Unset)
 					{
-						bAnyQueryCharExists = true;
+						bAnyCandidateCharExists = true;
 						break;
 					}
 				}
-				if (!bAnyQueryCharExists)
+				if (!bAnyCandidateCharExists)
 					return {};
 			}
 
-			// Zero-init matchings via memset (deferred past early exit; m_nMatched==0 means unset)
-			NMemory::fg_MemClear(pMatchings, umint(_CandidateLen) * sizeof(CMatching));
-
-			tf_CIndex iBestContiguous = c_Unset;
-			int nBestContiguousMismatches = int(_QueryLen) + 1;
-
-			tf_CIndex iQueryPos = 0;
-			while (iQueryPos < _QueryLen)
+			NContainer::TCVector<CMatchRun> MatchRuns;
+			MatchRuns.f_Reserve(fg_Min(umint(_CandidateLen) * umint(_QueryLen), umint(1024)));
+			constexpr umint c_UnsetRun = TCLimitsInt<umint>::mc_Max;
+			for (umint iBucket = 0; iBucket < BucketLen; ++iBucket)
 			{
-				pQueryChainNext[iQueryPos] = c_Unset;
-				tf_CIndex iStart = CharHead[pLowerBuf[umint(_CandidateLen) + umint(iQueryPos)]];
-				bool bQueryPosChained = false;
-				while (iStart != c_Unset)
+				pBucketHeads[iBucket] = c_UnsetRun;
+				pBucketTails[iBucket] = c_UnsetRun;
+			}
+			auto fAddMatchRun = [&](tf_CIndex _iCandidate, tf_CIndex _iQuery, tf_CIndex _nMatched, tf_CIndex _nCaseMismatches)
+				{
+					umint iBucket = umint(_nMatched) * BucketStride + umint(_nCaseMismatches);
+					umint iRun = MatchRuns.f_GetLen();
+					auto &MatchRun = MatchRuns.f_Insert();
+					MatchRun.m_nMatched = _nMatched;
+					MatchRun.m_iQuery = _iQuery;
+					MatchRun.m_iCandidate = _iCandidate;
+					MatchRun.m_nCaseMismatches = _nCaseMismatches;
+					MatchRun.m_iNextRun = c_UnsetRun;
+
+					if (pBucketHeads[iBucket] == c_UnsetRun)
+						pBucketHeads[iBucket] = iRun;
+					else
+						MatchRuns.f_GetArray()[pBucketTails[iBucket]].m_iNextRun = iRun;
+
+					pBucketTails[iBucket] = iRun;
+				}
+			;
+
+			for (tf_CIndex iStart = 0; iStart < _CandidateLen; ++iStart)
+			{
+				tf_CIndex iQueryPos = QueryHead[pLowerBuf[iStart]];
+				while (iQueryPos != c_Unset)
 				{
 					// Extend match from candidate[iStart] against query[iQueryPos]
 					// First char already matches by construction, so start from second
@@ -165,140 +223,99 @@ namespace NMib::NStr
 					while (Found < nMaxExtent && pLowerBuf[iStart + Found] == pLowerBuf[umint(_CandidateLen) + umint(iQueryPos) + umint(Found)])
 						++Found;
 
-					if (iQueryPos == 0 && Found == _QueryLen) [[unlikely]]
-					{
-						// Track the contiguous match with best case quality
-						int nMismatches = 0;
-						for (tf_CIndex iChar = 0; iChar < _QueryLen; ++iChar)
-						{
-							if (_pCandidate[iStart + iChar] != _pQuery[iChar])
-								++nMismatches;
-						}
-						if (nMismatches == 0)
-							return fg_BuildContiguousMatchResult(_pCandidate, _pQuery, aint(_CandidateLen), aint(_QueryLen), aint(iStart));
-						if (nMismatches < nBestContiguousMismatches)
-						{
-							iBestContiguous = iStart;
-							nBestContiguousMismatches = nMismatches;
-						}
-						iStart = pNextPos[iStart];
-						continue;
-					}
-
-					bool bLarger = true;
+					tf_CIndex nCaseMismatches = 0;
 					for (tf_CIndex iOffset = 0; iOffset < Found; ++iOffset)
 					{
-						if (Found < pMatchings[iStart + iOffset].m_nMatched)
-						{
-							bLarger = false;
-							break;
-						}
+						if (_pCandidate[iStart + iOffset] != _pQuery[iQueryPos + iOffset])
+							++nCaseMismatches;
 					}
 
-					// When the new match is the same length as an existing one at iStart, prefer better case quality
-					if (bLarger && pMatchings[iStart].m_nMatched == Found)
-					{
-						auto &Existing = pMatchings[iStart];
-						int nNewMismatches = 0;
-						int nOldMismatches = 0;
-						for (tf_CIndex iOffset = 0; iOffset < Found; ++iOffset)
-						{
-							if (_pCandidate[iStart + iOffset] != _pQuery[iQueryPos + iOffset])
-								++nNewMismatches;
-							if (_pCandidate[Existing.m_iCandidate + iOffset] != _pQuery[Existing.m_iQuery + iOffset])
-								++nOldMismatches;
-						}
-						if (nNewMismatches > nOldMismatches)
-							bLarger = false;
-						else if (nNewMismatches == nOldMismatches)
-						{
-							bLarger = false;
-							// Chain this query position as an alternative. Only insert once per
-							// iQueryPos since multiple candidates with the same head share the chain.
-							if (!bQueryPosChained)
-							{
-								pQueryChainNext[iQueryPos] = pQueryChainNext[pMatchings[iStart].m_iQuery];
-								pQueryChainNext[pMatchings[iStart].m_iQuery] = iQueryPos;
-								bQueryPosChained = true;
-							}
-						}
-					}
+					fAddMatchRun(iStart, iQueryPos, Found, nCaseMismatches);
 
-					if (bLarger)
-					{
-						// Clear old matching that extends before the new match's start
-						if (pMatchings[iStart].m_nMatched > 0)
-						{
-							tf_CIndex OldStart = pMatchings[iStart].m_iCandidate;
-							for (tf_CIndex iClear = OldStart; iClear < iStart; ++iClear)
-								pMatchings[iClear] = {};
-						}
+					if (Found > 1)
+						fAddMatchRun(iStart, iQueryPos, tf_CIndex(1), _pCandidate[iStart] != _pQuery[iQueryPos] ? tf_CIndex(1) : tf_CIndex(0));
 
-						// Clear old matching that extends after the new match's end
-						if (pMatchings[iStart + Found - 1].m_nMatched > 0)
-						{
-							auto &EndMatch = pMatchings[iStart + Found - 1];
-							tf_CIndex OldEnd = EndMatch.m_iCandidate + EndMatch.m_nMatched;
-							for (tf_CIndex iClear = iStart + Found; iClear < OldEnd; ++iClear)
-								pMatchings[iClear] = {};
-						}
-
-						// Record the new matching
-						for (tf_CIndex iRecord = iStart; iRecord < iStart + Found; ++iRecord)
-						{
-							auto &Matching = pMatchings[iRecord];
-							Matching.m_nMatched = Found;
-							Matching.m_iQuery = iQueryPos;
-							Matching.m_iCandidate = iStart;
-						}
-					}
-
-					iStart = pNextPos[iStart];
+					iQueryPos = pQueryNext[iQueryPos];
 				}
-
-				if (iBestContiguous != c_Unset)
-					return fg_BuildContiguousMatchResult(_pCandidate, _pQuery, aint(_CandidateLen), aint(_QueryLen), aint(iBestContiguous));
-
-				++iQueryPos;
 			}
-
-			// Phase 3: Build pQueryMatchings (reverse mapping for query coverage)
+			// Phase 3: Resolve unordered, non-overlapping runs into pQueryMatchings
 			CMatching *pQueryMatchings = reinterpret_cast<CMatching *>(pScratch + QueryMatchingsOffset);
 			NMemory::fg_MemClear(pQueryMatchings, umint(_QueryLen) * sizeof(CMatching));
+			NMemory::fg_MemClear(pLowerBuf, LowerBufSize);
 
-			tf_CIndex LastMatch = c_Unset;
-
-			for (tf_CIndex iCandidate = 0; iCandidate < _CandidateLen; ++iCandidate)
-			{
-				auto &Matching = pMatchings[iCandidate];
-				if (Matching.m_iCandidate != LastMatch && Matching.m_nMatched != 0)
+			uch8 *pCandidateUsed = pLowerBuf;
+			uch8 *pQueryUsed = pLowerBuf + _CandidateLen;
+			umint nSelectedRuns = 0;
+			auto fAcceptRun = [&](CMatchRun const &_MatchRun)
 				{
-					tf_CIndex iQueryAlt = Matching.m_iQuery;
-					bool bWritten = false;
-					while (!bWritten && iQueryAlt != c_Unset)
+					pSelectedRuns[nSelectedRuns] = _MatchRun;
+					++nSelectedRuns;
+					for (tf_CIndex iOffset = 0; iOffset < _MatchRun.m_nMatched; ++iOffset)
 					{
-						for (tf_CIndex iQuery = iQueryAlt; iQuery < iQueryAlt + Matching.m_nMatched; ++iQuery)
-						{
-							if (Matching.m_nMatched > pQueryMatchings[iQuery].m_nMatched)
-							{
-								pQueryMatchings[iQuery].m_nMatched = Matching.m_nMatched;
-								pQueryMatchings[iQuery].m_iQuery = iQueryAlt;
-								pQueryMatchings[iQuery].m_iCandidate = Matching.m_iCandidate;
-								bWritten = true;
-							}
-						}
-						if (!bWritten)
-							iQueryAlt = pQueryChainNext[iQueryAlt];
+						pCandidateUsed[_MatchRun.m_iCandidate + iOffset] = true;
+						pQueryUsed[_MatchRun.m_iQuery + iOffset] = true;
+
+						auto &QueryMatching = pQueryMatchings[_MatchRun.m_iQuery + iOffset];
+						QueryMatching.m_nMatched = _MatchRun.m_nMatched;
+						QueryMatching.m_iQuery = _MatchRun.m_iQuery;
+						QueryMatching.m_iCandidate = _MatchRun.m_iCandidate;
 					}
 				}
-				LastMatch = Matching.m_iCandidate;
+			;
+
+			auto pMatchRuns = MatchRuns.f_GetArray();
+
+			for (tf_CIndex nMatched = _QueryLen; nMatched > 0; --nMatched)
+			{
+				for (tf_CIndex nCaseMismatches = 0; nCaseMismatches <= nMatched; ++nCaseMismatches)
+				{
+					umint iRun = pBucketHeads[umint(nMatched) * BucketStride + umint(nCaseMismatches)];
+					while (iRun != c_UnsetRun)
+					{
+						CMatchRun MatchRun = pMatchRuns[iRun];
+						umint iNextRun = MatchRun.m_iNextRun;
+						tf_CIndex iOffset = 0;
+						while (iOffset < MatchRun.m_nMatched)
+						{
+							while
+							(
+								iOffset < MatchRun.m_nMatched
+								&& (pCandidateUsed[MatchRun.m_iCandidate + iOffset] || pQueryUsed[MatchRun.m_iQuery + iOffset])
+							)
+							{
+								++iOffset;
+							}
+
+							tf_CIndex iStartOffset = iOffset;
+							tf_CIndex nSegmentCaseMismatches = 0;
+							while
+							(
+								iOffset < MatchRun.m_nMatched
+								&& !pCandidateUsed[MatchRun.m_iCandidate + iOffset]
+								&& !pQueryUsed[MatchRun.m_iQuery + iOffset]
+							)
+							{
+								if (_pCandidate[MatchRun.m_iCandidate + iOffset] != _pQuery[MatchRun.m_iQuery + iOffset])
+									++nSegmentCaseMismatches;
+
+								++iOffset;
+							}
+
+							tf_CIndex nSegmentMatched = iOffset - iStartOffset;
+							if (nSegmentMatched == 0)
+								continue;
+
+							if (nSegmentMatched == MatchRun.m_nMatched)
+								fAcceptRun(MatchRun);
+							else
+								fAddMatchRun(MatchRun.m_iCandidate + iStartOffset, MatchRun.m_iQuery + iStartOffset, nSegmentMatched, nSegmentCaseMismatches);
+						}
+						iRun = iNextRun;
+					}
+				}
 			}
 
-			// Phase 4: Count unmatched, mark candidate positions, and compute score in one pass
-			// Reuse pLowerBuf for pCandidateMatched (no longer needed after main matching loop)
-			uch8 *pCandidateMatched = pLowerBuf;
-			NMemory::fg_MemClear(pCandidateMatched, umint(_CandidateLen));
-
+			// Phase 4: Count unmatched and compute score
 			int32 nUnmatchedQuery = 0;
 			fp64 MatchPenalty = 0.0;
 			for (tf_CIndex iQuery = 0; iQuery < _QueryLen; ++iQuery)
@@ -312,7 +329,6 @@ namespace NMib::NStr
 				else
 				{
 					tf_CIndex iCandidatePos = QueryMatching.m_iCandidate + (iQuery - QueryMatching.m_iQuery);
-					pCandidateMatched[iCandidatePos] = true;
 					MatchPenalty += fp64(_QueryLen - QueryMatching.m_nMatched);
 					// Penalize case mismatches
 					if (_pCandidate[iCandidatePos] != _pQuery[iQuery])
@@ -326,24 +342,30 @@ namespace NMib::NStr
 
 			aint nMatched = 0;
 			NContainer::TCVector<CFuzzyMatchRange> MatchRanges;
-			for (tf_CIndex iCandidate = 0; iCandidate < _CandidateLen;)
+			if (nSelectedRuns > 1)
 			{
-				if (!pCandidateMatched[iCandidate])
-				{
-					++iCandidate;
-					continue;
-				}
+				NMemory::fg_QSort
+					(
+						pSelectedRuns
+						, nSelectedRuns
+						, [](CMatchRun const &_Left, CMatchRun const &_Right)
+						{
+							if (auto Compare = _Left.m_iCandidate <=> _Right.m_iCandidate; Compare != 0)
+								return Compare;
 
-				tf_CIndex iRangeStart = iCandidate;
-				while (iCandidate < _CandidateLen && pCandidateMatched[iCandidate])
-					++iCandidate;
+							return _Left.m_iQuery <=> _Right.m_iQuery;
+						}
+					)
+				;
+			}
 
-				tf_CIndex iRangeEnd = iCandidate;
-
+			for (umint iSelectedRun = 0; iSelectedRun < nSelectedRuns; ++iSelectedRun)
+			{
+				auto const &MatchRun = pSelectedRuns[iSelectedRun];
 				auto &Range = MatchRanges.f_Insert();
-				Range.m_iStart = aint(iRangeStart);
-				Range.m_iEnd = aint(iRangeEnd);
-				nMatched += aint(iRangeEnd) - aint(iRangeStart);
+				Range.m_iStart = aint(MatchRun.m_iCandidate);
+				Range.m_iEnd = aint(MatchRun.m_iCandidate + MatchRun.m_nMatched);
+				nMatched += aint(MatchRun.m_nMatched);
 			}
 
 			fp64 MatchedPercentQuery = MatchPenalty / fp64(aint(_QueryLen) * aint(_QueryLen));

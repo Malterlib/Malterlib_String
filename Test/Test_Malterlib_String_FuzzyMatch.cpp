@@ -210,11 +210,13 @@ namespace
 					DMibTestPath("FoundBug1Reverse");
 					auto Result = fg_FuzzyMatchString("generate", "eegen");
 					DMibExpect(bool(Result), ==, true);
-					DMibAssert(Result.m_Matches.f_GetLen(), ==, 2u);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 3u);
 					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
-					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 4);
-					DMibExpect(Result.m_Matches[1].m_iStart, ==, 7);
-					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 8);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 3);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 3);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 4);
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 7);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 8);
 				}
 
 				{
@@ -269,6 +271,166 @@ namespace
 					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 8);
 					DMibExpect(Result.m_Matches[3].m_iStart, ==, 9);
 					DMibExpect(Result.m_Matches[3].m_iEnd, ==, 10);
+				}
+
+				{
+					DMibTestPath("ChainedAlternativeBounds");
+					auto Result = fg_FuzzyMatchString("aabba", "baba");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 3u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 1);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 1);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 3);
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 3);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 4);
+				}
+
+				{
+					DMibTestPath("ChainedAlternativeCycle");
+					auto Result = fg_FuzzyMatchString("aaaab", "aaba");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 2u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 1);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 2);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 5);
+				}
+
+				{
+					DMibTestPath("EqualLengthBucketCaseQuality");
+					auto Result = fg_FuzzyMatchString("ABxab", "ABab");
+					DMibExpect(bool(Result), ==, true);
+					DMibExpect(Result.m_Score, <, 0.25);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 2u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 2);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 3);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 5);
+				}
+
+				{
+					DMibTestPath("EqualLengthBucketCaseQuality2");
+					auto Result = fg_FuzzyMatchString("abxAB", "ABab");
+					DMibExpect(bool(Result), ==, true);
+					DMibExpect(Result.m_Score, <, 0.25);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 2u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 2);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 3);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 5);
+				}
+
+				{
+					// All query characters should be matched: "Test" + "M" + "e" + "JsonPerformance.cpp"
+					DMibTestPath("FilenameSearch");
+					auto Result = fg_FuzzyMatchString("Test_Malterlib_Encoding_JsonPerformance.cpp", "TestMEJsonPerformance.cpp");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 4u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 4);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 5);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 6);
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 15);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 16);
+					DMibExpect(Result.m_Matches[3].m_iStart, ==, 24);
+					DMibExpect(Result.m_Matches[3].m_iEnd, ==, 43);
+				}
+				{
+					DMibTestPath("FilenameSearch2");
+					auto Result = fg_FuzzyMatchString("Test_Malterlib_Encoding_JsonPerformance.cpp", "TestmaenJsonPerformance.cpp");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 4u);
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 4);
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 5);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 7);
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 15);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 17);
+					DMibExpect(Result.m_Matches[3].m_iStart, ==, 24);
+					DMibExpect(Result.m_Matches[3].m_iEnd, ==, 43);
+				}
+				{
+					DMibTestPath("FilenameSearch3");
+					auto Result = fg_FuzzyMatchString("Test_malterlib_cencoding_JsonPerformance.cpp", "TestJsonPerformance.cppman++ce");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 5u);
+
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 4);
+
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 5);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 7);
+
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 15);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 17);
+
+					DMibExpect(Result.m_Matches[3].m_iStart, ==, 17);
+					DMibExpect(Result.m_Matches[3].m_iEnd, ==, 18);
+
+					DMibExpect(Result.m_Matches[4].m_iStart, ==, 25);
+					DMibExpect(Result.m_Matches[4].m_iEnd, ==, 44);
+				}
+				{
+					DMibTestPath("FilenameSearch4");
+					auto Result = fg_FuzzyMatchString("Test_Malterlib_Encoding_JsonPerformance.cpp", "PerformancemeJson");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 4u);
+
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 1);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 2);
+
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 5);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 6);
+
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 24);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 28);
+
+					DMibExpect(Result.m_Matches[3].m_iStart, ==, 28);
+					DMibExpect(Result.m_Matches[3].m_iEnd, ==, 39);
+				}
+				{
+					DMibTestPath("Ordering Regression");
+					auto Result = fg_FuzzyMatchString("CamelCaseRocks", "ccr");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 3u);
+
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 1);
+
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 9);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 10);
+
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 11);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 12);
+				}
+				{
+					DMibTestPath("Length First Not Optimal");
+					auto Result = fg_FuzzyMatchString("abbb", "bbab");
+					DMibExpect(bool(Result), ==, true);
+					DMibExpect(Result.m_Score, <, 0.25);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 2u);
+
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 2);
+
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 2);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 4);
+				}
+				{
+					DMibTestPath("Ordering Regression 2");
+					auto Result = fg_FuzzyMatchString("Test_Malterlib_Encoding_JsonPerformance.cpp", "Test_Malterlib_JsonPerformance.cpp_Encoding");
+					DMibExpect(bool(Result), ==, true);
+					DMibAssert(Result.m_Matches.f_GetLen(), ==, 3u);
+
+					DMibExpect(Result.m_Matches[0].m_iStart, ==, 0);
+					DMibExpect(Result.m_Matches[0].m_iEnd, ==, 14);
+
+					DMibExpect(Result.m_Matches[1].m_iStart, ==, 14);
+					DMibExpect(Result.m_Matches[1].m_iEnd, ==, 23);
+
+					DMibExpect(Result.m_Matches[2].m_iStart, ==, 23);
+					DMibExpect(Result.m_Matches[2].m_iEnd, ==, 43);
 				}
 			};
 		}
