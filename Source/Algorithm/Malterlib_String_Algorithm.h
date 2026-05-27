@@ -117,8 +117,6 @@ namespace NMib::NStr
 	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept;
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept;
-	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2) noexcept;
 
 	template <typename tf_CData1, typename tf_CData2>

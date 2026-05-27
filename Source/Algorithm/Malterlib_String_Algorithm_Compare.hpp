@@ -9,14 +9,14 @@ namespace NMib::NStr
 	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCaseImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen) noexcept;
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpConstExpr(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
+	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
 
-		tf_CData1 const *pStr1 = _pStr1;
-		tf_CData2 const *pStr2 = _pStr2;
+		auto const *pStr1 = _pStr1;
+		auto const *pStr2 = _pStr2;
 
 		while (*pStr1 && *pStr2)
 		{
@@ -39,42 +39,15 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpImpl(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
-	{
-		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
-		using CData1 = NTraits::TCUnsigned<tf_CData1>;
-		using CData2 = NTraits::TCUnsigned<tf_CData2>;
-
-		CData1 const *pStr1 = (CData1 const *)_pStr1;
-		CData2 const *pStr2 = (CData2 const *)_pStr2;
-
-		while (*pStr1 && *pStr2)
-		{
-			CRetType Ret0 = *pStr1;
-			CRetType Ret1 = *pStr2;
-			if (Ret0 != Ret1)
-				return (Ret0 - Ret1) << 1;
-
-			++pStr1;
-			++pStr2;
-		}
-
-		if ((*pStr1) && !(*pStr2))
-			return 1;
-
-		if (!(*pStr1) && (*pStr2))
-			return -1;
-
-		return 0;
-	}
-
-	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_always typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmp(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2) noexcept
 	{
-		if constexpr (NTraits::cIsSame<tf_CData1, tf_CData2>)
+		if_not_consteval
 		{
-			if (_pStr1 == _pStr2)
-				return 0;
+			if constexpr (NTraits::cIsSame<tf_CData1, tf_CData2>)
+			{
+				if (_pStr1 == _pStr2)
+					return 0;
+			}
 		}
 
 		return fg_StrCmpImpl(_pStr1, _pStr2);
