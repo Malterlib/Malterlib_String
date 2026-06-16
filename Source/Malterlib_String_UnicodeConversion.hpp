@@ -265,8 +265,8 @@ namespace NMib::NStr
 			uint32 w1 = 0xD800 + vh;
 			uint32 w2 = 0xDC00 + v1;
 
-			*pRet = w1;++pRet;
-			*pRet = w2;
+			*pRet = ch16(w1);++pRet;
+			*pRet = ch16(w2);
 		}
 		else
 		{
@@ -277,7 +277,7 @@ namespace NMib::NStr
 					return false;
 			}
 
-			*pRet = _Char;
+			*pRet = ch16(_Char);
 		}
 		return true;
 	}
