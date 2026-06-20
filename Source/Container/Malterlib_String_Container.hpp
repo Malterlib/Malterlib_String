@@ -18,13 +18,6 @@ namespace NMib::NStr
 		DMibFastCheck(_Index <= CImp::f_GetStrLen());
 		return f_GetStr()[_Index];
 	}
-#ifdef DMibDebuggerHelpers
-	template <typename t_CTCStrTraits>
-	TCStrTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> TCStr<t_CTCStrTraits>::fs_TypeDebugHelper()
-	{
-		return {};
-	}
-#endif
 
 	template <typename t_TCStrTraits>
 	TCStr<t_TCStrTraits>::CAddStrAgrs::CAddStrAgrs(aint &_StrLen, umint _Len)

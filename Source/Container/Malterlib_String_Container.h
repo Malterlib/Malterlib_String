@@ -19,11 +19,6 @@ namespace NMib::NStr
 	struct CInitByRange {};
 	struct CAllowNUL {};
 
-#ifdef DMibDebuggerHelpers
-	template <int t_Type>
-	struct TCStrTypeHelper {};
-#endif
-
 	template <typename t_CString>
 	struct TCStringAppender;
 
@@ -604,10 +599,6 @@ namespace NMib::NStr
 		TCStr f_RemovePrefix(tf_CStr const &_ToFind) const;
 		template <typename tf_CStr>
 		TCStr f_RemoveSuffix(tf_CStr const &_ToFind) const;
-
-#ifdef DMibDebuggerHelpers
-		static TCStrTypeHelper<t_CTCStrTraits::CStrTraits::mc_Type> fs_TypeDebugHelper();
-#endif
 
 		inline_large TCStr &operator = (TCStr const &_From);
 		inline_large TCStr &operator = (TCStr &&_From);

@@ -88,27 +88,18 @@ namespace NMib::NStr
 		}
 		: CImp(fg_Forward<tfp_CParams>(p_Params)...)
 	{
-#ifdef DMibDebuggerHelpers
-		static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
 	}
 
 	template <typename t_CTCStrTraits>
 	constexpr inline_small TCStr<t_CTCStrTraits>::TCStr(TCStr const &_Str)
 		: CImp(_Str)
 	{
-#ifdef DMibDebuggerHelpers
-		static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small TCStr<t_CTCStrTraits>::TCStr(TCStr &&_Str)
 		: CImp(fg_Move(_Str))
 	{
-#ifdef DMibDebuggerHelpers
-		static_assert(TCInstantiateValue<&fs_TypeDebugHelper>::mc_Value);
-#endif
 	}
 
 	template <typename t_CTCStrTraits>
