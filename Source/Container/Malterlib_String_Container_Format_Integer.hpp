@@ -788,7 +788,7 @@ namespace NMib::NStr
 		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(_Data);
-		return CFormatType::CStrFormatTypeClassifier();
+		return typename CFormatType::CStrFormatTypeClassifier();
 	}
 
 	template <typename t_CFormatter, typename t_CInt0, typename t_CInt1>
@@ -797,7 +797,7 @@ namespace NMib::NStr
 		::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data);
-		return CFormatType::CStrFormatTypeClassifier();
+		return typename CFormatType::CStrFormatTypeClassifier();
 	}
 
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
@@ -806,7 +806,7 @@ namespace NMib::NStr
 		::fs_CreateFormat(t_CFormatter &_Formatter, TCValueWithOptions<t_COption, t_CIntType> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(_Data, _Data);
-		return CFormatType::CStrFormatTypeClassifier();
+		return typename CFormatType::CStrFormatTypeClassifier();
 	}
 
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
@@ -815,7 +815,7 @@ namespace NMib::NStr
 		::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data, *_Data);
-		return CFormatType::CStrFormatTypeClassifier();
+		return typename CFormatType::CStrFormatTypeClassifier();
 	}
 
 	template <int32 tf_Radix, typename tf_CIntType>
