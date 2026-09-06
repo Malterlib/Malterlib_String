@@ -32,6 +32,7 @@ namespace NMib::NStr
 		ch32 mp_Current;
 	};
 
+	// Character iterators preserve leading U+FEFF/U+FFFE. Stream decoders own BOM handling.
 	struct CStrIteratorUTF8
 	{
 		CStrIteratorUTF8(ch8 const *_pStr, umint _StrLen);
@@ -50,7 +51,6 @@ namespace NMib::NStr
 		inline_always CStrIteratorUTF8 &operator ++ ();
 
 	private:
-		void fp_ParseBOM();
 		ch32 fp_Next();
 
 		uch8 const *mp_pBegin;
@@ -62,6 +62,7 @@ namespace NMib::NStr
 		bool mp_bValidCodePoint;
 	};
 
+	// Input is already in native byte order; no signature detection or byte swapping.
 	struct CStrIteratorUTF16
 	{
 		CStrIteratorUTF16(ch16 const *_pStr, umint _StrLen);
@@ -76,7 +77,6 @@ namespace NMib::NStr
 		CStrIteratorUTF16 &f_GetIterator();
 
 	private:
-		void fp_ParseBOM();
 		ch32 fp_Next();
 
 		uch16 const *mp_pBegin;
@@ -95,9 +95,6 @@ namespace NMib::NStr
 
 	template <typename t_FOutFunctor>
 	bool fg_EncodeUTF8BOM(t_FOutFunctor &&_OutFunctor);
-
-	template <typename t_FOutFunctor>
-	bool fg_EncodeUTF16BOM(t_FOutFunctor &&_OutFunctor);
 
 	template <bool t_bCheckLength, typename t_FOutFunctor>
 	inline_always bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &&_OutFunctor);

@@ -237,6 +237,44 @@ namespace
 			};
 		}
 
+		void fp_LeadingBOMTests()
+		{
+			DMibTestCategory("LeadingBOM")
+			{
+				struct CCase
+				{
+					CStr m_Name;
+					CStr m_Input;
+					CStr m_Upper;
+					CStr m_Lower;
+				};
+
+				NContainer::TCVector<CCase> Cases = {{"ASCII", "aBc", "ABC", "abc"}, {"Latin1", "àÑþ", "ÀÑÞ", "àñþ"}, {"Empty", "", "", ""}};
+				for (auto const &Case : Cases)
+				{
+					DMibTestPath(Case.m_Name);
+					for (bool bRepeated : {false, true})
+					{
+						DMibTestPath(bRepeated ? "RepeatedMarker" : "SingleMarker");
+						CStr Prefix = "\xEF\xBB\xBF";
+						if (bRepeated)
+							Prefix += "\xEF\xBB\xBF";
+
+						CStr Upper = Prefix + Case.m_Input;
+						CStr Lower = Upper;
+						CStr Capitalized = Upper;
+						fg_StrUpperCase(Upper.f_GetStrUniqueWritable(), Upper.f_GetLen());
+						fg_StrLowerCase(Lower.f_GetStrUniqueWritable(), Lower.f_GetLen());
+						fg_StrCapitalize(Capitalized.f_GetStrUniqueWritable());
+
+						DMibExpect(Upper, ==, Prefix + Case.m_Upper);
+						DMibExpect(Lower, ==, Prefix + Case.m_Lower);
+						DMibExpect(Capitalized, ==, Prefix + Case.m_Input);
+					}
+				}
+			};
+		}
+
 		void fp_ContainerTests()
 		{
 			DMibTestCategory("Container")
@@ -346,6 +384,7 @@ namespace
 					fp_StrUpperCaseUTF8Tests();
 					fp_StrLowerCaseUTF8Tests();
 					fp_StrCapitalizeUTF8Tests();
+					fp_LeadingBOMTests();
 				};
 				fp_ContainerTests();
 			};

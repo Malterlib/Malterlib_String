@@ -71,8 +71,10 @@ namespace NMib::NStr
 	template<typename tf_FProcess, typename tf_CString>
 	inline_always bool fg_ProcessUTF8(tf_FProcess &&_fFunctor, tf_CString *_pStr, umint _Len, EValidateUTF8Flag _Flags)
 	{
+		auto pEnd = _pStr + _Len;
+
 		// BOM
-		if (_Len >= 3 && _pStr[0] == 0xEF && _pStr[1] == 0xBB && _pStr[2] == 0xBF)
+		if (_Len >= 3 && *_pStr == 0xEF && *(_pStr + 1) == 0xBB && *(_pStr + 2) == 0xBF)
 		{
 			if (_fFunctor(_pStr, 3, true))
 				return false;
@@ -80,8 +82,6 @@ namespace NMib::NStr
 		}
 		umint nOneByteCodepointsProcessed = 0;
 		tf_CString *pOneByteCodepoints = nullptr;
-
-		auto pEnd = _pStr + _Len;
 
 		while (_pStr < pEnd)
 		{

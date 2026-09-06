@@ -5,13 +5,6 @@
 
 namespace NMib::NStr
 {
-	void CStrIteratorUTF8::fp_ParseBOM()
-	{
-		// Remove BOM
-		if (mp_pBegin[0] == 0xEF && mp_pBegin[1] == 0xBB && mp_pBegin[2] == 0xBF)
-			mp_pBegin += 3;
-	}
-
 	ch32 CStrIteratorUTF8::fp_Next()
 	{
 		ch32 DestChar = 0;
@@ -89,7 +82,6 @@ namespace NMib::NStr
 		, mp_bWholeCodePoint(true)
 		, mp_bValidCodePoint(true)
 	{
-		fp_ParseBOM();
 		mp_Current = fp_Next();
 	}
 
@@ -111,13 +103,6 @@ namespace NMib::NStr
 	CStrIteratorUTF8 &CStrIteratorUTF8::f_GetIterator()
 	{
 		return *this;
-	}
-
-	void CStrIteratorUTF16::fp_ParseBOM()
-	{
-		// Remove BOM
-		if (mp_pBegin[0] == 0xFFFE)
-			++mp_pBegin;
 	}
 
 	ch32 CStrIteratorUTF16::fp_Next()
@@ -161,7 +146,6 @@ namespace NMib::NStr
 		: mp_pBegin((uch16 const *)_pStr)
 		, mp_pEnd((uch16 const *)_pStr + _StrLen)
 	{
-		fp_ParseBOM();
 		mp_Current = fp_Next();
 	}
 

@@ -15,7 +15,6 @@ namespace NMib::NStr
 		, mp_bValidCodePoint(true)
 	{
 		static_assert(sizeof(typename tf_CStrTraits::CStrTraits::CChar) == 1, "Incorrectly sized char for UTC8");
-		fp_ParseBOM();
 		mp_Current = fp_Next();
 	}
 
@@ -46,7 +45,6 @@ namespace NMib::NStr
 		, mp_pEnd((uch16 const *)_String.f_GetStr() + _String.f_GetStrLen())
 	{
 		static_assert(sizeof(typename tf_CStrTraits::CStrTraits::CChar) == 2, "Incorrectly sized char for UTC8");
-		fp_ParseBOM();
 		mp_Current = fp_Next();
 	}
 
@@ -282,15 +280,4 @@ namespace NMib::NStr
 		return true;
 	}
 
-	template <typename t_FOutFunctor>
-	bool fg_EncodeUTF16BOM(t_FOutFunctor &&_OutFunctor)
-	{
-		auto *pRet = _OutFunctor(1);
-		if (pRet)
-		{
-			*pRet = ch16(0xFFFE);
-			return true;
-		}
-		return false;
-	}
 }
