@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 	template <bool t_bCaseSensitive>
 	template <typename tf_CLeft, typename tf_CRight>
-	inline_small auto TCMultiReplace<t_bCaseSensitive>::CSort_Reverse::operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const -> COrdering
+	inline_small auto TCMultiReplace<t_bCaseSensitive>::CSort_Reverse::operator () (tf_CLeft &&_Left, tf_CRight &&_Right) const -> COrdering
 	{
 		if constexpr (t_bCaseSensitive)
 			return fg_StrCmp(_Right, _Left) <=> 0;
@@ -76,7 +76,15 @@ namespace NMib::NStr
 	template <bool t_bCaseSensitive>
 	bool TCMultiReplace<t_bCaseSensitive>::f_StringMatches(ch8 const *_pString)
 	{
-		return f_StringMatches(_pString, [](CStr const &_ToFind, CStr const &_FoundEntry) { return true; });
+		return f_StringMatches
+			(
+				_pString
+				, [](CStr const &_ToFind, CStr const &_FoundEntry)
+				{
+					return true;
+				}
+			)
+		;
 	}
 
 	template <bool t_bCaseSensitive>

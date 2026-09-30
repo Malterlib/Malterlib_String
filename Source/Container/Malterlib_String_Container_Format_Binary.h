@@ -36,11 +36,11 @@ namespace NMib::NStr
 		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CType const &_Value);
 		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CType const &_Value, COptionsStatic &_Options);
 
-		constexpr static bool mc_bNeedDestruct = true;
+		static constexpr bool mc_bNeedDestruct = true;
 
 	private:
 		template <typename tf_COptions>
-		inline_small static void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, const CType &_Value);
+		inline_small static void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Value);
 
 		inline static bool constexpr mcp_TypeID = false;
 

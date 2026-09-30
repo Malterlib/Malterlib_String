@@ -45,5 +45,5 @@ using zuch32 = NMib::TCAutoClear<uch32>;
 #include "Malterlib_String_Instantiated.hpp"
 
 #ifndef DMibPNoShortCuts
-	using namespace NMib::NStr;
+using namespace NMib::NStr;
 #endif

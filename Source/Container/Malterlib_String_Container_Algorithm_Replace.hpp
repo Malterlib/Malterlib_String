@@ -6,14 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename tf_CTCStrTraits, typename tf_CData, typename tf_CData2>
-	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, umint _LenFind
-			, tf_CData2 const *_pStrReplace
-			, umint _LenReplace
-		)
+	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, umint _LenFind, tf_CData2 const *_pStrReplace, umint _LenReplace)
 	{
 		using CChar = typename TCStr<tf_CTCStrTraits>::CChar;
 
@@ -58,7 +51,6 @@ namespace NMib::NStr
 		return fg_StrReplace(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace));
 	}
 
-
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
 	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace)
 	{
@@ -67,27 +59,15 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits1> const &_StrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits1> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _StrReplace.f_GetStr(), _StrReplace.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData, typename tf_CData2>
-	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, umint _LenFind
-			, tf_CData2 const *_pStrReplace
-			, umint _LenReplace
-			, umint _MaxLen
-		)
+	inline_large auto fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, umint _LenFind, tf_CData2 const *_pStrReplace, umint _LenReplace, umint _MaxLen)
+		-> TCStr<tf_CTCStrTraits> &
 	{
 		using CChar = typename TCStr<tf_CTCStrTraits>::CChar;
 
@@ -126,54 +106,28 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits2> const &_StrFind
-			, tf_CData const *_pStrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits2> const &_StrFind, tf_CData const *_pStrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
-
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str, _pStrFind, fg_StrLen(_pStrFind), _StrReplace.f_GetStr(), _StrReplace.f_GetLen(), _MaxLen);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits1> const &_StrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplace(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits1> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplace(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _StrReplace.f_GetStr(), _StrReplace.f_GetLen(), _MaxLen);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData, typename tf_CData2>
-	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, umint _LenFind
-			, tf_CData2 const *_pStrReplace
-			, umint _LenReplace
-		)
+	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, umint _LenFind, tf_CData2 const *_pStrReplace, umint _LenReplace)
 	{
 		using CChar = typename TCStr<tf_CTCStrTraits>::CChar;
 
@@ -218,36 +172,23 @@ namespace NMib::NStr
 		return fg_StrReplaceNoCase(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace));
 	}
 
-
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, const TCStr<tf_CTCStrTraits2> &_StrReplace)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str, _pStrFind, fg_StrLen(_pStrFind), _StrReplace.f_GetStr(), _StrReplace.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits1> const &_StrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits1> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _StrReplace.f_GetStr(), _StrReplace.f_GetLen());
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CData, typename tf_CData2>
-	inline_large TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, umint _LenFind
-			, tf_CData2 const *_pStrReplace
-			, umint _LenReplace
-			, umint _MaxLen
-		)
+	inline_large auto fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, umint _LenFind, tf_CData2 const *_pStrReplace, umint _LenReplace, umint _MaxLen)
+		-> TCStr<tf_CTCStrTraits> &
 	{
 		using CChar = typename TCStr<tf_CTCStrTraits>::CChar;
 
@@ -286,45 +227,25 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits2> const &_StrFind
-			, tf_CData const *_pStrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits2> const &_StrFind, tf_CData const *_pStrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _pStrReplace, fg_StrLen(_pStrReplace), _MaxLen);
 	}
 
-
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits2, typename tf_CData>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, tf_CData const *_pStrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str, _pStrFind, fg_StrLen(_pStrFind), _StrReplace.f_GetStr(), _StrReplace.f_GetLen(), _MaxLen);
 	}
 
 	template <typename tf_CTCStrTraits, typename tf_CTCStrTraits1, typename tf_CTCStrTraits2>
-	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase
-		(
-			TCStr<tf_CTCStrTraits> &_Str
-			, TCStr<tf_CTCStrTraits1> const &_StrFind
-			, TCStr<tf_CTCStrTraits2> const &_StrReplace
-			, umint _MaxLen
-		)
+	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceNoCase(TCStr<tf_CTCStrTraits> &_Str, TCStr<tf_CTCStrTraits1> const &_StrFind, TCStr<tf_CTCStrTraits2> const &_StrReplace, umint _MaxLen)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits1>::mc_Value && TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
 		return fg_StrReplaceNoCase(_Str, _StrFind.f_GetStr(), _StrFind.f_GetLen(), _StrReplace.f_GetStr(), _StrReplace.f_GetLen(), _MaxLen);
 	}
-
 
 	template <typename tf_CTCStrTraits, typename tf_CData, typename tf_CData2>
 	inline_small TCStr<tf_CTCStrTraits> &fg_StrReplaceChar(TCStr<tf_CTCStrTraits> &_Str, tf_CData _CharFind, tf_CData2 _CharReplace)

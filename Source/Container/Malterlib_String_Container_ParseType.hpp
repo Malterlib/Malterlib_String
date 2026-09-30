@@ -43,9 +43,7 @@ namespace NMib::NStr
 
 			TICStrParseType const *pParseVar = _ArgData.f_GetArg(ArgNumber);
 			if (pParseVar)
-			{
 				pParseVar->f_Get_Str(_pDestStr, _MaxChars);
-			}
 		}
 		else
 		{
@@ -88,16 +86,12 @@ namespace NMib::NStr
 
 			TICStrParseType const *pParseVar = _ArgData.f_GetArg(ArgNumber);
 			if (pParseVar)
-			{
 				return pParseVar->f_Get_aint();
-			}
 			else
 				return _FailValue;
 		}
 		else
-		{
 			return CStrTraits::fs_StrToIntBase10(m_pDataStart, _FailValue);
-		}
 	}
 
 	template <typename t_CParser>
@@ -114,16 +108,12 @@ namespace NMib::NStr
 
 			TICStrParseType const *pParseVar = _ArgData.f_GetArg(ArgNumber);
 			if (pParseVar)
-			{
 				return pParseVar->f_Get_aint();
-			}
 			else
 				return _FailValue;
 		}
 		else
-		{
 			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (umint)_FailValue);
-		}
 	}
 
 	template <typename t_CParser>
@@ -140,15 +130,13 @@ namespace NMib::NStr
 
 			TICStrParseType const *pParseVar = _ArgData.f_GetArg(ArgNumber);
 			if (pParseVar)
-			{
 				return pParseVar->f_Get_fp32();
-			}
 			else
 				return _FailValue;
 		}
 		else
 		{
-			constexpr static CChar const c_Terminators[] = {',','}',0};
+			static constexpr CChar const c_Terminators[] = {',', '}', 0};
 
 			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
@@ -168,15 +156,13 @@ namespace NMib::NStr
 
 			TICStrParseType const *pParseVar = _ArgData.f_GetArg(ArgNumber);
 			if (pParseVar)
-			{
 				return pParseVar->f_Get_fp64();
-			}
 			else
 				return _FailValue;
 		}
 		else
 		{
-			constexpr static CChar const c_Terminators[] = {',','}',0};
+			static constexpr CChar const c_Terminators[] = {',', '}', 0};
 
 			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
@@ -237,9 +223,7 @@ namespace NMib::NStr
 					++pRet;
 				pParse = nullptr;
 				break;
-			case ',':
-				++pParse;
-				break;
+			case ',': ++pParse; break;
 			default:
 				++pParse;
 				continue;
@@ -256,7 +240,7 @@ namespace NMib::NStr
 
 	template <typename t_CParser>
 	template <typename t_CParseType, typename t_COptions>
-	inline_small auto TICStrParseType<t_CParser>::fs_ParseOptions(t_CParseType const &_Parser, t_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData) -> const CChar *
+	inline_small auto TICStrParseType<t_CParser>::fs_ParseOptions(t_CParseType const &_Parser, t_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData) -> CChar const *
 	{
 		CChar const *pRet = _pParse;
 		while (_pParse)
@@ -270,9 +254,7 @@ namespace NMib::NStr
 				{
 				//	ch8 const pStr[] = {Option.m_ParseTypes.m_Parse1, Option.m_ParseTypes.m_Parse2, 0};
 				//	DMibDTrace("Unknown option: {}" DMibNewLine, pStr);
-
 				}
-
 			}
 		}
 		return pRet;

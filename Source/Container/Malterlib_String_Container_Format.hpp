@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 	template <typename tf_CType>
 	CStrFormatBinaryWrapper::CStrFormatBinaryWrapper(tf_CType const &_Data)
-		: mp_pData((const void *)&_Data)
+		: mp_pData((void const *)&_Data)
 		, mp_Size(sizeof(_Data))
 	{
 	}
@@ -67,7 +67,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	auto TCFormat<t_CTCStrTraits>::operator=(TCFormat &&_Other) -> TCFormat &
+	auto TCFormat<t_CTCStrTraits>::operator = (TCFormat &&_Other) -> TCFormat &
 	{
 		f_ClearFormats();
 
@@ -92,11 +92,11 @@ namespace NMib::NStr
 		{
 			if (!m_lFormats.f_GetLen())
 			{
-				m_lFormats.f_SetLen(m_nFormats*2);
+				m_lFormats.f_SetLen(m_nFormats * 2);
 				NMemory::fg_MemCopy(m_lFormats.f_GetArray(), m_plFormats, m_nFormats * sizeof(void *));
 			}
 			else
-				m_lFormats.f_SetLen(m_nFormats*2);
+				m_lFormats.f_SetLen(m_nFormats * 2);
 		}
 		m_pFormats = m_lFormats.f_GetArray();
 		m_pFormats[m_nFormats] = pFormat;
@@ -150,10 +150,10 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	inline_medium TCFormat<t_CTCStrTraits>::TCFormat(const CChar *_pFormatStr)
+	inline_medium TCFormat<t_CTCStrTraits>::TCFormat(CChar const *_pFormatStr)
 	{
 		m_pFormatStr = _pFormatStr;
-		m_pFormats = m_plFormats;;
+		m_pFormats = m_plFormats;
 		m_nFormats = 0;
 		m_iCurrentAlloc = 0;
 	}
@@ -254,7 +254,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	void TCFormat<t_CTCStrTraits>::f_SetFormatStr(const CChar *_pFormatStr)
+	void TCFormat<t_CTCStrTraits>::f_SetFormatStr(CChar const *_pFormatStr)
 	{
 		m_pFormatStr = _pFormatStr;
 	}
@@ -339,7 +339,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bConcat>
-	void TCFormat<t_CTCStrTraits>::fp_FormatArguments(const TCFormat &_Format, TCStr<t_CTCStrTraits> &_ToStr)
+	void TCFormat<t_CTCStrTraits>::fp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr)
 	{
 		aint CurrentStrLen;
 		aint MaxLen;
@@ -360,7 +360,7 @@ namespace NMib::NStr
 		umint nFormats = _Format.m_nFormats;
 		for (umint i = 0; i < nFormats; ++i)
 		{
-			const TICStrFormatType<TCFormat> *pFormatVar = _Format.fp_GetFormatEntry(i);
+			TICStrFormatType<TCFormat> const *pFormatVar = _Format.fp_GetFormatEntry(i);
 			pFormatVar->f_AddToStr(_ToStr, CurrentStrLen, nullptr, _Format);
 		}
 
@@ -369,7 +369,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bConcat>
-	void TCFormat<t_CTCStrTraits>::fp_FormatArgList(const TCFormat &_Format, const CChar *_pFormat, TCStr<t_CTCStrTraits> &_ToStr)
+	void TCFormat<t_CTCStrTraits>::fp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr)
 	{
 		aint CurrentStrLen;
 		aint MaxLen;
@@ -389,7 +389,7 @@ namespace NMib::NStr
 
 		// Start by getting all parameters
 
-		const CChar *pFormat = _pFormat;
+		CChar const *pFormat = _pFormat;
 
 		aint SearchMode = 0;
 		while (*pFormat)
@@ -408,21 +408,20 @@ namespace NMib::NStr
 
 					CChar *pWritePtr = _ToStr.f_GetStrWritable();
 					CChar *pWritePtrStart = pWritePtr;
-					const CChar *pWritePtrEnd = pWritePtr + MaxLen;
+					CChar const *pWritePtrEnd = pWritePtr + MaxLen;
 					pWritePtr += CurrentStrLen;
-					const CChar *pAdd = pFormat;
+					CChar const *pAdd = pFormat;
 
 					while (pWritePtrEnd - pWritePtr)
 					{
 						CChar CurrentFormat = (*pAdd);
-						switch(CurrentFormat)
+						switch (CurrentFormat)
 						{
 						case '{':
 							SearchMode = 1;
 							++pAdd;
 							break;
-						case 0:
-							break;
+						case 0: break;
 						default:
 							*(pWritePtr++) = CurrentFormat;
 							++pAdd;
@@ -434,8 +433,6 @@ namespace NMib::NStr
 
 					*pWritePtr = 0;
 					CurrentStrLen = (pWritePtr - pWritePtrStart);
-
-
 				}
 				break;
 			case 1:
@@ -465,19 +462,16 @@ namespace NMib::NStr
 
 							if ((*pFormat) == ',')
 								++pFormat;
-							const TICStrFormatType<TCFormat> * pFormatVar = _Format.f_GetArg(ArgNumber);
+							TICStrFormatType<TCFormat> const *pFormatVar = _Format.f_GetArg(ArgNumber);
 							if (pFormatVar)
-							{
 								Variable = pFormatVar->f_Get_aint();
-							}
 							else
 							{
-								const ch8 *pTmp = "###format var out of range###";
+								ch8 const *pTmp = "###format var out of range###";
 								while (*pTmp)
 									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
 							}
-
 						}
 						else if (t_CTCStrTraits::CStrTraits::fs_CharIsNumber(*pFormat))
 						{
@@ -490,14 +484,14 @@ namespace NMib::NStr
 								++pFormat;
 							if (Variable == -16324)
 							{
-								const ch8 *pTmp = "###format var parse error###";
+								ch8 const *pTmp = "###format var parse error###";
 								while (*pTmp)
 									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
 							}
 							else if (Variable < 0)
 							{
-								const ch8 *pTmp = "###format var out of range###";
+								ch8 const *pTmp = "###format var out of range###";
 								while (*pTmp)
 									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 								goto EndArgSearch;
@@ -505,43 +499,37 @@ namespace NMib::NStr
 						}
 						else if (*pFormat == '\n')
 						{
-							const ch8 *pTmp = DMibNewLine;
+							ch8 const *pTmp = DMibNewLine;
 							while (*pTmp)
 								_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 							goto EndArgSearch;
 						}
 
 						{
-							const TICStrFormatType<TCFormat> * pFormatVar = _Format.f_GetArg(Variable);
+							TICStrFormatType<TCFormat> const *pFormatVar = _Format.f_GetArg(Variable);
 							if (pFormatVar)
-							{
 								pFormatVar->f_AddToStr(_ToStr, CurrentStrLen, pFormat, _Format);
-							}
 							else
 							{
-								const ch8 *pTmp = "###format var out of range###";
+								ch8 const *pTmp = "###format var out of range###";
 								while (*pTmp)
 									_ToStr.f_AddCharLengthAware(CurrentStrLen, (CChar)(*(pTmp++)));
 							}
 						}
 
-EndArgSearch:
+					EndArgSearch:
 
 						while ((*pFormat) && (*pFormat) != '}')
-						{
 							++pFormat;
-						}
 
 						if (*pFormat)
 							++pFormat;
 
 						SearchMode = 0;
 					}
-
 				}
 				break;
 			}
-
 		}
 
 		_ToStr.f_SetStrLen(CurrentStrLen);
@@ -578,22 +566,21 @@ EndArgSearch:
 	{
 	}
 
-	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	template <typename tf_CFormat, typename tf_CFirst, typename ...tfp_CParams>
 	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First)
 	{
 		_Format << fg_Forward<tf_CFirst>(_First);
 	}
 
-	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
-	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams &&...p_Params)
+	template <typename tf_CFormat, typename tf_CFirst, typename ...tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams && ...p_Params)
 	{
 		_Format << fg_Forward<tf_CFirst>(_First);
 		fg_AddFormatParams(_Format, fg_Forward<tfp_CParams>(p_Params)...);
 	}
 
-
-	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
-	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params)
+	template <typename tf_CReturnString, typename tf_CFormat, typename ...tfp_CParams>
+	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams && ...p_Params)
 	{
 		typename tf_CReturnString::CFormat Formatter(_Format);
 
@@ -602,8 +589,8 @@ EndArgSearch:
 		return Formatter;
 	}
 
-	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
-	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams &&...p_Params)
+	template <typename tf_CReturnString, typename tf_CFormat, typename ...tfp_CParams>
+	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams && ...p_Params)
 	{
 		typename tf_CReturnString::CFormat Formatter(_Format);
 

@@ -52,7 +52,7 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CValue>
-	CMStrDeprecated &CMStrDeprecated::operator =(tf_CValue &&_Other)
+	CMStrDeprecated &CMStrDeprecated::operator = (tf_CValue &&_Other)
 	{
 		(CStr &)*this = fg_Forward<tf_CValue>(_Other);
 		return *this;
@@ -113,9 +113,7 @@ namespace NMib::NStream
 					NewStr.f_SetStrLen(Len);
 					switch (StrType)
 					{
-					case NStr::EStrType_Ansi:
-						NStr::NPlatform::fg_SystemDecodeAnsiStr(NewStr.f_GetStr(), _Data);
-						break;
+					case NStr::EStrType_Ansi: NStr::NPlatform::fg_SystemDecodeAnsiStr(NewStr.f_GetStr(), _Data); break;
 					case NStr::EStrType_Unicode:
 						{
 							aint StrLen = 0;
@@ -124,11 +122,8 @@ namespace NMib::NStream
 							_Data.f_TrimSize();
 						}
 						break;
-					default:
-						_Data = fg_Move(NewStr);
-						break;
+					default: _Data = fg_Move(NewStr); break;
 					}
-
 				}
 				break;
 			case NStr::EMStr_Type_CWStr:
@@ -149,9 +144,7 @@ namespace NMib::NStream
 							_Data.f_TrimSize();
 						}
 						break;
-					default:
-						_Data = NewStr;
-						break;
+					default: _Data = NewStr; break;
 					}
 				}
 				break;

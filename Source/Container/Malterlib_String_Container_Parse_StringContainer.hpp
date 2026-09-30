@@ -33,7 +33,7 @@ namespace NMib::NStr
 	{
 		switch (_Option.m_ParseTypes.m_Parse1)
 		{
-			case 'S':
+		case 'S':
 			{
 				switch (_Option.m_ParseTypes.m_Parse2)
 				{

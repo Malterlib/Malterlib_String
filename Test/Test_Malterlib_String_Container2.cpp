@@ -18,8 +18,6 @@ namespace NMib
 {
 	namespace NStr
 	{
-
-
 	}
 }
 
@@ -27,11 +25,10 @@ CStr const &fg_GetTestStringInAnotherTranslationUnit();
 
 namespace
 {
+	static uch8 const gc_AnsiTestStringSource[] = {'a', 'b', 'c', 'd', 0xc6, 0xc5, 0xd6, 0xe6, 0xe5, 0xf6, 0};
 
-	static uch8 const gc_AnsiTestStringSource[] = { 'a', 'b', 'c', 'd', 0xc6, 0xc5, 0xd6, 0xe6, 0xe5, 0xf6, 0 };
-
-	char const* gc_AnsiTestString = (char const*)gc_AnsiTestStringSource;
-	char const* gc_AnsiTestStringUTF = str_utf8("abcdÆÅÖæåö");
+	char const *gc_AnsiTestString = (char const *)gc_AnsiTestStringSource;
+	char const *gc_AnsiTestStringUTF = str_utf8("abcdÆÅÖæåö");
 
 	struct CGlobalFunctions_Tests : public NMib::NTest::CTest
 	{
@@ -169,7 +166,6 @@ namespace
 			DMibExpect(StringCapitalized_0_65535.f_LowerCase(), ==, StringLower_0_65535);
 			DMibExpect(StringCapitalized_0_10ffff.f_LowerCase(), ==, StringLower_0_10ffff);
 
-
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_127), ==, StringLower_0_127);
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_255), ==, StringLower_0_255);
 			DMibExpect(fLowerCaseMaxLen(StringLower_0_65535), ==, StringLower_0_65535);
@@ -184,7 +180,6 @@ namespace
 			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_255), ==, StringLower_0_255);
 			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_65535), ==, StringLower_0_65535);
 			DMibExpect(fLowerCaseMaxLen(StringCapitalized_0_10ffff), ==, StringLower_0_10ffff);
-
 
 			DMibExpect(StringLower_0_127.f_UpperCase(), ==, StringUpper_0_127);
 			DMibExpect(StringLower_0_255.f_UpperCase(), ==, StringUpper_0_255);
@@ -201,7 +196,6 @@ namespace
 			DMibExpect(StringCapitalized_0_65535.f_UpperCase(), ==, StringUpper_0_65535);
 			DMibExpect(StringCapitalized_0_10ffff.f_UpperCase(), ==, StringUpper_0_10ffff);
 
-
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_127), ==, StringUpper_0_127);
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_255), ==, StringUpper_0_255);
 			DMibExpect(fUpperCaseMaxLen(StringLower_0_65535), ==, StringUpper_0_65535);
@@ -216,7 +210,6 @@ namespace
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_255), ==, StringUpper_0_255);
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_65535), ==, StringUpper_0_65535);
 			DMibExpect(fUpperCaseMaxLen(StringCapitalized_0_10ffff), ==, StringUpper_0_10ffff);
-
 
 			DMibExpect(fCapitalize(StringLower_0_127), ==, StringCapitalized_0_127);
 			DMibExpect(fCapitalize(StringLower_0_255), ==, StringCapitalized_0_255);
@@ -257,26 +250,27 @@ namespace
 		{
 			DMibTestSuite("StrCmpNoCase")
 			{
-
 				CStr UniqueStrings[] =
-				{
-					"Hello", "ch8 Hello",
-					"Hell", "ch8 Hell",
-					"", "ch8 Empty",
-					CStr("Hello"), "CStr Hello",
-					CStr("Hell"), "CStr Hell",
-					CStr(""), "CStr Empty",
-				};
-				int siz = (sizeof(UniqueStrings) / sizeof(CStr)) / 2;
-				for(int i=0;i<siz;++i)
-				{
-					DMibTestPath(UniqueStrings[i*2+1]);
-					for(int j=0;j<siz;++j)
 					{
-						DMibTestPath(UniqueStrings[j*2+1]);
-						CStr const &Left = UniqueStrings[i*2];
-						CStr const &Right = UniqueStrings[j*2];
-						if(i%3==j%3)
+						// malterlib-format columns: 2
+						  "Hello",       "ch8 Hello"
+						, "Hell",        "ch8 Hell"
+						, "",            "ch8 Empty"
+						, CStr("Hello"), "CStr Hello"
+						, CStr("Hell"),  "CStr Hell"
+						, CStr(""),      "CStr Empty"
+					}
+				;
+				int siz = (sizeof(UniqueStrings) / sizeof(CStr)) / 2;
+				for (int i = 0; i < siz; ++i)
+				{
+					DMibTestPath(UniqueStrings[i * 2 + 1]);
+					for (int j = 0; j < siz; ++j)
+					{
+						DMibTestPath(UniqueStrings[j * 2 + 1]);
+						CStr const &Left = UniqueStrings[i * 2];
+						CStr const &Right = UniqueStrings[j * 2];
+						if (i % 3 == j % 3)
 						{
 							DMibTest(DMibExpr(fg_StrCmpNoCase(Left, Right) == 0));
 							DMibTest(DMibExpr(fg_StrCmpNoCase(Right, Left) == 0));
@@ -371,11 +365,9 @@ namespace
 					}
 
 					{
-
 						CStr Out;
 						umint Len = 0;
-						auto fl_AddChars
-							= [&](umint _nChars) -> ch8 *
+						auto fl_AddChars = [&](umint _nChars) -> ch8 *
 							{
 								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
@@ -421,11 +413,9 @@ namespace
 					}
 
 					{
-
 						CWStr Out;
 						umint Len = 0;
-						auto fl_AddChars
-							= [&](umint _nChars) -> ch16 *
+						auto fl_AddChars = [&](umint _nChars) -> ch16 *
 							{
 								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
@@ -449,7 +439,6 @@ namespace
 
 						CMStrDeprecated Encoded = Out;
 						DMibTest(DMibExpr(Encoded) == DMibExpr(TestString));
-
 					}
 				};
 			};
@@ -465,7 +454,6 @@ namespace
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
 					}
 					{
 						DMibTestPath("ANSI not tracked");
@@ -475,7 +463,6 @@ namespace
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
 					}
 					{
 						DMibTestPath("Unicode");
@@ -485,7 +472,6 @@ namespace
 						CStr MixedTo = TestConvert;
 
 						DMibTest(DMibExpr(MixedFrom) == DMibExpr(MixedTo));
-
 					}
 					{
 						DMibTestPath("Unicode not tracked");
@@ -1022,42 +1008,42 @@ namespace
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xc2\x80x"))));
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xe0\xa0\x80x"))));
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xf0\x90\x80\x80x"))));
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x88\x80\x80\x80x"))));	// Beyond U-10FFFF
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x88\x80\x80\x80x")))); // Beyond U-10FFFF
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x")))); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xdf\xbfx"))));
-						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));	// Invalid codepoint
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));	// Invalid codepoint
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf7\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfb\xbf\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))));	// Beyond U-10FFFF
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbfx")))); // Invalid codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters))); // Invalid codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf7\xbf\xbf\xbfx")))); // Beyond U-10FFFF
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfb\xbf\xbf\xbf\xbfx")))); // Beyond U-10FFFF
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx")))); // Beyond U-10FFFF
 						// Others
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xed\x9f\xbfx"))));
-						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xee\x80\x80x"))));	// Private use area
-						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbdx"))));	// ReplacementChar character
-						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"))));	// Non-character codepoint
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));	// Non-character codepoint
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x90\x80\x80x"))));  // Beyond U-10FFFF
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xee\x80\x80x")))); // Private use area
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbdx")))); // ReplacementChar character
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx")))); // Non-character codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters))); // Non-character codepoint
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf4\x90\x80\x80x")))); // Beyond U-10FFFF
 					}
 					{
 						DMibTestPath("Invalid Bytes");
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\x80\xbfx"))));	// Unexpected continuation bytes
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfe\xfe\xff\xffx"))));	// Impossible bytes
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\x80\xbfx")))); // Unexpected continuation bytes
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfe\xfe\xff\xffx")))); // Impossible bytes
 					}
 					{
 						DMibTestPath("Lonely start characters");
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xc0x\xdfx"))));	// Lonely start characters from 2-byte sequence
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0x\xefx"))));	// Lonely start characters from 3-byte sequence
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0x\xf7x"))));	// Lonely start characters from 4-byte sequence
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8x\xfbx"))));	// Lonely start characters from 5-byte sequence
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfcx\xfdx"))));	// Lonely start characters from 6-byte sequence
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xc0x\xdfx")))); // Lonely start characters from 2-byte sequence
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0x\xefx")))); // Lonely start characters from 3-byte sequence
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0x\xf7x")))); // Lonely start characters from 4-byte sequence
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8x\xfbx")))); // Lonely start characters from 5-byte sequence
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfcx\xfdx")))); // Lonely start characters from 6-byte sequence
 					}
 					{
 						DMibTestPath("Last character missing");
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0\x80x"))));	// 3-byte sequence with last byte missing
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0\x80\x80x"))));	// 4-byte sequence with last byte missing
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x80\x80\x80x"))));	// 5-byte sequence with last byte missing
-						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x80\x80\x80\x80x"))));	// 6-byte sequence with last byte missing
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xe0\x80x")))); // 3-byte sequence with last byte missing
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf0\x80\x80x")))); // 4-byte sequence with last byte missing
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xf8\x80\x80\x80x")))); // 5-byte sequence with last byte missing
+						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xfc\x80\x80\x80\x80x")))); // 6-byte sequence with last byte missing
 					}
 					{
 						DMibTestPath("Overlong sequences");
@@ -1100,7 +1086,7 @@ namespace
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xb0\x80x"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xed\xaf\xbf\xed\xbf\xbfx"))));
 						// Invalid code positions
-						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbex")))) ;
+						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbex"))));
 						DMibTest(DMibExpr(fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"))));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbex"), EValidateUTF8Flag::mc_DisallowNonCharacters)));
 						DMibTest(DMibExpr(!fg_IsValidUTF8(CStr("x\xef\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)));
@@ -1116,7 +1102,7 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xc2\x80x"))) == DMibExpr(CStr("x\xc2\x80x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\xa0\x80x"))) == DMibExpr(CStr("x\xe0\xa0\x80x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\x90\x80\x80x"))) == DMibExpr(CStr("x\xf0\x90\x80\x80x")));
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x88\x80\x80\x80x"))) == DMibExpr(CStr("x?????x")));	// Beyond U-10FFFF
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x88\x80\x80\x80x"))) == DMibExpr(CStr("x?????x"))); // Beyond U-10FFFF
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x"))) == DMibExpr(CStr("x??????x"))); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xdf\xbfx"))) == DMibExpr(CStr("x\xdf\xbfx")));
@@ -1127,31 +1113,32 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))) == DMibExpr(CStr("x??????x")));
 						// Others
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\x9f\xbfx"))) == DMibExpr(CStr("x\xed\x9f\xbfx")));
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x")));	// Private use area
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(CStr("x\xef\xbf\xbdx")));	// ReplacementChar character
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx")));	//Non-character codepoint
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(CStr("x????x")));	//Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x"))); // Private use area
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(CStr("x\xef\xbf\xbdx"))); // ReplacementChar character
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx"))); //Non-character codepoint
+						// Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(CStr("x????x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(CStr("x????x")));
 					}
 					{
 						DMibTestPath("Invalid Bytes");
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\x80\xbfx"))) == DMibExpr("x??x"));	// Unexpected continuation bytes
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr("x????x"));	// Impossible bytes
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\x80\xbfx"))) == DMibExpr("x??x")); // Unexpected continuation bytes
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr("x????x")); // Impossible bytes
 					}
 					{
 						DMibTestPath("Lonely start characters");
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xc0\xdfx"))) == DMibExpr("x??x"));	// Lonely start characters from 2-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\xefx"))) == DMibExpr("x??x"));	// Lonely start characters from 3-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\xf7x"))) == DMibExpr("x??x"));	// Lonely start characters from 4-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\xfbx"))) == DMibExpr("x??x"));	// Lonely start characters from 5-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\xfdx"))) == DMibExpr("x??x"));	// Lonely start characters from 6-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xc0\xdfx"))) == DMibExpr("x??x")); // Lonely start characters from 2-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\xefx"))) == DMibExpr("x??x")); // Lonely start characters from 3-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\xf7x"))) == DMibExpr("x??x")); // Lonely start characters from 4-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\xfbx"))) == DMibExpr("x??x")); // Lonely start characters from 5-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\xfdx"))) == DMibExpr("x??x")); // Lonely start characters from 6-byte sequence
 					}
 					{
 						DMibTestPath("Last character missing");
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\x80x"))) == DMibExpr("x??x"));	// 3-byte sequence with last byte missing
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr("x???x"));	// 4-byte sequence with last byte missing
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr("x????x"));	// 5-byte sequence with last byte missing
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr("x?????x"));	// 6-byte sequence with last byte missing
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xe0\x80x"))) == DMibExpr("x??x")); // 3-byte sequence with last byte missing
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr("x???x")); // 4-byte sequence with last byte missing
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr("x????x")); // 5-byte sequence with last byte missing
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr("x?????x")); // 6-byte sequence with last byte missing
 					}
 					{
 						DMibTestPath("Overlong sequences");
@@ -1213,7 +1200,7 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xc2\x80x"))) == DMibExpr(CStr("x\xc2\x80x")));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\xa0\x80x"))) == DMibExpr(CStr("x\xe0\xa0\x80x")));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\x90\x80\x80x"))) == DMibExpr(CStr("x\xf0\x90\x80\x80x")));
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x88\x80\x80\x80x"))) == DMibExpr(ReplacementChar));	// Beyond U-10FFFF
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x88\x80\x80\x80x"))) == DMibExpr(ReplacementChar)); // Beyond U-10FFFF
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x84\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar)); // Beyond U-10FFFF
 						// Last possible sequences
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xdf\xbfx"))) == DMibExpr(CStr("x\xdf\xbfx")));
@@ -1224,31 +1211,32 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfd\xbf\xbf\xbf\xbf\xbfx"))) == DMibExpr(ReplacementChar));
 						// Others
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xed\x9f\xbfx"))) == DMibExpr(CStr("x\xed\x9f\xbfx")));
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x")));	// Private use area
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(ReplacementChar));	// ReplacementChar character
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx")));	// Non-character codepoint
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));	// Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x"))); // Private use area
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(ReplacementChar)); // ReplacementChar character
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx"))); // Non-character codepoint
+						// Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(ReplacementChar));
 						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(ReplacementChar));
 					}
 					{
 						DMibTestPath("Invalid Bytes");
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\x80\xbfx"))) == DMibExpr(DoubleReplacementChar));	// Unexpected continuation bytes
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr(QuadReplacementChar));	// Impossible bytes
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\x80\xbfx"))) == DMibExpr(DoubleReplacementChar)); // Unexpected continuation bytes
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfe\xfe\xff\xffx"))) == DMibExpr(QuadReplacementChar)); // Impossible bytes
 					}
 					{
 						DMibTestPath("Lonely start characters");
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xc0\xdfx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 2-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\xefx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 3-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\xf7x"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 4-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\xfbx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 5-byte sequence
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\xfdx"))) == DMibExpr(DoubleReplacementChar));	// Lonely start characters 6-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xc0\xdfx"))) == DMibExpr(DoubleReplacementChar)); // Lonely start characters 2-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\xefx"))) == DMibExpr(DoubleReplacementChar)); // Lonely start characters 3-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\xf7x"))) == DMibExpr(DoubleReplacementChar)); // Lonely start characters 4-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\xfbx"))) == DMibExpr(DoubleReplacementChar)); // Lonely start characters 5-byte sequence
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\xfdx"))) == DMibExpr(DoubleReplacementChar)); // Lonely start characters 6-byte sequence
 					}
 					{
 						DMibTestPath("Last character missing");
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\x80x"))) == DMibExpr(ReplacementChar));	// 3-byte sequence last byte missing
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr(ReplacementChar));	// 4-byte sequence last byte missing
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr(ReplacementChar));	// 5-byte sequence last byte missing
-						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar));	// 6-byte sequence last byte missing
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xe0\x80x"))) == DMibExpr(ReplacementChar)); // 3-byte sequence last byte missing
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf0\x80\x80x"))) == DMibExpr(ReplacementChar)); // 4-byte sequence last byte missing
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xf8\x80\x80\x80x"))) == DMibExpr(ReplacementChar)); // 5-byte sequence last byte missing
+						DMibTest(DMibExpr(fg_ReplaceSequenceUTF8(CStr("x\xfc\x80\x80\x80\x80x"))) == DMibExpr(ReplacementChar)); // 6-byte sequence last byte missing
 					}
 					{
 						DMibTestPath("Overlong sequences");
@@ -1315,8 +1303,7 @@ namespace
 						CStr ValidString("abc\xc3\xa5\xc3\xa4\xc3\xb6\n");
 						auto iUTF = ValidString.f_GetUnicodeIterator();
 
-						auto fCheckCharacter =
-							[&](ch32 _Char)
+						auto fCheckCharacter = [&](ch32 _Char)
 							{
 								DMibTestPath(CStr::CFormat("{}") << _Char);
 								DMibTest(DMibExpr(*iUTF) == DMibExpr(_Char));
@@ -1368,8 +1355,7 @@ namespace
 						CStr IncompleteString("a\xc3");
 						auto iUTF = IncompleteString.f_GetUnicodeIterator();
 
-						auto fCheckCharacter =
-							[&](bool _bExpectFail)
+						auto fCheckCharacter = [&](bool _bExpectFail)
 							{
 								DMibTestPath(CStr::CFormat("{}") << *iUTF);
 								if (_bExpectFail)
@@ -1399,8 +1385,7 @@ namespace
 
 						CStrIteratorUTF8 iUTF(Temp, 2);
 
-						auto fCheckCharacter =
-							[&](bool _bExpectFail)
+						auto fCheckCharacter = [&](bool _bExpectFail)
 							{
 								DMibTestPath(CStr::CFormat("{}") << *iUTF);
 								if (_bExpectFail)
@@ -1425,22 +1410,21 @@ namespace
 						CStr InvalidString("a\xc3" "b");
 						auto iUTF = InvalidString.f_GetUnicodeIterator();
 
-						auto fCheckCharacter =
-							[&](bool _bExpectFail)
-						{
-							DMibTestPath(CStr::CFormat("{}") << *iUTF);
-							if (_bExpectFail)
+						auto fCheckCharacter = [&](bool _bExpectFail)
 							{
-								DMibTest(DMibExpr(iUTF.f_IsWholeCodePoint()));
-								DMibTest(DMibExpr(iUTF.f_IsBroken()));
+								DMibTestPath(CStr::CFormat("{}") << *iUTF);
+								if (_bExpectFail)
+								{
+									DMibTest(DMibExpr(iUTF.f_IsWholeCodePoint()));
+									DMibTest(DMibExpr(iUTF.f_IsBroken()));
+								}
+								else
+								{
+									DMibTest(DMibExpr(iUTF.f_IsWholeCodePoint()));
+									DMibTest(DMibExpr(!iUTF.f_IsBroken()));
+								}
+								++iUTF;
 							}
-							else
-							{
-								DMibTest(DMibExpr(iUTF.f_IsWholeCodePoint()));
-								DMibTest(DMibExpr(!iUTF.f_IsBroken()));
-							}
-							++iUTF;
-						}
 						;
 
 						fCheckCharacter(false);
@@ -1510,8 +1494,6 @@ namespace
 						DMibTest(DMibExpr(true) == DMibExpr((bool)Str3.f_IsEmpty()));
 					}
 				};
-
-
 			};
 		}
 
@@ -1617,9 +1599,9 @@ namespace
 
 				DMibExpect(gc_Str<"TestString">.m_Str, ==, CStr("TestString"));
 				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &gc_Str<"TestString">.m_Str);
-#ifndef DCompiler_MSVC
+#	ifndef DCompiler_MSVC
 				DMibExpect(&gc_Str<"TestString">.m_Str, ==, &fg_GetTestStringInAnotherTranslationUnit());
-#endif
+#	endif
 				DMibExpect(gc_Str<str_utf16("TestString")>.m_Str, ==, CWStr(str_utf16("TestString")));
 				DMibExpect(&gc_Str<str_utf16("TestString")>.m_Str, ==, &gc_Str<str_utf16("TestString")>.m_Str);
 
@@ -1643,7 +1625,7 @@ namespace
 		}
 	};
 
-	 DMibTestRegister(CGlobalFunctions_Tests, Malterlib::String::Container);
+	DMibTestRegister(CGlobalFunctions_Tests, Malterlib::String::Container);
 
 	struct CFormat_Tests : public NMib::NTest::CTest
 	{
@@ -1661,6 +1643,7 @@ namespace
 						: m_Extracted(0)
 					{
 					}
+
 					uint32 m_Extracted;
 
 					virtual void operator () (uint32 _Value)
@@ -1699,7 +1682,7 @@ namespace
 						m_Extracted |= DMibBit(5);
 					}
 
-					virtual void operator () (const ch8 *_pValue)
+					virtual void operator () (ch8 const *_pValue)
 					{
 						DMibTest(DMibExpr(fg_StrCmp(_pValue, "String") == 0));
 						m_Extracted |= DMibBit(6);
@@ -1714,22 +1697,23 @@ namespace
 				CTestExtractor Extractor;
 
 				auto fl_Test = [&](CStr::CFormat const &_Format)
-				{
-					DMibTest(DMibExpr(_Format.f_GetNumArgs()) == DMibExpr(8u)) (ETest_FailAndStop);
-					_Format.f_GetArg(0)->f_Visit(Extractor);
-					_Format.f_GetArg(1)->f_Visit(Extractor);
-					_Format.f_GetArg(2)->f_Visit(Extractor);
-					_Format.f_GetArg(3)->f_Visit(Extractor);
-					_Format.f_GetArg(4)->f_Visit(Extractor);
-					_Format.f_GetArg(5)->f_Visit(Extractor);
-					_Format.f_GetArg(6)->f_Visit(Extractor);
-					_Format.f_GetArg(7)->f_Visit(Extractor);
-				};
+					{
+						DMibTest(DMibExpr(_Format.f_GetNumArgs()) == DMibExpr(8u))(ETest_FailAndStop);
+						_Format.f_GetArg(0)->f_Visit(Extractor);
+						_Format.f_GetArg(1)->f_Visit(Extractor);
+						_Format.f_GetArg(2)->f_Visit(Extractor);
+						_Format.f_GetArg(3)->f_Visit(Extractor);
+						_Format.f_GetArg(4)->f_Visit(Extractor);
+						_Format.f_GetArg(5)->f_Visit(Extractor);
+						_Format.f_GetArg(6)->f_Visit(Extractor);
+						_Format.f_GetArg(7)->f_Visit(Extractor);
+					}
+				;
 
 				CStr::CFormat Test("");
 				fl_Test(Test << int32(5) << uint32(6) << int64(7) << uint64(8) << fp32(9.5) << fp64(10.5) << "String" << fg_FormatAsBinary(CTesting()));
 
-				DMibTest(DMibExpr(Extractor.m_Extracted) == DMibExpr((uint32(DMibBitRange(0 ,7)))));
+				DMibTest(DMibExpr(Extractor.m_Extracted) == DMibExpr((uint32(DMibBitRange(0, 7)))));
 			};
 
 			DMibTestSuite("Any formats")
@@ -1743,6 +1727,7 @@ namespace
 						mp_Test[2] = 0xbb;
 						mp_Test[3] = 0x00;
 					}
+
 				private:
 					uint8 mp_Test[4];
 				};
@@ -1758,7 +1743,6 @@ namespace
 					DMibTestPath("Bash");
 					CWStr TestStringSQStart(str_utf16("abcdÅÄÖåöä '亜哀姐飴'"));
 					CWStr TestStringSQEnd(str_utf16("'abcdÅÄÖåöä '\\''亜哀姐飴'\\'''"));
-
 
 					DMibTest(DMibExpr(fg_StrEscapeBashQuotesNeeded(CStr("Fred"))) == DMibExpr(false));
 					DMibTest(DMibExpr(fg_StrEscapeBashQuotesNeeded(CStr("Fred/Stone.test"))) == DMibExpr(false));
@@ -1790,7 +1774,6 @@ namespace
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(CStr("\"Fred\""))) == DMibExpr(CStr("\"\\\"Fred\\\"\"")));
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(CStr("\"Bam\" \"Bam\""))) == DMibExpr(CStr("\"\\\"Bam\\\" \\\"Bam\\\"\"")));
 					DMibTest(DMibExpr(fg_StrEscapeBashDoubleQuotes(TestStringDQStart)) == DMibExpr(TestStringDQEnd));
-
 				}
 			};
 			DMibTestSuite("Recursive Format")
@@ -1859,7 +1842,6 @@ namespace
 
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!(3>2))}") << 0)) == DMibExpr("0"));
 					DMibTest(DMibExpr(CStr(CStr::CFormat("{xpr(!!(3>2))}") << 0)) == DMibExpr("1"));
-
 				}
 				{
 					DMibTestPath("Bitwise operators");
@@ -1932,7 +1914,19 @@ namespace
 						DMibTestPath("FoundInWild");
 						{
 							CStr A = "Result";
-							DMibTest(DMibExpr(fg_ViolatesSafeCheck("reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value) 'You cannot assign a format to string that is used by reference as an argument.'")) == DMibLExpr( (A = CStr::CFormat("{}{}") << A << "Value")));
+							DMibTest
+								(
+									DMibExpr
+									(
+										fg_ViolatesSafeCheck
+										(
+											"reinterpret_cast<void const *>(&_String) != reinterpret_cast<void const *>(&_Value) 'You cannot assign a format to string that is used by "
+											"reference as an argument.'"
+										)
+									)
+									== DMibLExpr((A = CStr::CFormat("{}{}") << A << "Value"))
+								)
+							;
 						}
 					}
 				}

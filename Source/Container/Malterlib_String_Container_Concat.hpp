@@ -81,13 +81,7 @@ namespace NMib::NStr
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
 			else
 			{
-				using CTempAnsiStr = TCConditional
-					<
-						NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
-						, CAnsiStrNonTracked
-						, CAnsiStr
-					>
-				;
+				using CTempAnsiStr = TCConditional<NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>, CAnsiStrNonTracked, CAnsiStr>;
 				CTempAnsiStr Ansi(_From.f_GetStr(), _From.f_GetLen());
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Temp);
 			}
@@ -101,16 +95,16 @@ namespace NMib::NStr
 			CImp::f_SetStrLen(Length);
 		}
 		else if constexpr
-			(
-				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
-			)
+		(
+			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+		)
 		{
 			f_AddStr(_From.f_GetStr(), _From.f_GetLen());
 		}
 		else if constexpr
-			(
-				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
-			)
+		(
+			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+		)
 		{
 			if (*_From.f_GetStr() != 0)
 			{
@@ -120,9 +114,7 @@ namespace NMib::NStr
 			}
 		}
 		else
-		{
 			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
-		}
 	}
 
 	template <typename t_TCStrTraits>
@@ -137,7 +129,7 @@ namespace NMib::NStr
 	{
 		if constexpr (sizeof(CChar) == 1)
 		{
-			static_assert( mc_Type == EStrType_UTF, "Lossy conversion");
+			static_assert(mc_Type == EStrType_UTF, "Lossy conversion");
 
 			aint CurrentLength = f_GetLen();
 
@@ -395,9 +387,7 @@ namespace NMib::NStr
 			pWritePtr += _StrLen;
 
 			while (*pReadPtr && pWritePtr < pWritePtrEnd)
-			{
 				*(pWritePtr++) = (CUnsignedChar)(*(pReadPtr++));
-			}
 
 			*pWritePtr = 0;
 			_StrLen = (pWritePtr - (CUnsignedChar const *)f_GetStr());
@@ -413,15 +403,13 @@ namespace NMib::NStr
 
 		CUnsignedChar *pWritable = (CUnsignedChar *)CImp::f_GetStrWritable();
 
-		if (_Args.m_Len <= (8/sizeof(CChar)))
+		if (_Args.m_Len <= (8 / sizeof(CChar)))
 		{
 			CUnsignedChar const *pStr = (CUnsignedChar const *)_pStr;
 			CUnsignedChar *pWrite = pWritable + _Args.m_StrLen;
 			CUnsignedChar *pEnd = pWrite + (MaxLen - _Args.m_StrLen);
 			while (pWrite < pEnd)
-			{
 				*(pWrite++) = *(pStr++);
-			}
 
 			*pWrite = 0;
 			_Args.m_StrLen = MaxLen;
@@ -436,7 +424,6 @@ namespace NMib::NStr
 			NMib::NMemory::fg_MemCopy((pWritable + _Args.m_StrLen), _pStr, (MaxLen - _Args.m_StrLen) * sizeof(CChar));
 			_Args.m_StrLen = MaxLen;
 			pWritable[MaxLen] = 0;
-
 		}
 	}
 }

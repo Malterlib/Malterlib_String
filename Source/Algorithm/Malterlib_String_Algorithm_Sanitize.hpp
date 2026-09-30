@@ -17,7 +17,8 @@ namespace NMib::NStr
 					, tf_CStr::CTraits::CStrTraits::mc_Type
 					, typename tf_CStr::CImp
 					, typename tf_CStr::CTraits::CStrTraits::CParams
-				>::CType
+				>
+				::CType
 			>
 		;
 
@@ -63,9 +64,7 @@ namespace NMib::NStr
 			*/
 				Return.f_AddChar(0x0020);
 				break;
-			default:
-				Return.f_AddChar(*iUTF);
-				break;
+			default: Return.f_AddChar(*iUTF); break;
 			}
 
 			++iUTF;

@@ -36,7 +36,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CType>
-	auto TCStr<t_CTCStrTraits>::fs_ToStr(CChar const *_pFormat, tf_CType const& _Format) -> TCStr
+	auto TCStr<t_CTCStrTraits>::fs_ToStr(CChar const *_pFormat, tf_CType const &_Format) -> TCStr
 	{
 		return (CFormat(_pFormat) << _Format).f_GetStr();
 	}
@@ -73,7 +73,7 @@ namespace NMib::NStr
 	inline_medium void TCStr<t_CTCStrTraits>::fs_ToStrInplace
 		(
 			TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-			, tf_CType const& _Format
+			, tf_CType const &_Format
 		)
 	{
 		using CFormatType = typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType;
@@ -87,7 +87,7 @@ namespace NMib::NStr
 	void TCStr<t_CTCStrTraits>::fs_ToStrInplace
 		(
 			TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-			, tf_CType const& _Format
+			, tf_CType const &_Format
 		)
 	{
 		(CFormat(nullptr) << _Format).f_FormatArgumentsToStr(_Destination);
@@ -95,7 +95,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CType>
-	void TCStr<t_CTCStrTraits>::fs_ToStrInplace(TCStr &_Destination, CChar const *_pFormat, tf_CType const& _Format)
+	void TCStr<t_CTCStrTraits>::fs_ToStrInplace(TCStr &_Destination, CChar const *_pFormat, tf_CType const &_Format)
 	{
 		return (CFormat(_pFormat) << _Format).f_FormatToStr(_Destination);
 	}
@@ -105,7 +105,7 @@ namespace NMib::NStr
 	inline_medium void TCStr<t_CTCStrTraits>::fs_ToStrInplaceConcat
 		(
 			TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-			, tf_CType const& _Format
+			, tf_CType const &_Format
 		)
 	{
 		using CFormatType = typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType;
@@ -120,7 +120,7 @@ namespace NMib::NStr
 	inline_medium void TCStr<t_CTCStrTraits>::fs_ToStrInplaceConcat
 		(
 			TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-			, tf_CType const& _Format
+			, tf_CType const &_Format
 			, aint &_Len
 		)
 	{
@@ -134,7 +134,7 @@ namespace NMib::NStr
 	void TCStr<t_CTCStrTraits>::fs_ToStrInplaceConcat
 		(
 			TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-			, tf_CType const& _Format
+			, tf_CType const &_Format
 		)
 	{
 		(CFormat(nullptr) << _Format).f_FormatArgumentsToStrConcat(_Destination);
@@ -142,7 +142,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CType>
-	void TCStr<t_CTCStrTraits>::fs_ToStrInplaceConcat(TCStr &_Destination, CChar const *_pFormat, tf_CType const& _Format)
+	void TCStr<t_CTCStrTraits>::fs_ToStrInplaceConcat(TCStr &_Destination, CChar const *_pFormat, tf_CType const &_Format)
 	{
 		return (CFormat(_pFormat) << _Format).f_FormatToStrConcat(_Destination);
 	}
@@ -169,13 +169,7 @@ namespace NMib::NStr
 						NStr::NPlatform::fg_SystemDecodeAnsiStr((ch8 const *)f_GetStr(), Decoded);
 					else
 					{
-						using CTempAnsiStr = TCConditional
-							<
-								NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
-								, CAnsiStrNonTracked
-								, CAnsiStr
-							>
-						;
+						using CTempAnsiStr = TCConditional<NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>, CAnsiStrNonTracked, CAnsiStr>;
 						CTempAnsiStr Ansi((ch8 const *)f_GetStr(), f_GetLen());
 						NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Decoded);
 					}
@@ -197,9 +191,7 @@ namespace NMib::NStr
 					this->f_Assign(fg_Move(New));
 				}
 				break;
-			default:
-				DMibFastCheck(false);
-				break;
+			default: DMibFastCheck(false); break;
 			}
 		}
 	}
@@ -222,9 +214,7 @@ namespace NMib::NStr
 					this->f_Assign(fg_Move(New));
 				}
 				break;
-			default:
-				DMibFastCheck(false);
-				break;
+			default: DMibFastCheck(false); break;
 			}
 		}
 	}
@@ -294,7 +284,6 @@ namespace NMib::NStr
 		return CStrTraits::fs_StrToIntExact(CImp::f_GetStr(), f_GetLen(), _FailValue, _pStrTerminators);
 	}
 
-
 	template <typename t_CTCStrTraits>
 	fp32 TCStr<t_CTCStrTraits>::f_ToFloat() const
 	{
@@ -327,7 +316,6 @@ namespace NMib::NStr
 	{
 		return CStrTraits::fs_StrToFloatExact(CImp::f_GetStr(), f_GetLen(), _FailValue);
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CReturn, typename tf_CTerm>

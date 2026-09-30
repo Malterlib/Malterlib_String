@@ -16,9 +16,7 @@ namespace NMib::NStr
 	{
 		tf_CData1 *pStr1 = _pStr1;
 		while (*pStr1)
-		{
 			++pStr1;
-		}
 		--pStr1;
 
 		while (pStr1 >= _pStr1)
@@ -34,7 +32,7 @@ namespace NMib::NStr
 				}
 				else
 				{
-					if (*pCharsToTrim - *pStr1  == 0)
+					if (*pCharsToTrim - *pStr1 == 0)
 						break;
 				}
 				++pCharsToTrim;

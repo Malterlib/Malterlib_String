@@ -69,7 +69,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
-	template<typename tf_CData, typename tf_CReturn>
+	template <typename tf_CData, typename tf_CReturn>
 	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator)
 	{
 		return fg_StrToIntParseHex(_pStr, _FailValue);

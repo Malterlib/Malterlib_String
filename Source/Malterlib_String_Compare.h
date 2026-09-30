@@ -8,7 +8,7 @@ namespace NMib::NStr
 	struct CCompareNoCase
 	{
 		template <typename tf_CLeft, typename tf_CRight>
-		COrdering_Weak operator()(const tf_CLeft &_Left, const tf_CRight &_Right) const;
+		COrdering_Weak operator () (tf_CLeft const &_Left, tf_CRight const &_Right) const;
 	};
 }
 

@@ -22,6 +22,7 @@ namespace
 		}
 		return str_utf8("");
 	}
+
 	template <>
 	ch16 const *fg_GetToWildcardMatch<ch16>(umint _Type)
 	{
@@ -33,6 +34,7 @@ namespace
 		}
 		return str_utf16("");
 	}
+
 	template <>
 	ch32 const *fg_GetToWildcardMatch<ch32>(umint _Type)
 	{
@@ -94,6 +96,7 @@ namespace
 				}
 			};
 		}
+
 		void f_DoTests()
 		{
 			fp_DoTests<ch8>("UTF8");

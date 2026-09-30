@@ -27,6 +27,6 @@ namespace NMib::NStr
 	extern template struct TCStrImp_Dynamic<CStrTraits_CWStr::CStrTraits>;
 	extern template struct TCStrImp_Dynamic<CStrTraits_CUStr::CStrTraits>;
 
-	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStr<NMib::NStr::CStrTraits_CStr> const &);
+	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator = (TCStr<NMib::NStr::CStrTraits_CStr> const &);
 	extern template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
 }

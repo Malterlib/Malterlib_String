@@ -19,13 +19,13 @@ namespace NMib::NStr
 	{
 	}
 
-	CMStrPreserve &CMStrPreserve::operator =(CMStrPreserve const &_Other)
+	CMStrPreserve &CMStrPreserve::operator = (CMStrPreserve const &_Other)
 	{
 		(CMStrDeprecated &)*this = (CMStrDeprecated const &)_Other;
 		return *this;
 	}
 
-	CMStrPreserve &CMStrPreserve::operator =(CMStrPreserve &&_Other)
+	CMStrPreserve &CMStrPreserve::operator = (CMStrPreserve &&_Other)
 	{
 		(CMStrDeprecated &)*this = fg_Move((CMStrDeprecated &)_Other);
 		return *this;

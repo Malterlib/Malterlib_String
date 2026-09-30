@@ -58,11 +58,11 @@ namespace NMib::NStr
 		{
 			if (!m_lParses.f_GetLen())
 			{
-				m_lParses.f_SetLen(m_nParses*2);
+				m_lParses.f_SetLen(m_nParses * 2);
 				NMemory::fg_MemCopy(m_lParses.f_GetArray(), m_plParses, m_nParses * sizeof(void *));
 			}
 			else
-				m_lParses.f_SetLen(m_nParses*2);
+				m_lParses.f_SetLen(m_nParses * 2);
 		}
 		m_pParses = m_lParses.f_GetArray();
 		m_pParses[m_nParses] = pParse;
@@ -89,9 +89,7 @@ namespace NMib::NStr
 	inline_medium auto TCStrParse<t_CStrTraits>::f_GetArg(aint _iArgument) const -> TICStrParseType<TCStrParse> const *
 	{
 		if (_iArgument < 0)
-		{
 			_iArgument = m_iCurrentArgument++;
-		}
 
 		if (_iArgument >= (aint)m_nParses)
 			return nullptr;
@@ -103,7 +101,7 @@ namespace NMib::NStr
 	inline_medium TCStrParse<t_CStrTraits>::TCStrParse(CChar const *_pParseStr)
 	{
 		m_pParseStr = _pParseStr;
-		m_pParses = m_plParses;;
+		m_pParses = m_plParses;
 		m_nParses = 0;
 		m_iCurrentAlloc = 0;
 	}
@@ -170,14 +168,13 @@ namespace NMib::NStr
 					while (1)
 					{
 						CChar CurrentFormat = (*pAdd);
-						switch(CurrentFormat)
+						switch (CurrentFormat)
 						{
 						case '{':
 							SearchMode = 1;
 							++pAdd;
 							break;
-						case 0:
-							break;
+						case 0: break;
 
 						case ' ':
 						case '\t':
@@ -243,14 +240,9 @@ namespace NMib::NStr
 								++pFormat;
 							TICStrParseType<TCStrParse> const *pFormatVar = _DataArgs.f_GetArg(ArgNumber);
 							if (pFormatVar)
-							{
 								Variable = pFormatVar->f_Get_aint();
-							}
 							else
-							{
 								return pParse;
-							}
-
 						}
 						else if (CStrTraits::fs_CharIsNumber(*pFormat))
 						{
@@ -262,13 +254,9 @@ namespace NMib::NStr
 							if ((*pFormat) == ',')
 								++pFormat;
 							if (Variable == -16324)
-							{
 								return pParse;
-							}
 							else if (Variable < 0)
-							{
 								return pParse;
-							}
 						}
 
 						{
@@ -279,26 +267,20 @@ namespace NMib::NStr
 									++_nParsed;
 							}
 							else
-							{
 								return pParse;
-							}
 						}
 
 						while ((*pFormat) && (*pFormat) != '}')
-						{
 							++pFormat;
-						}
 
 						if (*pFormat)
 							++pFormat;
 
 						SearchMode = 0;
 					}
-
 				}
 				break;
 			}
-
 		}
 		return pParse;
 	}

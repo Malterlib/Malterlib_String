@@ -315,7 +315,7 @@ namespace NMib::NStr
 			fg_EncodeUTF8Char<true>
 				(
 					_Character
-					, [&](umint _nChars) inline_always_lambda ->typename t_CString::CUnsignedChar *
+					, [&](umint _nChars) inline_always_lambda -> typename t_CString::CUnsignedChar *
 					{
 						umint NeededLen = mp_StrLen + _nChars;
 						if (NeededLen > mp_MaxLen)

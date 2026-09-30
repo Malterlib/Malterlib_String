@@ -23,7 +23,7 @@ namespace
 
 	static constexpr umint gc_nTries = 5;
 
-	volatile bool gs_bSink;
+	bool volatile gs_bSink;
 
 	template <typename tf_FOperation>
 	inline_never void fg_Measure(NTest::CTestPerformanceMeasure &_Measure, umint _nIterations, tf_FOperation const &_fOperation)

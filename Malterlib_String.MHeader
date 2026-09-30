@@ -67,7 +67,6 @@ Property
 	}
 }
 
-
 Property
 {
 	MalterlibLibrary_String: bool = MalterlibLibrary_All
@@ -91,7 +90,7 @@ Property
 		{
 			!!PlatformFamily "Windows"
 		}
-	
+
 		Warnings_MissingCommaVariadicParam false
 		{
 			!!Compiler "Clang"
@@ -102,7 +101,7 @@ Property
 Property
 {
 	!!MalterlibEnableInternalTests true
-	
+
 	MalterlibTests =+ "Malterlib_String"
 	MalterlibTestFiles_Malterlib_String: [type(CEntity)] = ["Test/*"->MakeAbsolute()]
 	MalterlibTestExtraGroups_Malterlib_String: [string] = ["{Test}/{Malterlib_String}"]

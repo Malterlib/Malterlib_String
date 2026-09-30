@@ -5,23 +5,23 @@
 
 namespace NMib::NStr
 {
-	static inline CStrNonTracked::CFormat fg_GetStringFormat(const ch8 *_pFormat)
+	static inline CStrNonTracked::CFormat fg_GetStringFormat(ch8 const *_pFormat)
 	{
 		return CStrNonTracked::CFormat(_pFormat);
 	}
 
-	static inline CWStrNonTracked::CFormat fg_GetStringFormat(const ch16 *_pFormat)
+	static inline CWStrNonTracked::CFormat fg_GetStringFormat(ch16 const *_pFormat)
 	{
 		return CWStrNonTracked::CFormat(_pFormat);
 	}
 
-	static inline CUStrNonTracked::CFormat fg_GetStringFormat(const ch32 *_pFormat)
+	static inline CUStrNonTracked::CFormat fg_GetStringFormat(ch32 const *_pFormat)
 	{
 		return CUStrNonTracked::CFormat(_pFormat);
 	}
 
-	template <typename tf_CFormat, typename... tfp_CParams>
-	CStr fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params)
+	template <typename tf_CFormat, typename ...tfp_CParams>
+	CStr fg_Format(tf_CFormat const &_Format, tfp_CParams && ...p_Params)
 	{
 		return fg_Format<CStr>(_Format, fg_Forward<tfp_CParams>(p_Params)...);
 	}
@@ -36,31 +36,22 @@ namespace NMib::NStr::NPrivate
 		static t_CDataToTest const &fps_GetData();
 		static t_CClassToTestAgainst &fps_GetFormatClass();
 		template <typename tf_CData>
-		static auto fps_CheckFormat(tf_CData const& data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).f_ClassifiedAs(fps_GetFormatClass()));
+		static auto fps_CheckFormat(tf_CData const &data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).f_ClassifiedAs(fps_GetFormatClass()));
 		template <typename tf_CData>
 		static auto fps_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
 
 	public:
-		constexpr static bool mc_bValue = sizeof(fps_CheckFormat(fps_GetData())) == sizeof(NTraits::CTrueBySize);
+		static constexpr bool mc_bValue = sizeof(fps_CheckFormat(fps_GetData())) == sizeof(NTraits::CTrueBySize);
 	};
 
 	static_assert(cHas_f_Format<NContainer::TCVector<uint32>>);
 
-	template
-	<
-		typename t_CFormatter
-		, typename t_CData
-		, EStringFormatType t_FormatType
-	>
+	template <typename t_CFormatter, typename t_CData, EStringFormatType t_FormatType>
 	struct TCStringFormatterHelper
 	{
 	};
 
-	template
-	<
-		typename t_CFormatter
-		, typename t_CData
-	>
+	template <typename t_CFormatter, typename t_CData>
 	struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_InlineCreateStringFormatter>
 	{
 		using CFormatType = decltype(fg_GetType<t_CData &>().f_GetStringFormatType(fg_GetType<t_CFormatter &>()));
@@ -72,11 +63,7 @@ namespace NMib::NStr::NPrivate
 		}
 	};
 
-	template
-	<
-		typename t_CFormatter
-		, typename t_CData
-	>
+	template <typename t_CFormatter, typename t_CData>
 	struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_Inline>
 	{
 		using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, true>;
@@ -90,11 +77,7 @@ namespace NMib::NStr::NPrivate
 		}
 	};
 
-	template
-	<
-		typename t_CFormatter
-		, typename t_CData
-	>
+	template <typename t_CFormatter, typename t_CData>
 	struct TCStringFormatterHelper<t_CFormatter, t_CData, EStringFormatType::mc_FormatterTemplate>
 	{
 		using CFormatType = typename TCStringFormatter<t_CFormatter, CStrFormatBinaryWrapperUntyped>::CFormatType;

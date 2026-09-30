@@ -9,10 +9,10 @@ namespace NMib::NStr
 {
 	enum EStrToIntParseMode
 	{
-		EStrToIntParseMode_Hex = 16,
-		EStrToIntParseMode_Base10 = 10,
-		EStrToIntParseMode_Binary = 8,
-		EStrToIntParseMode_Octal = 2,
+		EStrToIntParseMode_Hex      = 16
+		, EStrToIntParseMode_Base10 = 10
+		, EStrToIntParseMode_Binary = 8
+		, EStrToIntParseMode_Octal  = 2
 	};
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
@@ -39,9 +39,9 @@ namespace NMib::NStr
 		)
 	;
 
-	template<typename t_CData, typename t_CReturn>
+	template <typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue);
-	template<typename t_CData, typename t_CReturn>
+	template <typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue, t_CData _Terminator);
 
 	template <typename t_CData, typename t_CReturn>
