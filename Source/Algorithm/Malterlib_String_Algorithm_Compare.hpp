@@ -75,7 +75,6 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
-
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -106,7 +105,6 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
-
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -171,7 +169,8 @@ namespace NMib::NStr
 	}
 
 	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2) noexcept
+	constexpr inline_large auto fg_StrCmpLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2) noexcept
+		-> typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -262,7 +261,8 @@ namespace NMib::NStr
 	}
 
 	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept
+	constexpr inline_large auto fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept
+		-> typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType
 	{
 		using CRetType = typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType;
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -363,7 +363,6 @@ namespace NMib::NStr
 			return -1;
 
 		return 0;
-
 	}
 
 	template <typename tf_CData1, typename tf_CData2>

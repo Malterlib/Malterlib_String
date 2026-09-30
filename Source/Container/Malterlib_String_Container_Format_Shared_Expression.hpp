@@ -93,8 +93,14 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_CImplementation, typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_never tf_CData TICStrFormatType<t_CFormatter>
-		::fpr_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const * &_pParse, bool &_bError, bool _bExitAtValue) const
+	inline_never tf_CData TICStrFormatType<t_CFormatter>::fpr_EvalExpression
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, CChar const * &_pParse
+			, bool &_bError
+			, bool _bExitAtValue
+		)
+		const
 	{
 		TCValueData<tf_CData, tf_CImplementation> ValueData;
 
@@ -329,9 +335,7 @@ namespace NMib::NStr
 					Operator = EFormatXprOperator_Equal;
 				}
 				else if (*pParse == '^')
-				{
 					Operator = EFormatXprOperator_BitwiseXor;
-				}
 				else
 				{
 					_bError = true;

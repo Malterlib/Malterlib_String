@@ -9,13 +9,13 @@ namespace NMib::NStr
 {
 	struct CStrFormatType_StaticOptions
 	{
-		constexpr inline_small static bool f_RestrictLength();
-		constexpr inline_small static umint f_MinLength();
-		constexpr inline_small static umint f_MaxLength();
-		constexpr inline_small static aint f_Align();
-		constexpr inline_small static bool f_LeftAlign();
-		constexpr inline_small static bool f_SimpleAlign();
-		constexpr inline_small static ch8 f_Fillout();
+		static constexpr inline_small bool f_RestrictLength();
+		static constexpr inline_small umint f_MinLength();
+		static constexpr inline_small umint f_MaxLength();
+		static constexpr inline_small aint f_Align();
+		static constexpr inline_small bool f_LeftAlign();
+		static constexpr inline_small bool f_SimpleAlign();
+		static constexpr inline_small ch8 f_Fillout();
 	};
 
 	template <umint t_MinLength, typename t_CParent>
@@ -23,8 +23,8 @@ namespace NMib::NStr
 	{
 		inline_small TICStrFormatType_StaticOptions_MinLength(t_CParent const &_Parent);
 
-		constexpr inline_small static umint f_MinLength();
-		constexpr inline_small static bool f_RestrictLength();
+		static constexpr inline_small umint f_MinLength();
+		static constexpr inline_small bool f_RestrictLength();
 	};
 
 	template <umint t_MaxLength, typename t_CParent>
@@ -32,16 +32,16 @@ namespace NMib::NStr
 	{
 		inline_small TICStrFormatType_StaticOptions_MaxLength(t_CParent const &_Parent);
 
-		constexpr inline_small static umint f_MaxLength();
-		constexpr inline_small static bool f_RestrictLength();
+		static constexpr inline_small umint f_MaxLength();
+		static constexpr inline_small bool f_RestrictLength();
 	};
 
 	template <ch32 t_FillOut, typename t_CParent>
 	struct TICStrFormatType_StaticOptions_FillOut : public t_CParent
 	{
-		inline_small TICStrFormatType_StaticOptions_FillOut (t_CParent const &_Parent);
+		inline_small TICStrFormatType_StaticOptions_FillOut(t_CParent const &_Parent);
 
-		constexpr inline_small static ch32 f_Fillout();
+		static constexpr inline_small ch32 f_Fillout();
 	};
 
 	template <typename t_COptions, typename t_CIntType>
@@ -51,7 +51,7 @@ namespace NMib::NStr
 
 		inline_small TCValueWithOptions(t_CIntType const &_Int, t_COptions const &_Options);
 
-		inline_small t_CIntType const & f_GetValue() const;
+		inline_small t_CIntType const &f_GetValue() const;
 		inline_small COptions const &f_GetOptions() const;
 		inline_small COptions &f_GetOptions();
 		inline_small operator t_CIntType const & () const;
@@ -118,43 +118,86 @@ namespace NMib::NStr
 			virtual void operator () (fp32 _Value) = 0;
 			virtual void operator () (fp64 _Value) = 0;
 			virtual void operator () (CChar const *_pValue) = 0;
-			virtual void operator () () {}
+			virtual void operator () ()
+			{
+			}
 		};
 
 		struct CVisitorInteger : public CVisitor
 		{
-			virtual void operator () (fp32 _Value) {}
-			virtual void operator () (fp64 _Value) {}
-			virtual void operator () (CChar const *_pValue) {}
+			virtual void operator () (fp32 _Value)
+			{
+			}
+
+			virtual void operator () (fp64 _Value)
+			{
+			}
+
+			virtual void operator () (CChar const *_pValue)
+			{
+			}
 		};
 
 		struct CVisitorFloat : public CVisitor
 		{
-			virtual void operator () (uint32 _Value) {}
-			virtual void operator () (uint64 _Value) {}
-			virtual void operator () (int32 _Value) {}
-			virtual void operator () (int64 _Value) {}
-			virtual void operator () (CChar const *_pValue) {}
+			virtual void operator () (uint32 _Value)
+			{
+			}
+
+			virtual void operator () (uint64 _Value)
+			{
+			}
+
+			virtual void operator () (int32 _Value)
+			{
+			}
+
+			virtual void operator () (int64 _Value)
+			{
+			}
+
+			virtual void operator () (CChar const *_pValue)
+			{
+			}
 		};
 
 		struct CVisitorNumber : public CVisitor
 		{
-			virtual void operator () (CChar const *_pValue) {}
+			virtual void operator () (CChar const *_pValue)
+			{
+			}
 		};
 
 		struct CVisitorString : public CVisitor
 		{
-			virtual void operator () (uint32 _Value) {}
-			virtual void operator () (uint64 _Value) {}
-			virtual void operator () (int32 _Value) {}
-			virtual void operator () (int64 _Value) {}
-			virtual void operator () (fp32 _Value) {}
-			virtual void operator () (fp64 _Value) {}
+			virtual void operator () (uint32 _Value)
+			{
+			}
+
+			virtual void operator () (uint64 _Value)
+			{
+			}
+
+			virtual void operator () (int32 _Value)
+			{
+			}
+
+			virtual void operator () (int64 _Value)
+			{
+			}
+
+			virtual void operator () (fp32 _Value)
+			{
+			}
+
+			virtual void operator () (fp64 _Value)
+			{
+			}
 		};
 
 		struct COption
 		{
- 			struct CFormatTypes
+			struct CFormatTypes
 			{
 				ch32 m_Format1;
 				ch32 m_Format2;
@@ -250,16 +293,10 @@ namespace NMib::NStr
 		inline_never void fp_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const *_pParse) const;
 
 		template <typename tf_CImplementation, typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-		inline_never tf_CData fpr_EvalExpression
-			(
-				TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
-				, CChar const * &_pParse
-				, bool &_bError
-				, bool _bExitAtValue
-			) const
+		inline_never auto fpr_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const * &_pParse, bool &_bError, bool _bExitAtValue) const
+			-> tf_CData
 		;
 	};
-
 
 	template <umint tf_MinLength, typename tf_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMinLength(tf_CValueType const &_Value);
@@ -268,7 +305,6 @@ namespace NMib::NStr
 	inline_small auto fg_FormatMinLength(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, tf_COldOptions>, tf_CValueType>
 	;
-
 
 	template <umint tf_MaxLength, typename tf_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMaxLength(tf_CValueType const &_Value);

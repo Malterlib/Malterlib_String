@@ -33,11 +33,11 @@ namespace NMib::NStr
 		inline_small void f_MakeUnique();
 		inline_small aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
 
-		constexpr static bool mc_bInitConstStr = false;
-		constexpr static bool mc_bNothrowAssign = true;
-		constexpr static bool mc_bIsNullTerminated = true;
-		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
-		constexpr static bool mc_AllocatesMemory = false;
+		static constexpr bool mc_bInitConstStr = false;
+		static constexpr bool mc_bNothrowAssign = true;
+		static constexpr bool mc_bIsNullTerminated = true;
+		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
+		static constexpr bool mc_AllocatesMemory = false;
 
 		umint m_Len;
 		CChar m_lData[t_DataLen];

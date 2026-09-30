@@ -20,14 +20,14 @@ namespace NMib::NStr
 	{
 		using CAllocator = NMemory::CAllocator_Heap;
 
-		constexpr static umint mc_MaxExtraChars = 32;
+		static constexpr umint mc_MaxExtraChars = 32;
 	};
 
 	struct CStrImp_Dynamic_ParamsNonTracked
 	{
 		using CAllocator = NMemory::CAllocator_NonTrackedHeap;
 
-		constexpr static umint mc_MaxExtraChars = 32;
+		static constexpr umint mc_MaxExtraChars = 32;
 	};
 
 	struct CStrImp_Dynamic_ParamsVirtual : public CStrImp_Dynamic_ParamsDeflauts
@@ -39,7 +39,7 @@ namespace NMib::NStr
 	{
 		using CAllocator = NMemory::CAllocator_HeapSecure;
 
-		constexpr static umint mc_MaxExtraChars = 32;
+		static constexpr umint mc_MaxExtraChars = 32;
 	};
 
 	using CStrTypeUnderlying = int32;
@@ -97,12 +97,29 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	struct TCStrFormatType_TStr;
 
-	enum EStrTypeClass_Float {};
-	enum EStrTypeClass_String {};
-	enum EStrTypeClass_Integer {};
-	enum EStrTypeClass_Binary {};
-	enum EStrTypeClass_Untyped {};
-	enum EStrTypeClass_Other {};
+	enum EStrTypeClass_Float
+	{
+	};
+
+	enum EStrTypeClass_String
+	{
+	};
+
+	enum EStrTypeClass_Integer
+	{
+	};
+
+	enum EStrTypeClass_Binary
+	{
+	};
+
+	enum EStrTypeClass_Untyped
+	{
+	};
+
+	enum EStrTypeClass_Other
+	{
+	};
 
 	struct CDefaultStrFormatTypeClassifier
 	{

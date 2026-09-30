@@ -53,7 +53,8 @@ namespace NMib::NStr
 	}
 
 	template <bool tf_bNoCase, bool tf_bUseCount = false, typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	inline tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count = 0)
+	inline auto fg_StrReplace(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count = 0)
+		-> tf_CData1 *
 	{
 		--_MaxLen; // Reserve space for null terminator
 
@@ -279,7 +280,8 @@ namespace NMib::NStr
 
 	// Convenience overloads that accept a pre-computed match count
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplaceWithCount(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count)
+	auto fg_StrReplaceWithCount(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count)
+		-> tf_CData1 *
 	{
 		return fg_StrReplace<false, true>(_pStr1, _Len, _pStrFind, _LenFind, _pStrReplace, _LenReplace, _MaxLen, _Count);
 	}
@@ -288,7 +290,8 @@ namespace NMib::NStr
 	tf_CData1 *fg_StrReplaceNoCaseWithCount
 		(
 			tf_CData1 *_pStr1
-			, umint _Len, tf_CData2 const *_pStrFind
+			, umint _Len
+			, tf_CData2 const *_pStrFind
 			, umint _LenFind
 			, tf_CData3 const *_pStrReplace
 			, umint _LenReplace

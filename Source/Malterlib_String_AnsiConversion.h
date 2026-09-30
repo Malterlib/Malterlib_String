@@ -9,10 +9,10 @@ namespace NMib::NStr
 {
 	enum ECharacterEncoding : int32
 	{
-		ECharacterEncoding_Unicode,
-		ECharacterEncoding_UTF8,
-		ECharacterEncoding_UTF16,
-		ECharacterEncoding_Windows_1252,
+		ECharacterEncoding_Unicode
+		, ECharacterEncoding_UTF8
+		, ECharacterEncoding_UTF16
+		, ECharacterEncoding_Windows_1252
 	};
 
 	template <ECharacterEncoding t_CharacterEncoding>
@@ -32,7 +32,6 @@ namespace NMib::NStr
 
 		static CTableEntry const ms_Table[];
 	};
-
 
 	template <ECharacterEncoding _Encoding>
 	CStr fg_DecodeCharacterEncoding(ch8 const *_pStr, CAnsiStr const *_pCStr = nullptr);

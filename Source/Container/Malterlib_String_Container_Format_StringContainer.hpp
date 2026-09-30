@@ -46,8 +46,14 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
-	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>
-		::f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const CChar *_pFormat, const t_CFormatter & _ArgData) const
+	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, CChar const *_pFormat
+			, t_CFormatter const &_ArgData
+		)
+		const
 	{
 		COptionsStr Options;
 
@@ -82,9 +88,7 @@ namespace NMib::NStr
 	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_Visit(CVisitor &_Extractor) const
 	{
 		if constexpr (sizeof(CCharIn) == sizeof(CChar))
-		{
 			_Extractor((CChar const *)(mp_TStr.f_GetStr()));
-		}
 		else
 		{
 			TCStr<CTStrTraits> Temp = mp_TStr;
@@ -108,8 +112,12 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_small aint TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
+	inline_small aint TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_ParseOption
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, COption &_Option
+		)
+		const
 	{
 		switch (_Option.m_FormatTypes.m_Format1)
 		{
@@ -117,21 +125,11 @@ namespace NMib::NStr
 			{
 				switch (_Option.m_FormatTypes.m_Format2)
 				{
-				case 'U':
-					_Args.m_Options.m_Case = COptionsStr::ECase_Upper;
-					break;
-				case 'L':
-					_Args.m_Options.m_Case = COptionsStr::ECase_Lower;
-					break;
-				case 'C':
-					_Args.m_Options.m_Case = COptionsStr::ECase_Capitalize;
-					break;
-				case 'D':
-					_Args.m_Options.m_Case = COptionsStr::ECase_Decapitalize;
-					break;
-				default:
-					return CSuper::f_ParseOption(_Args, _Option);
-					break;
+				case 'U': _Args.m_Options.m_Case = COptionsStr::ECase_Upper; break;
+				case 'L': _Args.m_Options.m_Case = COptionsStr::ECase_Lower; break;
+				case 'C': _Args.m_Options.m_Case = COptionsStr::ECase_Capitalize; break;
+				case 'D': _Args.m_Options.m_Case = COptionsStr::ECase_Decapitalize; break;
+				default: return CSuper::f_ParseOption(_Args, _Option); break;
 				}
 				return true;
 			}
@@ -141,25 +139,35 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
-	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStr<t_CStrTraitsIn> &_Value)
+	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCStr<t_CStrTraitsIn> const &_Value)
 	{
 		COptionsStr Options;
 		fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
-	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>
-		::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, const TCStr<t_CStrTraitsIn> &_Value, COptionsStr &_Options)
+	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fs_AddToStrStatic
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, TCStr<t_CStrTraitsIn> const &_Value
+			, COptionsStr &_Options
+		)
 	{
 		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	template <typename tf_COptions>
-	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const TCStr<CTStrTraits> &_Value)
+	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fp_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, tf_COptions &_Options
+			, TCStr<CTStrTraits> const &_Value
+		)
 	{
-		DMibSafeCheck(reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value), "You cannot assign a format to string that is used by reference as an argument.");
+		DMibSafeCheck(reinterpret_cast<void const *>(&_String) != reinterpret_cast<void const *>(&_Value), "You cannot assign a format to string that is used by reference as an argument.");
 
 		umint TempLen = _Value.f_GetLen();
 
@@ -171,23 +179,17 @@ namespace NMib::NStr
 					{
 						switch (_Options.m_Case)
 						{
-						case COptionsStr::ECase_Upper:
-							CTStrTraits::CStrTraits::fs_StrUpperCase(_pTemp, _Value.f_GetStr(), TempLen);
-							break;
-						case COptionsStr::ECase_Lower:
-							CTStrTraits::CStrTraits::fs_StrLowerCase(_pTemp, _Value.f_GetStr(), TempLen);
-							break;
+						case COptionsStr::ECase_Upper: CTStrTraits::CStrTraits::fs_StrUpperCase(_pTemp, _Value.f_GetStr(), TempLen); break;
+						case COptionsStr::ECase_Lower: CTStrTraits::CStrTraits::fs_StrLowerCase(_pTemp, _Value.f_GetStr(), TempLen); break;
 						case COptionsStr::ECase_Capitalize:
 							CTStrTraits::CStrTraits::fs_StrUpperCase(_pTemp, _Value.f_GetStr(), 1);
-							NMemory::fg_ObjectCopy(_pTemp+1, _Value.f_GetStr()+1, TempLen-1);
+							NMemory::fg_ObjectCopy(_pTemp + 1, _Value.f_GetStr() + 1, TempLen - 1);
 							break;
 						case COptionsStr::ECase_Decapitalize:
 							CTStrTraits::CStrTraits::fs_StrLowerCase(_pTemp, _Value.f_GetStr(), 1);
-							NMemory::fg_ObjectCopy(_pTemp+1, _Value.f_GetStr()+1, TempLen-1);
+							NMemory::fg_ObjectCopy(_pTemp + 1, _Value.f_GetStr() + 1, TempLen - 1);
 							break;
-						default:
-							DMibSafeCheck(0,"Case is wrong");
-							break;
+						default: DMibSafeCheck(0, "Case is wrong"); break;
 						}
 						if (_Options.m_bSimpleAlign)
 							CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, _pTemp, TempLen);
@@ -219,11 +221,15 @@ namespace NMib::NStr
 
 				using CUnicodeStr = TCStr
 					<
-						typename TCStrTraits_ReplaceParams<ch32
-						, EStrType_Unicode
-						, TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::mc_Type
-						, typename TCStr<t_CStrTraitsIn>::CImp
-						, typename TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::CParams>::CType
+						typename TCStrTraits_ReplaceParams
+						<
+							ch32
+							, EStrType_Unicode
+							, TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::mc_Type
+							, typename TCStr<t_CStrTraitsIn>::CImp
+							, typename TCStr<t_CStrTraitsIn>::CTraits::CStrTraits::CParams
+						>
+						::CType
 					>
 				;
 
@@ -231,21 +237,11 @@ namespace NMib::NStr
 
 				switch (_Options.m_Case)
 				{
-				case COptionsStr::ECase_Upper:
-					UnicodeStr = UnicodeStr.f_UpperCase();
-					break;
-				case COptionsStr::ECase_Lower:
-					UnicodeStr = UnicodeStr.f_LowerCase();
-					break;
-				case COptionsStr::ECase_Capitalize:
-					UnicodeStr[0] = CTStrTraits::CStrTraits::fs_CharUpperCase(UnicodeStr[0]);
-					break;
-				case COptionsStr::ECase_Decapitalize:
-					UnicodeStr[0] = CTStrTraits::CStrTraits::fs_CharLowerCase(UnicodeStr[0]);
-					break;
-				default:
-					DMibSafeCheck(0,"Case is wrong");
-					break;
+				case COptionsStr::ECase_Upper: UnicodeStr = UnicodeStr.f_UpperCase(); break;
+				case COptionsStr::ECase_Lower: UnicodeStr = UnicodeStr.f_LowerCase(); break;
+				case COptionsStr::ECase_Capitalize: UnicodeStr[0] = CTStrTraits::CStrTraits::fs_CharUpperCase(UnicodeStr[0]); break;
+				case COptionsStr::ECase_Decapitalize: UnicodeStr[0] = CTStrTraits::CStrTraits::fs_CharLowerCase(UnicodeStr[0]); break;
+				default: DMibSafeCheck(0, "Case is wrong"); break;
 				}
 
 				TCStr<CTStrTraits> ProcessedStr = UnicodeStr;
@@ -267,8 +263,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	template <typename tf_COptions, typename tf_CStrTraitsIn>
-	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, const TCStr<tf_CStrTraitsIn> &_Value)
+	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fp_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, tf_COptions &_Options
+			, TCStr<tf_CStrTraitsIn> const &_Value
+		)
 	{
 		TCStr<CTStrTraits> Value(_Value);
 		fp_AddToStr(_String, _CurrentStrLen, _Options, Value);
@@ -276,7 +277,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn>>::fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const&_Data)
+	inline_large auto TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn>>::fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const &_Data)
 		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(_Data);
@@ -285,7 +286,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>>>::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCStr<t_CStrTraitsIn>> const&_Data)
+	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>>>::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCStr<t_CStrTraitsIn>> const &_Data)
 		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data);

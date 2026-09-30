@@ -6,16 +6,7 @@
 namespace NMib::NStr
 {
 	template <bool t_bUseMaxLen, typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse
-		(
-			t_CData const * &_pStr
-			, umint _MaxLen
-			, t_CReturn _FailValue
-			, t_CTerm const *_pStrTerminators
-			, bool _bDontFail
-			, int32 _ParseMode
-			, bool *_pFailed
-		)
+	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
 		using CNumber = TCConditional<NTraits::cIsSame<t_CReturn, bool>, uint8, t_CReturn>;
 		CNumber DestNumber = 0;
@@ -61,16 +52,16 @@ namespace NMib::NStr
 			case 0:
 				{
 					if ((*pParseStr) == '+')
-					{
 						Sign = 1;
-					}
 					else if ((*pParseStr) == '-')
-					{
 						Sign = t_CReturn(-1);
-					}
-					else if (fg_CharIsNumber((*pParseStr)) || (ParseMode == EStrToIntParseMode_Hex && (((*pParseStr) >= 'a' && (*pParseStr) <= 'f') || ((*pParseStr) >= 'A' && (*pParseStr) <= 'F'))))
+					else if
+					(
+						fg_CharIsNumber((*pParseStr))
+						|| (ParseMode == EStrToIntParseMode_Hex && (((*pParseStr) >= 'a' && (*pParseStr) <= 'f') || ((*pParseStr) >= 'A' && (*pParseStr) <= 'F')))
+					)
 					{
-						if ((!t_bUseMaxLen || pParseStr + 1 < pEndStr) && fg_CharIsAlphabetical((*(pParseStr+1))))
+						if ((!t_bUseMaxLen || pParseStr + 1 < pEndStr) && fg_CharIsAlphabetical((*(pParseStr + 1))))
 						{
 							if ((*pParseStr) == '0' && (((*(pParseStr + 1)) == 'x') || ((*(pParseStr + 1)) == 'X')))
 							{
@@ -225,7 +216,7 @@ namespace NMib::NStr
 						{
 							if (ParseMode <= 10)
 							{
-								uint8 EndChar = '0' + (ParseMode-1);
+								uint8 EndChar = '0' + (ParseMode - 1);
 								while ((!t_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= EndChar)
 								{
 									DestNumber *= ParseMode;
@@ -268,7 +259,6 @@ namespace NMib::NStr
 										break;
 									++pParseStr;
 								}
-
 							}
 							SearchMode = 5;
 							continue;
@@ -296,7 +286,6 @@ namespace NMib::NStr
 			}
 
 			++pParseStr;
-
 		}
 
 	Return:
@@ -313,35 +302,18 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse
-		(
-			t_CData const * &_pStr
-			, t_CReturn _FailValue
-			, t_CTerm const *_pStrTerminators
-			, bool _bDontFail
-			, int32 _ParseMode
-			, bool *_pFailed
-		)
+	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
 		return fg_StrToIntParse<false>(_pStr, 0, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
 	}
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse
-		(
-			t_CData const * &_pStr
-			, umint _MaxLen
-			, t_CReturn _FailValue
-			, t_CTerm const *_pStrTerminators
-			, bool _bDontFail
-			, int32 _ParseMode
-			, bool *_pFailed
-		)
+	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
 		return fg_StrToIntParse<true>(_pStr, _MaxLen, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
 	}
 
-	template<typename t_CData, typename t_CReturn>
+	template <typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue, t_CData _Terminator)
 	{
 		t_CReturn DestNumber = 0;
@@ -360,13 +332,9 @@ namespace NMib::NStr
 			if ((*pParseStr) == _Terminator)
 				break;
 			else if ((*pParseStr) == '+')
-			{
 				Sign = 1;
-			}
 			else if ((*pParseStr) == '-')
-			{
 				Sign = t_CReturn(-1);
-			}
 			else if (fg_CharIsHexNumber(*pParseStr))
 			{
 				while ((*pParseStr))
@@ -410,8 +378,7 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-
-	template<typename t_CData, typename t_CReturn>
+	template <typename t_CData, typename t_CReturn>
 	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue)
 	{
 		t_CReturn DestNumber = 0;
@@ -428,13 +395,9 @@ namespace NMib::NStr
 		while ((*pParseStr))
 		{
 			if ((*pParseStr) == '+')
-			{
 				Sign = 1;
-			}
 			else if ((*pParseStr) == '-')
-			{
 				Sign = t_CReturn(-1);
-			}
 			else if (fg_CharIsHexNumber(*pParseStr))
 			{
 				while ((*pParseStr))
@@ -577,7 +540,6 @@ namespace NMib::NStr
 		return fg_StrToIntBase10Parse(pStr, _FailValue);
 	}
 
-
 	template <typename t_CData, typename t_CReturn>
 	t_CReturn fg_StrToIntBase10Parse(t_CData const * &_pStr, t_CReturn _FailValue)
 	{
@@ -614,7 +576,6 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-
 	template <typename t_CData, typename t_CReturn>
 	inline_large t_CReturn fg_StrToIntBase10NoSign(t_CData const *_pStr, t_CReturn _FailValue)
 	{
@@ -629,7 +590,6 @@ namespace NMib::NStr
 
 		return DestNumber;
 	}
-
 
 	template <typename t_CData, typename t_CReturn>
 	inline_large t_CReturn fg_StrToIntBase10ParseNoSign(t_CData const * &_pStr, t_CReturn _FailValue)

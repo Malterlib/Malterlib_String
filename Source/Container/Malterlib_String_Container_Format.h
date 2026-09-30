@@ -12,9 +12,9 @@ namespace NMib::NStr
 
 	enum class EStringFormatTypeFlag : uint8
 	{
-		mc_None = 0
+		mc_None           = 0
 		, mc_NeedDestruct = fg_Bit(0)
-		, mc_NeedDealloc = fg_Bit(1)
+		, mc_NeedDealloc  = fg_Bit(1)
 	};
 
 	namespace NPrivate
@@ -38,16 +38,16 @@ namespace NMib::NStr
 		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 		TCFormat(TCFormat &&_Other);
-		TCFormat(const TCFormat &_Other) = delete;
-		TCFormat& operator=(TCFormat const& _Other) = delete;
+		TCFormat(TCFormat const &_Other) = delete;
+		TCFormat &operator = (TCFormat const &_Other) = delete;
 
-		explicit inline_medium TCFormat(const CChar *_pFormatStr);
+		explicit inline_medium TCFormat(CChar const *_pFormatStr);
 		template <typename tf_CTCStrTraits>
 		explicit inline_medium TCFormat(TCStr<tf_CTCStrTraits> const &_Format);
 
 		~TCFormat();
 
-		TCFormat &operator=(TCFormat &&_Other);
+		TCFormat &operator = (TCFormat &&_Other);
 
 		void f_MoveFormats(TCFormat &&_Other);
 		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags);
@@ -56,7 +56,7 @@ namespace NMib::NStr
 		template <typename tf_CType, typename ...tfp_CParams>
 		inline_medium tf_CType *f_Alloc(tfp_CParams && ...p_Params);
 
-		inline_medium const TICStrFormatType<TCFormat> *f_GetArg(aint _iArgument) const;
+		inline_medium TICStrFormatType<TCFormat> const *f_GetArg(aint _iArgument) const;
 
 		umint f_GetNumArgs() const;
 		bool f_IsEmpty() const;
@@ -69,7 +69,7 @@ namespace NMib::NStr
 		inline_small void f_FormatToStrConcat(TCStr<t_CTCStrTraits> &_Str) const;
 		inline_small void f_FormatArgumentsToStr(TCStr<t_CTCStrTraits> &_Str) const;
 		inline_small void f_FormatArgumentsToStrConcat(TCStr<t_CTCStrTraits> &_Str) const;
-		void f_SetFormatStr(const CChar *_pFormatStr);
+		void f_SetFormatStr(CChar const *_pFormatStr);
 		TCStr<t_CTCStrTraits> f_GetStr() const;
 		TCStr<t_CTCStrTraits> operator ^ (umint _nCopies) const;
 
@@ -112,23 +112,23 @@ namespace NMib::NStr
 		static auto fs_GetFormatClassifier(tf_CType const &_Type) -> decltype(TCStringFormatterAll<TCFormat, tf_CType>::fs_CreateFormat(*((TCFormat *)0), _Type)); // Only used compile time
 
 		template <bool tf_bConcat>
-		static void fp_FormatArguments(const TCFormat &_Format, TCStr<t_CTCStrTraits> &_ToStr);
+		static void fp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr);
 
 		template <bool tf_bConcat>
-		static void fp_FormatArgList(const TCFormat &_Format, const CChar *_pFormat, TCStr<t_CTCStrTraits> &_ToStr);
+		static void fp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr);
 
 	private:
 		inline_small TICStrFormatType<TCFormat> **fp_GetFormatList() const;
 		inline_small TICStrFormatType<TCFormat> const *fp_GetFormatEntry(aint _iEntry) const;
 		void *fp_AllocSpace(int _Bytes);
 
-		constexpr static umint mcp_StaticFormats = 16;
-		constexpr static umint mcp_StaticSpace = mcp_StaticFormats * 4;
+		static constexpr umint mcp_StaticFormats = 16;
+		static constexpr umint mcp_StaticSpace = mcp_StaticFormats * 4;
 
 		uaint m_nFormats;
 		mutable aint m_iCurrentArgument;
 		TICStrFormatType<TCFormat> **m_pFormats;
-		const CChar *m_pFormatStr;
+		CChar const *m_pFormatStr;
 
 		TICStrFormatType<TCFormat> *m_plFormats[mcp_StaticFormats];
 		NContainer::TCVector<TICStrFormatType<TCFormat> *, CAllocator> m_lFormats;
@@ -147,7 +147,7 @@ namespace NMib::NStr
 		umint f_GetSize() const;
 
 	private:
-		const void *mp_pData;
+		void const *mp_pData;
 		umint mp_Size;
 	};
 
@@ -186,17 +186,17 @@ namespace NMib::NStr
 	template <typename tf_CFormat>
 	inline_always void fg_AddFormatParams(tf_CFormat &_Format);
 
-	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
+	template <typename tf_CFormat, typename tf_CFirst, typename ...tfp_CParams>
 	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First);
 
-	template <typename tf_CFormat, typename tf_CFirst, typename... tfp_CParams>
-	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams &&...p_Params);
+	template <typename tf_CFormat, typename tf_CFirst, typename ...tfp_CParams>
+	inline_always void fg_AddFormatParams(tf_CFormat &_Format, tf_CFirst &&_First, tfp_CParams && ...p_Params);
 
-	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
-	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params);
+	template <typename tf_CReturnString, typename tf_CFormat, typename ...tfp_CParams>
+	tf_CReturnString fg_Format(tf_CFormat const &_Format, tfp_CParams && ...p_Params);
 
-	template <typename tf_CReturnString, typename tf_CFormat, typename... tfp_CParams>
-	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams &&...p_Params);
+	template <typename tf_CReturnString, typename tf_CFormat, typename ...tfp_CParams>
+	void fg_AppendFormat(tf_CReturnString &_String, tf_CFormat const &_Format, tfp_CParams && ...p_Params);
 }
 
 #include "Malterlib_String_Container_Format.hpp"

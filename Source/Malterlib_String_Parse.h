@@ -64,12 +64,12 @@ namespace NMib::NStr
 
 	DMibImpErrorSpecificClassDefine(CExceptionParse, NMib::NException::CException, NContainer::TCVector<CParseError>);
 
-#	define DMibErrorParse(d_Description, d_Specific) DMibImpErrorSpecific(NMib::NStr::CExceptionParse, d_Description, d_Specific)
-#	define DMibExceptionInstanceParse(d_Description, d_Specific) DMibImpExceptionInstance(NMib::NStr::CExceptionParse, d_Description, d_Specific)
+#define DMibErrorParse(d_Description, d_Specific) DMibImpErrorSpecific(NMib::NStr::CExceptionParse, d_Description, d_Specific)
+#define DMibExceptionInstanceParse(d_Description, d_Specific) DMibImpExceptionInstance(NMib::NStr::CExceptionParse, d_Description, d_Specific)
 
-#	ifndef DMibPNoShortCuts
-#		define DErrorParse(d_Description, d_Specific) DMibErrorParse(d_Description, d_Specific)
-#	endif
+#ifndef DMibPNoShortCuts
+#	define DErrorParse(d_Description, d_Specific) DMibErrorParse(d_Description, d_Specific)
+#endif
 }
 
 #include "Malterlib_String_Parse.hpp"

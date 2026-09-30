@@ -38,10 +38,10 @@ namespace NMib::NStr
 
 		inline_small void f_Clear();
 
-		constexpr static bool mc_bInitConstStr = true;
-		constexpr static bool mc_bNothrowAssign = true;
-		constexpr static bool mc_bIsNullTerminated = false;
-		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
+		static constexpr bool mc_bInitConstStr = true;
+		static constexpr bool mc_bNothrowAssign = true;
+		static constexpr bool mc_bIsNullTerminated = false;
+		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
 
 		CChar *m_pData;
 		umint m_MaxLen;

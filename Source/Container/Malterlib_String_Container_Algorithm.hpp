@@ -30,7 +30,6 @@ namespace NMib::NStr
 		return _Str.f_Hash();
 	}
 
-
 	template <typename tf_CTCStrTraits>
 	inline_small uint32 fg_StrIsAnsi(TCStr<tf_CTCStrTraits> const &_Str)
 	{
@@ -42,7 +41,6 @@ namespace NMib::NStr
 	{
 		return fg_StrIsAnsiLengthAware(_Str.f_GetStr(), fg_Min(_Str.f_GetLen(), _MaxLen));
 	}
-
 
 	template <typename tf_CTCStrTraits>
 	bool fg_StrIsEmpty(TCStr<tf_CTCStrTraits> const &_Str)
@@ -61,7 +59,6 @@ namespace NMib::NStr
 	{
 		return _Str.f_LargestChar();
 	}
-
 
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	inline_small TCStr<tf_CTCStrTraits> &fg_StrCopy(TCStr<tf_CTCStrTraits> &_To, tf_CData const *_pFrom)
@@ -161,7 +158,6 @@ namespace NMib::NStr
 		return _Str;
 	}
 
-
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	inline_small TCStr<tf_CTCStrTraits> &fg_StrSetAt(TCStr<tf_CTCStrTraits> &_Str, aint _Index, tf_CData _Character)
 	{
@@ -229,11 +225,11 @@ namespace NMib::NStr
 			++pStr1;
 		}
 
-		uint32 MaxLen = NeededLen+1;
+		uint32 MaxLen = NeededLen + 1;
 		CChar *pWrite = _Str.f_GetStr(MaxLen);
-#			if DMibEnableSafeCheck > 0
-			CChar *pWriteStart = pWrite;
-#			endif
+#if DMibEnableSafeCheck > 0
+		CChar *pWriteStart = pWrite;
+#endif
 
 		pStr1 = Temp.f_GetStr();
 		Column = 0;
@@ -277,7 +273,6 @@ namespace NMib::NStr
 		*(pWrite++) = 0;
 
 		DMibSafeCheck((umint(pWrite - pWriteStart) <= MaxLen), "Memory overwritten");
-
 
 		_Str.f_SetModified();
 		return _Str;

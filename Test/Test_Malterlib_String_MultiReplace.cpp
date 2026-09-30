@@ -26,6 +26,7 @@ namespace
 				)
 			;
 
+			// malterlib-format off
 			CStr TestString = R"--(
 				Compile
 				{
@@ -37,7 +38,9 @@ namespace
 					Custom_Inputs ["C:/CompiledFiles/Qt6-b9ce2311/Hansoft/Generated/External_boringssl/Windows/x64/Debug/ssl/test/bssl_shim.exe"->MakeAbsolute()]
 				}
 			)--";
+			// malterlib-format on
 
+			// malterlib-format off
 			CStr ExpectedString = R"--(
 				Compile
 				{
@@ -49,6 +52,7 @@ namespace
 					Custom_Inputs ["C:/CompiledFiles/Qt6-b9ce2311/Hansoft/Generated/External_boringssl/Windows/x64/Debug/ssl/test/bssl_shim.exe"->MakeAbsolute()]
 				}
 			)--";
+			// malterlib-format on
 			DMibExpect(MultiReplace.f_Replace(TestString), ==, ExpectedString);
 		}
 
@@ -82,7 +86,9 @@ namespace
 
 					{
 						DMibTestPath("ShortCase");
-						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
+						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask."
+							"frag.qsb</file>"
+						;
 						CStr ReplacedString = MultiReplace.f_Replace(String);
 						CStr ExpectedString = "#(CMakeIntermediateDirectory)/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
 

@@ -8,7 +8,7 @@ namespace NMib::NStr
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	inline_large TCStr<tf_CTCStrTraits> &fg_StrInsert(TCStr<tf_CTCStrTraits> &_Str, aint _StartChar, tf_CData const *_pStrInsert)
 	{
-		umint NeededSize = fg_StrLen(_Str) + fg_StrLen(_pStrInsert);;
+		umint NeededSize = fg_StrLen(_Str) + fg_StrLen(_pStrInsert);
 		fg_StrInsert(_Str.f_GetStr(NeededSize), _StartChar, _pStrInsert);
 		_Str.f_SetModified();
 		return _Str;
@@ -18,7 +18,7 @@ namespace NMib::NStr
 	inline_small TCStr<tf_CTCStrTraits> &fg_StrInsert(TCStr<tf_CTCStrTraits> &_Str, aint _StartChar, TCStr<tf_CTCStrTraits2> const &_StrInsert)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits, tf_CTCStrTraits2>::mc_Value, "Not supported");
-		umint NeededSize = fg_StrLen(_Str) + fg_StrLen(_StrInsert);;
+		umint NeededSize = fg_StrLen(_Str) + fg_StrLen(_StrInsert);
 		fg_StrInsert(_Str.f_GetStr(NeededSize), _StartChar, _StrInsert.f_GetStr());
 		_Str.f_SetModified();
 		return _Str;

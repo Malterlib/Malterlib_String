@@ -77,7 +77,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_TCStrTraits>
-	constexpr inline_small bool TCStr<t_TCStrTraits>::f_IsEmpty () const
+	constexpr inline_small bool TCStr<t_TCStrTraits>::f_IsEmpty() const
 	{
 		return CImp::f_IsEmpty();
 	}

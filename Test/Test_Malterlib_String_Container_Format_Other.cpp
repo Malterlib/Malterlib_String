@@ -13,10 +13,9 @@ namespace
 		{
 			DMibTestSuite("General")
 			{
-
 				{
 					NMib::TCAutoClearInt<int32> ACInt = 5;
-					DMibTest(DMibExpr(NMib::NStr::CStr("5")) == DMibExpr( NMib::NStr::CStr( NMib::NStr::CStr::CFormat("{}") << ACInt ) ));
+					DMibTest(DMibExpr(NMib::NStr::CStr("5")) == DMibExpr(NMib::NStr::CStr(NMib::NStr::CStr::CFormat("{}") << ACInt)));
 				}
 
 				DMibTest(DMibExpr(0) == DMibExpr(0));

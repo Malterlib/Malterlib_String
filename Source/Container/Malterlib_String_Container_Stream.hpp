@@ -12,26 +12,26 @@ namespace NMib::NStream
 		{
 		case 1:
 			{
-				_Type = (NStr::EStrType)(_Len >> (sizeof(uint8) * 8-2));
-				_Len = uint8(_Len) & ((uint8(1) << (sizeof(uint8) * 8-2)) - 1);
+				_Type = (NStr::EStrType)(_Len >> (sizeof(uint8) * 8 - 2));
+				_Len = uint8(_Len) & ((uint8(1) << (sizeof(uint8) * 8 - 2)) - 1);
 			}
 			break;
 		case 2:
 			{
-				_Type = (NStr::EStrType)(_Len >> (sizeof(uint16) * 8-2));
-				_Len = uint16(_Len) & ((uint16(1) << (sizeof(uint16) * 8-2)) - 1);
+				_Type = (NStr::EStrType)(_Len >> (sizeof(uint16) * 8 - 2));
+				_Len = uint16(_Len) & ((uint16(1) << (sizeof(uint16) * 8 - 2)) - 1);
 			}
 			break;
 		case 4:
 			{
-				_Type = (NStr::EStrType)(_Len >> (sizeof(uint32) * 8-2));
-				_Len = uint32(_Len) & ((uint32(1) << (sizeof(uint32) * 8-2)) - 1);
+				_Type = (NStr::EStrType)(_Len >> (sizeof(uint32) * 8 - 2));
+				_Len = uint32(_Len) & ((uint32(1) << (sizeof(uint32) * 8 - 2)) - 1);
 			}
 			break;
 		case 8:
 			{
-				_Type = (NStr::EStrType)(_Len >> (sizeof(uint64) * 8-2));
-				_Len = uint64(_Len) & ((uint64(1) << (sizeof(uint64) * 8-2)) - 1);
+				_Type = (NStr::EStrType)(_Len >> (sizeof(uint64) * 8 - 2));
+				_Len = uint64(_Len) & ((uint64(1) << (sizeof(uint64) * 8 - 2)) - 1);
 			}
 			break;
 		}
@@ -43,29 +43,29 @@ namespace NMib::NStream
 		{
 		case 1:
 			{
-				_Len = uint8(fg_Clamp(_Len, uint8(0), uint8((uint8(1) << (sizeof(uint8)*8-2)) - uint8(1))) | (uint8(_Type) << (sizeof(uint8) * 8-2)));
+				_Len = uint8(fg_Clamp(_Len, uint8(0), uint8((uint8(1) << (sizeof(uint8) * 8 - 2)) - uint8(1))) | (uint8(_Type) << (sizeof(uint8) * 8 - 2)));
 			}
 			break;
 		case 2:
 			{
-				_Len = uint16(fg_Clamp(_Len, uint16(0), uint16((uint16(1) << (sizeof(uint16)*8-2)) - uint16(1))) | (uint16(_Type) << (sizeof(uint16) * 8-2)));
+				_Len = uint16(fg_Clamp(_Len, uint16(0), uint16((uint16(1) << (sizeof(uint16) * 8 - 2)) - uint16(1))) | (uint16(_Type) << (sizeof(uint16) * 8 - 2)));
 			}
 			break;
 		case 4:
 			{
-				_Len = uint32(fg_Clamp(_Len, uint32(0), uint32((uint32(1) << (sizeof(uint32)*8-2)) - uint32(1))) | (uint32(_Type) << (sizeof(uint32) * 8-2)));
+				_Len = uint32(fg_Clamp(_Len, uint32(0), uint32((uint32(1) << (sizeof(uint32) * 8 - 2)) - uint32(1))) | (uint32(_Type) << (sizeof(uint32) * 8 - 2)));
 			}
 			break;
 		case 8:
 			{
-				_Len = uint64(fg_Clamp(_Len, uint64(0), uint64((uint64(1) << (sizeof(uint64)*8-2)) - uint64(1))) | (uint64(_Type) << (sizeof(uint64) * 8-2)));
+				_Len = uint64(fg_Clamp(_Len, uint64(0), uint64((uint64(1) << (sizeof(uint64) * 8 - 2)) - uint64(1))) | (uint64(_Type) << (sizeof(uint64) * 8 - 2)));
 			}
 			break;
 		}
 	}
 
 	template <typename t_CStream, typename t_TCStrTraitsIn>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn> >
+	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn>>
 	{
 	public:
 		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> const &_Data)

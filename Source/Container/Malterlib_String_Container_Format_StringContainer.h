@@ -61,7 +61,7 @@ namespace NMib::NStr
 		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
-		constexpr static bool mc_bNeedDestruct = !t_bReference;
+		static constexpr bool mc_bNeedDestruct = !t_bReference;
 
 	private:
 		template <typename tf_COptions>
@@ -76,21 +76,21 @@ namespace NMib::NStr
 	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
-	struct TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn> >
+	struct TCStringFormatter<t_CFormatter, TCStr<t_CStrTraitsIn>>
 	{
 		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, true>;
 
 		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const&_Data);
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCStr<t_CStrTraitsIn> const &_Data);
 	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>
-	struct TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>> >
+	struct TCStringFormatter<t_CFormatter, TCByValue<TCStr<t_CStrTraitsIn>>>
 	{
 		using CFormatType = TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, false>;
 
 		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCStr<t_CStrTraitsIn>> const&_Data);
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCStr<t_CStrTraitsIn>> const &_Data);
 	};
 }
 

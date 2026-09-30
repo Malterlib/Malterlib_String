@@ -16,9 +16,9 @@ namespace NMib::NStr
 			t_CIndex m_iCandidate{0};
 		};
 
-		constexpr static fp64 gc_WeightUnmatchedQuery = 0.5;
-		constexpr static fp64 gc_WeightUnmatched = 0.1;
-		constexpr static fp64 gc_WeightMatchPercent = 1.0 - (gc_WeightUnmatchedQuery.f_Get() + gc_WeightUnmatched.f_Get());
+		static constexpr fp64 gc_WeightUnmatchedQuery = 0.5;
+		static constexpr fp64 gc_WeightUnmatched = 0.1;
+		static constexpr fp64 gc_WeightMatchPercent = 1.0 - (gc_WeightUnmatchedQuery.f_Get() + gc_WeightUnmatched.f_Get());
 
 		auto fg_BuildContiguousMatchResult(aint _CandidateLen, aint _QueryLen, aint _iStart, aint _nCaseMismatches) -> CFuzzyMatchResult
 		{
@@ -31,10 +31,7 @@ namespace NMib::NStr
 			fp64 MatchedPercentQuery = fp64(_nCaseMismatches) * 0.5 / fp64(_QueryLen * _QueryLen);
 			fp64 UnmatchedPercent = fp64(_CandidateLen - _QueryLen) / fp64(_CandidateLen);
 
-			Result.m_Score
-				= MatchedPercentQuery * gc_WeightMatchPercent
-				+ UnmatchedPercent * gc_WeightUnmatched
-			;
+			Result.m_Score = MatchedPercentQuery * gc_WeightMatchPercent + UnmatchedPercent * gc_WeightUnmatched;
 			return Result;
 		}
 
@@ -159,7 +156,7 @@ namespace NMib::NStr
 			tf_CIndex QueryHead[256];
 			NMemory::fg_ObjectSet(QueryHead, TCLimitsInt<tf_CIndex>::mc_Max, 256);
 
-			for (tf_CIndex iQuery = _QueryLen - 1; ; --iQuery)
+			for (tf_CIndex iQuery = _QueryLen - 1;; --iQuery)
 			{
 				pQueryNext[iQuery] = QueryHead[pLowerBuf[umint(_CandidateLen) + umint(iQuery)]];
 				QueryHead[pLowerBuf[umint(_CandidateLen) + umint(iQuery)]] = iQuery;
@@ -277,23 +274,12 @@ namespace NMib::NStr
 						tf_CIndex iOffset = 0;
 						while (iOffset < MatchRun.m_nMatched)
 						{
-							while
-							(
-								iOffset < MatchRun.m_nMatched
-								&& (pCandidateUsed[MatchRun.m_iCandidate + iOffset] || pQueryUsed[MatchRun.m_iQuery + iOffset])
-							)
-							{
+							while (iOffset < MatchRun.m_nMatched && (pCandidateUsed[MatchRun.m_iCandidate + iOffset] || pQueryUsed[MatchRun.m_iQuery + iOffset]))
 								++iOffset;
-							}
 
 							tf_CIndex iStartOffset = iOffset;
 							tf_CIndex nSegmentCaseMismatches = 0;
-							while
-							(
-								iOffset < MatchRun.m_nMatched
-								&& !pCandidateUsed[MatchRun.m_iCandidate + iOffset]
-								&& !pQueryUsed[MatchRun.m_iQuery + iOffset]
-							)
+							while (iOffset < MatchRun.m_nMatched && !pCandidateUsed[MatchRun.m_iCandidate + iOffset] && !pQueryUsed[MatchRun.m_iQuery + iOffset])
 							{
 								if (_pCandidate[MatchRun.m_iCandidate + iOffset] != _pQuery[MatchRun.m_iQuery + iOffset])
 									++nSegmentCaseMismatches;
@@ -373,11 +359,7 @@ namespace NMib::NStr
 			fp64 UnmatchedPercentQuery = fp64(nUnmatchedQuery) / fp64(_QueryLen);
 
 			CFuzzyMatchResult Result;
-			Result.m_Score
-				= MatchedPercentQuery * gc_WeightMatchPercent
-				+ UnmatchedPercent * gc_WeightUnmatched
-				+ UnmatchedPercentQuery * gc_WeightUnmatchedQuery
-			;
+			Result.m_Score = MatchedPercentQuery * gc_WeightMatchPercent + UnmatchedPercent * gc_WeightUnmatched + UnmatchedPercentQuery * gc_WeightUnmatchedQuery;
 			Result.m_Matches = fg_Move(MatchRanges);
 			return Result;
 		}

@@ -15,9 +15,9 @@ namespace NMib::NStr
 
 	enum class EStringParseTypeFlag : uint8
 	{
-		mc_None = 0
+		mc_None           = 0
 		, mc_NeedDestruct = fg_Bit(0)
-		, mc_NeedDealloc = fg_Bit(1)
+		, mc_NeedDealloc  = fg_Bit(1)
 	};
 
 	template <typename t_CParser>
@@ -74,7 +74,7 @@ namespace NMib::NStr
 		using CChar = typename t_CStrTraits::CChar;
 		using CStrTraits = t_CStrTraits;
 
-		inline_medium const TICStrParseType<TCStrParse> * f_GetArg(aint _iArgument) const;
+		inline_medium TICStrParseType<TCStrParse> const *f_GetArg(aint _iArgument) const;
 		inline_medium TCStrParse(CChar const *_pParseStr);
 
 		~TCStrParse();

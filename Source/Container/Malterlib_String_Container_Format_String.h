@@ -59,7 +59,7 @@ namespace NMib::NStr
 		template <typename t_CData, typename t_CFormatType, typename t_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, COption &_Option) const;
 
-		constexpr static bool mc_bNeedDestruct = false;
+		static constexpr bool mc_bNeedDestruct = false;
 
 	private:
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
@@ -75,7 +75,6 @@ namespace NMib::NStr
 		t_CStrDataType const *mp_pStr;
 		umint mp_StrLen;
 	};
-
 }
 
 #include "Malterlib_String_Container_Format_String.hpp"
@@ -88,12 +87,12 @@ namespace NMib::NStr
 #endif
 	DMibStrStringFormatterImplementStr(ch32, EStrType_Unicode);
 	DMibStrStringFormatterImplementStr(uint16, EStrType_UTF);
-	DMibStrStringFormatterImplementStr(const ch8, EStrType_UTF);
+	DMibStrStringFormatterImplementStr(ch8 const, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
-	DMibStrStringFormatterImplementStr(const ch16, EStrType_UTF);
+	DMibStrStringFormatterImplementStr(ch16 const, EStrType_UTF);
 #endif
-	DMibStrStringFormatterImplementStr(const ch32, EStrType_Unicode);
-	DMibStrStringFormatterImplementStr(const uint16, EStrType_UTF);
+	DMibStrStringFormatterImplementStr(ch32 const, EStrType_Unicode);
+	DMibStrStringFormatterImplementStr(uint16 const, EStrType_UTF);
 
 	DMibStrStringFormatterImplementStrArray(ch8, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
@@ -101,10 +100,10 @@ namespace NMib::NStr
 #endif
 	DMibStrStringFormatterImplementStrArray(ch32, EStrType_Unicode);
 	DMibStrStringFormatterImplementStrArray(uint16, EStrType_UTF);
-	DMibStrStringFormatterImplementStrArray(const ch8, EStrType_UTF);
+	DMibStrStringFormatterImplementStrArray(ch8 const, EStrType_UTF);
 #ifdef DMibPUniqueType_ch16
-	DMibStrStringFormatterImplementStrArray(const ch16, EStrType_UTF);
+	DMibStrStringFormatterImplementStrArray(ch16 const, EStrType_UTF);
 #endif
-	DMibStrStringFormatterImplementStrArray(const ch32, EStrType_Unicode);
-	DMibStrStringFormatterImplementStrArray(const uint16, EStrType_UTF);
+	DMibStrStringFormatterImplementStrArray(ch32 const, EStrType_Unicode);
+	DMibStrStringFormatterImplementStrArray(uint16 const, EStrType_UTF);
 }

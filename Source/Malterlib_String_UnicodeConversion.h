@@ -19,7 +19,7 @@ namespace NMib::NStr
 
 		TCStrIteratorUnicode &f_GetIterator();
 
-		mark_nodebug inline_always ch32 operator *() const;
+		mark_nodebug inline_always ch32 operator * () const;
 		mark_nodebug inline_always operator ch32 () const;
 		inline_always TCStrIteratorUnicode &operator ++ ();
 		inline_always smint operator - (TCStrIteratorUnicode const &_Other) const;
@@ -45,7 +45,7 @@ namespace NMib::NStr
 
 		CStrIteratorUTF8 &f_GetIterator();
 
-		mark_nodebug inline_always ch32 operator *() const;
+		mark_nodebug inline_always ch32 operator * () const;
 		mark_nodebug inline_always operator ch32 () const;
 		inline_always smint operator - (CStrIteratorUTF8 const &_Other) const;
 		inline_always CStrIteratorUTF8 &operator ++ ();
@@ -70,7 +70,7 @@ namespace NMib::NStr
 		CStrIteratorUTF16(TCStr<tf_CStrTraits> const &_String);
 
 		mark_nodebug inline_always operator ch32 () const;
-		mark_nodebug inline_always ch32 operator *() const;
+		mark_nodebug inline_always ch32 operator * () const;
 		inline_always CStrIteratorUTF16 &operator ++ ();
 		inline_always smint operator - (CStrIteratorUTF16 const &_Other) const;
 

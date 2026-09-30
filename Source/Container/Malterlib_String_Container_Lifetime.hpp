@@ -81,7 +81,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename ...tfp_CParams>
-	constexpr inline_large TCStr<t_CTCStrTraits>::TCStr(CStrInitGeneral _Init, tfp_CParams &&...p_Params)
+	constexpr inline_large TCStr<t_CTCStrTraits>::TCStr(CStrInitGeneral _Init, tfp_CParams && ...p_Params)
 		requires requires ()
 		{
 			CImp(fg_Forward<tfp_CParams>(p_Params)...);

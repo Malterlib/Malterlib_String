@@ -18,7 +18,7 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_medium TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-	::COptionsFloat::COptionsFloat()
+		::COptionsFloat::COptionsFloat()
 		: COptions(COptionsStatic())
 	{
 	}
@@ -72,8 +72,10 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::f_Move(t_CFormatter &_Formatter)
+	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_Move
+		(
+			t_CFormatter &_Formatter
+		)
 	{
 		DMibFastCheck(!t_bReference); // Not supported
 		if constexpr (!t_bReference)
@@ -93,7 +95,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_DefaultValue() -> CFloat
+		::CXprImplementation::fs_DefaultValue()
+		-> CFloat
 	{
 		return CFloat(fp32(0.0f));
 	}
@@ -111,7 +114,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_Modulus(CFloat const &_Value, CFloat const &_Modulus) -> CFloat
+		::CXprImplementation::fs_Modulus(CFloat const &_Value, CFloat const &_Modulus)
+		-> CFloat
 	{
 		return _Value.f_Mod(_Modulus);
 	}
@@ -129,7 +133,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_BitwiseOr(CFloat const &_Left, CFloat const &_Right) -> CFloat
+		::CXprImplementation::fs_BitwiseOr(CFloat const &_Left, CFloat const &_Right)
+		-> CFloat
 	{
 		return _Left;
 	}
@@ -147,7 +152,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_BitwiseAnd(CFloat const &_Left, CFloat const &_Right) -> CFloat
+		::CXprImplementation::fs_BitwiseAnd(CFloat const &_Left, CFloat const &_Right)
+		-> CFloat
 	{
 		return _Left;
 	}
@@ -165,7 +171,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_BitwiseXor(CFloat const &_Left, CFloat const &_Right) -> CFloat
+		::CXprImplementation::fs_BitwiseXor(CFloat const &_Left, CFloat const &_Right)
+		-> CFloat
 	{
 		return _Left;
 	}
@@ -183,7 +190,8 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_BitwiseNot(CFloat const &_Right) -> CFloat
+		::CXprImplementation::fs_BitwiseNot(CFloat const &_Right)
+		-> CFloat
 	{
 		return _Right;
 	}
@@ -201,8 +209,9 @@ namespace NMib::NStr
 		, bool t_bReference
 	>
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
+	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
 		::CXprImplementation::fs_StrToData(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+		-> t_CReturn
 	{
 		return fg_StrToFloatParseExact(_pStr, _FailValue, _pStrTerminators);
 	}
@@ -221,11 +230,11 @@ namespace NMib::NStr
 	>
 	template <typename t_CArgument>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_GetArgumentValue(t_CArgument *_pArg) -> decltype(_pArg->f_Get_fp64())
+		::CXprImplementation::fs_GetArgumentValue(t_CArgument *_pArg)
+		-> decltype(_pArg->f_Get_fp64())
 	{
 		return _pArg->f_Get_fp64();
 	}
-
 
 	template
 	<
@@ -255,24 +264,15 @@ namespace NMib::NStr
 
 						switch (*ToCompare)
 						{
-						case 'E':
-							_Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Exponent;
-							break;
-						case 'e':
-							_Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_ExponentLowerCase;
-							break;
-						case 'S':
-							_Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Shortest;
-							break;
-						case 's':
-							_Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_ShortestLowerCase;
-							break;
+						case 'E': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Exponent; break;
+						case 'e': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_ExponentLowerCase; break;
+						case 'S': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Shortest; break;
+						case 's': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_ShortestLowerCase; break;
 						case 'F':
 						case 'f':
 							_Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Fixed;
 							break;
-						default:
-							goto ReturnDefault;
+						default: goto ReturnDefault;
 						}
 					}
 					break;
@@ -282,14 +282,9 @@ namespace NMib::NStr
 
 						switch (fg_CharUpperCase(*ToCompare))
 						{
-						case 'B':
-							_Args.m_Options.m_MinDigits = -2;
-							break;
-						case 'S':
-							_Args.m_Options.m_MinDigits = -1;
-							break;
-						default:
-							_Args.m_Options.m_MinDigits = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, aint(-1));
+						case 'B': _Args.m_Options.m_MinDigits = -2; break;
+						case 'S': _Args.m_Options.m_MinDigits = -1; break;
+						default: _Args.m_Options.m_MinDigits = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, aint(-1));
 						}
 					}
 
@@ -315,18 +310,10 @@ namespace NMib::NStr
 
 						switch (fg_CharUpperCase(*ToCompare))
 						{
-						case 'I':
-							_Args.m_Options.m_bShowInf = 1;
-							break;
-						case 'D':
-							_Args.m_Options.m_bShowDenormalized = 1;
-							break;
-						case 'N':
-							_Args.m_Options.m_bShowNaN = 1;
-							break;
-						default:
-							goto ReturnDefault;
-							break;
+						case 'I': _Args.m_Options.m_bShowInf = 1; break;
+						case 'D': _Args.m_Options.m_bShowDenormalized = 1; break;
+						case 'N': _Args.m_Options.m_bShowNaN = 1; break;
+						default: goto ReturnDefault; break;
 						}
 					}
 					break;
@@ -336,18 +323,10 @@ namespace NMib::NStr
 
 						switch (fg_CharUpperCase(*ToCompare))
 						{
-						case 'I':
-							_Args.m_Options.m_bShowInf = 0;
-							break;
-						case 'D':
-							_Args.m_Options.m_bShowDenormalized = 0;
-							break;
-						case 'N':
-							_Args.m_Options.m_bShowNaN = 0;
-							break;
-						default:
-							goto ReturnDefault;
-							break;
+						case 'I': _Args.m_Options.m_bShowInf = 0; break;
+						case 'D': _Args.m_Options.m_bShowDenormalized = 0; break;
+						case 'N': _Args.m_Options.m_bShowNaN = 0; break;
+						default: goto ReturnDefault; break;
 						}
 					}
 					break;
@@ -361,9 +340,7 @@ namespace NMib::NStr
 						_Args.m_Options.m_bAutoRemoveDigits = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, aint(0)) != 0;
 					}
 					break;
-				default:
-					goto ReturnDefault;
-					break;
+				default: goto ReturnDefault; break;
 				}
 				return true;
 			}
@@ -372,12 +349,8 @@ namespace NMib::NStr
 			{
 				switch (_Option.m_FormatTypes.m_Format2)
 				{
-				case '+':
-					_Args.m_Options.m_bSign = true;
-					break;
-				default:
-					goto ReturnDefault;
-					break;
+				case '+': _Args.m_Options.m_bSign = true; break;
+				default: goto ReturnDefault; break;
 				}
 				return true;
 			}
@@ -397,7 +370,7 @@ namespace NMib::NStr
 				}
 			}
 		}
-		ReturnDefault:
+	ReturnDefault:
 		return TICStrFormatType<t_CFormatter>::f_ParseOption(_Args, _Option);
 	}
 
@@ -415,7 +388,7 @@ namespace NMib::NStr
 	>
 	template <typename t_COptions>
 	inline_small void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-	::fp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number)
+		::fp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number)
 	{
 		CFloat Number = _Number;
 		bool bOptionsSign = _Options.m_bSign;
@@ -470,7 +443,7 @@ namespace NMib::NStr
 			DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();
 			// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
 
-			if (nDigits > 0 && NMib::fg_Convert<CInteger>(nDigits-1) < DecimalDisplacementConstFloat)
+			if (nDigits > 0 && NMib::fg_Convert<CInteger>(nDigits - 1) < DecimalDisplacementConstFloat)
 				DecimalDisplacementConstFloat = NMib::fg_Convert<CInteger>(nDigits - 1);
 			else if (nDigits == -2)
 			{
@@ -549,14 +522,14 @@ namespace NMib::NStr
 		{
 			// Make a temporary buffer that can
 			static constexpr CChar c_NumberCharAdd = '0';
-			static constexpr umint c_NumTempChar =
-				((fg_MaxConstexpr(sizeof(Exponent), sizeof(FormatNumber)) * 8) / 3) // Approximation of log10(2) * nBits
+			static constexpr umint c_NumTempChar
+				= ((fg_MaxConstexpr(sizeof(Exponent), sizeof(FormatNumber)) * 8) / 3) // Approximation of log10(2) * nBits
 				+ 1 // +- Sign
 			;
 			CChar TempStr[c_NumTempChar];
 			CChar *pStrPlace = TempStr + c_NumTempChar - 1;
 
-			//	*(pStrPlace--) = 0;
+			// *(pStrPlace--) = 0;
 			if (FormatNumber != 0)
 			{
 				while (FormatNumber != 0)
@@ -587,8 +560,8 @@ namespace NMib::NStr
 			aint NumberSize = aint(c_NumTempChar) - ((pStrPlace - TempStr) + 1) - nRemoved;
 			aint DecimalPlacement = NumberSize - (DecimalDisplacement + DecimalDisplacementConst);
 
-			static constexpr umint c_nNeededCharacters =
-				c_NumTempChar // The number
+			static constexpr umint c_nNeededCharacters
+				= c_NumTempChar // The number
 				+ (sizeof(Exponent) * 8) / 3
 				+ 32 // Extra space
 			;
@@ -598,7 +571,7 @@ namespace NMib::NStr
 
 			if (_Options.m_FloatFormat == COptionsFloat::EFloatFormat_Shortest || _Options.m_FloatFormat == COptionsFloat::EFloatFormat_ShortestLowerCase)
 			{
-				if (DecimalPlacement < 0 || DecimalPlacement > (NumberSize+3))
+				if (DecimalPlacement < 0 || DecimalPlacement > (NumberSize + 3))
 					_Options.m_FloatFormat -= 2;
 			}
 
@@ -704,7 +677,7 @@ namespace NMib::NStr
 						{
 							if (DecimalPlacement == NumberSize)
 							{
-									if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
+								if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
 									nRealNeeded += 2; // .0
 							}
 							else
@@ -720,7 +693,6 @@ namespace NMib::NStr
 				if (_Options.m_bShowDenormalized && Number.f_IsDenormalized())
 					nRealNeeded += 7; // #denorm
 			}
-
 
 			CChar *pAlloc = nullptr;
 			CChar TempStr2[c_NumTempCharReal];
@@ -860,9 +832,7 @@ namespace NMib::NStr
 						fOutput(pSourceStr[i]);
 				}
 				else
-				{
 					fOutput('0');
-				}
 			}
 			else
 			{
@@ -935,17 +905,17 @@ namespace NMib::NStr
 					if (_Options.m_MinDecimals > 0)
 					{
 						fOutput('.');
-						for (aint i= DecimalPlacement; i < NumberSize; ++i)
+						for (aint i = DecimalPlacement; i < NumberSize; ++i)
 							fOutput(pSourceStr[i]);
-						for (aint i= NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
+						for (aint i = NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
 							fOutput('0');
 					}
-					else if (_Options.m_MinDigits> 0)
+					else if (_Options.m_MinDigits > 0)
 					{
 						if (NumberSize > DecimalPlacement || _Options.m_MinDigits > NumberSize)
 						{
 							fOutput('.');
-							for (aint i= DecimalPlacement; i < NumberSize; ++i)
+							for (aint i = DecimalPlacement; i < NumberSize; ++i)
 								fOutput(pSourceStr[i]);
 							for (aint i = NumberSize; i < _Options.m_MinDigits; ++i)
 								fOutput('0');
@@ -955,11 +925,11 @@ namespace NMib::NStr
 					{
 						if (DecimalPlacement == NumberSize)
 						{
-								if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
-								{
+							if (_Options.m_MinDecimals < 0 && _Options.m_MinDigits < 0)
+							{
 								fOutput('.');
 								fOutput('0');
-								}
+							}
 						}
 						else
 						{
@@ -978,7 +948,6 @@ namespace NMib::NStr
 					if (*pDestStart == '.')
 						++pDestStart;
 				}
-
 			}
 
 			if (_Options.m_bShowDenormalized && Number.f_IsDenormalized())
@@ -996,9 +965,9 @@ namespace NMib::NStr
 			DMibFastCheck(nRealNeeded >= nOutput);
 
 			if (_Options.m_bSimpleAlign)
-				CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, pDestStart, pDest-pDestStart);
+				CSuper::fs_AddSubStrToStrSimple(_String, _CurrentStrLen, _Options, pDestStart, pDest - pDestStart);
 			else
-				CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pDestStart, pDest-pDestStart, SubStrStart);
+				CSuper::fs_AddSubStrToStr(_String, _CurrentStrLen, _Options, pDestStart, pDest - pDestStart, SubStrStart);
 		}
 	}
 
@@ -1014,8 +983,14 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::f_AddToStr(CString &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const
+	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_AddToStr
+		(
+			CString &_String
+			, aint &_CurrentStrLen
+			, CChar const *_pFormat
+			, t_CFormatter const &_ArgData
+		)
+		const
 	{
 		COptionsFloat Options;
 
@@ -1133,8 +1108,11 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::f_Visit(CVisitor &_Extractor) const
+	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_Visit
+		(
+			CVisitor &_Extractor
+		)
+		const
 	{
 		if (sizeof(mp_Value) > sizeof(fp32))
 			_Extractor(fp64(mp_Value));
@@ -1154,8 +1132,9 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	void const *TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
+	auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
 		::f_GetTypeID() const
+		-> void const *
 	{
 		return &mcp_TypeID;
 	}
@@ -1172,8 +1151,11 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	bool TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::f_IsSame(void const *_pRight) const
+	bool TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>::f_IsSame
+		(
+			void const *_pRight
+		)
+		const
 	{
 		auto pRight = static_cast<TCStrFormatType_Float const *>(_pRight);
 		return mp_Value == pRight->mp_Value;
@@ -1195,7 +1177,9 @@ namespace NMib::NStr
 		<
 			t_CFormatter
 			, NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>
-		>::fs_CreateFormat(t_CFormatter &_Formatter, CFloat const&_Data) -> typename CFormatType::CStrFormatTypeClassifier
+		>
+		::fs_CreateFormat(t_CFormatter &_Formatter, CFloat const &_Data)
+		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(_Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
@@ -1214,10 +1198,12 @@ namespace NMib::NStr
 	>
 	template <typename tf_CTypeWithConst>
 	inline_large auto TCStringFormatter
-	<
-		t_CFormatter
-		, TCByValue<NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>>
-	>::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CFloat> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+		<
+			t_CFormatter
+			, TCByValue<NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>>
+		>
+		::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<CFloat> const &_Data)
+		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
@@ -1277,14 +1263,14 @@ namespace NMib::NStr
 	auto TCStringFormatter<t_CFormatter, pfp128>::fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data)
 		-> decltype(TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter, _Data))
 	{
-		return TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter,  reinterpret_cast<fp128 const &>(_Data));
+		return TCStringFormatter<t_CFormatter, fp128>::template fs_CreateFormat<fp128>(_Formatter, reinterpret_cast<fp128 const &>(_Data));
 	}
 
 	template <typename t_CFormatter>
 	template <typename tf_CTypeWithConst>
 	auto TCStringFormatter<t_CFormatter, TCByValue<pfp128>>::fs_CreateFormat(t_CFormatter &_Formatter, pfp128 const &_Data)
 	{
-		return TCStringFormatter<t_CFormatter, TCByValue<fp128>>::template fs_CreateFormat<fp128>(_Formatter,  reinterpret_cast<TCByValue<fp128> const &>(_Data));
+		return TCStringFormatter<t_CFormatter, TCByValue<fp128>>::template fs_CreateFormat<fp128>(_Formatter, reinterpret_cast<TCByValue<fp128> const &>(_Data));
 	}
 #endif
 }

@@ -9,9 +9,9 @@ namespace NMib::NStr
 {
 	enum EMatchWildcardResult
 	{
-		EMatchWildcardResult_NotMatched = 0
-		, EMatchWildcardResult_PatternExhausted =  DMibBit(0)
-		, EMatchWildcardResult_WholeStringMatched = DMibBit(1)
+		EMatchWildcardResult_NotMatched                              = 0
+		, EMatchWildcardResult_PatternExhausted                      = DMibBit(0)
+		, EMatchWildcardResult_WholeStringMatched                    = DMibBit(1)
 		, EMatchWildcardResult_WholeStringMatchedAndPatternExhausted = EMatchWildcardResult_WholeStringMatched | EMatchWildcardResult_PatternExhausted
 	};
 
@@ -59,9 +59,9 @@ namespace NMib::NStr
 
 	ch8 *fg_StrUpperCase(ch8 *_pStr);
 	ch8 *fg_StrUpperCase(ch8 *_pStr, umint _MaxLen);
-	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, const ch8 *_pSource);
-	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, const ch8 *_pSource, umint _SourceLen);
-	ch8 *fg_StrUpperCase(ch8 *_pDest, const ch8 *_pSource, umint _SourceLen);
+	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource);
+	ch8 *fg_StrUpperCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource, umint _SourceLen);
+	ch8 *fg_StrUpperCase(ch8 *_pDest, ch8 const *_pSource, umint _SourceLen);
 
 	template <typename tf_CData>
 	inline_large tf_CData *fg_StrUpperCase(tf_CData *_pStr);
@@ -76,8 +76,8 @@ namespace NMib::NStr
 
 	ch8 *fg_StrLowerCase(ch8 *_pStr);
 	ch8 *fg_StrLowerCase(ch8 *_pStr, umint _MaxLen);
-	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, const ch8 *_pSource);
-	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, const ch8 *_pSource, umint _SourceLen);
+	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource);
+	ch8 *fg_StrLowerCase(ch8 *_pDest, umint _MaxDestLen, ch8 const *_pSource, umint _SourceLen);
 	ch8 *fg_StrLowerCase(ch8 *_pDest, ch8 const *_pSource, umint _SourceLen);
 
 	template <typename tf_CData>
@@ -115,7 +115,9 @@ namespace NMib::NStr
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpNoCase(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2) noexcept;
 	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
-	constexpr inline_large typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept;
+	constexpr inline_large auto fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept
+		-> typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType
+	;
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrCmpNoCaseIterator(tf_CData1 &_Str1, tf_CData2 &_Str2) noexcept;
 
@@ -259,7 +261,7 @@ namespace NMib::NStr
 	constexpr EMatchWildcardResult fg_StrMatchWildcard(tf_CData1 const *_pStr, tf_CData2 const *_pPattern);
 
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr EMatchWildcardResult fg_StrMatchWildcardParse(tf_CData1 const *&_pStr, tf_CData2 const *_pPattern);
+	constexpr EMatchWildcardResult fg_StrMatchWildcardParse(tf_CData1 const * &_pStr, tf_CData2 const *_pPattern);
 
 	template <EMatchWildcardResult tf_Result = EMatchWildcardResult_WholeStringMatchedAndPatternExhausted, typename tf_CStr, typename tf_CContainer>
 	bool fg_StrMatchesAnyWildcardInContainerKeys(tf_CStr const &_String, tf_CContainer const &_Container);
@@ -280,7 +282,9 @@ namespace NMib::NStr
 	tf_CData1 *fg_StrReplace(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen);
 
 	template <typename tf_CData1, typename tf_CData2, typename tf_CData3>
-	tf_CData1 *fg_StrReplaceWithCount(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count);
+	auto fg_StrReplaceWithCount(tf_CData1 *_pStr1, umint _Len, tf_CData2 const *_pStrFind, umint _LenFind, tf_CData3 const *_pStrReplace, umint _LenReplace, umint _MaxLen, umint _Count)
+		-> tf_CData1 *
+	;
 
 	template <typename tf_CData1, typename tf_CData2, typename t_CData3>
 	inline_large tf_CData1 *fg_StrReplaceNoCase(tf_CData1 *_pStr1, tf_CData2 const *_pStrFind, t_CData3 const *_pStrReplace);
@@ -293,7 +297,8 @@ namespace NMib::NStr
 	tf_CData1 *fg_StrReplaceNoCaseWithCount
 		(
 			tf_CData1 *_pStr1
-			, umint _Len, tf_CData2 const *_pStrFind
+			, umint _Len
+			, tf_CData2 const *_pStrFind
 			, umint _LenFind
 			, tf_CData3 const *_pStrReplace
 			, umint _LenReplace
@@ -387,30 +392,24 @@ namespace NMib::NStr
 	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
 	inline_large tf_CData1 *fg_StrEscapeStr(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapChars, tf_CReplaceChar const *_pReplaceChar, umint _MaxLen);
 
-	template<typename tf_CData1, typename tf_CData2>
+	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource);
-	template<typename tf_CData1, typename tf_CData2>
+	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, umint _MaxLen);
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapChars);
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapChars, umint _MaxLen);
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapChars, tf_CReplaceChar const *_pReplaceChar);
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
-	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes
-		(
-			tf_CData1 *_pStrDest
-			, tf_CData2 const *_pStrSource
-			, tf_CEscapeChar const *_pEscapChars
-			, tf_CReplaceChar const *_pReplaceChar
-			, umint _MaxLen
-		)
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
+	inline_large auto fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapChars, tf_CReplaceChar const *_pReplaceChar, umint _MaxLen)
+		-> tf_CData1 *
 	;
 
-	template<typename tf_CData2>
+	template <typename tf_CData2>
 	inline_large umint fg_StrEscapedLength(tf_CData2 const *_pStrSource);
-	template<typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData2, typename tf_CEscapeChar>
 	inline_large umint fg_StrEscapedLength(tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars);
 
 	template <ch8 tf_EscapeChar, typename tf_CStrType>
@@ -426,10 +425,10 @@ namespace NMib::NStr
 	template <typename tf_CStr>
 	bool fg_StrEscapeBashQuotesNeeded(tf_CStr const &_Str);
 
-	template<typename tf_CStr>
+	template <typename tf_CStr>
 	tf_CStr fg_StrEscapeBashSingleQuotes(tf_CStr const &_Str);
 
-	template<typename tf_CStr>
+	template <typename tf_CStr>
 	tf_CStr fg_StrEscapeBashDoubleQuotes(tf_CStr const &_Str);
 
 	constexpr inline_medium bool fg_CharIsCombining(ch32 const _Character);
@@ -447,7 +446,7 @@ namespace NMib::NStr
 	constexpr inline_large bool fg_CharIsAnsiAlphabetical(tf_CData const _Character);
 	template <typename tf_CData>
 	constexpr inline_medium bool fg_CharIsNewLine(tf_CData const _Character);
-	template<typename tf_CData>
+	template <typename tf_CData>
 	constexpr inline_medium bool fg_CharIsWhiteSpaceNoLines(tf_CData const _Character);
 	template <typename tf_CData>
 	constexpr inline_medium bool fg_CharIsNumber(tf_CData const _Character);
@@ -500,5 +499,5 @@ namespace NMib::NStr
 }
 
 #ifndef DMibPNoShortCuts
-	using namespace NMib::NStr;
+using namespace NMib::NStr;
 #endif

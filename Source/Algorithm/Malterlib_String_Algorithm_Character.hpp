@@ -10,7 +10,7 @@ namespace NMib::NStr
 	{
 		using CData = NTraits::TCUnsigned<tf_CData>;
 
-		CData Char = (CData) _Character;
+		CData Char = (CData)_Character;
 
 		if (Char >= 'a' && Char <= 'z')
 			Char -= 0x20;
@@ -31,7 +31,7 @@ namespace NMib::NStr
 	{
 		using CData = NTraits::TCUnsigned<tf_CData>;
 
-		CData Char = (CData) _Character;
+		CData Char = (CData)_Character;
 
 		if (Char >= 'A' && Char <= 'Z')
 			Char += 0x20;
@@ -52,11 +52,11 @@ namespace NMib::NStr
 	{
 		switch (_Character)
 		{
-		case 32 : return true;
-		case 8 : return true;
-		case 9 : return true;
-		case 10 : return true;
-		case 13 : return true;
+		case 32: return true;
+		case 8: return true;
+		case 9: return true;
+		case 10: return true;
+		case 13: return true;
 		}
 		return false;
 	}
@@ -66,29 +66,29 @@ namespace NMib::NStr
 	{
 		switch (_Character)
 		{
-		case 10 : return true;
-		case 13 : return true;
+		case 10: return true;
+		case 13: return true;
 		}
 		return false;
 	}
 
-	template<typename tf_CData>
+	template <typename tf_CData>
 	constexpr inline_medium bool fg_CharIsWhiteSpaceNoLines(tf_CData const _Character)
 	{
 		switch (_Character)
 		{
-		case 32 : return true;
-		case 8 : return true;
-		case 9 : return true;
+		case 32: return true;
+		case 8: return true;
+		case 9: return true;
 		}
 		return false;
 	}
 
-	template<typename tf_CData>
+	template <typename tf_CData>
 	constexpr inline_large bool fg_CharIsAlphabetical(tf_CData const _Character)
 	{
 		using CData = NTraits::TCUnsigned<tf_CData>;
-		CData Char = (CData) _Character;
+		CData Char = (CData)_Character;
 
 		if (Char >= 'A' && Char <= 'Z')
 			return true;
@@ -99,7 +99,6 @@ namespace NMib::NStr
 			return true;
 
 		return false;
-
 	}
 
 	template <typename tf_CData>
@@ -111,7 +110,6 @@ namespace NMib::NStr
 			return true;
 
 		return false;
-
 	}
 
 	template <typename tf_CData>
@@ -121,7 +119,6 @@ namespace NMib::NStr
 			return true;
 
 		return false;
-
 	}
 
 	template <typename tf_CData>
@@ -168,15 +165,8 @@ namespace NMib::NStr
 	template <typename tf_CData>
 	constexpr inline_medium bool fg_CharIsHexNumber(tf_CData const _Character)
 	{
-		if
-		(
-			(_Character >= '0' && _Character <= '9')
-			|| (_Character >= 'a' && _Character <= 'f')
-			|| (_Character >= 'A' && _Character <= 'F')
-		)
-		{
+		if ((_Character >= '0' && _Character <= '9') || (_Character >= 'a' && _Character <= 'f') || (_Character >= 'A' && _Character <= 'F'))
 			return true;
-		}
 
 		return false;
 	}

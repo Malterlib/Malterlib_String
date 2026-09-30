@@ -41,7 +41,7 @@ namespace NMib::NStr
 	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch16>;
 	template struct TCStrImp_Dynamic_EmptyStringDataImp<ch32>;
 
-	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator= (TCStr<NMib::NStr::CStrTraits_CStr> const &);
+	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator = (TCStr<NMib::NStr::CStrTraits_CStr> const &);
 	template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
 
 #ifdef DMibDebug
