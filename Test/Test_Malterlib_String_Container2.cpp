@@ -259,14 +259,16 @@ namespace
 			{
 
 				CStr UniqueStrings[] =
-				{
-					"Hello", "ch8 Hello",
-					"Hell", "ch8 Hell",
-					"", "ch8 Empty",
-					CStr("Hello"), "CStr Hello",
-					CStr("Hell"), "CStr Hell",
-					CStr(""), "CStr Empty",
-				};
+					{
+						// malterlib-format columns: 2
+						  "Hello",       "ch8 Hello"
+						, "Hell",        "ch8 Hell"
+						, "",            "ch8 Empty"
+						, CStr("Hello"), "CStr Hello"
+						, CStr("Hell"),  "CStr Hell"
+						, CStr(""),      "CStr Empty"
+					}
+				;
 				int siz = (sizeof(UniqueStrings) / sizeof(CStr)) / 2;
 				for(int i=0;i<siz;++i)
 				{
