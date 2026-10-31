@@ -86,7 +86,9 @@ namespace
 
 					{
 						DMibTestPath("ShortCase");
-						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
+						CStr String = "/opt/CompiledFiles/QtUpdate-cb58ba2f/Hansoft/Generated/External_qt/macOS/arm64/Debug/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask."
+							"frag.qsb</file>"
+						;
 						CStr ReplacedString = MultiReplace.f_Replace(String);
 						CStr ExpectedString = "#(CMakeIntermediateDirectory)/qtdeclarative/src/quick/.qsb/scenegraph/shaders_ng/24bittextmask.frag.qsb</file>";
 
