@@ -42,7 +42,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_CType>
 	auto TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fsp_GetFormatOptionsType(tf_CType const &_Type)
-		requires requires(typename tf_CType::CFormatOptions const &_Options)
+		requires requires (typename tf_CType::CFormatOptions const &_Options)
 		{
 			_Options;
 		}
@@ -65,8 +65,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_small aint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
+	inline_small auto TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_ParseOption
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, COption &_Option
+		)
+		const
+		-> aint
 		requires requires
 		{
 			_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args);
@@ -80,8 +85,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_small aint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
+	inline_small auto TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_ParseOption
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, COption &_Option
+		)
+		const
+		-> aint
 		requires requires
 		{
 			_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option);
@@ -95,15 +105,26 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_small aint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
+	inline_small auto TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_ParseOption
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, COption &_Option
+		)
+		const
+		-> aint
 	{
 		return CSuper::f_ParseOption(_Args, _Option);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
-	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const
+	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, CChar const *_pFormat
+			, t_CFormatter const &_ArgData
+		)
+		const
 	{
 		CLocalOptions Options;
 
@@ -114,7 +135,6 @@ namespace NMib::NStr
 		}
 
 		fp_AddToStr(_String, _CurrentStrLen, Options, mp_ToFormat);
-
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
@@ -125,27 +145,37 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
-	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CToFormat const &_Value, CLocalOptions &_Options)
+	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fs_AddToStrStatic
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, t_CToFormat const &_Value
+			, CLocalOptions &_Options
+		)
 	{
 		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_COptions, typename tf_CToFormat>
-	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, tf_CToFormat const &_Value)
+	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fp_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, tf_COptions &_Options
+			, tf_CToFormat const &_Value
+		)
 	{
 		if (_Options.m_bSimpleAlign && !_Options.f_RestrictLength())
 		{
 			_String.f_SetStrLen(_CurrentStrLen);
 			if constexpr
-				(
-					requires
-					{
-						_Value.f_Format(_String, _Options);
-					}
-				)
+			(
+				requires
+				{
+					_Value.f_Format(_String, _Options);
+				}
+			)
 			{
 				_Value.f_Format(_String, _Options);
 			}
@@ -159,12 +189,12 @@ namespace NMib::NStr
 			TCStr<CTStrTraits> Temp;
 
 			if constexpr
-				(
-					requires
-					{
-						_Value.f_Format(Temp, _Options);
-					}
-				)
+			(
+				requires
+				{
+					_Value.f_Format(Temp, _Options);
+				}
+			)
 			{
 				_Value.f_Format(Temp, _Options);
 			}
@@ -185,20 +215,18 @@ namespace NMib::NStr
 	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value)
 	{
 		if constexpr
-			(
-				requires
-				{
-					_Value.f_Format(_String, fg_GetType<CLocalOptions &>());
-				}
-			)
+		(
+			requires
+			{
+				_Value.f_Format(_String, fg_GetType<CLocalOptions &>());
+			}
+		)
 		{
 			CLocalOptions Options;
 			_Value.f_Format(_String, Options);
 		}
 		else
-		{
 			_Value.f_Format(_String);
-		}
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>

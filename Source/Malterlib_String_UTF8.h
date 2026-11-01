@@ -9,7 +9,7 @@ namespace NMib::NStr
 {
 	enum struct EValidateUTF8Flag : uint32
 	{
-		mc_None = 0
+		mc_None                    = 0
 		, mc_DisallowNonCharacters = fg_Bit(0)
 	};
 

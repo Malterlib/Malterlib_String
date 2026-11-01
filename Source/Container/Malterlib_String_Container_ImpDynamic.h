@@ -17,13 +17,13 @@ namespace NMib::NStr
 		inline_small bool f_RefCountDecrease();
 
 		NAtomic::TCAtomicIndeterminate<umint> m_RefCount{1};
-		umint m_Len:sizeof(umint)*8-2 = 0;
+		umint m_Len:sizeof(umint) * 8 - 2 = 0;
 		umint m_bReserved:1 = 0;
 		umint m_bConstant:1 = 0;
-		umint m_StrLen:sizeof(umint)*8-2 = mc_InvalidStrLen;
+		umint m_StrLen:sizeof(umint) * 8 - 2 = mc_InvalidStrLen;
 		umint m_UserData:2 = 0;
 
-		constexpr static umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint)*8-2))) - 1;
+		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
 	};
 
 	template <umint t_nChars, typename t_CChar>
@@ -35,7 +35,7 @@ namespace NMib::NStr
 
 		inline_always constexpr TCStrConstData &f_SetUserData(uint8 _UserData);
 
-		constexpr static umint mc_nChars = t_nChars;
+		static constexpr umint mc_nChars = t_nChars;
 
 		t_CChar m_Data[t_nChars];
 	};
@@ -53,7 +53,7 @@ namespace NMib::NStr
 	template <typename t_CChar>
 	struct TCStrImp_Dynamic_EmptyStringDataImp
 	{
-		constexpr static TCStrImp_Dynamic_EmptyStringData<t_CChar> const mc_Instance = {};
+		static constexpr TCStrImp_Dynamic_EmptyStringData<t_CChar> const mc_Instance = {};
 	};
 
 	extern template struct TCStrImp_Dynamic_StringData<ch8>;
@@ -109,7 +109,7 @@ namespace NMib::NStr
 		inline_medium void f_SetStrLen(aint _Len);
 
 		constexpr inline_small aint f_GetAllocLength() const;
-		constexpr static inline_small bool f_FastLen();
+		static constexpr inline_small bool f_FastLen();
 
 		void f_Reserve(umint _Len);
 		inline_small void f_MakeUnique();
@@ -119,13 +119,13 @@ namespace NMib::NStr
 
 		inline_never static void fs_ThrowLengthException();
 
-		constexpr static umint mc_MaxAllocChars = (TCLimitsInt<umint>::mc_Max - sizeof(CData)) / sizeof(CChar);
-		constexpr static umint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
-		constexpr static bool mc_bNothrowAssign = true;
-		constexpr static bool mc_AllocatesMemory = true;
-		constexpr static bool mc_bInitConstStr = false;
-		constexpr static bool mc_bIsNullTerminated = true;
-		constexpr static umint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;
+		static constexpr umint mc_MaxAllocChars = (TCLimitsInt<umint>::mc_Max - sizeof(CData)) / sizeof(CChar);
+		static constexpr umint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
+		static constexpr bool mc_bNothrowAssign = true;
+		static constexpr bool mc_AllocatesMemory = true;
+		static constexpr bool mc_bInitConstStr = false;
+		static constexpr bool mc_bIsNullTerminated = true;
+		static constexpr umint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;
 
 		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));
 
@@ -148,7 +148,7 @@ namespace NMib::NStr
 	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch8>
 	{
-		constexpr operator NStr::CStr const &() const;
+		constexpr operator NStr::CStr const & () const;
 		constexpr operator TCStrConst<NStr::CStr> () const;
 
 		TCStrConstData<t_nChars, ch8> const m_StrData;
@@ -158,7 +158,7 @@ namespace NMib::NStr
 	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch16>
 	{
-		constexpr operator NStr::CWStr const &() const;
+		constexpr operator NStr::CWStr const & () const;
 		constexpr operator TCStrConst<NStr::CWStr> () const;
 
 		TCStrConstData<t_nChars, ch16> const m_StrData;
@@ -168,7 +168,7 @@ namespace NMib::NStr
 	template <umint t_nChars>
 	struct TCStrConstDataAndStr<t_nChars, ch32>
 	{
-		constexpr operator NStr::CUStr const &() const;
+		constexpr operator NStr::CUStr const & () const;
 		constexpr operator TCStrConst<NStr::CUStr> () const;
 
 		TCStrConstData<t_nChars, ch32> const m_StrData;

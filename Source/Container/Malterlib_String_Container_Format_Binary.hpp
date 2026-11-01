@@ -42,7 +42,6 @@ namespace NMib::NStr
 			NMemory::fg_MemCopy(&OutValue, pValue + i, 1);
 			CFormatType::fs_AddToStrStatic(_String, _CurrentStrLen, Temp);
 		}
-
 	}
 
 	template <typename t_CFormatter, typename t_CBinaryType>

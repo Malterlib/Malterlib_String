@@ -6,7 +6,7 @@
 #include <Mib/Core/Core>
 
 #ifdef DMibPCanDo_fp128
-#include <Mib/Numeric/fp128>
+#	include <Mib/Numeric/fp128>
 #endif
 
 namespace NMib::NStr
@@ -55,11 +55,11 @@ namespace NMib::NStr
 		{
 			enum EFloatFormat
 			{
-				EFloatFormat_Fixed,
-				EFloatFormat_Exponent,
-				EFloatFormat_ExponentLowerCase,
-				EFloatFormat_Shortest,
-				EFloatFormat_ShortestLowerCase,
+				EFloatFormat_Fixed
+				, EFloatFormat_Exponent
+				, EFloatFormat_ExponentLowerCase
+				, EFloatFormat_Shortest
+				, EFloatFormat_ShortestLowerCase
 			};
 
 			inline_medium COptionsFloat();
@@ -108,7 +108,7 @@ namespace NMib::NStr
 		template <typename t_CData, typename t_CFormatType, typename t_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, COption &_Option) const;
 
-		constexpr static bool mc_bNeedDestruct = !t_bReference;
+		static constexpr bool mc_bNeedDestruct = !t_bReference;
 
 	private:
 		template <typename t_COptions>
@@ -136,7 +136,7 @@ namespace NMib::NStr
 		using CFormatType = TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, true>;
 
 		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CFloat const&_Data);
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, CFloat const &_Data);
 	};
 
 	template

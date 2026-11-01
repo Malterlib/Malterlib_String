@@ -31,33 +31,19 @@ namespace NMib::NStr
 			{
 				switch (_Option.m_ParseTypes.m_Parse2)
 				{
-				case 'H':
-					_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base16;
-					break;
-				case 'O':
-					_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base8;
-					break;
-				case 'B':
-					_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base2;
-					break;
+				case 'H': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base16; break;
+				case 'O': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base8; break;
+				case 'B': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base2; break;
 				case 'F':
 					{
 						CChar const *ToCompare = _Option.m_pDataStart;
 
 						switch (CTStrTraits::fs_CharUpperCase(*ToCompare))
 						{
-						case 'H':
-							_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base16;
-							break;
-						case 'N':
-							_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base10;
-							break;
-						case 'O':
-							_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base8;
-							break;
-						case 'B':
-							_Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base2;
-							break;
+						case 'H': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base16; break;
+						case 'N': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base10; break;
+						case 'O': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base8; break;
+						case 'B': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base2; break;
 						default:
 							{
 								t_CIntType Form = t_CIntType(_Option.f_GetData_aint_NotSigned(_ArgData, 10));
@@ -76,9 +62,7 @@ namespace NMib::NStr
 						}
 						break;
 					}
-				default:
-					return CSuper::f_ParseOption(_Option, _Options, _ArgData);
-					break;
+				default: return CSuper::f_ParseOption(_Option, _Options, _ArgData); break;
 				}
 				return true;
 			}
@@ -98,15 +82,13 @@ namespace NMib::NStr
 #endif
 		switch (Options.m_NumberFormat)
 		{
-		case COptionsInt::ENumberFormat_Base16:
-			mp_Value = CTStrTraits::fs_StrToIntParseHex(_pString, mp_Value, Terminator);
-			break;
+		case COptionsInt::ENumberFormat_Base16: mp_Value = CTStrTraits::fs_StrToIntParseHex(_pString, mp_Value, Terminator); break;
 		default:
 			{
 				CChar const Terminators[] = {Terminator, 0};
 				mp_Value = CTStrTraits::fs_StrToIntParse(_pString, mp_Value, Terminators, true, Options.m_NumberFormat);
 			}
-		break;
+			break;
 		}
 		return true;
 	}

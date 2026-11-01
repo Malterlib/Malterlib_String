@@ -43,7 +43,6 @@ namespace NMib::NStr
 			++pStr;
 
 		return pStr - _pStr;
-
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -72,7 +71,7 @@ namespace NMib::NStr
 		if constexpr (sizeof(tf_CData1) == sizeof(tf_CData2))
 		{
 			umint Len = fg_StrLen(_pFrom) + 1;
-			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(tf_CData2));
+			NMemory::fg_MemMove(_pTo, _pFrom, Len * sizeof(tf_CData2));
 			return _pTo;
 		}
 		else
@@ -85,7 +84,7 @@ namespace NMib::NStr
 		if constexpr (sizeof(tf_CData1) == sizeof(tf_CData2))
 		{
 			umint Len = fg_Min(fg_StrLen(_pFrom, _MaxLen), _MaxLen - 1);
-			NMemory::fg_MemMove(_pTo, _pFrom, Len*sizeof(tf_CData2));
+			NMemory::fg_MemMove(_pTo, _pFrom, Len * sizeof(tf_CData2));
 			_pTo[Len] = 0;
 			return _pTo;
 		}
@@ -125,19 +124,19 @@ namespace NMib::NStr
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1)
 	{
-			return fg_StrIsAnsi<false, false>(_pStr1, 0);
+		return fg_StrIsAnsi<false, false>(_pStr1, 0);
 	}
 
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsi(tf_CData1 const *_pStr1, umint _Len)
 	{
-			return fg_StrIsAnsi<true, false>(_pStr1, _Len);
+		return fg_StrIsAnsi<true, false>(_pStr1, _Len);
 	}
 
 	template <typename tf_CData1>
 	constexpr inline_small bool fg_StrIsAnsiLengthAware(tf_CData1 const *_pStr1, umint _Len)
 	{
-			return fg_StrIsAnsi<true, true>(_pStr1, _Len);
+		return fg_StrIsAnsi<true, true>(_pStr1, _Len);
 	}
 
 	template <typename tf_CStr>
@@ -167,9 +166,7 @@ namespace NMib::NStr
 		while (*pStr1)
 		{
 			if (*pStr1 > Largest)
-			{
 				Largest = *pStr1;
-			}
 			++pStr1;
 		}
 		return Largest;

@@ -18,7 +18,7 @@ namespace NMib::NStr
 		mp_Current = fp_Next();
 	}
 
-	mark_nodebug inline_always ch32 CStrIteratorUTF8::operator *() const
+	mark_nodebug inline_always ch32 CStrIteratorUTF8::operator * () const
 	{
 		return mp_Current;
 	}
@@ -53,7 +53,7 @@ namespace NMib::NStr
 		return mp_Current;
 	}
 
-	mark_nodebug inline_always ch32 CStrIteratorUTF16::operator *() const
+	mark_nodebug inline_always ch32 CStrIteratorUTF16::operator * () const
 	{
 		return mp_Current;
 	}
@@ -100,7 +100,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	mark_nodebug inline_always ch32 TCStrIteratorUnicode<t_CChar>::operator *() const
+	mark_nodebug inline_always ch32 TCStrIteratorUnicode<t_CChar>::operator * () const
 	{
 		return mp_Current;
 	}
@@ -160,12 +160,18 @@ namespace NMib::NStr
 					return false;
 			}
 
-			*pRet = 0xFC | ((_Char >> 30) & 0x01); ++pRet;
-			*pRet = 0x80 | ((_Char >> 24) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
+			*pRet = 0xFC | ((_Char >> 30) & 0x01);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 24) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 18) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 6) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 0) & 0x3F);
+			++pRet;
 		}
 		else if (_Char >= 0x200000)
 		{
@@ -175,11 +181,16 @@ namespace NMib::NStr
 				if (!pRet)
 					return false;
 			}
-			*pRet = 0xF8 | ((_Char >> 24) & 0x03); ++pRet;
-			*pRet = 0x80 | ((_Char >> 18) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
+			*pRet = 0xF8 | ((_Char >> 24) & 0x03);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 18) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 6) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 0) & 0x3F);
+			++pRet;
 		}
 		else if (_Char >= 0x10000)
 		{
@@ -189,10 +200,14 @@ namespace NMib::NStr
 				if (!pRet)
 					return false;
 			}
-			*pRet = 0xF0 | ((_Char >> 18) & 0x07); ++pRet;
-			*pRet = 0x80 | ((_Char >> 12) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
+			*pRet = 0xF0 | ((_Char >> 18) & 0x07);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 12) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 6) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 0) & 0x3F);
+			++pRet;
 		}
 		else if (_Char >= 0x800)
 		{
@@ -202,9 +217,12 @@ namespace NMib::NStr
 				if (!pRet)
 					return false;
 			}
-			*pRet = 0xE0 | ((_Char >> 12) & 0x0F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 6 ) & 0x3F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
+			*pRet = 0xE0 | ((_Char >> 12) & 0x0F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 6) & 0x3F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 0) & 0x3F);
+			++pRet;
 		}
 		else if (_Char >= 0x80)
 		{
@@ -214,8 +232,10 @@ namespace NMib::NStr
 				if (!pRet)
 					return false;
 			}
-			*pRet = 0xC0 | ((_Char >> 6 ) & 0x1F); ++pRet;
-			*pRet = 0x80 | ((_Char >> 0 ) & 0x3F); ++pRet;
+			*pRet = 0xC0 | ((_Char >> 6) & 0x1F);
+			++pRet;
+			*pRet = 0x80 | ((_Char >> 0) & 0x3F);
+			++pRet;
 		}
 		else
 		{
@@ -236,9 +256,12 @@ namespace NMib::NStr
 		auto *pRet = _OutFunctor(3);
 		if (pRet)
 		{
-			*pRet = ch8(0xEF); ++pRet;
-			*pRet = ch8(0xBB); ++pRet;
-			*pRet = ch8(0xBF); ++pRet;
+			*pRet = ch8(0xEF);
+			++pRet;
+			*pRet = ch8(0xBB);
+			++pRet;
+			*pRet = ch8(0xBF);
+			++pRet;
 			return true;
 		}
 		return false;
@@ -263,7 +286,8 @@ namespace NMib::NStr
 			uint32 w1 = 0xD800 + vh;
 			uint32 w2 = 0xDC00 + v1;
 
-			*pRet = ch16(w1);++pRet;
+			*pRet = ch16(w1);
+			++pRet;
 			*pRet = ch16(w2);
 		}
 		else
@@ -279,5 +303,4 @@ namespace NMib::NStr
 		}
 		return true;
 	}
-
 }

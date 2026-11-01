@@ -20,10 +20,10 @@ namespace NMib::NStr
 		{
 			enum ENumberFormat
 			{
-				ENumberFormat_Base16 = 16
+				ENumberFormat_Base16   = 16
 				, ENumberFormat_Base10 = 10
-				, ENumberFormat_Base8 = 8
-				, ENumberFormat_Base2 = 2
+				, ENumberFormat_Base8  = 8
+				, ENumberFormat_Base2  = 2
 			};
 
 			aint m_NumberFormat = -1;
@@ -34,15 +34,15 @@ namespace NMib::NStr
 		TCStrParseType_Int &operator = (TCStrParseType_Int const &_Value) = delete;
 
 		virtual umint f_Destruct() override;
-		virtual bool f_ParseData(const CChar *&_pString, const CChar *_pFormat, const t_CParser & _ArgData) const override;
+		virtual bool f_ParseData(CChar const * &_pString, CChar const *_pFormat, t_CParser const &_ArgData) const override;
 		virtual aint f_Get_aint() const override;
 		virtual fp32 f_Get_fp32() const override;
 		virtual fp64 f_Get_fp64() const override;
 
 		template <typename tf_COptions>
-		inline_small aint f_ParseOption(COption &_Option, tf_COptions &_Options, const t_CParser & _ArgData) const;
+		inline_small aint f_ParseOption(COption &_Option, tf_COptions &_Options, t_CParser const &_ArgData) const;
 
-		constexpr static bool mc_bNeedDestruct = false;
+		static constexpr bool mc_bNeedDestruct = false;
 
 	private:
 		t_CIntType &mp_Value;

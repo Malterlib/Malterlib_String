@@ -25,7 +25,7 @@ namespace NMib::NStr
 	private:
 		template <typename tf_CType>
 		static auto fsp_GetFormatOptionsType(tf_CType const &_Type)
-			requires requires(typename tf_CType::CFormatOptions const &_Options)
+			requires requires (typename tf_CType::CFormatOptions const &_Options)
 			{
 				_Options;
 			}
@@ -35,7 +35,6 @@ namespace NMib::NStr
 		static auto fsp_GetFormatOptionsType(tf_CType const &_Type);
 
 	public:
-
 		struct CLocalOptions : public COptions
 		{
 			using COptionsType = decltype(fsp_GetFormatOptionsType(fg_GetReference<t_CToFormat>()));
@@ -81,7 +80,7 @@ namespace NMib::NStr
 		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
-		constexpr static bool mc_bNeedDestruct = !t_bReference;
+		static constexpr bool mc_bNeedDestruct = !t_bReference;
 
 	private:
 		template <typename tf_COptions, typename tf_CToFormat>

@@ -13,8 +13,8 @@ namespace NMib::NStr
 
 	enum EMStr_Type
 	{
-		EMStr_Type_None = 0
-		, EMStr_Type_CStr = 1
+		EMStr_Type_None    = 0
+		, EMStr_Type_CStr  = 1
 		, EMStr_Type_CWStr = 2
 		, EMStr_Type_CUStr = 3
 	};
@@ -27,10 +27,10 @@ namespace NMib::NStr
 		template <typename tf_CValue>
 		CMStrDeprecated(tf_CValue &&_Other);
 
-		CMStrDeprecated &operator =(CMStrDeprecated const &_Other);
-		CMStrDeprecated &operator =(CMStrDeprecated &&_Other);
+		CMStrDeprecated &operator = (CMStrDeprecated const &_Other);
+		CMStrDeprecated &operator = (CMStrDeprecated &&_Other);
 		template <typename tf_CValue>
-		CMStrDeprecated &operator =(tf_CValue &&_Other);
+		CMStrDeprecated &operator = (tf_CValue &&_Other);
 	};
 
 	template <typename tf_CStrTraits>

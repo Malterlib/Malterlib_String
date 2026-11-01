@@ -15,8 +15,8 @@ namespace NMib::NStr
 
 		enum
 		{
-			ERadix = 10,
-			ENumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3)
+			ERadix         = 10
+			, ENumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3)
 		};
 
 		uint32 m_Radix:29;
@@ -46,8 +46,8 @@ namespace NMib::NStr
 
 		enum
 		{
-			ERadix = 10,
-			ENumTempChar = (sizeof(CIntType) * 8)/3 + 2
+			ERadix         = 10
+			, ENumTempChar = (sizeof(CIntType) * 8) / 3 + 2
 		};
 
 		inline_always static bool f_StaticRadix();
@@ -69,15 +69,15 @@ namespace NMib::NStr
 		static_assert(t_Radix >= 2 && t_Radix <= 36);
 		enum
 		{
-			ENumBits = sizeof(CIntType) * 8,
-			ENumBitsPerChar = gc_HighestBitSet<t_Radix>
+			ENumBits          = sizeof(CIntType) * 8
+			, ENumBitsPerChar = gc_HighestBitSet<t_Radix>
 		};
 
 	public:
 		enum
 		{
-			ERadix = t_Radix,
-			ENumTempChar = (ENumBits+(ENumBitsPerChar-1))/ENumBitsPerChar + 2
+			ERadix         = t_Radix
+			, ENumTempChar = (ENumBits + (ENumBitsPerChar - 1)) / ENumBitsPerChar + 2
 		};
 
 		inline_always TCStrFormatType_Int_OptionsStatic_Radix(t_CParent const &_Parent);
@@ -100,7 +100,7 @@ namespace NMib::NStr
 		using CRadixType = TCConditional<NTraits::cIsFundamental<CUnsignedType>, CUnsignedType, uint32>;
 		using CVisitor = typename CSuper::CVisitor;
 
-		constexpr static bool mc_bNeedDestruct = !NTraits::cIsReference<t_CIntType>;
+		static constexpr bool mc_bNeedDestruct = !NTraits::cIsReference<t_CIntType>;
 
 		struct CStorage : public t_COptions
 		{
@@ -180,7 +180,7 @@ namespace NMib::NStr
 		template <CRadixType tf_Radix, typename tf_COptions>
 		inline_small static void fs_DoNumber_GeneralStatic(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace);
 
-		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const & _ArgData) const override;
+		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override;
 
 		template <typename t_COption2, typename t_CIntType2>
 		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCValueWithOptions<t_COption2, t_CIntType2> const &_Value);
@@ -256,6 +256,7 @@ namespace NMib::NStr
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data);
 	};
+
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, bool>
 	{
@@ -307,7 +308,6 @@ DMibStrStringFormatterImplementInt(int8192);
 DMibStrStringFormatterImplementInt(uint16384);
 DMibStrStringFormatterImplementInt(int16384);
 
-
 #ifdef DMibPUniqueType_mint
 DMibStrStringFormatterImplementInt(umint);
 #endif
@@ -327,7 +327,6 @@ DMibStrStringFormatterImplementInt(aint);
 #ifdef DMibPUniqueType_uaint
 DMibStrStringFormatterImplementInt(uaint);
 #endif
-
 
 #ifdef DMibPUniqueType_ch8
 DMibStrStringFormatterImplementInt(ch8);

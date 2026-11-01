@@ -48,13 +48,9 @@ namespace NMib::NStr
 			case 0:
 				{
 					if ((*pParseStr) == '+')
-					{
 						Sign = t_CReturn::fs_1();
-					}
 					else if ((*pParseStr) == '-')
-					{
 						Sign = -t_CReturn::fs_1();
-					}
 					else if ((*pParseStr) == 'e' || (*pParseStr) == 'E')
 					{
 						SearchMode = 3;
@@ -85,9 +81,7 @@ namespace NMib::NStr
 						else
 						{
 							if ((*pParseStr) == '.')
-							{
 								SearchMode = 2;
-							}
 						}
 						if (SearchMode == 0) // Nothing valid found, lets return
 							goto Return;
@@ -109,9 +103,7 @@ namespace NMib::NStr
 						SearchMode = 3;
 					}
 					else if (fg_CharIsWhiteSpace((*pParseStr)))
-					{
 						goto Return;
-					}
 					else
 					{
 						if (_pPoints)
@@ -132,9 +124,7 @@ namespace NMib::NStr
 						else
 						{
 							if ((*pParseStr) == '.')
-							{
 								SearchMode = 2;
-							}
 						}
 
 						if (SearchMode != 2)
@@ -156,13 +146,9 @@ namespace NMib::NStr
 						bFoundNum = true;
 					}
 					else if ((*pParseStr) == 'e' || (*pParseStr) == 'E')
-					{
 						SearchMode = 3;
-					}
 					else if (fg_CharIsWhiteSpace((*pParseStr)))
-					{
 						goto Return;
-					}
 					else
 					{
 						if (_bDontFail)
@@ -181,17 +167,11 @@ namespace NMib::NStr
 						bFoundNum = true;
 					}
 					else if ((*pParseStr) == '-')
-					{
 						ExponentSign = -t_CReturn::fs_1();
-					}
 					else if ((*pParseStr) == '+')
-					{
 						ExponentSign = t_CReturn::fs_1();
-					}
 					else if (fg_CharIsWhiteSpace((*pParseStr)))
-					{
 						goto Return;
-					}
 					else
 					{
 						if (_bDontFail)
@@ -211,21 +191,16 @@ namespace NMib::NStr
 			}
 
 			++pParseStr;
-
 		}
 
-Return:
+	Return:
 
 		_pStr = (t_CData const *)pParseStr;
 
 		if (bFoundNum)
-		{
 			return (DestNumber + DestDecimals) * Ten.f_Pow(DestExponent * ExponentSign) * Sign;
-		}
 		else
-		{
 			return _FailValue;
-		}
 	}
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
@@ -243,8 +218,9 @@ Return:
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail)
 	{
-		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (const ch8 *)nullptr);
+		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (ch8 const *)nullptr);
 	}
+
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
 	{
@@ -262,7 +238,6 @@ Return:
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, true, (ch8 const *)nullptr);
 	}
-
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail)
@@ -282,7 +257,6 @@ Return:
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, true, (ch8 const *)nullptr);
 	}
 
-
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
 	{
@@ -300,7 +274,6 @@ Return:
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, false, (ch8 const *)nullptr);
 	}
-
 
 	template <typename t_CData, typename t_CReturn, typename t_CTerm>
 	t_CReturn fg_StrToFloatParseExact(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)

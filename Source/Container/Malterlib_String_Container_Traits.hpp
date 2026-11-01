@@ -49,7 +49,7 @@ namespace NMib::NStr
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	template <typename tf_CData, typename tf_CReturn>
-	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntParse
+	inline_small auto TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntParse
 		(
 			tf_CData const * &_pStr
 			, tf_CReturn _FailValue
@@ -57,6 +57,7 @@ namespace NMib::NStr
 			, bool _bDontFail
 			, int32 _ParseMode
 		)
+		-> tf_CReturn
 	{
 		return fg_StrToIntParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, _ParseMode);
 	}
@@ -69,7 +70,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
-	template<typename tf_CData, typename tf_CReturn>
+	template <typename tf_CData, typename tf_CReturn>
 	inline_small tf_CReturn TCStrTraits<t_CChar, t_Type, t_CParams>::fs_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator)
 	{
 		return fg_StrToIntParseHex(_pStr, _FailValue);

@@ -14,8 +14,7 @@ namespace NMib::NStr
 
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -45,8 +44,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -60,8 +58,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -75,8 +72,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -109,8 +105,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -142,8 +137,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -157,8 +151,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -172,8 +165,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;
@@ -206,8 +198,7 @@ namespace NMib::NStr
 	{
 		static_assert
 			(
-				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1
-				|| (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
+				sizeof(typename TCStr<tf_CTCStrTraits>::CChar) > 1 || (NTraits::cIsSame<typename TCStr<tf_CTCStrTraits>::CChar, ch8> && TCStr<tf_CTCStrTraits>::mc_Type == EStrType_UTF)
 				, "Unsupported"
 			)
 		;

@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename tf_CData1, typename tf_CData2>
-	constexpr inline_large aint  fg_StrFindChar(tf_CData1 const *_pStr1, tf_CData2 _Char)
+	constexpr inline_large aint fg_StrFindChar(tf_CData1 const *_pStr1, tf_CData2 _Char)
 	{
 		using CChar1 = NTraits::TCUnsigned<tf_CData1>;
 		CChar1 const *pStr1 = (CChar1 const *)_pStr1;
@@ -51,9 +51,7 @@ namespace NMib::NStr
 
 		// Find end
 		while (*pStr1)
-		{
 			++pStr1;
-		}
 		--pStr1;
 
 		while (pStr1 >= (CChar1 const *)_pStr1)
@@ -78,9 +76,7 @@ namespace NMib::NStr
 
 		// Find end
 		while (*pStr1)
-		{
 			++pStr1;
-		}
 		--pStr1;
 
 		while (pStr1 >= (CChar1 const *)_pStr1)
@@ -405,7 +401,6 @@ namespace NMib::NStr
 	{
 		return fg_StrFindCharsNullTerminatedLengthAware<true, true>(_pStr1, _pChars, _MaxLen, _CharsLen);
 	}
-
 
 	template <typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindChars(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen)
@@ -843,7 +838,6 @@ namespace NMib::NStr
 
 			++pStr1;
 			++pStr2;
-
 		}
 
 		if constexpr (tf_bCheckLen2)
@@ -917,7 +911,6 @@ namespace NMib::NStr
 			while (*pStr1End)
 				++pStr1End;
 		}
-
 
 		CData2 const *pStr2Start = (CData2 const *)_pStr2;
 

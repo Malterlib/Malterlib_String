@@ -10,7 +10,6 @@ static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other
 
 namespace
 {
-
 	template <typename t_CTest>
 	auto fg_TestValue(t_CTest _Test) -> t_CTest
 	{
@@ -22,7 +21,7 @@ namespace
 	{
 		enum
 		{
-			ETest = sizeof(fg_TestValue(t_CTest())*1) == 4
+			ETest = sizeof(fg_TestValue(t_CTest()) * 1) == 4
 		};
 	};
 
@@ -36,7 +35,7 @@ namespace
 		{
 			DMibTestSuite("General")
 			{
-				DMibTest(DMibExpr(1) == DMibExpr(1)) (ETest_FailAndStop);
+				DMibTest(DMibExpr(1) == DMibExpr(1))(ETest_FailAndStop);
 			};
 		}
 	};

@@ -13,19 +13,23 @@ namespace NMib::NStr
 			return *this;
 		}
 
-		inline_medium CParse(typename TCStr<t_CTCStrTraits>::CChar const *_pParseStr) : TCStrParse<CStrTraits>(_pParseStr)
+		inline_medium CParse(typename TCStr<t_CTCStrTraits>::CChar const *_pParseStr)
+			: TCStrParse<CStrTraits>(_pParseStr)
 		{
 		}
+
 		inline_small aint f_Parse(TCStr<t_CTCStrTraits> const &_Str, aint &_nParsed, EParseFlag _ParseFlags)
 		{
 			CChar const *pParse = _Str.f_GetStr();
 			return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
 		}
+
 		inline_small aint f_Parse(TCStr<t_CTCStrTraits> const &_Str, aint &_nParsed)
 		{
 			CChar const *pParse = _Str.f_GetStr();
 			return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, EParseFlag_None) - pParse;
 		}
+
 		inline_small aint f_Parse(TCStr<t_CTCStrTraits> const &_Str, EParseFlag _ParseFlags = EParseFlag_None)
 		{
 			CChar const *pParse = _Str.f_GetStr();
@@ -37,6 +41,7 @@ namespace NMib::NStr
 			CChar const *pParse = _pStr;
 			return TCStrParse<CStrTraits>::f_Parse(pParse, _nParsed, _ParseFlags) - pParse;
 		}
+
 		inline_small aint f_Parse(CChar const *_pStr, EParseFlag _ParseFlags = EParseFlag_None)
 		{
 			CChar const *pParse = _pStr;

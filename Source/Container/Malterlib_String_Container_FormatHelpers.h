@@ -7,12 +7,12 @@
 
 namespace NMib::NStr
 {
-	static inline CStrNonTracked::CFormat fg_GetStringFormat(const ch8 *_pFormat);
-	static inline CWStrNonTracked::CFormat fg_GetStringFormat(const ch16 *_pFormat);
-	static inline CUStrNonTracked::CFormat fg_GetStringFormat(const ch32 *_pFormat);
+	static inline CStrNonTracked::CFormat fg_GetStringFormat(ch8 const *_pFormat);
+	static inline CWStrNonTracked::CFormat fg_GetStringFormat(ch16 const *_pFormat);
+	static inline CUStrNonTracked::CFormat fg_GetStringFormat(ch32 const *_pFormat);
 
-	template <typename tf_CFormat, typename... tfp_CParams>
-	CStr fg_Format(tf_CFormat const &_Format, tfp_CParams &&...p_Params);
+	template <typename tf_CFormat, typename ...tfp_CParams>
+	CStr fg_Format(tf_CFormat const &_Format, tfp_CParams && ...p_Params);
 }
 
 #include "Malterlib_String_Container_FormatHelpers.hpp"

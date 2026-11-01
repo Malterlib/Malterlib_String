@@ -50,7 +50,7 @@ namespace NMib::NStr
 	template <typename t_CChar>
 	inline_small auto TCStrImp_Dynamic_StringData<t_CChar>::f_GetData() const -> t_CChar *
 	{
-		return (t_CChar *)(this+1);
+		return (t_CChar *)(this + 1);
 	}
 
 	template <typename t_CChar>
@@ -225,7 +225,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small auto TCStrImp_Dynamic<t_CStrTraits>::f_GetStrWritable() const ->CChar *
+	inline_small auto TCStrImp_Dynamic<t_CStrTraits>::f_GetStrWritable() const -> CChar *
 	{
 		DMibSafeCheck(m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) == 1, "Must own str");
 		return m_pData->f_GetData(); // Return a const value if string is empty this will make application crash if it writes to this data
@@ -283,7 +283,7 @@ namespace NMib::NStr
 		if (_Len == -1)
 			NewLen = f_GetStrLen() + 1;
 		else if (_Len > 0)
-			NewLen = _Len+1;
+			NewLen = _Len + 1;
 
 		if (NewLen != CurLen)
 		{
@@ -296,7 +296,7 @@ namespace NMib::NStr
 	inline_small void TCStrImp_Dynamic<t_CStrTraits>::f_MakeUnique()
 	{
 		if (m_pData->m_RefCount.f_Load(NAtomic::gc_MemoryOrder_Relaxed) > 1)
-			f_CreateWritableBuffer(f_GetStrLen()+1, false);
+			f_CreateWritableBuffer(f_GetStrLen() + 1, false);
 	}
 
 	template <typename t_CStrTraits>
@@ -317,10 +317,10 @@ namespace NMib::NStr
 
 		Size = CAllocator::f_SizePadded(umint(2) << NMib::fg_GetHighestBitSetNoZero(Size - 1));
 
-#			if DMibEnableSafeCheck > 0
-			umint nChars = (Size - sizeof(CData)) / sizeof(CChar);
-			DMibFastCheck(nChars >= _Length);
-#			endif
+#if DMibEnableSafeCheck > 0
+		umint nChars = (Size - sizeof(CData)) / sizeof(CChar);
+		DMibFastCheck(nChars >= _Length);
+#endif
 
 		return Size;
 	}
@@ -438,7 +438,6 @@ namespace NMib::NStr
 		}
 
 		return CurLen;
-
 	}
 
 	template <typename t_CStrTraits>
@@ -456,7 +455,7 @@ namespace NMib::NStr
 	{
 		if (_Len)
 		{
-			f_CreateWritableBuffer(_Len+1, false);
+			f_CreateWritableBuffer(_Len + 1, false);
 			DMibFastCheck(!f_IsDefault());
 			m_pData->m_bReserved = true;
 		}
@@ -517,7 +516,7 @@ namespace NMib::NStr
 	}
 
 	template <umint t_nChars>
-	constexpr TCStrConstDataAndStr<t_nChars, ch8>::operator NStr::CStr const &() const
+	constexpr TCStrConstDataAndStr<t_nChars, ch8>::operator NStr::CStr const & () const
 	{
 		return m_Str;
 	}
@@ -529,7 +528,7 @@ namespace NMib::NStr
 	}
 
 	template <umint t_nChars>
-	constexpr TCStrConstDataAndStr<t_nChars, ch16>::operator NStr::CWStr const &() const
+	constexpr TCStrConstDataAndStr<t_nChars, ch16>::operator NStr::CWStr const & () const
 	{
 		return m_Str;
 	}
@@ -541,7 +540,7 @@ namespace NMib::NStr
 	}
 
 	template <umint t_nChars>
-	constexpr TCStrConstDataAndStr<t_nChars, ch32>::operator NStr::CUStr const &() const
+	constexpr TCStrConstDataAndStr<t_nChars, ch32>::operator NStr::CUStr const & () const
 	{
 		return m_Str;
 	}

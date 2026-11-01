@@ -59,7 +59,7 @@ namespace NMib::NStr
 		template <typename t_CData, typename t_CFormatType, typename t_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, COption &_Option) const;
 
-		constexpr static bool mc_bNeedDestruct = false;
+		static constexpr bool mc_bNeedDestruct = false;
 
 	private:
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
@@ -75,7 +75,6 @@ namespace NMib::NStr
 		t_CStrDataType const *mp_pStr;
 		umint mp_StrLen;
 	};
-
 }
 
 #include "Malterlib_String_Container_Format_String.hpp"

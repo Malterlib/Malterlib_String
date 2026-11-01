@@ -78,7 +78,7 @@ namespace NMib::NStr
 		return false;
 	}
 
- 	template <typename t_CIntType>
+	template <typename t_CIntType>
 	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Boolean()
 	{
 		return false;
@@ -133,13 +133,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	inline_small TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CStorage::CStorage(t_CIntType _Value, t_COptions const &_Options)
-		: t_COptions(_Options),
-		m_Value(_Value)
+		: t_COptions(_Options)
+		, m_Value(_Value)
 	{
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-	inline_small TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CStorage::operator CType const &() const
+	inline_small TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CStorage::operator CType const & () const
 	{
 		return m_Value;
 	}
@@ -157,8 +157,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-	inline_small TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::TCStrFormatType_Int(t_CIntType _Value, t_COptions const &_Options):
-		mp_Storage(_Value, _Options)
+	inline_small TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::TCStrFormatType_Int(t_CIntType _Value, t_COptions const &_Options)
+		: mp_Storage(_Value, _Options)
 	{
 	}
 
@@ -200,8 +200,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
-	inline_small tf_CReturn TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CXprImplementation
-		::fs_StrToData(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
+	inline_small auto TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CXprImplementation::fs_StrToData
+		(
+			tf_CData const * &_pStr
+			, tf_CReturn _FailValue
+			, tf_CTerm const *_pStrTerminators
+		)
+		-> tf_CReturn
 	{
 		return fg_StrToIntParseExact(_pStr, _FailValue, _pStrTerminators);
 	}
@@ -215,8 +220,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_small aint TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
+	inline_small auto TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::f_ParseOption
+		(
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+			, COption &_Option
+		)
+		const
+		-> aint
 	{
 		switch (_Option.m_FormatTypes.m_Format1)
 		{
@@ -224,12 +234,8 @@ namespace NMib::NStr
 			{
 				switch (_Option.m_FormatTypes.m_Format2)
 				{
-				case 'H':
-					_Args.m_Options.m_Radix = 16;
-					break;
-				case 'O':
-					_Args.m_Options.m_Radix = 8;
-					break;
+				case 'H': _Args.m_Options.m_Radix = 16; break;
+				case 'O': _Args.m_Options.m_Radix = 8; break;
 				case 'B':
 					switch (CTStrTraits::CStrTraits::fs_CharUpperCase(*_Option.m_pDataStart))
 					{
@@ -238,36 +244,20 @@ namespace NMib::NStr
 					default: _Args.m_Options.m_Radix = 2; break;
 					}
 					break;
-				case 'C':
-					_Args.m_Options.m_bNumberCaps = *_Option.m_pDataStart != '0';
-					break;
-				case 'T':
-					_Args.m_Options.m_ThousandSeparator = (CChar)_Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0);
-					break;
-				case 'S':
-					_Args.m_Options.m_ThousandSeparator = *_Option.m_pDataStart;
-					break;
-				case '+':
-					_Args.m_Options.m_bSign = true;
-					break;
+				case 'C': _Args.m_Options.m_bNumberCaps = *_Option.m_pDataStart != '0'; break;
+				case 'T': _Args.m_Options.m_ThousandSeparator = (CChar)_Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0); break;
+				case 'S': _Args.m_Options.m_ThousandSeparator = *_Option.m_pDataStart; break;
+				case '+': _Args.m_Options.m_bSign = true; break;
 				case 'F':
 					{
 						CChar const *ToCompare = _Option.m_pDataStart;
 
 						switch (CTStrTraits::CStrTraits::fs_CharUpperCase(*ToCompare))
 						{
-						case 'H':
-							_Args.m_Options.m_Radix = 16;
-							break;
-						case 'N':
-							_Args.m_Options.m_Radix = 10;
-							break;
-						case 'O':
-							_Args.m_Options.m_Radix = 8;
-							break;
-						case 'B':
-							_Args.m_Options.m_Radix = 2;
-							break;
+						case 'H': _Args.m_Options.m_Radix = 16; break;
+						case 'N': _Args.m_Options.m_Radix = 10; break;
+						case 'O': _Args.m_Options.m_Radix = 8; break;
+						case 'B': _Args.m_Options.m_Radix = 2; break;
 						default:
 							{
 								aint Form = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 10);
@@ -291,9 +281,7 @@ namespace NMib::NStr
 					_Args.m_Options.m_Fillout = '0';
 					_Args.m_Options.m_MinLength = _Args.m_Options.m_MaxLength = sizeof(tf_CData) * 2;
 					break;
-				default:
-					return TICStrFormatType<t_CFormatter>::f_ParseOption(_Args, _Option);
-					break;
+				default: return TICStrFormatType<t_CFormatter>::f_ParseOption(_Args, _Option); break;
 				}
 				return true;
 			}
@@ -321,20 +309,20 @@ namespace NMib::NStr
 	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_DoNumber_BitExact(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace)
 	{
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 #define DUnrollCode \
-			{\
-				CChar InterNum = (CRadixType(_Number) & (DMibBitRangeTyped(0, tf_nBits - 1, CRadixType)));\
-				_Number >>= tf_nBits;\
-				if (tf_nBits >= 4 && InterNum > 9)\
-					*(pStrPlace--) = NumberCharAddPast10 + InterNum;\
-				else\
-					*(pStrPlace--) = CChar('0') + InterNum;\
-				if (!_Number)\
-					break;\
-			}
+	{\
+		CChar InterNum = (CRadixType(_Number) & (DMibBitRangeTyped(0, tf_nBits - 1, CRadixType)));\
+		_Number >>= tf_nBits;\
+		if (tf_nBits >= 4 && InterNum > 9)\
+			*(pStrPlace--) = NumberCharAddPast10 + InterNum;\
+		else\
+			*(pStrPlace--) = CChar('0') + InterNum;\
+		if (!_Number)\
+			break;\
+	}
 			DUnrollCode;
 			DUnrollCode;
 			DUnrollCode;
@@ -344,7 +332,6 @@ namespace NMib::NStr
 #undef DUnrollCode
 		}
 		_pStrPlace = pStrPlace;
-
 	};
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -354,7 +341,7 @@ namespace NMib::NStr
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
 
 		aint CurrentNumber = 1;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			CChar InterNum = (CRadixType(_Number) & (DMibBitRangeTyped(0, tf_nBits - 1, CRadixType)));
@@ -376,7 +363,7 @@ namespace NMib::NStr
 	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_DoNumber_Above10(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace)
 	{
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			CChar InterNum = fg_Convert<CChar>(_Number % _Options.template f_Radix<CRadixType>());
@@ -398,7 +385,7 @@ namespace NMib::NStr
 	{
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
 		aint CurrentNumber = 1;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			CChar InterNum = fg_Convert<CChar>(_Number % _Options.template f_Radix<CRadixType>());
@@ -420,7 +407,7 @@ namespace NMib::NStr
 	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_DoNumber_Above10Static(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace)
 	{
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			CChar InterNum = fg_Convert<CChar>(CRadixType(_Number) % tf_Radix);
@@ -442,7 +429,7 @@ namespace NMib::NStr
 	{
 		CChar NumberCharAddPast10 = _Options.f_NumberCaps() ? 'A' - 10 : 'a' - 10;
 		aint CurrentNumber = 1;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			CChar InterNum = fg_Convert<CChar>(CRadixType(_Number) % tf_Radix);
@@ -465,7 +452,7 @@ namespace NMib::NStr
 	{
 		aint CurrentNumber = 1;
 		CUnsignedType Modulu;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			Modulu = _Number % _Options.template f_Radix<CRadixType>();
@@ -485,16 +472,16 @@ namespace NMib::NStr
 	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_DoNumber_General(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace)
 	{
 		CUnsignedType Modulu;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 #define DUnrollCode \
-			Modulu = _Number % _Options.template f_Radix<CRadixType>();\
-			_Number /= _Options.template f_Radix<CRadixType>();\
-			*(pStrPlace) = CChar('0') + fg_Convert<CChar>((Modulu));\
-			--pStrPlace;\
-			if (!_Number)\
-				break
+	Modulu = _Number % _Options.template f_Radix<CRadixType>();\
+	_Number /= _Options.template f_Radix<CRadixType>();\
+	*(pStrPlace) = CChar('0') + fg_Convert<CChar>((Modulu));\
+	--pStrPlace;\
+	if (!_Number)\
+		break
 
 			DUnrollCode;
 			DUnrollCode;
@@ -514,7 +501,7 @@ namespace NMib::NStr
 		CChar const NumberCharAdd = '0';
 		aint CurrentNumber = 1;
 		CUnsignedType Modulu;
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 			Modulu = CRadixType(_Number) % tf_Radix;
@@ -533,18 +520,18 @@ namespace NMib::NStr
 	template <TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CRadixType tf_Radix, typename tf_COptions>
 	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_DoNumber_GeneralStatic(tf_COptions const &_Options, CUnsignedType _Number, CChar * &_pStrPlace)
 	{
-		CChar * pStrPlace = _pStrPlace;
+		CChar *pStrPlace = _pStrPlace;
 		while (1)
 		{
 #if 0
-#define DUnrollCode(_Place) \
-			pStrPlace[-_Place] = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
-			_Number /= tf_Radix;\
-			if (!_Number)\
-			{\
-				pStrPlace -= (_Place + 1);\
-				break;\
-			}
+#	define DUnrollCode(_Place) \
+		pStrPlace[-_Place] = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
+		_Number /= tf_Radix;\
+		if (!_Number)\
+		{\
+			pStrPlace -= (_Place + 1);\
+			break;\
+		}
 
 			DUnrollCode(0);
 			DUnrollCode(1);
@@ -552,16 +539,16 @@ namespace NMib::NStr
 			DUnrollCode(3);
 			DUnrollCode(4);
 			DUnrollCode(5);
-#undef DUnrollCode
+#	undef DUnrollCode
 			pStrPlace -= 6;
 #else
 
-#define DUnrollCode \
-			*(pStrPlace) = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
-			--pStrPlace;\
-			_Number /= tf_Radix;\
-			if (!_Number)\
-				break
+#	define DUnrollCode \
+		*(pStrPlace) = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
+		--pStrPlace;\
+		_Number /= tf_Radix;\
+		if (!_Number)\
+			break
 
 			DUnrollCode;
 			DUnrollCode;
@@ -569,7 +556,7 @@ namespace NMib::NStr
 			DUnrollCode;
 			DUnrollCode;
 			DUnrollCode;
-#undef DUnrollCode
+#	undef DUnrollCode
 
 #endif
 		}
@@ -603,8 +590,13 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_COptions>
-	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>
-		::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer)
+	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fp_AddToStr
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, tf_COptions const &_Options
+			, CType const &_Integer
+		)
 	{
 		CUnsignedType Number = _Integer;
 
@@ -623,7 +615,11 @@ namespace NMib::NStr
 
 		// Make a temporary buffer that can hold the biggest
 
-		enum {NumTempChar = tf_COptions::ENumTempChar};
+		enum
+		{
+			NumTempChar = tf_COptions::ENumTempChar
+		};
+
 		CChar TempStr[NumTempChar];
 		CChar *pStrPlaceEnd = TempStr + NumTempChar - 1;
 		CChar *pStrPlace = pStrPlaceEnd;
@@ -665,9 +661,7 @@ namespace NMib::NStr
 					fs_DoNumber_General(_Options, Number, pStrPlace);
 			}
 			else
-			{
 				fs_DoNumber_Above10WithThousand(_Options, Number, pStrPlace);
-			}
 		}
 
 		if (bSign)
@@ -712,8 +706,13 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>
-		::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CType const &_Value, t_COptions &_Options)
+	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_AddToStrStatic
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, CType const &_Value
+			, t_COptions &_Options
+		)
 	{
 		if (!_Options.f_Boolean())
 			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
@@ -723,8 +722,12 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_COption, typename tf_CIntType>
-	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>
-		::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCValueWithOptions<tf_COption, tf_CIntType> const &_Value)
+	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fs_AddToStrStatic
+		(
+			TCStr<CTStrTraits> &_String
+			, aint &_CurrentStrLen
+			, TCValueWithOptions<tf_COption, tf_CIntType> const &_Value
+		)
 	{
 		if (!_Value.f_Boolean())
 			fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
@@ -793,8 +796,12 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CInt0, typename t_CInt1>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>>>
-		::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>>>::fs_CreateFormat
+		(
+			t_CFormatter &_Formatter
+			, TCByValue<NNumeric::TCInt<t_CInt0, t_CInt1>> const &_Data
+		)
+		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
@@ -802,8 +809,12 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, TCValueWithOptions<t_COption, t_CIntType>>
-		::fs_CreateFormat(t_CFormatter &_Formatter, TCValueWithOptions<t_COption, t_CIntType> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+	inline_large auto TCStringFormatter<t_CFormatter, TCValueWithOptions<t_COption, t_CIntType>>::fs_CreateFormat
+		(
+			t_CFormatter &_Formatter
+			, TCValueWithOptions<t_COption, t_CIntType> const &_Data
+		)
+		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(_Data, _Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
@@ -811,8 +822,12 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>>>
-		::fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>> const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+	inline_large auto TCStringFormatter<t_CFormatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>>>::fs_CreateFormat
+		(
+			t_CFormatter &_Formatter
+			, TCByValue<TCValueWithOptions<t_COption, t_CIntType>> const &_Data
+		)
+		-> typename CFormatType::CStrFormatTypeClassifier
 	{
 		_Formatter.template f_Alloc<CFormatType>(*_Data, *_Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
@@ -822,19 +837,11 @@ namespace NMib::NStr
 	inline_small auto fg_FormatIntFormat(tf_CIntType const &_Int)
 		-> TCValueWithOptions<TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, TCStrFormatType_Int_OptionsStatic<tf_CIntType>>, tf_CIntType>
 	{
-		return TCValueWithOptions
-			<
-				TCStrFormatType_Int_OptionsStatic_Radix
-					<
-						tf_Radix,
-						TCStrFormatType_Int_OptionsStatic
-						<
-							tf_CIntType
-						>
-					>,
-				tf_CIntType
-			>
-			(_Int, TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, TCStrFormatType_Int_OptionsStatic<tf_CIntType>>(TCStrFormatType_Int_OptionsStatic<tf_CIntType>()))
+		return TCValueWithOptions<TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, TCStrFormatType_Int_OptionsStatic<tf_CIntType>>, tf_CIntType>
+			(
+				_Int
+				, TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, TCStrFormatType_Int_OptionsStatic<tf_CIntType>>(TCStrFormatType_Int_OptionsStatic<tf_CIntType>())
+			)
 		;
 	}
 
@@ -842,16 +849,11 @@ namespace NMib::NStr
 	inline_small auto fg_FormatIntFormat(TCValueWithOptions<tf_COldOptions, tf_CIntType> const &_Int)
 		-> TCValueWithOptions<TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, tf_COldOptions>, tf_CIntType>
 	{
-		return TCValueWithOptions
-			<
-				TCStrFormatType_Int_OptionsStatic_Radix
-					<
-						tf_Radix,
-						tf_COldOptions
-					>,
-				tf_CIntType
-			>
-			(_Int.f_GetValue(), TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, tf_COldOptions>(_Int.f_GetOptions()))
+		return TCValueWithOptions<TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, tf_COldOptions>, tf_CIntType>
+			(
+				_Int.f_GetValue()
+				, TCStrFormatType_Int_OptionsStatic_Radix<tf_Radix, tf_COldOptions>(_Int.f_GetOptions())
+			)
 		;
 	}
 
@@ -863,19 +865,19 @@ namespace NMib::NStr
 		{
 		}
 
-		constexpr inline_small static bool f_RestrictLength()
+		static constexpr inline_small bool f_RestrictLength()
 		{
 			return true;
 		}
 
-		constexpr inline_small static umint f_MinLength()
+		static constexpr inline_small umint f_MinLength()
 		{
-			return sizeof(umint)*2;
+			return sizeof(umint) * 2;
 		}
 
-		constexpr inline_small static umint f_MaxLength()
+		static constexpr inline_small umint f_MaxLength()
 		{
-			return sizeof(umint)*2;
+			return sizeof(umint) * 2;
 		}
 
 		inline_small static ch8 f_Fillout()

@@ -35,7 +35,7 @@ namespace NMib::NStr
 		template <typename tf_COptions>
 		inline_small aint f_ParseOption(COption &_Option, tf_COptions &_Options, t_CParser const &_ArgData) const;
 
-		constexpr static bool mc_bNeedDestruct = false;
+		static constexpr bool mc_bNeedDestruct = false;
 
 	private:
 		t_CFloatType &mp_Value;

@@ -110,14 +110,7 @@ namespace NMib::NStr
 	requires
 	(
 		NTraits::cIsPointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
-		&& NTraits::cIsSame
-		<
-			NTraits::TCRemoveReferenceAndQualifiers
-			<
-				NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
-			>
-			, typename t_CString::CChar
-		>
+		&& NTraits::cIsSame<NTraits::TCRemoveReferenceAndQualifiers<NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>>, typename t_CString::CChar>
 	)
 	void TCStringAppender<t_CString>::operator += (tf_CPointer const &_pString)
 	{
@@ -315,7 +308,7 @@ namespace NMib::NStr
 			fg_EncodeUTF8Char<true>
 				(
 					_Character
-					, [&](umint _nChars) inline_always_lambda ->typename t_CString::CUnsignedChar *
+					, [&](umint _nChars) inline_always_lambda -> typename t_CString::CUnsignedChar *
 					{
 						umint NeededLen = mp_StrLen + _nChars;
 						if (NeededLen > mp_MaxLen)

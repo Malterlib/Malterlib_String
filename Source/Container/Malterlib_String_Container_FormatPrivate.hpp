@@ -15,32 +15,21 @@ namespace NMib::NStr
 namespace NMib::NStr::NPrivate
 {
 	template <typename t_CData, typename t_CFormatter>
-	concept cHas_f_GetStringFormatType =
-		requires
-		(
-			t_CData *_pData
-			, t_CFormatter &_Formatter
-		)
+	concept cHas_f_GetStringFormatType = requires (t_CData *_pData, t_CFormatter &_Formatter)
 		{
 			_pData->f_GetStringFormatType(_Formatter);
 		}
 	;
 
 	template <typename t_CData, typename t_CFormatter>
-	concept cHas_f_CreateStringFormatter =
-		requires
-		(
-			t_CData const *_pData
-			, t_CFormatter &_Formatter
-		)
+	concept cHas_f_CreateStringFormatter = requires (t_CData const *_pData, t_CFormatter &_Formatter)
 		{
 			_pData->f_CreateStringFormatter(_Formatter);
 		}
 	;
 
 	template <typename t_CData>
-	concept cHas_f_Format =
-		requires (t_CData const *_pData, CStr &o_Str)
+	concept cHas_f_Format = requires (t_CData const *_pData, CStr &o_Str)
 		{
 			_pData->f_Format(o_Str);
 		}
@@ -62,9 +51,9 @@ namespace NMib::NStr::NPrivate
 		typename t_CFormatter
 		, typename t_CData
 		, EStringFormatType t_FormatType
-		= cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter> ? EStringFormatType::mc_InlineCreateStringFormatter
-		: cHas_f_Format<t_CData> ? EStringFormatType::mc_Inline
-		: EStringFormatType::mc_FormatterTemplate
+		= cHas_f_GetStringFormatType<t_CData, t_CFormatter> && cHas_f_CreateStringFormatter<t_CData, t_CFormatter>
+		? EStringFormatType::mc_InlineCreateStringFormatter
+		: cHas_f_Format<t_CData> ? EStringFormatType::mc_Inline : EStringFormatType::mc_FormatterTemplate
 	>
 	struct TCStringFormatterHelper;
 

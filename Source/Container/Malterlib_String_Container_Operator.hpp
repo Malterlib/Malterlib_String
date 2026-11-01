@@ -29,7 +29,7 @@ namespace NMib::NStr
 
 	template <typename t_TCStrTraits>
 	template <typename t_CStrTraitsF>
-	inline_large TCStr<t_TCStrTraits> & TCStr<t_TCStrTraits>::operator += (TCStr<t_CStrTraitsF> const &_Str)
+	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator += (TCStr<t_CStrTraitsF> const &_Str)
 	{
 		if (f_IsEmpty())
 			f_SetStr(_Str);
@@ -166,5 +166,4 @@ namespace NMib::NStr
 	{
 		return fg_StrCmp(f_GetStr(), f_GetLen(), _pRight) <=> 0;
 	}
-
 }

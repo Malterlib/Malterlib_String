@@ -69,13 +69,14 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_CTCStrTraits0, typename tf_CTCStrTraits1, typename tf_CEscapeChar, typename tf_CReplaceChars>
-	inline_small TCStr<tf_CTCStrTraits0> &fg_StrEscapeStr
+	inline_small auto fg_StrEscapeStr
 		(
 			TCStr<tf_CTCStrTraits0> &_StrDest
 			, TCStr<tf_CTCStrTraits1> const &_StrSource
 			, tf_CEscapeChar const *_pEscapedChars
 			, tf_CReplaceChars const *_pReplaceChars
 		)
+		-> TCStr<tf_CTCStrTraits0> &
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits0, tf_CTCStrTraits1>::mc_Value, "Not supported");
 
@@ -110,7 +111,7 @@ namespace NMib::NStr
 		return _StrDest;
 	}
 
-	template<typename tf_CTCStrTraits0, typename tf_CTCStrTraits1>
+	template <typename tf_CTCStrTraits0, typename tf_CTCStrTraits1>
 	inline_small TCStr<tf_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStr<tf_CTCStrTraits0> &_StrDest, TCStr<tf_CTCStrTraits1> const &_StrSource)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits0, tf_CTCStrTraits1>::mc_Value, "Not supported");
@@ -138,7 +139,7 @@ namespace NMib::NStr
 		return _StrDest;
 	}
 
-	template<typename tf_CTCStrTraits0, typename tf_CTCStrTraits1, typename tf_CEscapeChar>
+	template <typename tf_CTCStrTraits0, typename tf_CTCStrTraits1, typename tf_CEscapeChar>
 	inline_small TCStr<tf_CTCStrTraits0> &fg_StrEscapeStrNoQuotes(TCStr<tf_CTCStrTraits0> &_StrDest, TCStr<tf_CTCStrTraits1> const &_StrSource, tf_CEscapeChar const *_pEscapedChars)
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits0, tf_CTCStrTraits1>::mc_Value, "Not supported");
@@ -174,14 +175,15 @@ namespace NMib::NStr
 		return _StrDest;
 	}
 
-	template<typename tf_CTCStrTraits0, typename tf_CTCStrTraits1, typename tf_CEscapeChar, typename tf_CReplaceChars>
-	inline_small TCStr<tf_CTCStrTraits0> &fg_StrEscapeStrNoQuotes
+	template <typename tf_CTCStrTraits0, typename tf_CTCStrTraits1, typename tf_CEscapeChar, typename tf_CReplaceChars>
+	inline_small auto fg_StrEscapeStrNoQuotes
 		(
 			TCStr<tf_CTCStrTraits0> &_StrDest
 			, TCStr<tf_CTCStrTraits1> const &_StrSource
 			, tf_CEscapeChar const *_pEscapedChars
 			, tf_CReplaceChars const *_pReplaceChars
 		)
+		-> TCStr<tf_CTCStrTraits0> &
 	{
 		static_assert(TCIsStrCompatibleWrite<tf_CTCStrTraits0, tf_CTCStrTraits1>::mc_Value, "Not supported");
 

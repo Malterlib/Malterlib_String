@@ -77,7 +77,7 @@ namespace NMib::NStr
 	}
 
 	template <ch32 t_FillOut, typename t_CParent>
-	inline_small TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_CParent>::TICStrFormatType_StaticOptions_FillOut (t_CParent const &_Parent)
+	inline_small TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_CParent>::TICStrFormatType_StaticOptions_FillOut(t_CParent const &_Parent)
 		: t_CParent(_Parent)
 	{
 	}
@@ -122,16 +122,11 @@ namespace NMib::NStr
 	template <umint t_MinLength, typename t_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMinLength(t_CValueType const &_Value)
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_MinLength
-					<
-						t_MinLength,
-						CStrFormatType_StaticOptions
-					>,
-				t_CValueType
-			>
-			(_Value, TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>, t_CValueType>
+			(
+				_Value
+				, TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+			)
 		;
 	}
 
@@ -139,33 +134,22 @@ namespace NMib::NStr
 	inline_small auto fg_FormatMinLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>, t_CValueType>
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_MinLength
-					<
-						t_MinLength,
-						t_COldOptions
-					>,
-				t_CValueType
-			>
-			(_Value.f_GetValue(), TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>(_Value.f_GetOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>, t_CValueType>
+			(
+				_Value.f_GetValue()
+				, TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>(_Value.f_GetOptions())
+			)
 		;
 	}
-
 
 	template <umint t_MaxLength, typename t_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMaxLength(t_CValueType const &_Value)
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_MaxLength
-					<
-						t_MaxLength,
-						CStrFormatType_StaticOptions
-					>,
-				t_CValueType
-			>
-			(_Value, TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>, t_CValueType>
+			(
+				_Value
+				, TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+			)
 		;
 	}
 
@@ -173,32 +157,22 @@ namespace NMib::NStr
 	inline_small auto fg_FormatMaxLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>, t_CValueType>
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_MaxLength
-					<
-						t_MaxLength,
-						t_COldOptions
-					>,
-				t_CValueType
-			>
-			(_Value.f_GetValue(), TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>(_Value.f_GetOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>, t_CValueType>
+			(
+				_Value.f_GetValue()
+				, TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>(_Value.f_GetOptions())
+			)
 		;
 	}
 
 	template <ch32 t_FillOut, typename t_CValueType>
 	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatFillOut(t_CValueType const &_Value)
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_FillOut
-					<
-						t_FillOut,
-						CStrFormatType_StaticOptions
-					>,
-				t_CValueType
-			>
-			(_Value, TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>, t_CValueType>
+			(
+				_Value
+				, TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+			)
 		;
 	}
 
@@ -206,16 +180,11 @@ namespace NMib::NStr
 	inline_small auto fg_FormatFillOut(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
 		-> TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>, t_CValueType>
 	{
-		return TCValueWithOptions
-			<
-				TICStrFormatType_StaticOptions_FillOut
-					<
-						t_FillOut,
-						t_COldOptions
-					>,
-				t_CValueType
-			>
-			(_Value.f_GetValue(), TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>(_Value.f_GetOptions()))
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>, t_CValueType>
+			(
+				_Value.f_GetValue()
+				, TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>(_Value.f_GetOptions())
+			)
 		;
 	}
 
@@ -274,8 +243,15 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CData, typename t_CFormatType, typename t_COptions>
-	TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions>
-		::TICStrFormatType_ParseOptionsArgs(t_CData &_Data, t_CFormatType const &_FormatType, CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFormatter const &_Formatter)
+	TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions>::TICStrFormatType_ParseOptionsArgs
+		(
+			t_CData &_Data
+			, t_CFormatType const &_FormatType
+			, CString &_String
+			, aint &_CurrentStrLen
+			, t_COptions &_Options
+			, CFormatter const &_Formatter
+		)
 		: m_Data(_Data)
 		, m_FormatType(_FormatType)
 		, m_String(_String)
@@ -318,16 +294,12 @@ namespace NMib::NStr
 
 			TICStrFormatType const *pFormatVar = _ArgData.f_GetArg(ArgNumber);
 			if (pFormatVar)
-			{
 				return pFormatVar->f_Get_aint();
-			}
 			else
 				return _FailValue;
 		}
 		else
-		{
 			return CStrTraits::fs_StrToIntBase10(m_pDataStart, _FailValue);
-		}
 	}
 
 	template <typename t_CFormatter>
@@ -344,16 +316,12 @@ namespace NMib::NStr
 
 			TICStrFormatType const *pFormatVar = _ArgData.f_GetArg(ArgNumber);
 			if (pFormatVar)
-			{
 				return pFormatVar->f_Get_aint();
-			}
 			else
 				return _FailValue;
 		}
 		else
-		{
 			return (aint)CStrTraits::fs_StrToIntBase10NoSign(m_pDataStart, (umint)_FailValue);
-		}
 	}
 
 	template <typename t_CFormatter>
@@ -370,15 +338,13 @@ namespace NMib::NStr
 
 			TICStrFormatType const *pFormatVar = _ArgData.f_GetArg(ArgNumber);
 			if (pFormatVar)
-			{
 				return pFormatVar->f_Get_fp32();
-			}
 			else
 				return _FailValue;
 		}
 		else
 		{
-			constexpr static CChar const c_Terminators[] = {',','}',0};
+			static constexpr CChar const c_Terminators[] = {',', '}', 0};
 
 			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
@@ -398,15 +364,13 @@ namespace NMib::NStr
 
 			TICStrFormatType const *pFormatVar = _ArgData.f_GetArg(ArgNumber);
 			if (pFormatVar)
-			{
 				return pFormatVar->f_Get_fp64();
-			}
 			else
 				return _FailValue;
 		}
 		else
 		{
-			constexpr static CChar const c_Terminators[] = {',','}',0};
+			static constexpr CChar const c_Terminators[] = {',', '}', 0};
 
 			return CStrTraits::fs_StrToFloatExactNullTerminated(m_pDataStart, _FailValue, c_Terminators);
 		}
@@ -447,7 +411,6 @@ namespace NMib::NStr
 			{
 				if (!_Args.m_FormatType.f_ParseOption(_Args, Option))
 					Option.f_DisplayUnknownFormat(_Args.m_String, _Args.m_CurrentStrLen);
-
 			}
 		}
 	}
@@ -458,13 +421,9 @@ namespace NMib::NStr
 	{
 		switch (_Option.m_FormatTypes.m_Format1)
 		{
-			// Format
-		case 'L':
-			_Args.m_Options.m_MinLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0);
-			break;
-		case 'M':
-			_Args.m_Options.m_MaxLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, TCLimitsInt<aint>::mc_Max);
-			break;
+		// Format
+		case 'L': _Args.m_Options.m_MinLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0); break;
+		case 'M': _Args.m_Options.m_MaxLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, TCLimitsInt<aint>::mc_Max); break;
 		case 'S':
 			{
 				switch (_Option.m_FormatTypes.m_Format2)
@@ -473,20 +432,14 @@ namespace NMib::NStr
 				case 'Z':
 					_Args.m_Options.m_MaxLength = _Args.m_Options.m_MinLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0);
 					break;
-				case 'L':
-					_Args.m_Options.m_MinLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0);
-					break;
-				case 'M':
-					_Args.m_Options.m_MaxLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, TCLimitsInt<aint>::mc_Max);
-					break;
+				case 'L': _Args.m_Options.m_MinLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0); break;
+				case 'M': _Args.m_Options.m_MaxLength = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, TCLimitsInt<aint>::mc_Max); break;
 				case 'F':
 					{
 						_Args.m_Options.m_Fillout = *_Option.m_pDataStart;
 					}
 					break;
-				default:
-					return false;
-					break;
+				default: return false; break;
 				}
 			}
 			break;
@@ -503,15 +456,11 @@ namespace NMib::NStr
 					_Args.m_Options.m_Align = _Option.f_GetData_aint_NotSigned(_Args.m_Formatter, 0);
 					_Args.m_Options.m_bSimpleAlign = _Args.m_Options.m_Align == 0;
 					break;
-				default:
-					return false;
-					break;
+				default: return false; break;
 				}
 				break;
 			}
-		default:
-			return false;
-			break;
+		default: return false; break;
 		}
 		return true;
 	}
@@ -568,9 +517,7 @@ namespace NMib::NStr
 			if (_Options.f_LeftAlign())
 			{
 				if ((_SubStrLen) > _Options.f_MaxLength())
-				{
 					Args.m_Len = _Options.f_MaxLength();
-				}
 			}
 			else
 			{
@@ -597,9 +544,7 @@ namespace NMib::NStr
 		if (_Options.f_RestrictLength())
 		{
 			if (_SubStrLen < _Options.f_MinLength())
-			{
 				_String.f_AddCharsLengthAware(_CurrentStrLen, _Options.f_Fillout(), _Options.f_MinLength() - _SubStrLen);
-			}
 			else
 			{
 				if (_SubStrLen > _Options.f_MaxLength())
@@ -674,9 +619,7 @@ namespace NMib::NStr
 			case '}':
 				pFormat = nullptr;
 				break;
-			case ',':
-				++pFormat;
-				break;
+			case ',': ++pFormat; break;
 			default:
 				++pFormat;
 				continue;

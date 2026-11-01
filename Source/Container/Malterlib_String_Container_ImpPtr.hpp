@@ -106,7 +106,7 @@ namespace NMib::NStr
 	inline_medium aint TCStrImp_Ptr<t_CStrTraits>::f_GetStrLen() const
 	{
 		if (m_Len == mc_InvalidStrLen)
-			const_cast<TCStrImp_Ptr*>(this)->m_Len = t_CStrTraits::fs_StrLen(m_pData);
+			const_cast<TCStrImp_Ptr *>(this)->m_Len = t_CStrTraits::fs_StrLen(m_pData);
 
 		return m_Len;
 	}

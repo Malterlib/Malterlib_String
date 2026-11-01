@@ -15,9 +15,17 @@
 
 namespace NMib::NStr
 {
-	struct CStrInitGeneral {};
-	struct CInitByRange {};
-	struct CAllowNUL {};
+	struct CStrInitGeneral
+	{
+	};
+
+	struct CInitByRange
+	{
+	};
+
+	struct CAllowNUL
+	{
+	};
 
 	template <typename t_CString>
 	struct TCStringAppender;
@@ -26,23 +34,8 @@ namespace NMib::NStr
 	using TCGetUnicodeIterator = TCConditional
 		<
 			sizeof(t_CChar) == 1
-			, TCConditional
-			<
-				t_StrType == EStrType_UTF
-				, CStrIteratorUTF8
-				, TCStrIteratorUnicode<t_CChar>
-			>
-			, TCConditional
-			<
-				sizeof(t_CChar) == 2
-				, TCConditional
-				<
-					t_StrType == EStrType_UTF
-					, CStrIteratorUTF16
-					, TCStrIteratorUnicode<t_CChar>
-				>
-				, TCStrIteratorUnicode<t_CChar>
-			>
+			, TCConditional<t_StrType == EStrType_UTF, CStrIteratorUTF8, TCStrIteratorUnicode<t_CChar>>
+			, TCConditional<sizeof(t_CChar) == 2, TCConditional<t_StrType == EStrType_UTF, CStrIteratorUTF16, TCStrIteratorUnicode<t_CChar>>, TCStrIteratorUnicode<t_CChar>>
 		>
 	;
 
@@ -132,7 +125,7 @@ namespace NMib::NStr
 		;
 
 		template <typename ...tfp_CParams>
-		constexpr inline_large TCStr(CStrInitGeneral _Init, tfp_CParams &&...p_Params)
+		constexpr inline_large TCStr(CStrInitGeneral _Init, tfp_CParams && ...p_Params)
 			requires requires ()
 			{
 				CImp(fg_Forward<tfp_CParams>(p_Params)...);
@@ -148,7 +141,7 @@ namespace NMib::NStr
 		inline static TCStr fs_ToStr(tf_CType const &_Format);
 
 		template <typename tf_CType>
-		static TCStr fs_ToStr(CChar const *_pFormat, tf_CType const& _Format);
+		static TCStr fs_ToStr(CChar const *_pFormat, tf_CType const &_Format);
 
 		template <typename tf_CStrDataType>
 		static TCStr fs_Create(tf_CStrDataType const *_pStr);
@@ -174,7 +167,7 @@ namespace NMib::NStr
 		inline_small CChar *f_GetStrUniqueWritable();
 		inline_small operator CChar const * () const;
 
-		constexpr inline_small bool f_IsEmpty () const;
+		constexpr inline_small bool f_IsEmpty() const;
 		constexpr inline_small explicit operator bool () const;
 
 		TCStrSpan<typename CStrTraits::CTypes> f_Span() const;
@@ -232,26 +225,21 @@ namespace NMib::NStr
 		inline_medium static void fs_ToStrInplace
 			(
 				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-				, tf_CType const& _Format
+				, tf_CType const &_Format
 			)
 		;
 
 		template <typename tf_CType>
-		static void fs_ToStrInplace
-			(
-				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-				, tf_CType const& _Format
-			)
-		;
+		static void fs_ToStrInplace(TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination, tf_CType const &_Format);
 
 		template <typename tf_CType>
-		static void fs_ToStrInplace(TCStr &_Destination, CChar const *_pFormat, tf_CType const& _Format);
+		static void fs_ToStrInplace(TCStr &_Destination, CChar const *_pFormat, tf_CType const &_Format);
 
 		template <typename tf_CType>
 		inline_medium static void fs_ToStrInplaceConcat
 			(
 				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-				, tf_CType const& _Format
+				, tf_CType const &_Format
 			)
 		;
 
@@ -259,21 +247,16 @@ namespace NMib::NStr
 		inline_medium static void fs_ToStrInplaceConcat
 			(
 				TCEnableIf<!NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-				, tf_CType const& _Format
+				, tf_CType const &_Format
 				, aint &_Len
 			)
 		;
 
 		template <typename tf_CType>
-		static void fs_ToStrInplaceConcat
-			(
-				TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination
-				, tf_CType const& _Format
-			)
-		;
+		static void fs_ToStrInplaceConcat(TCEnableIf<NTraits::cIsSame<typename TCStringFormatterAll<CFormat, tf_CType>::CFormatType, int>, TCStr> &_Destination, tf_CType const &_Format);
 
 		template <typename tf_CType>
-		static void fs_ToStrInplaceConcat(TCStr &_Destination, CChar const *_pFormat, tf_CType const& _Format);
+		static void fs_ToStrInplaceConcat(TCStr &_Destination, CChar const *_pFormat, tf_CType const &_Format);
 
 		template <typename tf_CData>
 		inline_small void f_SetAt(aint _Index, tf_CData _Character);
@@ -640,23 +623,17 @@ namespace NMib::NStr
 		inline_large TCStr &operator += (TCStr<tf_CStrTraitsF> &&_Str);
 
 		template <typename tf_CStrTraitsF>
-		TCStr operator + (TCStr<tf_CStrTraitsF> const &_Str)  const;
+		TCStr operator + (TCStr<tf_CStrTraitsF> const &_Str) const;
 
 		template <typename tf_CStrDataType>
 		TCStr operator + (tf_CStrDataType const *_pToAdd) const;
 
 		TCStr operator ^ (umint _nCopies) const;
 
-		constexpr static CChar mc_FormatStr[] = {'{', '}', 0};
+		static constexpr CChar mc_FormatStr[] = {'{', '}', 0};
 
 	private:
-		using CTempStr = TCConditional
-			<
-				NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
-				, CStrNonTracked
-				, CStr
-			>
-		;
+		using CTempStr = TCConditional<NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>, CStrNonTracked, CStr>;
 
 		static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
@@ -683,34 +660,24 @@ namespace NMib::NStr
 		enum
 		{
 			EDebug_CharSize = sizeof(CChar)
-			, EDebug_Type = t_CTCStrTraits::CStrTraits::mc_Type
+			, EDebug_Type   = t_CTCStrTraits::CStrTraits::mc_Type
 		};
 	};
 
 	template <typename t_TCStr0, typename t_TCStr1>
 	struct TCIsStrCompatible
 	{
-		constexpr static bool mc_Value =
-			(
-				sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar)
-				&& t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type
-			)
-			||
-			(
-				t_TCStr0::CStrTraits::mc_Type == EStrType_Unicode
-				&& t_TCStr1::CStrTraits::mc_Type == EStrType_Unicode
-			)
+		static constexpr bool mc_Value
+			= (sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar) && t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type)
+			|| (t_TCStr0::CStrTraits::mc_Type == EStrType_Unicode && t_TCStr1::CStrTraits::mc_Type == EStrType_Unicode)
 		;
 	};
 
 	template <typename t_TCStr0, typename t_TCStr1>
 	struct TCIsStrCompatibleWrite
 	{
-		constexpr static bool mc_Value =
-			(
-				sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar)
-				&& t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type
-			)
+		static constexpr bool mc_Value
+			= (sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar) && t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type)
 			||
 			(
 				sizeof(typename t_TCStr0::CStrTraits::CChar) >= sizeof(typename t_TCStr1::CStrTraits::CChar)

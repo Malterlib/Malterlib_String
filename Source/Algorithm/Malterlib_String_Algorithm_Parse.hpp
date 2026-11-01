@@ -128,7 +128,7 @@ namespace NMib::NStr
 			++pParse;
 		}
 
-		_pParse = (tf_CChar const * )pParse;
+		_pParse = (tf_CChar const *)pParse;
 	}
 
 	template <typename tf_CChar>

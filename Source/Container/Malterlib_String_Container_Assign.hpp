@@ -85,13 +85,7 @@ namespace NMib::NStr
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
 			else
 			{
-				using CTempAnsiStr = TCConditional
-					<
-						NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>
-						, CAnsiStrNonTracked
-						, CAnsiStr
-					>
-				;
+				using CTempAnsiStr = TCConditional<NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>, CAnsiStrNonTracked, CAnsiStr>;
 				CTempAnsiStr Ansi(_From.f_GetStr(), _From.f_GetLen());
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Temp);
 			}
@@ -105,16 +99,16 @@ namespace NMib::NStr
 			CImp::f_SetStrLen(Length);
 		}
 		else if constexpr
-			(
-				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
-			)
+		(
+			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+		)
 		{
 			f_SetStr(_From.f_GetStr(), _From.f_GetLen());
 		}
 		else if constexpr
-			(
-				t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
-			)
+		(
+			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+		)
 		{
 			if (*_From.f_GetStr() != 0)
 			{
@@ -126,8 +120,6 @@ namespace NMib::NStr
 				this->f_Clear();
 		}
 		else
-		{
 			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
-		}
 	}
 }

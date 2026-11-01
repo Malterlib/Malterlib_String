@@ -201,7 +201,6 @@ namespace NMib::NStr
 		return fg_StrFindCharsReverseNoCase(*this, _pChars, _MaxLen);
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
 	inline_small aint TCStr<t_CTCStrTraits>::f_FindChars(TCStr<tf_CTCStrTraits> const &_Chars) const
@@ -257,7 +256,6 @@ namespace NMib::NStr
 	{
 		return fg_StrFindCharsReverseNoCase(*this, _Chars, _MaxLen);
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
@@ -457,7 +455,6 @@ namespace NMib::NStr
 		return fg_StrFindReverseNoCase(*this, _Str, _MaxLen, _FindLen);
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
 	inline_small bool TCStr<t_CTCStrTraits>::f_StartsWith(tf_CData const *_pStr) const
@@ -485,7 +482,6 @@ namespace NMib::NStr
 	{
 		return fg_StrStartsWithNoCase(*this, _Str);
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData>
@@ -515,13 +511,11 @@ namespace NMib::NStr
 		return fg_StrEndsWithNoCase(*this, _Str);
 	}
 
-
 	template <typename t_CTCStrTraits>
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAnsi() const
 	{
 		return fg_StrIsAnsiLengthAware(f_GetStr(), f_GetLen());
 	}
-
 
 	template <typename t_CTCStrTraits>
 	inline_small bool TCStr<t_CTCStrTraits>::f_IsAlphaNumeric() const
@@ -672,7 +666,6 @@ namespace NMib::NStr
 		return Return;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <bool tf_bRemoveEmpty>
 	NContainer::TCVector<TCStr<t_CTCStrTraits>> TCStr<t_CTCStrTraits>::f_SplitEscaped(CChar _Separator) const
@@ -756,8 +749,16 @@ namespace NMib::NStr
 		umint SeparatorLen = fg_StrLen(_Separator);
 		auto const *pSeparator = [&]() inline_always_lambda
 			{
-				if constexpr (requires { _Separator.f_GetStr(); })
+				if constexpr
+				(
+					requires
+					{
+						_Separator.f_GetStr();
+					}
+				)
+				{
 					return _Separator.f_GetStr();
+				}
 				else
 					return _Separator;
 			}
@@ -912,7 +913,6 @@ namespace NMib::NStr
 		return Temp;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace) const -> TCStr
@@ -930,7 +930,6 @@ namespace NMib::NStr
 		fg_StrReplace(Temp, _StrFind, _StrReplace);
 		return Temp;
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
@@ -950,7 +949,6 @@ namespace NMib::NStr
 		return Temp;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace) const -> TCStr
@@ -969,7 +967,6 @@ namespace NMib::NStr
 		return Temp;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
 	auto TCStr<t_CTCStrTraits>::f_ReplaceChar(tf_CData _CharFind, tf_CData2 _CharReplace) const -> TCStr
@@ -978,7 +975,6 @@ namespace NMib::NStr
 		fg_StrReplaceChar(Temp, _CharFind, _CharReplace);
 		return Temp;
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
@@ -998,7 +994,6 @@ namespace NMib::NStr
 		return Temp;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
 	auto TCStr<t_CTCStrTraits>::f_Replace(tf_CData const *_pStrFind, TCStr<tf_CTCStrTraits> const &_StrReplace, umint _MaxLen) const -> TCStr
@@ -1017,7 +1012,6 @@ namespace NMib::NStr
 		return Temp;
 	}
 
-
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData, typename tf_CData2>
 	auto TCStr<t_CTCStrTraits>::f_ReplaceNoCase(tf_CData const *_pStrFind, tf_CData2 const *_pStrReplace, umint _MaxLen) const -> TCStr
@@ -1035,7 +1029,6 @@ namespace NMib::NStr
 		fg_StrReplaceNoCase(Temp, _StrFind, _pStrReplace, _MaxLen);
 		return Temp;
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits, typename tf_CData>
@@ -1063,7 +1056,6 @@ namespace NMib::NStr
 		fg_StrReplaceChar(Temp, _CharFind, _CharReplace, _MaxLen);
 		return Temp;
 	}
-
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CData2>
@@ -1152,7 +1144,6 @@ namespace NMib::NStr
 		fg_StrEscapeStrNoQuotes(Temp, *this, _pEscapeChars, _pReplaceChars);
 		return Temp;
 	}
-
 
 	template <typename t_CTCStrTraits>
 	auto TCStr<t_CTCStrTraits>::f_Delete(aint _StartChar, umint _nChars) const -> TCStr

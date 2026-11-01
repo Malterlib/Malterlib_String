@@ -223,7 +223,7 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2>
+	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, umint _MaxLen)
 	{
 		tf_CData1 *pDest = _pStrDest;
@@ -254,7 +254,7 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2>
+	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource)
 	{
 		tf_CData1 *pDest = _pStrDest;
@@ -276,7 +276,7 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars, umint _MaxLen)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -317,7 +317,7 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars)
 	{
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -349,15 +349,9 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
-	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes
-		(
-			tf_CData1 *_pStrDest
-			, tf_CData2 const *_pStrSource
-			, tf_CEscapeChar const *_pEscapeChars
-			, tf_CReplaceChar const *_pReplaceChars
-			, umint _MaxLen
-		)
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
+	inline_large auto fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars, tf_CReplaceChar const *_pReplaceChars, umint _MaxLen)
+		-> tf_CData1 *
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
 		using CData1 = NTraits::TCUnsigned<tf_CData1>;
@@ -400,7 +394,7 @@ namespace NMib::NStr
 		return _pStrDest;
 	}
 
-	template<typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
+	template <typename tf_CData1, typename tf_CData2, typename tf_CEscapeChar, typename tf_CReplaceChar>
 	inline_large tf_CData1 *fg_StrEscapeStrNoQuotes(tf_CData1 *_pStrDest, tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars, tf_CReplaceChar const *_pReplaceChars)
 	{
 		DMibFastCheck(fg_StrLen(_pEscapeChars) == fg_StrLen(_pReplaceChars));
@@ -436,32 +430,32 @@ namespace NMib::NStr
 	}
 
 	// Size in chars required for escaped string, EXCLUDING null.
-	template<typename tf_CData2>
+	template <typename tf_CData2>
 	inline_large umint fg_StrEscapedLength(tf_CData2 const *_pStrSource)
 	{
 		umint nEscapedChars = 0;
 
-		++nEscapedChars;	// '"'
+		++nEscapedChars; // '"'
 		tf_CData2 const *pParse = _pStrSource;
 
 		while (*pParse)
 		{
 			if (*pParse == '\"' || *pParse == '\\')
 			{
-				++nEscapedChars;	// '\\'
-				++nEscapedChars;	// '<char>'
+				++nEscapedChars; // '\\'
+				++nEscapedChars; // '<char>'
 				++pParse;
 				continue;
 			}
-			++nEscapedChars;	// Char copy
+			++nEscapedChars; // Char copy
 		}
-		++nEscapedChars;	// '"'
+		++nEscapedChars; // '"'
 		//++nEscapedChars;	// Null
 		return nEscapedChars;
 	}
 
 	// Size in chars required for escaped string, EXCLUDING null.
-	template<typename tf_CData2, typename tf_CEscapeChar>
+	template <typename tf_CData2, typename tf_CEscapeChar>
 	inline_large umint fg_StrEscapedLength(tf_CData2 const *_pStrSource, tf_CEscapeChar const *_pEscapeChars)
 	{
 		using CData2 = NTraits::TCUnsigned<tf_CData2>;
@@ -469,7 +463,7 @@ namespace NMib::NStr
 
 		umint nEscapedChars = 0;
 
-		++nEscapedChars;	// '"'
+		++nEscapedChars; // '"'
 		CData2 const *pParse = (CData2 const *)_pStrSource;
 
 		while (*pParse)
@@ -483,16 +477,16 @@ namespace NMib::NStr
 			}
 			if (_pEscapeChars[iEscape])
 			{
-				++nEscapedChars;	// '\\'
-				++nEscapedChars;	// '<char>'
+				++nEscapedChars; // '\\'
+				++nEscapedChars; // '<char>'
 
 				++pParse;
 				continue;
 			}
-			++nEscapedChars;	// Char Copy
+			++nEscapedChars; // Char Copy
 			++pParse;
 		}
-		++nEscapedChars;	// '"'
+		++nEscapedChars; // '"'
 		// Don't include null.
 		// ++nEscapedBytes;	// 0
 		return nEscapedChars;
@@ -622,10 +616,7 @@ namespace NMib::NStr
 				}
 
 				if (fg_StrStartsWith(pParse, _pSep))
-				{
 					break;
-				}
-
 			}
 			else if (Mode == 1)
 			{
@@ -639,9 +630,7 @@ namespace NMib::NStr
 				{
 					++pParse;
 					if (*pParse)
-					{
 						++pParse;
-					}
 					continue;
 				}
 			}
@@ -720,14 +709,14 @@ namespace NMib::NStr
 		return false;
 	}
 
-	template<typename tf_CStr>
+	template <typename tf_CStr>
 	tf_CStr fg_StrEscapeBashSingleQuotes(tf_CStr const &_Str)
 	{
 		tf_CStr Return;
 
 		Return.f_AddStr("'");
 
-		auto const* pParse = _Str.f_GetStr();
+		auto const *pParse = _Str.f_GetStr();
 
 		while (*pParse)
 		{
@@ -744,14 +733,14 @@ namespace NMib::NStr
 		return Return;
 	}
 
-	template<typename tf_CStr>
+	template <typename tf_CStr>
 	tf_CStr fg_StrEscapeBashDoubleQuotes(tf_CStr const &_Str)
 	{
 		tf_CStr Return;
 
 		Return.f_AddStr("\"");
 
-		auto const* pParse = _Str.f_GetStr();
+		auto const *pParse = _Str.f_GetStr();
 
 		while (*pParse)
 		{

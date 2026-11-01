@@ -161,16 +161,12 @@ namespace NMib::NStr
 				if constexpr (sizeof(tf_CData1) > sizeof(tf_CData2))
 				{
 					if (*pStr1 - *pCharsToTrim == 0)
-					{
 						break;
-					}
 				}
 				else
 				{
-					if (*pCharsToTrim - *pStr1  == 0)
-					{
+					if (*pCharsToTrim - *pStr1 == 0)
 						break;
-					}
 				}
 				++pCharsToTrim;
 			}

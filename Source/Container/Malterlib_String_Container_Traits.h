@@ -9,14 +9,14 @@ namespace NMib::NStr
 	struct TCStrTraitsTypes
 	{
 		using CChar = t_CChar;
-		constexpr static EStrType const mc_Type = (EStrType)t_Type;
+		static constexpr EStrType const mc_Type = (EStrType)t_Type;
 	};
 
 	template <typename t_CChar, CStrTypeUnderlying t_Type, typename t_CParams>
 	struct TCStrTraits
 	{
 		using CChar = t_CChar;
-		constexpr static EStrType mc_Type = (EStrType)t_Type;
+		static constexpr EStrType mc_Type = (EStrType)t_Type;
 		using CTypes = TCStrTraitsTypes<t_CChar, t_Type>;
 		using CParams = t_CParams;
 		using CAllocator = typename t_CParams::CAllocator;
@@ -34,7 +34,7 @@ namespace NMib::NStr
 		template <typename tf_CData, typename tf_CReturn>
 		static inline_small tf_CReturn fs_StrToIntBase10(tf_CData const *_pStr, tf_CReturn _FailValue);
 		template <typename tf_CData, typename tf_CReturn>
-		static inline_small tf_CReturn fs_StrToIntParse
+		static inline_small auto fs_StrToIntParse
 			(
 				tf_CData const * &_pStr
 				, tf_CReturn _FailValue
@@ -42,10 +42,11 @@ namespace NMib::NStr
 				, bool _bDontFail = false
 				, int32 _ParseMode = EStrToIntParseMode_Base10
 			)
+			-> tf_CReturn
 		;
 		template <typename tf_CData, typename tf_CReturn>
 		static inline_small tf_CReturn fs_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue);
-		template<typename tf_CData, typename tf_CReturn>
+		template <typename tf_CData, typename tf_CReturn>
 		static inline_small tf_CReturn fs_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator);
 		template <typename tf_CData>
 		static inline_small umint fs_StrLen(tf_CData const *_pStr);

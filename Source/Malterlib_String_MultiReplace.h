@@ -12,7 +12,7 @@ namespace NMib::NStr
 		struct CSort_Reverse
 		{
 			template <typename tf_CLeft, typename tf_CRight>
-			inline_small COrdering operator()(tf_CLeft &&_Left, tf_CRight &&_Right) const;
+			inline_small COrdering operator () (tf_CLeft &&_Left, tf_CRight &&_Right) const;
 		};
 
 		using CStringMap = NContainer::TCMap<CStr, CStr, CSort_Reverse>;

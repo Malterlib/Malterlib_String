@@ -39,14 +39,7 @@ namespace NMib::NStr
 		requires
 		(
 			NTraits::cIsPointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
-			&& NTraits::cIsSame
-			<
-				NTraits::TCRemoveReferenceAndQualifiers
-				<
-					NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>
-				>
-				, typename t_CString::CChar
-			>
+			&& NTraits::cIsSame<NTraits::TCRemoveReferenceAndQualifiers<NTraits::TCRemovePointer<NTraits::TCRemoveReferenceAndQualifiers<tf_CPointer>>>, typename t_CString::CChar>
 		)
 		void operator += (tf_CPointer const &_pString);
 

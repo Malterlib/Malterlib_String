@@ -18,12 +18,7 @@ namespace NMib::NStr
 	template <typename tf_CStr>
 	void TCParseLocation<t_CStr, t_bIncludeExtra>::f_Format(tf_CStr &o_FormatInto) const
 	{
-		o_FormatInto
-			+= typename tf_CStr::CFormat(DMibPFileLineColumnFormat)
-			<< m_File
-			<< m_Line
-			<< m_Column
-		;
+		o_FormatInto += typename tf_CStr::CFormat(DMibPFileLineColumnFormat) << m_File << m_Line << m_Column;
 	}
 
 	template <typename t_CStr, bool t_bIncludeExtra>
@@ -56,11 +51,7 @@ namespace NMib::NStr
 	template <typename tf_CStr>
 	void TCParseLocation<t_CStr, false>::f_Format(tf_CStr &o_FormatInto) const
 	{
-		o_FormatInto
-			+= typename tf_CStr::CFormat(DMibPFileLineFormat)
-			<< m_File
-			<< m_Line
-		;
+		o_FormatInto += typename tf_CStr::CFormat(DMibPFileLineFormat) << m_File << m_Line;
 	}
 
 	template <typename t_CStr>
