@@ -1115,8 +1115,8 @@ namespace
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xed\x9f\xbfx"))) == DMibExpr(CStr("x\xed\x9f\xbfx")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xee\x80\x80x"))) == DMibExpr(CStr("x\xee\x80\x80x"))); // Private use area
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xef\xbf\xbdx"))) == DMibExpr(CStr("x\xef\xbf\xbdx"))); // ReplacementChar character
-						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx"))); //Non-character codepoint
-						//Non-character codepoint
+						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"))) == DMibExpr(CStr("x\xf4\x8f\xbf\xbfx"))); // Non-character codepoint
+						// Non-character codepoint
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x8f\xbf\xbfx"), EValidateUTF8Flag::mc_DisallowNonCharacters)) == DMibExpr(CStr("x????x")));
 						DMibTest(DMibExpr(fg_ReplaceCharactersUTF8(CStr("x\xf4\x90\x80\x80x"))) == DMibExpr(CStr("x????x")));
 					}
@@ -1920,7 +1920,8 @@ namespace
 									(
 										fg_ViolatesSafeCheck
 										(
-											"reinterpret_cast<void const*>(&_String) != reinterpret_cast<void const*>(&_Value) 'You cannot assign a format to string that is used by reference as an argument.'"
+											"reinterpret_cast<void const *>(&_String) != reinterpret_cast<void const *>(&_Value) 'You cannot assign a format to string that is used by "
+											"reference as an argument.'"
 										)
 									)
 									== DMibLExpr((A = CStr::CFormat("{}{}") << A << "Value"))
