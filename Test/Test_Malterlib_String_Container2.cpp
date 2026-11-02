@@ -1786,10 +1786,11 @@ namespace
 			{
 				{
 					DMibTestPath("Move");
-					auto fMoveFormat = [](auto _Value) -> CStr::CFormat
+					auto fMoveFormat = [](auto const &_Value) -> CStr::CFormat
 						{
+							auto Value = _Value;
 							CStr::CFormat Format("{}");
-							Format << NMib::fg_ByValue(_Value);
+							Format << NMib::fg_ByValue(Value);
 							return NMib::fg_Move(Format);
 						}
 					;
