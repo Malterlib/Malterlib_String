@@ -43,6 +43,7 @@ using zuch32 = NMib::TCAutoClear<uch32>;
 #include "Malterlib_String_Parse.h"
 #include "Malterlib_String_UTF8.h"
 #include "Malterlib_String_Instantiated.hpp"
+#include "Malterlib_String_InstantiatedFormat.hpp"
 
 #ifndef DMibPNoShortCuts
 using namespace NMib::NStr;
