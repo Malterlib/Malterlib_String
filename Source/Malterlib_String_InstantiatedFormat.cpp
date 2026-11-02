@@ -23,7 +23,7 @@ namespace NMib::NStr
 	template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, uint32>;
 	template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, int8, TCStringFormatter<TCFormat<CStrTraits_CStr>, bool>::CBoolOptions>;
 	template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStrNonTracked>, int32 const &>;
-#ifdef DMibPUniqueType_mint
+#ifdef DMibPUniqueType_umint
 	template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, umint const &>;
 	template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStrNonTracked>, umint const &>;
 #endif

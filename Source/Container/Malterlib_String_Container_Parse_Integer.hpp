@@ -112,17 +112,17 @@ namespace NMib::NStr
 	}
 }
 
-#define DMibStrStringParserImplementInt(_Type) namespace NMib::NStr \
+#define DMibStrStringParserImplementInt(d_Type) namespace NMib::NStr \
 	{\
 		template <typename t_CParser> \
-		struct TCStringParser<t_CParser, _Type> \
+		struct TCStringParser<t_CParser, d_Type> \
 		{ \
-			static inline_large void f_CreateParse(t_CParser &_Formatter, _Type &_Data) \
+			static inline_large void f_CreateParse(t_CParser &_Formatter, d_Type &_Data) \
 			{ \
 				EStringParseTypeFlag Flags; \
-				void *pSpace = _Formatter.f_AllocSpace(sizeof(TCStrParseType_Int<t_CParser, _Type>), Flags); \
-				TCStrParseType_Int<t_CParser, _Type> *pNew = new(pSpace) TCStrParseType_Int<t_CParser, _Type>(_Data); \
-				Flags |= (TCStrParseType_Int<t_CParser, _Type>::mc_bNeedDestruct ? EStringParseTypeFlag::mc_NeedDestruct : EStringParseTypeFlag::mc_None); \
+				void *pSpace = _Formatter.f_AllocSpace(sizeof(TCStrParseType_Int<t_CParser, d_Type>), Flags); \
+				TCStrParseType_Int<t_CParser, d_Type> *pNew = new(pSpace) TCStrParseType_Int<t_CParser, d_Type>(_Data); \
+				Flags |= (TCStrParseType_Int<t_CParser, d_Type>::mc_bNeedDestruct ? EStringParseTypeFlag::mc_NeedDestruct : EStringParseTypeFlag::mc_None); \
 				_Formatter.fp_AddParse(pNew, Flags); \
 			} \
 		}; \

@@ -88,7 +88,7 @@ DMibStrStringParserImplementInt(int8192);
 DMibStrStringParserImplementInt(uint16384);
 DMibStrStringParserImplementInt(int16384);
 
-#ifdef DMibPUniqueType_mint
+#ifdef DMibPUniqueType_umint
 DMibStrStringParserImplementInt(umint);
 #endif
 #ifdef DMibPUniqueType_smint

@@ -308,7 +308,7 @@ DMibStrStringFormatterImplementInt(int8192);
 DMibStrStringFormatterImplementInt(uint16384);
 DMibStrStringFormatterImplementInt(int16384);
 
-#ifdef DMibPUniqueType_mint
+#ifdef DMibPUniqueType_umint
 DMibStrStringFormatterImplementInt(umint);
 #endif
 #ifdef DMibPUniqueType_smint

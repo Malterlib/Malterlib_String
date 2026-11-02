@@ -25,7 +25,7 @@ namespace NMib::NStr
 	extern template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, uint32>;
 	extern template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, int8, TCStringFormatter<TCFormat<CStrTraits_CStr>, bool>::CBoolOptions>;
 	extern template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStrNonTracked>, int32 const &>;
-#ifdef DMibPUniqueType_mint
+#ifdef DMibPUniqueType_umint
 	extern template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStr>, umint const &>;
 	extern template struct TCStrFormatType_Int<TCFormat<CStrTraits_CStrNonTracked>, umint const &>;
 #endif

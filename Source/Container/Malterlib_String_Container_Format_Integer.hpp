@@ -524,12 +524,12 @@ namespace NMib::NStr
 		while (1)
 		{
 #if 0
-#	define DUnrollCode(_Place) \
-		pStrPlace[-_Place] = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
+#	define DUnrollCode(d_Place) \
+		pStrPlace[-d_Place] = CChar('0') + fg_Convert<CChar>((_Number % tf_Radix));\
 		_Number /= tf_Radix;\
 		if (!_Number)\
 		{\
-			pStrPlace -= (_Place + 1);\
+			pStrPlace -= (d_Place + 1);\
 			break;\
 		}
 
@@ -918,27 +918,27 @@ namespace NMib::NStr
 	}
 }
 
-#define DMibStrStringFormatterImplementInt(_Type) namespace NMib::NStr \
+#define DMibStrStringFormatterImplementInt(d_Type) namespace NMib::NStr \
 	{ \
 		template <typename t_CFormatter> \
-		struct TCStringFormatter<t_CFormatter, _Type> \
+		struct TCStringFormatter<t_CFormatter, d_Type> \
 		{ \
 		public: \
-			using CFormatType = TCStrFormatType_Int<t_CFormatter, _Type const &>; \
+			using CFormatType = TCStrFormatType_Int<t_CFormatter, d_Type const &>; \
 			template <typename tf_CTypeWithConst> \
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, _Type const &_Data) \
+			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, d_Type const &_Data) \
 			{ \
 				_Formatter.template f_Alloc<CFormatType>(_Data);\
 				return typename CFormatType::CStrFormatTypeClassifier();\
 			} \
 		};\
 		template <typename t_CFormatter> \
-		struct TCStringFormatter<t_CFormatter, TCByValue<_Type>> \
+		struct TCStringFormatter<t_CFormatter, TCByValue<d_Type>> \
 		{ \
 		public: \
-			using CFormatType = TCStrFormatType_Int<t_CFormatter, _Type>; \
+			using CFormatType = TCStrFormatType_Int<t_CFormatter, d_Type>; \
 			template <typename tf_CTypeWithConst> \
-			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<_Type> const &_Data) \
+			static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, TCByValue<d_Type> const &_Data) \
 			{ \
 				_Formatter.template f_Alloc<CFormatType>(*_Data);\
 				return typename CFormatType::CStrFormatTypeClassifier();\
