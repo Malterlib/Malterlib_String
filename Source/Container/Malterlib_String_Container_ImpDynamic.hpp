@@ -315,6 +315,8 @@ namespace NMib::NStr
 
 		umint Size = sizeof(CData) + _Length * sizeof(CChar);
 
+		DMibFastCheck(Size - 1 != 0);
+		DMibAnalyzerAssume(Size - 1 != 0);
 		Size = CAllocator::f_SizePadded(umint(2) << NMib::fg_GetHighestBitSetNoZero(Size - 1));
 
 #if DMibEnableSafeCheck > 0
