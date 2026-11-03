@@ -239,8 +239,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CParser>
-	template <typename t_CParseType, typename t_COptions>
-	inline_small auto TICStrParseType<t_CParser>::fs_ParseOptions(t_CParseType const &_Parser, t_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData) -> CChar const *
+	template <typename tf_CParseType, typename tf_COptions>
+	inline_small auto TICStrParseType<t_CParser>::fs_ParseOptions(tf_CParseType const &_Parser, tf_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData) -> CChar const *
 	{
 		CChar const *pRet = _pParse;
 		while (_pParse)
@@ -261,8 +261,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CParser>
-	template <typename t_COptions>
-	inline_small aint TICStrParseType<t_CParser>::f_ParseOption(COption &_Option, t_COptions &_Options, t_CParser const &_ArgData) const
+	template <typename tf_COptions>
+	inline_small aint TICStrParseType<t_CParser>::f_ParseOption(COption &_Option, tf_COptions &_Options, t_CParser const &_ArgData) const
 	{
 		return false;
 	}

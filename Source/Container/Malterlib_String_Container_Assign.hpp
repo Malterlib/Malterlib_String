@@ -5,9 +5,9 @@
 
 namespace NMib::NStr
 {
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	void TCStr<t_TCStrTraits>::f_SetStr(tf_CStrDataType *_pStr)
+	void TCStr<t_CTCStrTraits>::f_SetStr(tf_CStrDataType *_pStr)
 	{
 		if (*_pStr != 0)
 		{
@@ -19,9 +19,9 @@ namespace NMib::NStr
 			this->f_Clear();
 	}
 
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	void TCStr<t_TCStrTraits>::f_SetStr(tf_CStrDataType const *_pStr, aint _Len)
+	void TCStr<t_CTCStrTraits>::f_SetStr(tf_CStrDataType const *_pStr, aint _Len)
 	{
 		if (_Len && *_pStr != 0)
 		{
@@ -33,8 +33,8 @@ namespace NMib::NStr
 			this->f_Clear();
 	}
 
-	template <typename t_TCStrTraits>
-	void TCStr<t_TCStrTraits>::f_SetStr(CChar const *_pStr)
+	template <typename t_CTCStrTraits>
+	void TCStr<t_CTCStrTraits>::f_SetStr(CChar const *_pStr)
 	{
 		if (*_pStr != 0)
 		{
@@ -46,8 +46,8 @@ namespace NMib::NStr
 			this->f_Clear();
 	}
 
-	template <typename t_TCStrTraits>
-	void TCStr<t_TCStrTraits>::f_SetStr(CChar const *_pStr, aint _Len)
+	template <typename t_CTCStrTraits>
+	void TCStr<t_CTCStrTraits>::f_SetStr(CChar const *_pStr, aint _Len)
 	{
 		if (_Len && *_pStr != 0)
 		{
@@ -60,8 +60,8 @@ namespace NMib::NStr
 			this->f_Clear();
 	}
 
-	template <typename t_TCStrTraits>
-	void TCStr<t_TCStrTraits>::f_SetStr(CAllowNUL, CChar const *_pStr, aint _Len)
+	template <typename t_CTCStrTraits>
+	void TCStr<t_CTCStrTraits>::f_SetStr(CAllowNUL _AllowNUL, CChar const *_pStr, aint _Len)
 	{
 		if (_Len)
 		{
@@ -74,14 +74,14 @@ namespace NMib::NStr
 			this->f_Clear();
 	}
 
-	template <typename t_TCStrTraits>
-	template <typename t_CStrTraitsF>
-	void TCStr<t_TCStrTraits>::f_SetStr(TCStr<t_CStrTraitsF> const &_From)
+	template <typename t_CTCStrTraits>
+	template <typename tf_CStrTraitsF>
+	void TCStr<t_CTCStrTraits>::f_SetStr(TCStr<tf_CStrTraitsF> const &_From)
 	{
-		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
+		if constexpr (tf_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_CTCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
 			CTempStr Temp;
-			if constexpr (t_CStrTraitsF::CImp::mc_bIsNullTerminated)
+			if constexpr (tf_CStrTraitsF::CImp::mc_bIsNullTerminated)
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
 			else
 			{
@@ -91,7 +91,7 @@ namespace NMib::NStr
 			}
 			f_SetStr(Temp);
 		}
-		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
+		else if constexpr (tf_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_CTCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
 		{
 			aint Length = 0;
 			CAddStrAgrs Args(Length, _From.f_GetLen());
@@ -100,14 +100,14 @@ namespace NMib::NStr
 		}
 		else if constexpr
 		(
-			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			tf_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (tf_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename tf_CStrTraitsF::CStrTraits::CChar))
 		)
 		{
 			f_SetStr(_From.f_GetStr(), _From.f_GetLen());
 		}
 		else if constexpr
 		(
-			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			tf_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(tf_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename tf_CStrTraitsF::CStrTraits::CChar))
 		)
 		{
 			if (*_From.f_GetStr() != 0)
@@ -120,6 +120,6 @@ namespace NMib::NStr
 				this->f_Clear();
 		}
 		else
-			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
+			static_assert(NTraits::gc_MakeValueDependent<false, tf_CStrTraitsF>, "Unhandled case");
 	}
 }

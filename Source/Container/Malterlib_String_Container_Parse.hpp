@@ -142,10 +142,10 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	template <typename t_CType>
-	inline_small auto TCStrParse<t_CStrTraits>::operator >> (t_CType &_Type) -> TCStrParse &
+	template <typename tf_CType>
+	inline_small auto TCStrParse<t_CStrTraits>::operator >> (tf_CType &_Type) -> TCStrParse &
 	{
-		TCStringParser<TCStrParse, t_CType>::fs_CreateParse(*this, _Type);
+		TCStringParser<TCStrParse, tf_CType>::fs_CreateParse(*this, _Type);
 		return *this;
 	}
 

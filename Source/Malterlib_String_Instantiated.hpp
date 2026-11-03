@@ -5,6 +5,7 @@
 
 namespace NMib::NStr
 {
+	// NOLINTBEGIN(malterlib-parameter-naming): the check asks for parameter names in explicit instantiations, which have none
 	extern template struct TCStr<CStrTraits_CStr>;
 	extern template struct TCStr<CStrTraits_CWStr>;
 	extern template struct TCStr<CStrTraits_CUStr>;
@@ -29,4 +30,5 @@ namespace NMib::NStr
 
 	extern template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator = (TCStr<NMib::NStr::CStrTraits_CStr> const &);
 	extern template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
+	// NOLINTEND(malterlib-parameter-naming)
 }

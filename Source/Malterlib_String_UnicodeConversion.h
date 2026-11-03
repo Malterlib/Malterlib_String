@@ -93,14 +93,14 @@ namespace NMib::NStr
 	template <typename tf_CChar, umint tf_Size = sizeof(tf_CChar)>
 	TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>> fg_GetUnicodeIterator(tf_CChar const *_pStr, umint _Len);
 
-	template <typename t_FOutFunctor>
-	bool fg_EncodeUTF8BOM(t_FOutFunctor &&_OutFunctor);
+	template <typename tf_FOutFunctor>
+	bool fg_EncodeUTF8BOM(tf_FOutFunctor &&_OutFunctor);
 
-	template <bool t_bCheckLength, typename t_FOutFunctor>
-	inline_always bool fg_EncodeUTF8Char(ch32 _Char, t_FOutFunctor &&_OutFunctor);
+	template <bool tf_bCheckLength, typename tf_FOutFunctor>
+	inline_always bool fg_EncodeUTF8Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor);
 
-	template <bool t_bCheckLength, typename t_FOutFunctor>
-	inline_always bool fg_EncodeUTF16Char(ch32 _Char, t_FOutFunctor &&_OutFunctor);
+	template <bool tf_bCheckLength, typename tf_FOutFunctor>
+	inline_always bool fg_EncodeUTF16Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor);
 }
 
 #include "Malterlib_String_UnicodeConversion.hpp"

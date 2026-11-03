@@ -5,18 +5,18 @@
 
 namespace NMib::NStr
 {
-	template <bool t_bUseMaxLen, typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
+	template <bool tf_bUseMaxLen, typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToIntParse(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
-		using CNumber = TCConditional<NTraits::cIsSame<t_CReturn, bool>, uint8, t_CReturn>;
+		using CNumber = TCConditional<NTraits::cIsSame<tf_CReturn, bool>, uint8, tf_CReturn>;
 		CNumber DestNumber = 0;
 
-		using CData = NTraits::TCUnsigned<t_CData>;
-		using CTerm = NTraits::TCUnsigned<t_CTerm>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
+		using CTerm = NTraits::TCUnsigned<tf_CTerm>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 		CData const *pEndStr = nullptr;
-		if constexpr (t_bUseMaxLen)
+		if constexpr (tf_bUseMaxLen)
 			pEndStr = pParseStr + _MaxLen;
 
 		uint32 ParseMode;
@@ -26,12 +26,12 @@ namespace NMib::NStr
 			ParseMode = fg_Clamp(_ParseMode, int32(2), int32(36));
 
 		aint SearchMode = 0;
-		t_CReturn Sign = 1;
+		tf_CReturn Sign = 1;
 
 		aint bFoundNum = false;
 
 		// Parse for characters, and end if str terminator is found
-		while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+		while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 		{
 			if (_pStrTerminators)
 
@@ -54,14 +54,14 @@ namespace NMib::NStr
 					if ((*pParseStr) == '+')
 						Sign = 1;
 					else if ((*pParseStr) == '-')
-						Sign = t_CReturn(-1);
+						Sign = tf_CReturn(-1);
 					else if
 					(
 						fg_CharIsNumber((*pParseStr))
 						|| (ParseMode == EStrToIntParseMode_Hex && (((*pParseStr) >= 'a' && (*pParseStr) <= 'f') || ((*pParseStr) >= 'A' && (*pParseStr) <= 'F')))
 					)
 					{
-						if ((!t_bUseMaxLen || pParseStr + 1 < pEndStr) && fg_CharIsAlphabetical((*(pParseStr + 1))))
+						if ((!tf_bUseMaxLen || pParseStr + 1 < pEndStr) && fg_CharIsAlphabetical((*(pParseStr + 1))))
 						{
 							if ((*pParseStr) == '0' && (((*(pParseStr + 1)) == 'x') || ((*(pParseStr + 1)) == 'X')))
 							{
@@ -114,7 +114,7 @@ namespace NMib::NStr
 					{
 					case EStrToIntParseMode_Base10:
 						{
-							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= '9')
+							while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= '9')
 							{
 								DestNumber *= 10;
 								DestNumber += (*pParseStr) - '0';
@@ -129,7 +129,7 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Hex:
 						// Hex
 						{
-							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+							while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 							{
 								aint Num;
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
@@ -142,7 +142,7 @@ namespace NMib::NStr
 									break;
 
 								DestNumber <<= 4;
-								if constexpr (NTraits::cIsFundamental<t_CReturn>)
+								if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 									DestNumber |= Num;
 								else
 								{
@@ -161,14 +161,14 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Binary:
 						// Binary
 						{
-							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+							while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 							{
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '1')
 								{
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 1;
-									if constexpr (NTraits::cIsFundamental<t_CReturn>)
+									if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 										DestNumber |= Num;
 									else
 									{
@@ -188,14 +188,14 @@ namespace NMib::NStr
 					case EStrToIntParseMode_Octal:
 						// Octal
 						{
-							while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+							while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 							{
 								if ((*pParseStr) >= '0' && (*pParseStr) <= '7')
 								{
 									aint Num = (*pParseStr) - '0';
 
 									DestNumber <<= 3;
-									if constexpr (NTraits::cIsFundamental<t_CReturn>)
+									if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 										DestNumber |= Num;
 									else
 									{
@@ -217,7 +217,7 @@ namespace NMib::NStr
 							if (ParseMode <= 10)
 							{
 								uint8 EndChar = '0' + (ParseMode - 1);
-								while ((!t_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= EndChar)
+								while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (*pParseStr) >= '0' && (*pParseStr) <= EndChar)
 								{
 									DestNumber *= ParseMode;
 									DestNumber += (*pParseStr) - '0';
@@ -229,7 +229,7 @@ namespace NMib::NStr
 							{
 								uint8 EndChar0 = 'a' + (ParseMode - 11);
 								uint8 EndChar1 = 'A' + (ParseMode - 11);
-								while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+								while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 								{
 									if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 									{
@@ -274,7 +274,7 @@ namespace NMib::NStr
 						if (_bDontFail)
 							goto Return;
 
-						_pStr = (t_CData const *)pParseStr;
+						_pStr = (tf_CData const *)pParseStr;
 						if (_pFailed)
 							*_pFailed = true;
 						return _FailValue;
@@ -289,7 +289,7 @@ namespace NMib::NStr
 		}
 
 	Return:
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return DestNumber * Sign;
@@ -301,28 +301,28 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToIntParse(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
 		return fg_StrToIntParse<false>(_pStr, 0, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToIntParse(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, int32 _ParseMode, bool *_pFailed)
 	{
 		return fg_StrToIntParse<true>(_pStr, _MaxLen, _FailValue, _pStrTerminators, _bDontFail, _ParseMode, _pFailed);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue, t_CData _Terminator)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator)
 	{
-		t_CReturn DestNumber = 0;
+		tf_CReturn DestNumber = 0;
 
-		using CData = NTraits::TCUnsigned<t_CData>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 
-		t_CReturn Sign = 1;
+		tf_CReturn Sign = 1;
 
 		aint bFoundNum = false;
 
@@ -334,7 +334,7 @@ namespace NMib::NStr
 			else if ((*pParseStr) == '+')
 				Sign = 1;
 			else if ((*pParseStr) == '-')
-				Sign = t_CReturn(-1);
+				Sign = tf_CReturn(-1);
 			else if (fg_CharIsHexNumber(*pParseStr))
 			{
 				while ((*pParseStr))
@@ -350,7 +350,7 @@ namespace NMib::NStr
 						break;
 
 					DestNumber <<= 4;
-					if constexpr (NTraits::cIsFundamental<t_CReturn>)
+					if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 						DestNumber |= Num;
 					else
 					{
@@ -370,7 +370,7 @@ namespace NMib::NStr
 			++pParseStr;
 		}
 
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return DestNumber * Sign;
@@ -378,16 +378,16 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
+		tf_CReturn DestNumber = 0;
 
-		using CData = NTraits::TCUnsigned<t_CData>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 
-		t_CReturn Sign = 1;
+		tf_CReturn Sign = 1;
 
 		aint bFoundNum = false;
 
@@ -397,7 +397,7 @@ namespace NMib::NStr
 			if ((*pParseStr) == '+')
 				Sign = 1;
 			else if ((*pParseStr) == '-')
-				Sign = t_CReturn(-1);
+				Sign = tf_CReturn(-1);
 			else if (fg_CharIsHexNumber(*pParseStr))
 			{
 				while ((*pParseStr))
@@ -413,7 +413,7 @@ namespace NMib::NStr
 						break;
 
 					DestNumber <<= 4;
-					if constexpr (NTraits::cIsFundamental<t_CReturn>)
+					if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 						DestNumber |= Num;
 					else
 					{
@@ -433,7 +433,7 @@ namespace NMib::NStr
 			++pParseStr;
 		}
 
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return DestNumber * Sign;
@@ -441,12 +441,12 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHexNoSign(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
+		tf_CReturn DestNumber = 0;
 
-		using CData = NTraits::TCUnsigned<t_CData>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 		aint bFoundNum = false;
@@ -466,7 +466,7 @@ namespace NMib::NStr
 					break;
 
 				DestNumber <<= 4;
-				if constexpr (NTraits::cIsFundamental<t_CReturn>)
+				if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 					DestNumber |= Num;
 				else
 				{
@@ -481,7 +481,7 @@ namespace NMib::NStr
 			++pParseStr;
 		}
 
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return DestNumber;
@@ -489,12 +489,12 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHexNoSign(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
+		tf_CReturn DestNumber = 0;
 
-		using CData = NTraits::TCUnsigned<t_CData>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 		auto pEndStr = pParseStr + _MaxLen;
@@ -513,7 +513,7 @@ namespace NMib::NStr
 				break;
 
 			DestNumber <<= 4;
-			if constexpr (NTraits::cIsFundamental<t_CReturn>)
+			if constexpr (NTraits::cIsFundamental<tf_CReturn>)
 				DestNumber |= Num;
 			else
 			{
@@ -525,7 +525,7 @@ namespace NMib::NStr
 			++pParseStr;
 		}
 
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return DestNumber;
@@ -533,20 +533,20 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToIntBase10(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToIntBase10(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntBase10Parse(pStr, _FailValue);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntBase10Parse(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntBase10Parse(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
-		t_CData const *pParseStr = _pStr;
+		tf_CReturn DestNumber = 0;
+		tf_CData const *pParseStr = _pStr;
 
-		t_CReturn Sign = 1;
+		tf_CReturn Sign = 1;
 
 		aint bFoundNum = false;
 
@@ -576,10 +576,10 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_large t_CReturn fg_StrToIntBase10NoSign(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_large tf_CReturn fg_StrToIntBase10NoSign(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
+		tf_CReturn DestNumber = 0;
 
 		// Parse for characters, and end if str terminator is found
 		while ((*_pStr) >= '0' && (*_pStr) <= '9')
@@ -591,11 +591,11 @@ namespace NMib::NStr
 		return DestNumber;
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_large t_CReturn fg_StrToIntBase10ParseNoSign(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_large tf_CReturn fg_StrToIntBase10ParseNoSign(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
-		t_CReturn DestNumber = 0;
-		t_CData const *pParseStr = _pStr;
+		tf_CReturn DestNumber = 0;
+		tf_CData const *pParseStr = _pStr;
 
 		// Parse for characters, and end if str terminator is found
 		while ((*pParseStr) >= '0' && (*pParseStr) <= '9')
@@ -609,62 +609,62 @@ namespace NMib::NStr
 		return DestNumber;
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _FailValue, _pStrTerminators, true);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _MaxLen, _FailValue, _pStrTerminators, true);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _FailValue, (ch8 const *)nullptr, true);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntParse(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToIntParse(_pStr, _FailValue, (ch8 const *)nullptr, true);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _FailValue, _pStrTerminators, false);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _MaxLen, _FailValue, _pStrTerminators, false);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
-		t_CData const *pStr = _pStr;
+		tf_CData const *pStr = _pStr;
 		return fg_StrToIntParse(pStr, _FailValue, (ch8 const *)nullptr, false);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntParseExact(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToIntParse(_pStr, _FailValue, (ch8 const *)nullptr, false);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParseExact(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToIntParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToIntParse(_pStr, _FailValue, _pStrTerminators, false);
 	}

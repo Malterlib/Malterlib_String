@@ -104,14 +104,14 @@ namespace NMib::NStr
 		static void fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, CFloat const &_Value);
 		static void fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, CFloat const &_Value, COptionsFloat &_Options);
 
-		template <typename t_CData, typename t_CFormatType, typename t_COptions>
-		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, COption &_Option) const;
+		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
 		static constexpr bool mc_bNeedDestruct = !t_bReference;
 
 	private:
-		template <typename t_COptions>
-		static inline_small void fsp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number);
+		template <typename tf_COptions>
+		static inline_small void fsp_AddToStr(CString &_String, aint &_CurrentStrLen, tf_COptions &_Options, CFloat const &_Number);
 
 		inline static bool constexpr mcp_TypeID = false;
 

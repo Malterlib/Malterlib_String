@@ -169,8 +169,8 @@ namespace NMib::NStr
 
 		virtual void f_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override;
 
-		template <typename t_COption2, typename t_CIntType2>
-		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCValueWithOptions<t_COption2, t_CIntType2> const &_Value);
+		template <typename tf_COption2, typename tf_CIntType2>
+		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCValueWithOptions<tf_COption2, tf_CIntType2> const &_Value);
 
 	private:
 		template <typename tf_COptions>

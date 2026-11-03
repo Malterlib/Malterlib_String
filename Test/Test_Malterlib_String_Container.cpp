@@ -509,7 +509,7 @@ namespace
 						SpiritSemanticTimer.f_Start();
 
 						std::string::iterator iBegin = HexListStdStr.begin();
-						auto Lamba = [&SpiritSemanticVector](CValue const &_Value, boost::spirit::unused_type, bool)
+						auto Lamba = [&SpiritSemanticVector](CValue const &_Value, boost::spirit::unused_type _Context, bool _bPass)
 							{
 								SpiritSemanticVector.push_back(_Value);
 							}

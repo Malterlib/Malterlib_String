@@ -36,9 +36,9 @@ namespace NMib::NStr::NPrivate
 		static t_CDataToTest const &fsp_GetData();
 		static t_CClassToTestAgainst &fsp_GetFormatClass();
 		template <typename tf_CData>
-		static auto fsp_CheckFormat(tf_CData const &data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).fs_ClassifiedAs(fsp_GetFormatClass()));
+		static auto fsp_CheckFormat(tf_CData const &_Data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(_Data).fs_ClassifiedAs(fsp_GetFormatClass()));
 		template <typename tf_CData>
-		static auto fsp_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
+		static auto fsp_CheckFormat(tf_CData &&_Data) -> NTraits::CFalseBySize;
 
 	public:
 		static constexpr bool mc_bValue = sizeof(fsp_CheckFormat(fsp_GetData())) == sizeof(NTraits::CTrueBySize);

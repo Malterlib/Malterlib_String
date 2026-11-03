@@ -122,10 +122,10 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	template <typename t_CData, typename t_CFormatType, typename t_COptions>
+	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
 	inline_small auto TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_ParseOption
 		(
-			TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args
+			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
 			, COption &_Option
 		)
 		const
@@ -170,12 +170,12 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
+	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename tf_COptions>
 	inline_small auto TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
-			, t_COptions &_Options
+			, tf_COptions &_Options
 			, CChar const *_pValue
 			, umint _StrLen
 		)
@@ -231,12 +231,12 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
-	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
+	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename tf_COptions, typename tf_CStrDataType>
 	inline_small void TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
-			, t_COptions &_Options
+			, tf_COptions &_Options
 			, tf_CStrDataType const *_pValue
 			, umint _StrLen
 		)

@@ -89,14 +89,14 @@ namespace NMib::NStr
 		return -1;
 	}
 
-	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharReverseLengthAware(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _Len)
 	{
 		using CChar1 = NTraits::TCUnsigned<tf_CData1>;
 		using CChar2 = NTraits::TCUnsigned<tf_CData2>;
 		CChar1 const *pStr1 = (CChar1 const *)_pStr1;
 		CChar2 Char;
-		if constexpr (t_bNoCase)
+		if constexpr (tf_bNoCase)
 			Char = fg_CharLowerCase(_Char);
 		else
 			Char = _Char;
@@ -104,7 +104,7 @@ namespace NMib::NStr
 		for (umint iChar = _Len; iChar > 0; --iChar)
 		{
 			CChar1 StrChar = pStr1[iChar - 1];
-			if constexpr (t_bNoCase)
+			if constexpr (tf_bNoCase)
 				StrChar = fg_CharLowerCase(StrChar);
 
 			if (StrChar == Char)
@@ -150,18 +150,18 @@ namespace NMib::NStr
 		return -1;
 	}
 
-	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharLengthAware(tf_CData1 const *_pStr1, tf_CData2 _Char, umint _Len)
 	{
 		using CChar1 = NTraits::TCUnsigned<tf_CData1>;
 		CChar1 const *pStr1 = (CChar1 const *)_pStr1;
 		NTraits::TCUnsigned<tf_CData2> Char = _Char;
-		if constexpr (t_bNoCase)
+		if constexpr (tf_bNoCase)
 			Char = fg_CharLowerCase(Char);
 
 		for (umint iChar = 0; iChar < _Len; ++iChar)
 		{
-			if constexpr (t_bNoCase)
+			if constexpr (tf_bNoCase)
 			{
 				if (fg_CharLowerCase(pStr1[iChar]) == Char)
 					return iChar;
@@ -229,7 +229,7 @@ namespace NMib::NStr
 		return -1;
 	}
 
-	template <bool t_bNoCase, bool t_bReverse, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, bool tf_bReverse, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars, umint _CharsLen)
 	{
 		if (_Len == 0 || _CharsLen == 0)
@@ -239,7 +239,7 @@ namespace NMib::NStr
 			{
 				for (umint iChar = 0; iChar < _CharsLen; ++iChar)
 				{
-					if constexpr (t_bNoCase)
+					if constexpr (tf_bNoCase)
 					{
 						if (fg_CharLowerCase(_Char) == fg_CharLowerCase(_pChars[iChar]))
 							return true;
@@ -254,7 +254,7 @@ namespace NMib::NStr
 			}
 		;
 
-		if constexpr (t_bReverse)
+		if constexpr (tf_bReverse)
 		{
 			for (umint iSource = _Len; iSource > 0; --iSource)
 			{
@@ -280,25 +280,25 @@ namespace NMib::NStr
 		return fg_StrFindCharsLengthAware<false, false>(_pStr1, _Len, _pChars, _CharsLen);
 	}
 
-	template <bool t_bNoCase, bool t_bReverse, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, bool tf_bReverse, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pChars)
 	{
-		return fg_StrFindCharsLengthAware<t_bNoCase, t_bReverse>(_pStr1, _Len, _pChars, fg_StrLen(_pChars));
+		return fg_StrFindCharsLengthAware<tf_bNoCase, tf_bReverse>(_pStr1, _Len, _pChars, fg_StrLen(_pChars));
 	}
 
-	template <bool t_bNoCase, bool t_bReverse, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, bool tf_bReverse, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindCharsNullTerminatedLengthAware(tf_CData1 const *_pStr1, tf_CData2 const *_pChars, umint _MaxLen, umint _CharsLen)
 	{
 		if (_CharsLen == 0)
 			return -1;
 
-		if constexpr (!t_bReverse)
+		if constexpr (!tf_bReverse)
 		{
 			for (umint iChar = 0; iChar < _MaxLen && _pStr1[iChar]; ++iChar)
 			{
 				for (umint iFindChar = 0; iFindChar < _CharsLen; ++iFindChar)
 				{
-					if constexpr (t_bNoCase)
+					if constexpr (tf_bNoCase)
 					{
 						if (fg_CharLowerCase(_pStr1[iChar]) == fg_CharLowerCase(_pChars[iFindChar]))
 							return iChar;
@@ -318,7 +318,7 @@ namespace NMib::NStr
 		while (Len < _MaxLen && _pStr1[Len])
 			++Len;
 
-		return fg_StrFindCharsLengthAware<t_bNoCase, t_bReverse>(_pStr1, Len, _pChars, _CharsLen);
+		return fg_StrFindCharsLengthAware<tf_bNoCase, tf_bReverse>(_pStr1, Len, _pChars, _CharsLen);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -570,7 +570,7 @@ namespace NMib::NStr
 		return fg_StrFind<false, true>(_pStr1, _pStr2, _MaxLen);
 	}
 
-	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2, umint _FindLen)
 	{
 		if (_FindLen == 0)
@@ -580,18 +580,18 @@ namespace NMib::NStr
 
 		for (umint iSource = 0; iSource <= _Len - _FindLen; ++iSource)
 		{
-			if (fg_StrStartsWith<t_bNoCase, true, true, true, true>(_pStr1 + iSource, _pStr2, _Len - iSource, _FindLen))
+			if (fg_StrStartsWith<tf_bNoCase, true, true, true, true>(_pStr1 + iSource, _pStr2, _Len - iSource, _FindLen))
 				return iSource;
 		}
 
 		return -1;
 	}
 
-	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindLengthAware(tf_CData1 const *_pStr1, umint _Len, tf_CData2 const *_pStr2)
 	{
 		umint FindLen = fg_StrLen(_pStr2);
-		return fg_StrFindLengthAware<t_bNoCase>(_pStr1, _Len, _pStr2, FindLen);
+		return fg_StrFindLengthAware<tf_bNoCase>(_pStr1, _Len, _pStr2, FindLen);
 	}
 
 	template <typename tf_CData1, typename tf_CData2>
@@ -600,7 +600,7 @@ namespace NMib::NStr
 		return fg_StrFindLengthAware<false>(_pStr1, _Len, _pStr2, _FindLen);
 	}
 
-	template <bool t_bNoCase, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large aint fg_StrFindNullTerminatedLengthAware(tf_CData1 const *_pStr1, tf_CData2 const *_pStr2, umint _MaxLen, umint _FindLen)
 	{
 		if (_FindLen == 0)
@@ -610,7 +610,7 @@ namespace NMib::NStr
 		{
 			umint MaxLen = _MaxLen == TCLimitsInt<umint>::mc_Max ? TCLimitsInt<umint>::mc_Max : _MaxLen - iSource;
 
-			if (fg_StrStartsWith<t_bNoCase, true, false, true, true>(_pStr1 + iSource, _pStr2, MaxLen, _FindLen))
+			if (fg_StrStartsWith<tf_bNoCase, true, false, true, true>(_pStr1 + iSource, _pStr2, MaxLen, _FindLen))
 				return iSource;
 		}
 

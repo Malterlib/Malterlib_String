@@ -15,74 +15,74 @@ namespace NMib::NStr
 		, EStrToIntParseMode_Octal  = 2
 	};
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
 	auto fg_StrToIntParse
 		(
-			t_CData const * &_pStr
-			, t_CReturn _FailValue
-			, t_CTerm const *_pStrTerminators = nullptr
+			tf_CData const * &_pStr
+			, tf_CReturn _FailValue
+			, tf_CTerm const *_pStrTerminators = nullptr
 			, bool _bDontFail = false
 			, int32 _ParseMode = EStrToIntParseMode_Base10
 			, bool *_pFailed = nullptr
 		)
-		-> t_CReturn
+		-> tf_CReturn
 	;
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
 	auto fg_StrToIntParse
 		(
-			t_CData const * &_pStr
+			tf_CData const * &_pStr
 			, umint _MaxLen
-			, t_CReturn _FailValue
-			, t_CTerm const *_pStrTerminators = nullptr
+			, tf_CReturn _FailValue
+			, tf_CTerm const *_pStrTerminators = nullptr
 			, bool _bDontFail = false
 			, int32 _ParseMode = EStrToIntParseMode_Base10
 			, bool *_pFailed = nullptr
 		)
-		-> t_CReturn
+		-> tf_CReturn
 	;
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHex(t_CData const * &_pStr, t_CReturn _FailValue, t_CData _Terminator);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHex(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CData _Terminator);
 
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn>
-	inline_medium t_CReturn fg_StrToIntParseHexNoSign(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHexNoSign(tf_CData const * &_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_medium tf_CReturn fg_StrToIntParseHexNoSign(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue);
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToIntBase10(t_CData const *_pStr, t_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToIntBase10(tf_CData const *_pStr, tf_CReturn _FailValue);
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntBase10Parse(t_CData const * &_pStr, t_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntBase10Parse(tf_CData const * &_pStr, tf_CReturn _FailValue);
 
-	template <typename t_CData, typename t_CReturn>
-	inline_large t_CReturn fg_StrToIntBase10NoSign(t_CData const *_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn>
-	inline_large t_CReturn fg_StrToIntBase10ParseNoSign(t_CData const * &_pStr, t_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_large tf_CReturn fg_StrToIntBase10NoSign(tf_CData const *_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_large tf_CReturn fg_StrToIntBase10ParseNoSign(tf_CData const * &_pStr, tf_CReturn _FailValue);
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToInt(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators);
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToInt(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators);
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntParse(t_CData const * &_pStr, t_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntParse(tf_CData const * &_pStr, tf_CReturn _FailValue);
 
-	template <typename t_CData, typename t_CReturn>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	inline_small t_CReturn fg_StrToIntExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
+	template <typename tf_CData, typename tf_CReturn>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators);
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	inline_small tf_CReturn fg_StrToIntExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators);
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToIntParseExact(t_CData const * &_pStr, t_CReturn _FailValue);
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToIntParseExact(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators);
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToIntParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue);
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToIntParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators);
 }
 
 #include "Malterlib_String_Parse_Integer.hpp"

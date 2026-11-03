@@ -33,16 +33,16 @@ namespace NMib::NStr
 		static CTableEntry const ms_Table[];
 	};
 
-	template <ECharacterEncoding _Encoding>
+	template <ECharacterEncoding tf_Encoding>
 	CStr fg_DecodeCharacterEncoding(ch8 const *_pStr, CAnsiStr const *_pCStr = nullptr);
 
-	template <ECharacterEncoding _Encoding>
+	template <ECharacterEncoding tf_Encoding>
 	CStr fg_DecodeCharacterEncoding(CAnsiStr const &_CStr);
 
-	template <ECharacterEncoding _Encoding>
+	template <ECharacterEncoding tf_Encoding>
 	CStrNonTracked fg_DecodeCharacterEncodingNonTracked(ch8 const *_pStr, CAnsiStrNonTracked const *_pCStr = nullptr);
 
-	template <ECharacterEncoding _Encoding>
+	template <ECharacterEncoding tf_Encoding>
 	CStrNonTracked fg_DecodeCharacterEncodingNonTracked(CAnsiStrNonTracked const &_CStr);
 }
 

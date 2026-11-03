@@ -10,8 +10,8 @@ static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClassOther>
 
 namespace
 {
-	template <typename t_CTest>
-	auto fg_TestValue(t_CTest _Test) -> t_CTest
+	template <typename tf_CTest>
+	auto fg_TestValue(tf_CTest _Test) -> tf_CTest
 	{
 		return _Test;
 	}

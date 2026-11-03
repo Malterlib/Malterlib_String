@@ -33,16 +33,16 @@ namespace
 	struct CGlobalFunctions_Tests : public NMib::NTest::CTest
 	{
 	private:
-		template <typename t_CStr>
+		template <typename tf_CStr>
 		static void fsp_FindCharTestsTyped()
 		{
-			t_CStr AlphabetLowerStr("abcdefghijklmnopqrstuvwxyz");
-			t_CStr AlphabetUpperStr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-			t_CStr AlphabetMixedStr("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
+			tf_CStr AlphabetLowerStr("abcdefghijklmnopqrstuvwxyz");
+			tf_CStr AlphabetUpperStr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			tf_CStr AlphabetMixedStr("aBcDeFgHiJkLmNoPqRsTuVwXyZ");
 
-			t_CStr AlphabetX2LowerStr("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-			t_CStr AlphabetX2UpperStr("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
-			t_CStr AlphabetX2MixedStr("aBcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVwXyZ");
+			tf_CStr AlphabetX2LowerStr("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+			tf_CStr AlphabetX2UpperStr("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+			tf_CStr AlphabetX2MixedStr("aBcDeFgHiJkLmNoPqRsTuVwXyZaBcDeFgHiJkLmNoPqRsTuVwXyZ");
 
 			DMibTest(DMibExpr(fg_StrFindChar(AlphabetX2LowerStr, 'a')) == DMibExpr(0));
 			DMibTest(DMibExpr(fg_StrFindChar(AlphabetX2LowerStr, 'A')) == DMibExpr(-1));

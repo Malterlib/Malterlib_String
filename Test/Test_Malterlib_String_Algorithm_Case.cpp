@@ -8,7 +8,7 @@ namespace
 	using namespace NMib;
 	using namespace NMib::NStr;
 
-	template <typename tf_CChar>
+	template <typename t_CChar>
 	struct TCStrType;
 
 	template <>

@@ -57,11 +57,11 @@ namespace NMib::NStr
 		virtual aint f_Get_Str(CChar *_pStr, aint _MaxChars) const;
 		virtual bool f_ParseData(CChar const * &_pString, CChar const *_pFormat, t_CParser const &_ArgData) const = 0;
 
-		template <typename t_CParseType, typename t_COptions>
-		inline_small static CChar const *fs_ParseOptions(t_CParseType const &_Parser, t_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData);
+		template <typename tf_CParseType, typename tf_COptions>
+		inline_small static CChar const *fs_ParseOptions(tf_CParseType const &_Parser, tf_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData);
 
-		template <typename t_COptions>
-		inline_small aint f_ParseOption(COption &_Option, t_COptions &_Options, t_CParser const &_ArgData) const;
+		template <typename tf_COptions>
+		inline_small aint f_ParseOption(COption &_Option, tf_COptions &_Options, t_CParser const &_ArgData) const;
 
 		TICStrParseType *m_pNextParse;
 
@@ -87,8 +87,8 @@ namespace NMib::NStr
 
 		static CChar const *fs_ParseArgList(CChar const *_pFormat, CChar const *_pParse, TCStrParse const &_DataArgs, EParseFlag _ParseFlags, aint &_nParsed);
 
-		template <typename t_CType>
-		inline_small TCStrParse &operator >> (t_CType &_Type);
+		template <typename tf_CType>
+		inline_small TCStrParse &operator >> (tf_CType &_Type);
 
 	private:
 		inline_small TICStrParseType<TCStrParse> **fp_GetParseList();

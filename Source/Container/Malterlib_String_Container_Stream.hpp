@@ -64,20 +64,20 @@ namespace NMib::NStream
 		}
 	}
 
-	template <typename t_CStream, typename t_TCStrTraitsIn>
-	struct TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn>>
+	template <typename t_CStream, typename t_CTCStrTraits>
+	struct TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_CTCStrTraits>>
 	{
-		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> const &_Data)
+		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStr<t_CTCStrTraits> const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();
 			uint64 LenStream = Len;
 			fg_StrEncodeLenType(LenStream, _Stream.f_LengthSize(), _Data.mc_Type);
 			fg_FeedLenToStream(_Stream, LenStream);
 			if (Len != 0)
-				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStr<t_TCStrTraitsIn>::CChar));
+				_Stream.f_FeedBytes(_Data.f_GetStr(), Len * sizeof(typename NStr::TCStr<t_CTCStrTraits>::CChar));
 		}
 
-		static constexpr void fs_Consume(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> &_Data)
+		static constexpr void fs_Consume(t_CStream &_Stream, NStr::TCStr<t_CTCStrTraits> &_Data)
 		{
 			uint64 Len;
 			fg_ConsumeLenFromStream(_Stream, Len);
@@ -85,9 +85,9 @@ namespace NMib::NStream
 			fg_StrDecodeLenType(Len, _Stream.f_LengthSize(), Type);
 			fg_CheckLengthLimit(_Stream, Len);
 
-			//NStr::TCStr<t_TCStrTraitsIn>
+			//NStr::TCStr<t_CTCStrTraits>
 
-			typename NStr::TCStr<t_TCStrTraitsIn>::CChar *pStr = _Data.f_GetStr(Len + 1);
+			typename NStr::TCStr<t_CTCStrTraits>::CChar *pStr = _Data.f_GetStr(Len + 1);
 			auto Cleanup = g_OnScopeExit / [&]
 				{
 					_Data.f_Clear();
@@ -95,7 +95,7 @@ namespace NMib::NStream
 			;
 
 			if (Len != 0)
-				_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStr<t_TCStrTraitsIn>::CChar));
+				_Stream.f_ConsumeBytes(pStr, Len * sizeof(typename NStr::TCStr<t_CTCStrTraits>::CChar));
 			Cleanup.f_Clear();
 			pStr[Len] = 0;
 			_Data.f_SetStrLen(Len);

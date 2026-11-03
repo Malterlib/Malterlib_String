@@ -119,71 +119,71 @@ namespace NMib::NStr
 		return m_Int;
 	}
 
-	template <umint t_MinLength, typename t_CValueType>
-	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMinLength(t_CValueType const &_Value)
+	template <umint tf_MinLength, typename tf_CValueType>
+	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMinLength(tf_CValueType const &_Value)
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, CStrFormatType_StaticOptions>, tf_CValueType>
 			(
 				_Value
-				, TICStrFormatType_StaticOptions_MinLength<t_MinLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+				, TICStrFormatType_StaticOptions_MinLength<tf_MinLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
 			)
 		;
 	}
 
-	template <umint t_MinLength, typename t_CValueType, typename t_COldOptions>
-	inline_small auto fg_FormatMinLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
-		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>, t_CValueType>
+	template <umint tf_MinLength, typename tf_CValueType, typename tf_COldOptions>
+	inline_small auto fg_FormatMinLength(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
+		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, tf_COldOptions>, tf_CValueType>
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MinLength<tf_MinLength, tf_COldOptions>, tf_CValueType>
 			(
 				_Value.f_GetValue()
-				, TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_COldOptions>(_Value.f_GetOptions())
+				, TICStrFormatType_StaticOptions_MinLength<tf_MinLength, tf_COldOptions>(_Value.f_GetOptions())
 			)
 		;
 	}
 
-	template <umint t_MaxLength, typename t_CValueType>
-	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatMaxLength(t_CValueType const &_Value)
+	template <umint tf_MaxLength, typename tf_CValueType>
+	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatMaxLength(tf_CValueType const &_Value)
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, CStrFormatType_StaticOptions>, tf_CValueType>
 			(
 				_Value
-				, TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+				, TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
 			)
 		;
 	}
 
-	template <umint t_MaxLength, typename t_CValueType, typename t_COldOptions>
-	inline_small auto fg_FormatMaxLength(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
-		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>, t_CValueType>
+	template <umint tf_MaxLength, typename tf_CValueType, typename tf_COldOptions>
+	inline_small auto fg_FormatMaxLength(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
+		-> TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, tf_COldOptions>, tf_CValueType>
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, tf_COldOptions>, tf_CValueType>
 			(
 				_Value.f_GetValue()
-				, TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_COldOptions>(_Value.f_GetOptions())
+				, TICStrFormatType_StaticOptions_MaxLength<tf_MaxLength, tf_COldOptions>(_Value.f_GetOptions())
 			)
 		;
 	}
 
-	template <ch32 t_FillOut, typename t_CValueType>
-	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>, t_CValueType> fg_FormatFillOut(t_CValueType const &_Value)
+	template <ch32 tf_FillOut, typename tf_CValueType>
+	inline_small TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<tf_FillOut, CStrFormatType_StaticOptions>, tf_CValueType> fg_FormatFillOut(tf_CValueType const &_Value)
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<tf_FillOut, CStrFormatType_StaticOptions>, tf_CValueType>
 			(
 				_Value
-				, TICStrFormatType_StaticOptions_FillOut<t_FillOut, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
+				, TICStrFormatType_StaticOptions_FillOut<tf_FillOut, CStrFormatType_StaticOptions>(CStrFormatType_StaticOptions())
 			)
 		;
 	}
 
-	template <ch32 t_FillOut, typename t_CValueType, typename t_COldOptions>
-	inline_small auto fg_FormatFillOut(TCValueWithOptions<t_COldOptions, t_CValueType> const &_Value)
-		-> TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>, t_CValueType>
+	template <ch32 tf_FillOut, typename tf_CValueType, typename tf_COldOptions>
+	inline_small auto fg_FormatFillOut(TCValueWithOptions<tf_COldOptions, tf_CValueType> const &_Value)
+		-> TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<tf_FillOut, tf_COldOptions>, tf_CValueType>
 	{
-		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>, t_CValueType>
+		return TCValueWithOptions<TICStrFormatType_StaticOptions_FillOut<tf_FillOut, tf_COldOptions>, tf_CValueType>
 			(
 				_Value.f_GetValue()
-				, TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_COldOptions>(_Value.f_GetOptions())
+				, TICStrFormatType_StaticOptions_FillOut<tf_FillOut, tf_COldOptions>(_Value.f_GetOptions())
 			)
 		;
 	}

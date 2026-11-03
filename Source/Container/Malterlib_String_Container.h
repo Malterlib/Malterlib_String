@@ -106,7 +106,7 @@ namespace NMib::NStr
 			requires (CImp::mc_bInitConstStr)
 		;
 
-		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+		inline_large TCStr(CInitByRange _InitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
 			requires (CImp::mc_bInitConstStr)
 		;
 
@@ -116,11 +116,11 @@ namespace NMib::NStr
 		;
 
 		template <typename tf_CStrDataType>
-		inline_large TCStr(CAllowNUL, tf_CStrDataType const *_pStr, umint _Len)
+		inline_large TCStr(CAllowNUL _AllowNUL, tf_CStrDataType const *_pStr, umint _Len)
 			requires (!CImp::mc_bInitConstStr)
 		;
 
-		inline_large TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+		inline_large TCStr(CInitByRange _InitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
 			requires (!CImp::mc_bInitConstStr)
 		;
 
@@ -213,7 +213,7 @@ namespace NMib::NStr
 
 		void f_SetStr(CChar const *_pStr);
 		void f_SetStr(CChar const *_pStr, aint _Len);
-		void f_SetStr(CAllowNUL, CChar const *_pStr, aint _Len);
+		void f_SetStr(CAllowNUL _AllowNUL, CChar const *_pStr, aint _Len);
 		template <typename tf_CStrDataType>
 		void f_SetStr(tf_CStrDataType *_pStr);
 		template <typename tf_CStrDataType>
@@ -664,25 +664,25 @@ namespace NMib::NStr
 		};
 	};
 
-	template <typename t_TCStr0, typename t_TCStr1>
+	template <typename t_CStr0, typename t_CStr1>
 	struct TCIsStrCompatible
 	{
 		static constexpr bool mc_Value
-			= (sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar) && t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type)
-			|| (t_TCStr0::CStrTraits::mc_Type == EStrType_Unicode && t_TCStr1::CStrTraits::mc_Type == EStrType_Unicode)
+			= (sizeof(typename t_CStr0::CStrTraits::CChar) == sizeof(typename t_CStr1::CStrTraits::CChar) && t_CStr0::CStrTraits::mc_Type == t_CStr1::CStrTraits::mc_Type)
+			|| (t_CStr0::CStrTraits::mc_Type == EStrType_Unicode && t_CStr1::CStrTraits::mc_Type == EStrType_Unicode)
 		;
 	};
 
-	template <typename t_TCStr0, typename t_TCStr1>
+	template <typename t_CStr0, typename t_CStr1>
 	struct TCIsStrCompatibleWrite
 	{
 		static constexpr bool mc_Value
-			= (sizeof(typename t_TCStr0::CStrTraits::CChar) == sizeof(typename t_TCStr1::CStrTraits::CChar) && t_TCStr0::CStrTraits::mc_Type == t_TCStr1::CStrTraits::mc_Type)
+			= (sizeof(typename t_CStr0::CStrTraits::CChar) == sizeof(typename t_CStr1::CStrTraits::CChar) && t_CStr0::CStrTraits::mc_Type == t_CStr1::CStrTraits::mc_Type)
 			||
 			(
-				sizeof(typename t_TCStr0::CStrTraits::CChar) >= sizeof(typename t_TCStr1::CStrTraits::CChar)
-				&& t_TCStr0::CStrTraits::mc_Type == EStrType_Unicode
-				&& t_TCStr1::CStrTraits::mc_Type == EStrType_Unicode
+				sizeof(typename t_CStr0::CStrTraits::CChar) >= sizeof(typename t_CStr1::CStrTraits::CChar)
+				&& t_CStr0::CStrTraits::mc_Type == EStrType_Unicode
+				&& t_CStr1::CStrTraits::mc_Type == EStrType_Unicode
 			)
 		;
 	};

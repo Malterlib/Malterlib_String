@@ -5,31 +5,31 @@
 
 namespace NMib::NStr
 {
-	template <typename t_TCStrTraits>
-	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator += (ch32 _ToAdd)
+	template <typename t_CTCStrTraits>
+	inline_large TCStr<t_CTCStrTraits> &TCStr<t_CTCStrTraits>::operator += (ch32 _ToAdd)
 	{
 		f_AddChar(_ToAdd);
 		return *this;
 	}
 
-	template <typename t_TCStrTraits>
-	template <typename t_CStrDataType>
-	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator += (t_CStrDataType const *_pToAdd)
+	template <typename t_CTCStrTraits>
+	template <typename tf_CStrDataType>
+	inline_large TCStr<t_CTCStrTraits> &TCStr<t_CTCStrTraits>::operator += (tf_CStrDataType const *_pToAdd)
 	{
 		f_AddStr(_pToAdd);
 		return *this;
 	}
 
-	template <typename t_TCStrTraits>
-	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator += (CFormat const &_Format)
+	template <typename t_CTCStrTraits>
+	inline_large TCStr<t_CTCStrTraits> &TCStr<t_CTCStrTraits>::operator += (CFormat const &_Format)
 	{
 		_Format.f_FormatToStrConcat(*this);
 		return *this;
 	}
 
-	template <typename t_TCStrTraits>
-	template <typename t_CStrTraitsF>
-	inline_large TCStr<t_TCStrTraits> &TCStr<t_TCStrTraits>::operator += (TCStr<t_CStrTraitsF> const &_Str)
+	template <typename t_CTCStrTraits>
+	template <typename tf_CStrTraitsF>
+	inline_large TCStr<t_CTCStrTraits> &TCStr<t_CTCStrTraits>::operator += (TCStr<tf_CStrTraitsF> const &_Str)
 	{
 		if (f_IsEmpty())
 			f_SetStr(_Str);

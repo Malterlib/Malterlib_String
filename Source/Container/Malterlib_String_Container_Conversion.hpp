@@ -153,9 +153,9 @@ namespace NMib::NStr
 		fp_ConvertFromType<sizeof(CChar)>(_Type);
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize>
-	TCEnableIf<t_CharSize == 1, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize>
+	TCEnableIf<tf_CharSize == 1, void> TCStr<t_CTCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -174,7 +174,7 @@ namespace NMib::NStr
 						NStr::NPlatform::fg_SystemDecodeAnsiStr(Ansi, Decoded);
 					}
 					this->f_Clear();
-					TCStr<t_TCStrTraits> New;
+					TCStr<t_CTCStrTraits> New;
 					aint Len = 0;
 					New.f_AddFromUnicodeIterator(Len, Decoded.f_GetUnicodeIterator());
 					New.f_SetStrLen(Len);
@@ -184,7 +184,7 @@ namespace NMib::NStr
 			case EStrType_Unicode:
 				{
 					DMibSafeCheck(mc_Type == EStrType_UTF, "Must convert to UTF");
-					TCStr<t_TCStrTraits> New;
+					TCStr<t_CTCStrTraits> New;
 					aint Len = 0;
 					New.f_AddFromUnicodeIterator(Len, NStr::TCStrIteratorUnicode<ch8>(f_GetStr(), f_GetLen()));
 					New.f_SetStrLen(Len);
@@ -196,9 +196,9 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize>
-	TCEnableIf<t_CharSize == 2, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize>
+	TCEnableIf<tf_CharSize == 2, void> TCStr<t_CTCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type <= mc_Type);
 		if (_Type < mc_Type)
@@ -207,7 +207,7 @@ namespace NMib::NStr
 			{
 			case EStrType_Unicode:
 				{
-					TCStr<t_TCStrTraits> New;
+					TCStr<t_CTCStrTraits> New;
 					aint Len = 0;
 					New.f_AddFromUnicodeIterator(Len, NStr::TCStrIteratorUnicode<ch16>(f_GetStr(), f_GetLen()));
 					New.f_SetStrLen(Len);
@@ -219,9 +219,9 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize>
-	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStr<t_TCStrTraits>::fp_ConvertFromType(EStrType _Type)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize>
+	TCEnableIf<tf_CharSize != 1 && tf_CharSize != 2, void> TCStr<t_CTCStrTraits>::fp_ConvertFromType(EStrType _Type)
 	{
 		DMibFastCheck(_Type == EStrType_Unicode);
 	}

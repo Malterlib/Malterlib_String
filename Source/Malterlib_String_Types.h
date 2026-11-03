@@ -13,7 +13,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	struct TCStrImp_Ptr;
 
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	struct TCStr;
 
 	struct CStrImp_Dynamic_ParamsDeflauts
@@ -122,43 +122,43 @@ namespace NMib::NStr
 
 	struct CDefaultStrFormatTypeClassifier
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassOther _Value);
 	};
 
 	struct CStrFormatTypeClassifier_String
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassString _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Integer
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassInteger _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Untyped
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassUntyped _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Binary
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassBinary _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Float
 	{
-		template <typename t_CType>
-		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		template <typename tf_CType>
+		static NTraits::CFalseBySize fs_ClassifiedAs(tf_CType _Any);
 		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassFloat _Value);
 	};
 }

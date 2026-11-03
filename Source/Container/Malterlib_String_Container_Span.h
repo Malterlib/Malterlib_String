@@ -13,12 +13,12 @@ namespace NMib::NStr
 		using CUnsignedChar = NTraits::TCUnsigned<typename t_CStrTraitsTypes::CChar>;
 
 		TCStrSpan() = default;
-		TCStrSpan(TCStrSpan const &) = default;
-		TCStrSpan(TCStrSpan &&) = default;
+		TCStrSpan(TCStrSpan const &_Other) = default;
+		TCStrSpan(TCStrSpan &&_Other) = default;
 		TCStrSpan(CChar const *_pStr, umint _Length);
 
-		TCStrSpan &operator = (TCStrSpan const &) = default;
-		TCStrSpan &operator = (TCStrSpan &&) = default;
+		TCStrSpan &operator = (TCStrSpan const &_Other) = default;
+		TCStrSpan &operator = (TCStrSpan &&_Other) = default;
 
 		CChar const *f_GetStr() const;
 		umint f_GetLen() const;

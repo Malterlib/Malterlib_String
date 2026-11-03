@@ -212,8 +212,8 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
-	template <typename t_CArgument>
-	inline_small auto TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CXprImplementation::fs_GetArgumentValue(t_CArgument *_pArg) -> decltype(_pArg->f_Get_aint())
+	template <typename tf_CArgument>
+	inline_small auto TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::CXprImplementation::fs_GetArgumentValue(tf_CArgument *_pArg) -> decltype(_pArg->f_Get_aint())
 	{
 		return _pArg->f_Get_aint();
 	}

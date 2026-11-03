@@ -208,10 +208,10 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_StrToData(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
-		-> t_CReturn
+		::CXprImplementation::fs_StrToData(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
+		-> tf_CReturn
 	{
 		return fg_StrToFloatParseExact(_pStr, _FailValue, _pStrTerminators);
 	}
@@ -228,9 +228,9 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	template <typename t_CArgument>
+	template <typename tf_CArgument>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::CXprImplementation::fs_GetArgumentValue(t_CArgument *_pArg)
+		::CXprImplementation::fs_GetArgumentValue(tf_CArgument *_pArg)
 		-> decltype(_pArg->f_Get_fp64())
 	{
 		return _pArg->f_Get_fp64();
@@ -248,9 +248,9 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	template <typename t_CData, typename t_CFormatType, typename t_COptions>
+	template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
 	inline_small auto TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, t_COptions> &_Args, COption &_Option) const
+		::f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
 		-> aint
 	{
 		switch (_Option.m_FormatTypes.m_Format1)
@@ -387,9 +387,9 @@ namespace NMib::NStr
 		, typename t_CIntegerStorage
 		, bool t_bReference
 	>
-	template <typename t_COptions>
+	template <typename tf_COptions>
 	inline_small void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::fsp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number)
+		::fsp_AddToStr(CString &_String, aint &_CurrentStrLen, tf_COptions &_Options, CFloat const &_Number)
 	{
 		CFloat Number = _Number;
 		bool bOptionsSign = _Options.m_bSign;

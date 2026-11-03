@@ -177,7 +177,7 @@ namespace NMib::NStr
 		umint nValidChars = 0;
 		bool bReturn = fg_ProcessUTF8
 			(
-				[&](uch8 const *, umint _Len, bool _bValid) inline_always_lambda -> bool
+				[&](uch8 const *_pStr, umint _Len, bool _bValid) inline_always_lambda -> bool
 				{
 					nValidChars += _Len;
 					return !_bValid;
@@ -206,14 +206,14 @@ namespace NMib::NStr
 
 		fg_ProcessUTF8
 			(
-				[&](uch8 *pStr, umint _Length, bool _bValid) inline_always_lambda -> bool
+				[&](uch8 *_pStr, umint _Length, bool _bValid) inline_always_lambda -> bool
 				{
 					if (!_bValid)
 					{
 						while (_Length)
 						{
-							*pStr = _ReplacementChar;
-							++pStr;
+							*_pStr = _ReplacementChar;
+							++_pStr;
 							--_Length;
 						}
 					}

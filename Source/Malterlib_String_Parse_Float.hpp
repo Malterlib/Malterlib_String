@@ -5,30 +5,30 @@
 
 namespace NMib::NStr
 {
-	template <bool t_bUseMaxLen, typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	template <bool tf_bUseMaxLen, typename tf_CData, typename tf_CReturn, typename tf_CTerm, typename tf_CPoints>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, tf_CPoints const *_pPoints)
 	{
-		t_CReturn DestNumber = t_CReturn::fs_Zero();
-		t_CReturn DestDecimals = t_CReturn::fs_Zero();
-		t_CReturn DestExponent = t_CReturn::fs_Zero();
-		t_CReturn DecimalPlace = t_CReturn::fs_One();
+		tf_CReturn DestNumber = tf_CReturn::fs_Zero();
+		tf_CReturn DestDecimals = tf_CReturn::fs_Zero();
+		tf_CReturn DestExponent = tf_CReturn::fs_Zero();
+		tf_CReturn DecimalPlace = tf_CReturn::fs_One();
 
-		using CData = NTraits::TCUnsigned<t_CData>;
-		using CTerm = NTraits::TCUnsigned<t_CTerm>;
+		using CData = NTraits::TCUnsigned<tf_CData>;
+		using CTerm = NTraits::TCUnsigned<tf_CTerm>;
 
 		CData const *pParseStr = (CData const *)_pStr;
 		CData const *pEndStr = nullptr;
-		if constexpr (t_bUseMaxLen)
+		if constexpr (tf_bUseMaxLen)
 			pEndStr = pParseStr + _MaxLen;
-		static t_CReturn const Ten = fg_Convert<t_CReturn>(10);
+		static tf_CReturn const Ten = fg_Convert<tf_CReturn>(10);
 
 		aint SearchMode = 0;
-		t_CReturn Sign = t_CReturn::fs_One();
-		t_CReturn ExponentSign = t_CReturn::fs_One();
+		tf_CReturn Sign = tf_CReturn::fs_One();
+		tf_CReturn ExponentSign = tf_CReturn::fs_One();
 		aint bFoundNum = false;
 
 		// Parse for characters, and end if str terminator is found
-		while ((!t_bUseMaxLen || pParseStr < pEndStr) && (t_bUseMaxLen || (*pParseStr)))
+		while ((!tf_bUseMaxLen || pParseStr < pEndStr) && (tf_bUseMaxLen || (*pParseStr)))
 		{
 			if (_pStrTerminators)
 			{
@@ -48,13 +48,13 @@ namespace NMib::NStr
 			case 0:
 				{
 					if ((*pParseStr) == '+')
-						Sign = t_CReturn::fs_One();
+						Sign = tf_CReturn::fs_One();
 					else if ((*pParseStr) == '-')
-						Sign = -t_CReturn::fs_One();
+						Sign = -tf_CReturn::fs_One();
 					else if ((*pParseStr) == 'e' || (*pParseStr) == 'E')
 					{
 						SearchMode = 3;
-						DestNumber = t_CReturn::fs_One();
+						DestNumber = tf_CReturn::fs_One();
 					}
 					else if (fg_CharIsNumber((*pParseStr)))
 					{
@@ -94,7 +94,7 @@ namespace NMib::NStr
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
 						DestNumber *= Ten;
-						DestNumber += fg_Convert<t_CReturn>((*pParseStr) - '0');
+						DestNumber += fg_Convert<tf_CReturn>((*pParseStr) - '0');
 						bFoundNum = true;
 					}
 					else if ((*pParseStr) == 'e' || (*pParseStr) == 'E')
@@ -142,7 +142,7 @@ namespace NMib::NStr
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
 						DecimalPlace *= Ten;
-						DestDecimals += (fg_Convert<t_CReturn>((*pParseStr) - '0')) / DecimalPlace;
+						DestDecimals += (fg_Convert<tf_CReturn>((*pParseStr) - '0')) / DecimalPlace;
 						bFoundNum = true;
 					}
 					else if ((*pParseStr) == 'e' || (*pParseStr) == 'E')
@@ -163,13 +163,13 @@ namespace NMib::NStr
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
 						DestExponent *= Ten;
-						DestExponent += fg_Convert<t_CReturn>((*pParseStr) - '0');
+						DestExponent += fg_Convert<tf_CReturn>((*pParseStr) - '0');
 						bFoundNum = true;
 					}
 					else if ((*pParseStr) == '-')
-						ExponentSign = -t_CReturn::fs_One();
+						ExponentSign = -tf_CReturn::fs_One();
 					else if ((*pParseStr) == '+')
-						ExponentSign = t_CReturn::fs_One();
+						ExponentSign = tf_CReturn::fs_One();
 					else if (fg_CharIsWhiteSpace((*pParseStr)))
 						goto Return;
 					else
@@ -195,7 +195,7 @@ namespace NMib::NStr
 
 	Return:
 
-		_pStr = (t_CData const *)pParseStr;
+		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
 			return (DestNumber + DestDecimals) * Ten.f_Pow(DestExponent * ExponentSign) * Sign;
@@ -203,86 +203,86 @@ namespace NMib::NStr
 			return _FailValue;
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm, typename tf_CPoints>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, tf_CPoints const *_pPoints)
 	{
 		return fg_StrToFloatParse<false>(_pStr, 0, _FailValue, _pStrTerminators, _bDontFail, _pPoints);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm, typename t_CPoints>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail, t_CPoints const *_pPoints)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm, typename tf_CPoints>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail, tf_CPoints const *_pPoints)
 	{
 		return fg_StrToFloatParse<true>(_pStr, _MaxLen, _FailValue, _pStrTerminators, _bDontFail, _pPoints);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloat(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloat(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, true, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloat(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloat(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _MaxLen, _FailValue, _pStrTerminators, true, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToFloat(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToFloat(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, true, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators, bool _bDontFail)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators, bool _bDontFail)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, _bDontFail, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, true, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToFloatParse(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToFloatParse(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, true, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloatExact(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, false, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, umint _MaxLen, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloatExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _MaxLen, _FailValue, _pStrTerminators, false, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToFloatExact(t_CData const *_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToFloatExact(tf_CData const *_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, false, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn, typename t_CTerm>
-	t_CReturn fg_StrToFloatParseExact(t_CData const * &_pStr, t_CReturn _FailValue, t_CTerm const *_pStrTerminators)
+	template <typename tf_CData, typename tf_CReturn, typename tf_CTerm>
+	tf_CReturn fg_StrToFloatParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue, tf_CTerm const *_pStrTerminators)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, _pStrTerminators, false, (ch8 const *)nullptr);
 	}
 
-	template <typename t_CData, typename t_CReturn>
-	t_CReturn fg_StrToFloatParseExact(t_CData const * &_pStr, t_CReturn _FailValue)
+	template <typename tf_CData, typename tf_CReturn>
+	tf_CReturn fg_StrToFloatParseExact(tf_CData const * &_pStr, tf_CReturn _FailValue)
 	{
 		return fg_StrToFloatParse(_pStr, _FailValue, (ch8 const *)nullptr, false, (ch8 const *)nullptr);
 	}

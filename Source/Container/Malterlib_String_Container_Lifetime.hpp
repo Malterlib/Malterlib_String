@@ -34,7 +34,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(CInitByRange _InitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
 		requires (CImp::mc_bInitConstStr)
 		: CImp(_pStrStart, _pStrEnd - _pStrStart)
 	{
@@ -55,7 +55,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(CAllowNUL, tf_CStrDataType const *_pStr, umint _Len)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(CAllowNUL _AllowNUL, tf_CStrDataType const *_pStr, umint _Len)
 		requires (!CImp::mc_bInitConstStr)
 	{
 		if (!_Len)
@@ -67,7 +67,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CTCStrTraits>
-	inline_large TCStr<t_CTCStrTraits>::TCStr(CInitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
+	inline_large TCStr<t_CTCStrTraits>::TCStr(CInitByRange _InitByRange, CChar const *_pStrStart, CChar const *_pStrEnd)
 		requires (!CImp::mc_bInitConstStr)
 	{
 		auto Len = _pStrEnd - _pStrStart;

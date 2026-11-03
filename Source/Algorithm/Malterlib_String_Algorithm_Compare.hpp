@@ -168,7 +168,7 @@ namespace NMib::NStr
 		return fg_StrCmpImpl(_pStr1, _pStr2, _MaxLen);
 	}
 
-	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, bool tf_bUseLen1, bool tf_bUseLen2, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large auto fg_StrCmpLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2) noexcept
 		-> typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType
 	{
@@ -181,7 +181,7 @@ namespace NMib::NStr
 
 		while (true)
 		{
-			if constexpr (t_bUseLen1)
+			if constexpr (tf_bUseLen1)
 			{
 				if (iCompare >= _Len1)
 					break;
@@ -189,7 +189,7 @@ namespace NMib::NStr
 			else if (pStr1[iCompare] == 0)
 				break;
 
-			if constexpr (t_bUseLen2)
+			if constexpr (tf_bUseLen2)
 			{
 				if (iCompare >= _Len2)
 					break;
@@ -199,7 +199,7 @@ namespace NMib::NStr
 
 			CRetType Ret0;
 			CRetType Ret1;
-			if constexpr (t_bNoCase)
+			if constexpr (tf_bNoCase)
 			{
 				Ret0 = fg_CharLowerCase(pStr1[iCompare]);
 				Ret1 = fg_CharLowerCase(pStr2[iCompare]);
@@ -217,13 +217,13 @@ namespace NMib::NStr
 		}
 
 		bool bStr1Ended;
-		if constexpr (t_bUseLen1)
+		if constexpr (tf_bUseLen1)
 			bStr1Ended = iCompare >= _Len1;
 		else
 			bStr1Ended = pStr1[iCompare] == 0;
 
 		bool bStr2Ended;
-		if constexpr (t_bUseLen2)
+		if constexpr (tf_bUseLen2)
 			bStr2Ended = iCompare >= _Len2;
 		else
 			bStr2Ended = pStr2[iCompare] == 0;
@@ -260,7 +260,7 @@ namespace NMib::NStr
 		return fg_StrCmpLengthAware<true, true, false>(_pStr1, _Len1, _pStr2, 0);
 	}
 
-	template <bool t_bNoCase, bool t_bUseLen1, bool t_bUseLen2, typename tf_CData1, typename tf_CData2>
+	template <bool tf_bNoCase, bool tf_bUseLen1, bool tf_bUseLen2, typename tf_CData1, typename tf_CData2>
 	constexpr inline_large auto fg_StrCmpMaxLengthAware(tf_CData1 const *_pStr1, umint _Len1, tf_CData2 const *_pStr2, umint _Len2, umint _MaxLen) noexcept
 		-> typename TCChooseStrCompareType<tf_CData1, tf_CData2>::CType
 	{
@@ -274,7 +274,7 @@ namespace NMib::NStr
 
 		while (iCompare < _MaxLen)
 		{
-			if constexpr (t_bUseLen1)
+			if constexpr (tf_bUseLen1)
 			{
 				if (iCompare >= _Len1)
 					break;
@@ -282,7 +282,7 @@ namespace NMib::NStr
 			else if (pStr1[iCompare] == 0)
 				break;
 
-			if constexpr (t_bUseLen2)
+			if constexpr (tf_bUseLen2)
 			{
 				if (iCompare >= _Len2)
 					break;
@@ -292,7 +292,7 @@ namespace NMib::NStr
 
 			CRetType Ret0;
 			CRetType Ret1;
-			if constexpr (t_bNoCase)
+			if constexpr (tf_bNoCase)
 			{
 				Ret0 = fg_CharLowerCase(pStr1[iCompare]);
 				Ret1 = fg_CharLowerCase(pStr2[iCompare]);
@@ -313,13 +313,13 @@ namespace NMib::NStr
 			return 0;
 
 		bool bStr1Ended;
-		if constexpr (t_bUseLen1)
+		if constexpr (tf_bUseLen1)
 			bStr1Ended = iCompare >= _Len1;
 		else
 			bStr1Ended = pStr1[iCompare] == 0;
 
 		bool bStr2Ended;
-		if constexpr (t_bUseLen2)
+		if constexpr (tf_bUseLen2)
 			bStr2Ended = iCompare >= _Len2;
 		else
 			bStr2Ended = pStr2[iCompare] == 0;

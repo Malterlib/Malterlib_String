@@ -6,10 +6,10 @@
 namespace NMib::NStr
 {
 	template <typename t_CFormatter>
-	template <typename tf_CData, typename tf_CImplementation>
-	TICStrFormatType<t_CFormatter>::TCValueData<tf_CData, tf_CImplementation>::TCValueData()
-		: m_ValuePrec0(tf_CImplementation::fs_DefaultValue())
-		, m_ValuePrec1(tf_CImplementation::fs_DefaultValue())
+	template <typename t_CData, typename t_CImplementation>
+	TICStrFormatType<t_CFormatter>::TCValueData<t_CData, t_CImplementation>::TCValueData()
+		: m_ValuePrec0(t_CImplementation::fs_DefaultValue())
+		, m_ValuePrec1(t_CImplementation::fs_DefaultValue())
 		, m_CurrentOperatorPrec0(EFormatXprOperator_None)
 		, m_CurrentOperatorPrec1(EFormatXprOperator_None)
 		, m_Precedence(0)
@@ -17,11 +17,11 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter>
-	template <typename tf_CData, typename tf_CImplementation>
-	void TICStrFormatType<t_CFormatter>::TCValueData<tf_CData, tf_CImplementation>::operator () (tf_CData _Value)
+	template <typename t_CData, typename t_CImplementation>
+	void TICStrFormatType<t_CFormatter>::TCValueData<t_CData, t_CImplementation>::operator () (t_CData _Value)
 	{
 		EFormatXprOperator *pOperator;
-		tf_CData *pValue;
+		t_CData *pValue;
 
 		if (m_Precedence == 0)
 		{
@@ -42,7 +42,7 @@ namespace NMib::NStr
 		case EFormatXprOperator_None: Value = _Value; break;
 		case EFormatXprOperator_Multiply: Value *= _Value; break;
 		case EFormatXprOperator_Divide: Value /= _Value; break;
-		case EFormatXprOperator_Modulus: Value = tf_CImplementation::fs_Modulus(Value, _Value); break;
+		case EFormatXprOperator_Modulus: Value = t_CImplementation::fs_Modulus(Value, _Value); break;
 		case EFormatXprOperator_Add: Value += _Value; break;
 		case EFormatXprOperator_Sub: Value -= _Value; break;
 
@@ -55,9 +55,9 @@ namespace NMib::NStr
 		case EFormatXprOperator_LogicalOr: Value = !!Value || !!_Value; break;
 		case EFormatXprOperator_LogicalAnd: Value = !!Value && !!_Value; break;
 
-		case EFormatXprOperator_BitwiseOr: Value = tf_CImplementation::fs_BitwiseOr(Value, _Value); break;
-		case EFormatXprOperator_BitwiseAnd: Value = tf_CImplementation::fs_BitwiseAnd(Value, _Value); break;
-		case EFormatXprOperator_BitwiseXor: Value = tf_CImplementation::fs_BitwiseXor(Value, _Value); break;
+		case EFormatXprOperator_BitwiseOr: Value = t_CImplementation::fs_BitwiseOr(Value, _Value); break;
+		case EFormatXprOperator_BitwiseAnd: Value = t_CImplementation::fs_BitwiseAnd(Value, _Value); break;
+		case EFormatXprOperator_BitwiseXor: Value = t_CImplementation::fs_BitwiseXor(Value, _Value); break;
 		}
 
 		Operator = EFormatXprOperator_None;

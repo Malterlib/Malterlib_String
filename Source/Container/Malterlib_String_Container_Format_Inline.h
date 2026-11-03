@@ -61,24 +61,24 @@ namespace NMib::NStr
 		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CToFormat const &_Value);
 		static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CToFormat const &_Value, CLocalOptions &_Options);
 
-		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
 			requires requires
 			{
 				_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option, _Args);
 			}
 		;
 
-		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const
+		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const
 			requires requires
 			{
 				_Args.m_Data.f_FormatParseOption(_Args.m_Options.m_LocalOptions, _Option);
 			}
 		;
 
-		template <typename t_CData, typename t_CFormatType, typename tf_COptions>
-		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<t_CData, t_CFormatType, tf_COptions> &_Args, COption &_Option) const;
+		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
+		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
 		static constexpr bool mc_bNeedDestruct = !t_bReference;
 

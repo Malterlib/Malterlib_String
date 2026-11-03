@@ -70,14 +70,14 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_TCStrTraits>
-	template <typename t_CStrTraitsF>
-	void TCStr<t_TCStrTraits>::f_AddStr(TCStr<t_CStrTraitsF> const &_From)
+	template <typename t_CTCStrTraits>
+	template <typename tf_CStrTraitsF>
+	void TCStr<t_CTCStrTraits>::f_AddStr(TCStr<tf_CStrTraitsF> const &_From)
 	{
-		if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
+		if constexpr (tf_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_CTCStrTraits::CStrTraits::mc_Type != EStrType_Ansi)
 		{
 			CTempStr Temp;
-			if constexpr (t_CStrTraitsF::CImp::mc_bIsNullTerminated)
+			if constexpr (tf_CStrTraitsF::CImp::mc_bIsNullTerminated)
 				NStr::NPlatform::fg_SystemDecodeAnsiStr(_From.f_GetStr(), Temp);
 			else
 			{
@@ -87,7 +87,7 @@ namespace NMib::NStr
 			}
 			f_AddStr(Temp);
 		}
-		else if constexpr (t_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_TCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
+		else if constexpr (tf_CStrTraitsF::CStrTraits::mc_Type == EStrType_Ansi && t_CTCStrTraits::CStrTraits::mc_Type == EStrType_Ansi)
 		{
 			aint Length = f_GetLen();
 			CAddStrAgrs Args(Length, _From.f_GetLen());
@@ -96,14 +96,14 @@ namespace NMib::NStr
 		}
 		else if constexpr
 		(
-			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			tf_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && (tf_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename tf_CStrTraitsF::CStrTraits::CChar))
 		)
 		{
 			f_AddStr(_From.f_GetStr(), _From.f_GetLen());
 		}
 		else if constexpr
 		(
-			t_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(t_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename t_CStrTraitsF::CStrTraits::CChar))
+			tf_CStrTraitsF::CStrTraits::mc_Type != EStrType_Ansi && !(tf_CStrTraitsF::CStrTraits::mc_Type == mc_Type && sizeof(CChar) == sizeof(typename tf_CStrTraitsF::CStrTraits::CChar))
 		)
 		{
 			if (*_From.f_GetStr() != 0)
@@ -114,18 +114,18 @@ namespace NMib::NStr
 			}
 		}
 		else
-			static_assert(NTraits::gc_MakeValueDependent<false, t_CStrTraitsF>, "Unhandled case");
+			static_assert(NTraits::gc_MakeValueDependent<false, tf_CStrTraitsF>, "Unhandled case");
 	}
 
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrIterator>
-	void TCStr<t_TCStrTraits>::f_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	void TCStr<t_CTCStrTraits>::f_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		fp_AddFromUnicodeIterator<sizeof(CChar)>(_StrLen, _From);
 	}
 
-	template <typename t_TCStrTraits>
-	void TCStr<t_TCStrTraits>::f_AddUnicodeChar(ch32 _Character)
+	template <typename t_CTCStrTraits>
+	void TCStr<t_CTCStrTraits>::f_AddUnicodeChar(ch32 _Character)
 	{
 		if constexpr (sizeof(CChar) == 1)
 		{
@@ -191,9 +191,9 @@ namespace NMib::NStr
 			f_AddChar(_Character);
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize == 1, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize, typename tf_CStrIterator>
+	TCEnableIf<tf_CharSize == 1, void> TCStr<t_CTCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 1 && mc_Type == EStrType_UTF, "Lossy conversion");
 
@@ -239,9 +239,9 @@ namespace NMib::NStr
 		_StrLen = pOut - pOutStart;
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize == 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize, typename tf_CStrIterator>
+	TCEnableIf<tf_CharSize == 2, void> TCStr<t_CTCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 2 && mc_Type == EStrType_UTF, "Lossy conversion");
 		umint LenNeeded = _StrLen;
@@ -286,9 +286,9 @@ namespace NMib::NStr
 		_StrLen = pOut - pOutStart;
 	}
 
-	template <typename t_TCStrTraits>
-	template <int t_CharSize, typename tf_CStrIterator>
-	TCEnableIf<t_CharSize != 1 && t_CharSize != 2, void> TCStr<t_TCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
+	template <typename t_CTCStrTraits>
+	template <int tf_CharSize, typename tf_CStrIterator>
+	TCEnableIf<tf_CharSize != 1 && tf_CharSize != 2, void> TCStr<t_CTCStrTraits>::fp_AddFromUnicodeIterator(aint &_StrLen, tf_CStrIterator const &_From)
 	{
 		static_assert(sizeof(CChar) == 4 && mc_Type == EStrType_Unicode, "Lossy conversion");
 		umint LenNeeded = _StrLen;
@@ -320,9 +320,9 @@ namespace NMib::NStr
 		_StrLen = pOut - pOutStart;
 	}
 
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_medium void TCStr<t_TCStrTraits>::f_AddCharLengthAware(aint &_StrLen, tf_CStrDataType _Char)
+	inline_medium void TCStr<t_CTCStrTraits>::f_AddCharLengthAware(aint &_StrLen, tf_CStrDataType _Char)
 	{
 		aint MaxLen = CImp::f_CreateWritableBuffer(_StrLen + 2, false);
 		if (MaxLen >= (_StrLen + 2))
@@ -333,8 +333,8 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_TCStrTraits>
-	inline_small void TCStr<t_TCStrTraits>::f_AddStrLengthAwareInline(CAddStrAgrs const &_Args, CChar const *_pStr)
+	template <typename t_CTCStrTraits>
+	inline_small void TCStr<t_CTCStrTraits>::f_AddStrLengthAwareInline(CAddStrAgrs const &_Args, CChar const *_pStr)
 	{
 		aint WantLen = _Args.m_StrLen + _Args.m_Len + 1;
 		aint MaxLen = fg_Min(CImp::f_CreateWritableBuffer(WantLen, false), WantLen) - 1;
@@ -353,9 +353,9 @@ namespace NMib::NStr
 		_Args.m_StrLen = MaxLen;
 	}
 
-	template <typename t_TCStrTraits>
+	template <typename t_CTCStrTraits>
 	template <typename tf_CStrDataType>
-	inline_large void TCStr<t_TCStrTraits>::f_AddCharsLengthAware(aint &_StrLen, tf_CStrDataType _Char, aint _Count)
+	inline_large void TCStr<t_CTCStrTraits>::f_AddCharsLengthAware(aint &_StrLen, tf_CStrDataType _Char, aint _Count)
 	{
 		aint WantLen = _StrLen + _Count + 1;
 		aint MaxLen = fg_Min(CImp::f_CreateWritableBuffer(WantLen, false), WantLen) - 1;
@@ -371,8 +371,8 @@ namespace NMib::NStr
 		_StrLen = pWritePtr - pStartPtr;
 	}
 
-	template <typename t_TCStrTraits>
-	inline_large void TCStr<t_TCStrTraits>::f_AddStrLengthAware(aint &_StrLen, CChar const *_pStr)
+	template <typename t_CTCStrTraits>
+	inline_large void TCStr<t_CTCStrTraits>::f_AddStrLengthAware(aint &_StrLen, CChar const *_pStr)
 	{
 		CChar const *pReadPtr = _pStr;
 		aint Grow = 32;
@@ -395,8 +395,8 @@ namespace NMib::NStr
 		}
 	}
 
-	template <typename t_TCStrTraits>
-	inline_extralarge void TCStr<t_TCStrTraits>::f_AddStrLengthAware(CAddStrAgrs const &_Args, CChar const *_pStr)
+	template <typename t_CTCStrTraits>
+	inline_extralarge void TCStr<t_CTCStrTraits>::f_AddStrLengthAware(CAddStrAgrs const &_Args, CChar const *_pStr)
 	{
 		aint WantLen = _Args.m_StrLen + _Args.m_Len + 1;
 		aint MaxLen = fg_Min(CImp::f_CreateWritableBuffer(WantLen, false), WantLen) - 1;

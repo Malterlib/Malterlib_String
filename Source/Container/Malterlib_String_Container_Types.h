@@ -27,10 +27,10 @@ namespace NMib::NStr
 	template <typename t_CChar, CStrTypeUnderlying t_Type>
 	struct TCStrTraitsTypes;
 
-	template <typename t_CCharType, CStrTypeUnderlying t_Type, template <typename> class t_TImpl, typename t_CParams>
+	template <typename t_CCharType, CStrTypeUnderlying t_Type, template <typename> class t_TCImplementation, typename t_CParams>
 	struct TCStrTraits_Eval
 	{
-		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_Type, t_CParams>>>;
+		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_Type, t_CParams>, t_TCImplementation<TCStrTraits<t_CCharType, t_Type, t_CParams>>>;
 	};
 
 	template <typename t_CCharType, CStrTypeUnderlying t_DesiredType, CStrTypeUnderlying t_Type, class t_CImpl, typename t_CParams>
@@ -41,14 +41,14 @@ namespace NMib::NStr
 		typename t_CCharType
 		, CStrTypeUnderlying t_DesiredType
 		, CStrTypeUnderlying t_Type
-		, template <typename> class t_TImpl
+		, template <typename> class t_TCImplementation
 		, typename t_CParams
 		, typename t_CCharType2
 		, typename t_CParams2
 	>
-	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TImpl<TCStrTraits<t_CCharType2, t_Type, t_CParams2>>, t_CParams>
+	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TCImplementation<TCStrTraits<t_CCharType2, t_Type, t_CParams2>>, t_CParams>
 	{
-		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>>>;
+		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TCImplementation<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>>>;
 	};
 
 	struct CStrTraits_CStr : public TCStrTraits_Eval<ch8, EStrType_UTF, TCStrImp_Dynamic, CStrImp_Dynamic_ParamsDeflauts>::CType
@@ -225,15 +225,15 @@ namespace NMib::NStr
 		typename t_CCharType
 		, CStrTypeUnderlying t_DesiredType
 		, CStrTypeUnderlying t_Type
-		, template <typename, aint t_DataLen> class t_TImpl
+		, template <typename, aint t_DataLen> class t_TCImplementation
 		, typename t_CParams
 		, typename t_CCharType2
 		, typename t_CParams2
 		, aint t_DataLen
 	>
-	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TImpl<TCStrTraits<t_CCharType2, t_Type, t_CParams2>, t_DataLen>, t_CParams>
+	struct TCStrTraits_ReplaceParams<t_CCharType, t_DesiredType, t_Type, t_TCImplementation<TCStrTraits<t_CCharType2, t_Type, t_CParams2>, t_DataLen>, t_CParams>
 	{
-		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TImpl<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_DataLen>>;
+		using CType = TCTCStrTraits<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_TCImplementation<TCStrTraits<t_CCharType, t_DesiredType, t_CParams>, t_DataLen>>;
 	};
 
 	/***************************************************************************************************\
