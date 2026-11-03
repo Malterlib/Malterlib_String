@@ -262,6 +262,86 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitor::operator () ()
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorInteger::operator () (fp32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorInteger::operator () (fp64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorInteger::operator () (CChar const *_pValue)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorFloat::operator () (uint32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorFloat::operator () (uint64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorFloat::operator () (int32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorFloat::operator () (int64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorFloat::operator () (CChar const *_pValue)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorNumber::operator () (CChar const *_pValue)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (uint32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (uint64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (int32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (int64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (fp32 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
+	void TICStrFormatType<t_CFormatter>::CVisitorString::operator () (fp64 _Value)
+	{
+	}
+
+	template <typename t_CFormatter>
 	void TICStrFormatType<t_CFormatter>::COption::f_GetData_Str(CChar *_pDestStr, aint _MaxChars) const
 	{
 		CChar const *pParseStr = m_pDataStart;

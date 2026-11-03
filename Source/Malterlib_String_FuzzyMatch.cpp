@@ -365,6 +365,11 @@ namespace NMib::NStr
 		}
 	}
 
+	CFuzzyMatchResult::operator bool () const
+	{
+		return m_Score >= 0.0;
+	}
+
 	CFuzzyMatchResult fg_FuzzyMatchString(CStr const &_Candidate, CStr const &_Query)
 	{
 		if (_Candidate.f_GetLen() == 0 || _Query.f_GetLen() == 0)

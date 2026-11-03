@@ -118,81 +118,38 @@ namespace NMib::NStr
 			virtual void operator () (fp32 _Value) = 0;
 			virtual void operator () (fp64 _Value) = 0;
 			virtual void operator () (CChar const *_pValue) = 0;
-			virtual void operator () ()
-			{
-			}
+			virtual void operator () ();
 		};
 
 		struct CVisitorInteger : public CVisitor
 		{
-			virtual void operator () (fp32 _Value)
-			{
-			}
-
-			virtual void operator () (fp64 _Value)
-			{
-			}
-
-			virtual void operator () (CChar const *_pValue)
-			{
-			}
+			virtual void operator () (fp32 _Value);
+			virtual void operator () (fp64 _Value);
+			virtual void operator () (CChar const *_pValue);
 		};
 
 		struct CVisitorFloat : public CVisitor
 		{
-			virtual void operator () (uint32 _Value)
-			{
-			}
-
-			virtual void operator () (uint64 _Value)
-			{
-			}
-
-			virtual void operator () (int32 _Value)
-			{
-			}
-
-			virtual void operator () (int64 _Value)
-			{
-			}
-
-			virtual void operator () (CChar const *_pValue)
-			{
-			}
+			virtual void operator () (uint32 _Value);
+			virtual void operator () (uint64 _Value);
+			virtual void operator () (int32 _Value);
+			virtual void operator () (int64 _Value);
+			virtual void operator () (CChar const *_pValue);
 		};
 
 		struct CVisitorNumber : public CVisitor
 		{
-			virtual void operator () (CChar const *_pValue)
-			{
-			}
+			virtual void operator () (CChar const *_pValue);
 		};
 
 		struct CVisitorString : public CVisitor
 		{
-			virtual void operator () (uint32 _Value)
-			{
-			}
-
-			virtual void operator () (uint64 _Value)
-			{
-			}
-
-			virtual void operator () (int32 _Value)
-			{
-			}
-
-			virtual void operator () (int64 _Value)
-			{
-			}
-
-			virtual void operator () (fp32 _Value)
-			{
-			}
-
-			virtual void operator () (fp64 _Value)
-			{
-			}
+			virtual void operator () (uint32 _Value);
+			virtual void operator () (uint64 _Value);
+			virtual void operator () (int32 _Value);
+			virtual void operator () (int64 _Value);
+			virtual void operator () (fp32 _Value);
+			virtual void operator () (fp64 _Value);
 		};
 
 		struct COption
