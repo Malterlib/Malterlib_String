@@ -311,8 +311,6 @@ MalterlibBuildShowProgress=false ./mib build Tests
 - `Source/Malterlib_String_FormatUtils.h/hpp` - Format utilities
 
 ### Unicode & Encoding
-- `Source/Malterlib_String_Iterator_Unicode.h/hpp` - Unicode iteration
-- `Source/Malterlib_String_Iterator_UTF*.h/hpp` - UTF encoding iterators
 - `Source/Malterlib_String_UnicodeConversion.h` - Conversion utilities
 - `Source/Malterlib_String_AnsiConversion.h` - ANSI conversion
 
