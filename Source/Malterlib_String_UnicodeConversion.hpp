@@ -28,9 +28,9 @@ namespace NMib::NStr
 		return mp_Current;
 	}
 
-	inline_always smint CStrIteratorUTF8::operator - (CStrIteratorUTF8 const &_Other) const
+	inline_always smint CStrIteratorUTF8::operator - (CStrIteratorUTF8 const &_iOther) const
 	{
-		return mp_pBegin - _Other.mp_pBegin;
+		return mp_pBegin - _iOther.mp_pBegin;
 	}
 
 	inline_always CStrIteratorUTF8 &CStrIteratorUTF8::operator ++ ()
@@ -64,9 +64,9 @@ namespace NMib::NStr
 		return *this;
 	}
 
-	inline_always smint CStrIteratorUTF16::operator - (CStrIteratorUTF16 const &_Other) const
+	inline_always smint CStrIteratorUTF16::operator - (CStrIteratorUTF16 const &_iOther) const
 	{
-		return mp_pBegin - _Other.mp_pBegin;
+		return mp_pBegin - _iOther.mp_pBegin;
 	}
 
 	template <typename t_CChar>
@@ -119,9 +119,9 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CChar>
-	inline_always smint TCStrIteratorUnicode<t_CChar>::operator - (TCStrIteratorUnicode const &_Other) const
+	inline_always smint TCStrIteratorUnicode<t_CChar>::operator - (TCStrIteratorUnicode const &_iOther) const
 	{
-		return mp_pBegin - _Other.mp_pBegin;
+		return mp_pBegin - _iOther.mp_pBegin;
 	}
 
 	template <typename t_CChar>
@@ -149,11 +149,11 @@ namespace NMib::NStr
 	}
 
 	template <bool tf_bCheckLength, typename tf_FOutFunctor>
-	inline_always bool fg_EncodeUTF8Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor)
+	inline_always bool fg_EncodeUTF8Char(ch32 _Char, tf_FOutFunctor &&_fOutFunctor)
 	{
 		if (_Char >= 0x4000000)
 		{
-			auto *pRet = _OutFunctor(6);
+			auto *pRet = _fOutFunctor(6);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -175,7 +175,7 @@ namespace NMib::NStr
 		}
 		else if (_Char >= 0x200000)
 		{
-			auto *pRet = _OutFunctor(5);
+			auto *pRet = _fOutFunctor(5);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -194,7 +194,7 @@ namespace NMib::NStr
 		}
 		else if (_Char >= 0x10000)
 		{
-			auto *pRet = _OutFunctor(4);
+			auto *pRet = _fOutFunctor(4);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -211,7 +211,7 @@ namespace NMib::NStr
 		}
 		else if (_Char >= 0x800)
 		{
-			auto *pRet = _OutFunctor(3);
+			auto *pRet = _fOutFunctor(3);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -226,7 +226,7 @@ namespace NMib::NStr
 		}
 		else if (_Char >= 0x80)
 		{
-			auto *pRet = _OutFunctor(2);
+			auto *pRet = _fOutFunctor(2);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -239,7 +239,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			auto *pRet = _OutFunctor(1);
+			auto *pRet = _fOutFunctor(1);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -251,9 +251,9 @@ namespace NMib::NStr
 	}
 
 	template <typename tf_FOutFunctor>
-	bool fg_EncodeUTF8BOM(tf_FOutFunctor &&_OutFunctor)
+	bool fg_EncodeUTF8BOM(tf_FOutFunctor &&_fOutFunctor)
 	{
-		auto *pRet = _OutFunctor(3);
+		auto *pRet = _fOutFunctor(3);
 		if (pRet)
 		{
 			*pRet = ch8(0xEF);
@@ -268,11 +268,11 @@ namespace NMib::NStr
 	}
 
 	template <bool tf_bCheckLength, typename tf_FOutFunctor>
-	inline_always bool fg_EncodeUTF16Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor)
+	inline_always bool fg_EncodeUTF16Char(ch32 _Char, tf_FOutFunctor &&_fOutFunctor)
 	{
 		if (_Char > 0xFFFF)
 		{
-			auto *pRet = _OutFunctor(2);
+			auto *pRet = _fOutFunctor(2);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)
@@ -292,7 +292,7 @@ namespace NMib::NStr
 		}
 		else
 		{
-			auto *pRet = _OutFunctor(1);
+			auto *pRet = _fOutFunctor(1);
 			if constexpr (tf_bCheckLength)
 			{
 				if (!pRet)

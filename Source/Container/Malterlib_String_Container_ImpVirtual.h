@@ -16,7 +16,7 @@ namespace NMib::NStr
 		virtual aint f_CreateWritableBuffer(aint _Length, bool _bDiscard) = 0;
 		virtual aint f_GetAllocLength() = 0;
 
-		static constexpr bool mc_AllocatesMemory = true;
+		static constexpr bool mc_bAllocatesMemory = true;
 		static constexpr bool mc_bIsNullTerminated = false;
 	};
 
@@ -32,7 +32,7 @@ namespace NMib::NStr
 		virtual void f_Clear();
 
 		static constexpr bool mc_bInitConstStr = false;
-		static constexpr bool mc_AllocatesMemory = TCStr<t_CTStrTraits>::mc_AllocatesMemory;
+		static constexpr bool mc_bAllocatesMemory = TCStr<t_CTStrTraits>::mc_bAllocatesMemory;
 		static constexpr bool mc_bIsNullTerminated = false;
 
 		TCStr<t_CTStrTraits> *m_pStr;
@@ -50,7 +50,7 @@ namespace NMib::NStr
 		virtual void f_Clear();
 
 		static constexpr bool mc_bInitConstStr = false;
-		static constexpr bool mc_AllocatesMemory = TCStr<t_CTStrTraits>::mc_AllocatesMemory;
+		static constexpr bool mc_bAllocatesMemory = TCStr<t_CTStrTraits>::mc_bAllocatesMemory;
 		static constexpr bool mc_bIsNullTerminated = false;
 
 		TCStr<t_CTStrTraits> m_Str;

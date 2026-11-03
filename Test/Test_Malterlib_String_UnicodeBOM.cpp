@@ -21,26 +21,26 @@ namespace
 				DMibTestCategory("Iteration")
 				{
 					CStr Text("\xEF\xBB\xBF" "\xEF\xBF\xBE" "A");
-					CStrIteratorUTF8 UTF8(Text);
+					CStrIteratorUTF8 iUTF8(Text);
 
-					DMibExpect(*UTF8, ==, ch32(0xFEFF));
-					DMibExpect(UTF8.f_GetLastWholeCodePointPos(), ==, 3);
-					++UTF8;
-					DMibExpect(*UTF8, ==, ch32(0xFFFE));
-					++UTF8;
-					DMibExpect(*UTF8, ==, ch32('A'));
+					DMibExpect(*iUTF8, ==, ch32(0xFEFF));
+					DMibExpect(iUTF8.f_GetLastWholeCodePointPos(), ==, 3);
+					++iUTF8;
+					DMibExpect(*iUTF8, ==, ch32(0xFFFE));
+					++iUTF8;
+					DMibExpect(*iUTF8, ==, ch32('A'));
 
 					ch16 Units[] = {ch16(0xFEFF), ch16(0xFFFE), ch16('A')};
-					CStrIteratorUTF16 UTF16(Units, fg_ArraySize(Units));
+					CStrIteratorUTF16 iUTF16(Units, fg_ArraySize(Units));
 
-					DMibExpect(*UTF16, ==, ch32(0xFEFF));
-					++UTF16;
-					DMibExpect(*UTF16, ==, ch32(0xFFFE));
-					++UTF16;
-					DMibExpect(*UTF16, ==, ch32('A'));
+					DMibExpect(*iUTF16, ==, ch32(0xFEFF));
+					++iUTF16;
+					DMibExpect(*iUTF16, ==, ch32(0xFFFE));
+					++iUTF16;
+					DMibExpect(*iUTF16, ==, ch32('A'));
 
-					CStrIteratorUTF16 Noncharacter(Units + 1, 1);
-					DMibExpect(*Noncharacter, ==, ch32(0xFFFE));
+					CStrIteratorUTF16 iNoncharacter(Units + 1, 1);
+					DMibExpect(*iNoncharacter, ==, ch32(0xFFFE));
 				};
 
 				DMibTestCategory("BoundedInput")
@@ -49,12 +49,12 @@ namespace
 					for (umint Len : {0, 1, 2, 3})
 					{
 						DMibTestPath(CStr("Length{}"_f << Len));
-						CStrIteratorUTF8 Iterator(Bytes, Len);
+						CStrIteratorUTF8 iChar(Bytes, Len);
 
-						DMibExpect(Iterator.f_IsWholeCodePoint(), ==, Len == 0 || Len == 3);
-						DMibExpect(Iterator.f_GetLastWholeCodePointPos(), <=, Len);
+						DMibExpect(iChar.f_IsWholeCodePoint(), ==, Len == 0 || Len == 3);
+						DMibExpect(iChar.f_GetLastWholeCodePointPos(), <=, Len);
 						if (Len == 3)
-							DMibExpect(*Iterator, ==, ch32(0xFEFF));
+							DMibExpect(*iChar, ==, ch32(0xFEFF));
 					}
 
 					DMibExpectTrue(fg_IsValidUTF8(Bytes, 3));
@@ -64,8 +64,8 @@ namespace
 					DMibExpectFalse(fg_IsValidUTF8(CStr("\xEF\xBF\xBE"), EValidateUTF8Flag::mc_DisallowNonCharacters));
 
 					ch16 Unit = ch16(0xFFFE);
-					CStrIteratorUTF16 Empty(&Unit, 0);
-					DMibExpect(*Empty, ==, ch32(0));
+					CStrIteratorUTF16 iEmpty(&Unit, 0);
+					DMibExpect(*iEmpty, ==, ch32(0));
 				};
 
 				DMibTestCategory("ConversionAndFormatting")

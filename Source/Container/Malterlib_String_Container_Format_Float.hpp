@@ -1140,7 +1140,7 @@ namespace NMib::NStr
 		::f_GetTypeID() const
 		-> void const *
 	{
-		return &mcp_TypeID;
+		return &mcp_bTypeID;
 	}
 
 	template

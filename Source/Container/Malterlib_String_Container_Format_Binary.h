@@ -41,7 +41,7 @@ namespace NMib::NStr
 		template <typename tf_COptions>
 		inline_small static void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Value);
 
-		inline static bool constexpr mcp_TypeID = false;
+		inline static bool constexpr mcp_bTypeID = false;
 
 		t_CBinaryType mp_Value;
 	};

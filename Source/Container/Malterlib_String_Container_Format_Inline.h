@@ -91,7 +91,7 @@ namespace NMib::NStr
 
 		CStorageType mp_ToFormat;
 
-		inline static bool constexpr mcp_TypeID = false;
+		inline static bool constexpr mcp_bTypeID = false;
 	};
 }
 

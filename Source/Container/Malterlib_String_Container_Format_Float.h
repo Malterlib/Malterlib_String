@@ -113,7 +113,7 @@ namespace NMib::NStr
 		template <typename tf_COptions>
 		static inline_small void fsp_AddToStr(CString &_String, aint &_CurrentStrLen, tf_COptions &_Options, CFloat const &_Number);
 
-		inline static bool constexpr mcp_TypeID = false;
+		inline static bool constexpr mcp_bTypeID = false;
 
 		CStorage mp_Value;
 	};

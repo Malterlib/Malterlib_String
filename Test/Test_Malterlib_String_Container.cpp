@@ -105,7 +105,7 @@ namespace
 #else
 				static int const s_nTests = 100;
 #endif
-				auto Karma = [&]()
+				auto fKarma = [&]()
 					{
 						KarmaResult = std::string();
 						{ // Timing boost.spirit
@@ -118,7 +118,7 @@ namespace
 						}
 					}
 				;
-				auto KarmaReserve = [&]()
+				auto fKarmaReserve = [&]()
 					{
 						KarmaReserveResult = std::string();
 						KarmaReserveResult.reserve(NeededCharSize);
@@ -132,7 +132,7 @@ namespace
 						}
 					}
 				;
-				auto KarmaChar = [&]()
+				auto fKarmaChar = [&]()
 					{
 						{ // Timing boost.spirit
 							KarmaStaticNoAllocTime.f_Start();
@@ -145,75 +145,75 @@ namespace
 						}
 					}
 				;
-				auto KarmaManualStaticAlloc = [&]()
+				auto fKarmaManualStaticAlloc = [&]()
 					{
 						KarmaManualStaticAllocResult = std::string();
 						{ // Timing boost.spirit
 							KarmaManualStaticAllocTime.f_Start();
 
-							std::back_insert_iterator<std::string> OutIter(KarmaManualStaticAllocResult);
+							std::back_insert_iterator<std::string> iOut(KarmaManualStaticAllocResult);
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
-							*OutIter = '[';
-							++OutIter;
-							if (Iter != IterEnd)
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
+							*iOut = '[';
+							++iOut;
+							if (iValue != iEnd)
 							{
-								NKarma::generate(OutIter, hex, *Iter);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
-									NKarma::generate(OutIter, ',' << hex, *Iter);
+								NKarma::generate(iOut, hex, *iValue);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
+									NKarma::generate(iOut, ',' << hex, *iValue);
 							}
-							*OutIter = ']';
-							++OutIter;
+							*iOut = ']';
+							++iOut;
 
 							KarmaManualStaticAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
-				auto KarmaManualStaticAllocReserve = [&]()
+				auto fKarmaManualStaticAllocReserve = [&]()
 					{
 						KarmaManualStaticAllocReserveResult = std::string();
 						KarmaManualStaticAllocReserveResult.reserve(NeededCharSize);
 						KarmaManualStaticAllocReserveTime.f_Start();
 						{ // Timing boost.spirit
 
-							std::back_insert_iterator<std::string> OutIter(KarmaManualStaticAllocReserveResult);
+							std::back_insert_iterator<std::string> iOut(KarmaManualStaticAllocReserveResult);
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
-							*OutIter = '[';
-							++OutIter;
-							if (Iter != IterEnd)
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
+							*iOut = '[';
+							++iOut;
+							if (iValue != iEnd)
 							{
-								NKarma::generate(OutIter, hex, *Iter);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
-									NKarma::generate(OutIter, ',' << hex, *Iter);
+								NKarma::generate(iOut, hex, *iValue);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
+									NKarma::generate(iOut, ',' << hex, *iValue);
 							}
-							*OutIter = ']';
-							++OutIter;
+							*iOut = ']';
+							++iOut;
 						}
 						KarmaManualStaticAllocReserveTime.f_Stop(mc_VectorSize);
 					}
 				;
-				auto KarmaManualStaticNoAlloc = [&]()
+				auto fKarmaManualStaticNoAlloc = [&]()
 					{
 						KarmaManualStaticNoAllocTime.f_Start();
 						{ // Timing boost.spirit
 
 							ch8 *pGenerate = KarmaManualStaticNoAllocResult.f_GetArray();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							*pGenerate = '[';
 							++pGenerate;
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								NKarma::generate(pGenerate, hex, *Iter);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
-									NKarma::generate(pGenerate, ',' << hex, *Iter);
+								NKarma::generate(pGenerate, hex, *iValue);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
+									NKarma::generate(pGenerate, ',' << hex, *iValue);
 							}
 							*pGenerate = ']';
 							++pGenerate;
@@ -223,26 +223,26 @@ namespace
 					}
 				;
 
-				auto MalterlibAlloc = [&]()
+				auto fMalterlibAlloc = [&]()
 					{
 						MalterlibAllocResult.f_Clear();
 						{ // Timing CStr::Parse
 							MalterlibAllocTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							MalterlibAllocResult += '[';
 
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								MalterlibAllocResult += (CStr::CFormat("{nh}") << *Iter);
-								++Iter;
+								MalterlibAllocResult += (CStr::CFormat("{nh}") << *iValue);
+								++iValue;
 								CValue Value;
 								CStr::CFormat Format(",{nh}");
 								Format << Value;
-								for (; Iter != IterEnd; ++Iter)
+								for (; iValue != iEnd; ++iValue)
 								{
-									Value = *Iter;
+									Value = *iValue;
 									MalterlibAllocResult += Format;
 								}
 							}
@@ -253,26 +253,26 @@ namespace
 						}
 					}
 				;
-				auto MalterlibAllocReserve = [&]()
+				auto fMalterlibAllocReserve = [&]()
 					{
 						MalterlibAllocReserveResult.f_Clear();
 						MalterlibAllocReserveResult.f_Reserve(NeededCharSize);
 						{ // Timing CStr::Parse
 							MalterlibAllocReserveTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							MalterlibAllocReserveResult += '[';
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								MalterlibAllocReserveResult += (CStr::CFormat("{nh}") << *Iter);
-								++Iter;
+								MalterlibAllocReserveResult += (CStr::CFormat("{nh}") << *iValue);
+								++iValue;
 								CValue Value;
 								CStr::CFormat Format(",{nh}");
 								Format << Value;
-								for (; Iter != IterEnd; ++Iter)
+								for (; iValue != iEnd; ++iValue)
 								{
-									Value = *Iter;
+									Value = *iValue;
 									MalterlibAllocReserveResult += Format;
 								}
 							}
@@ -282,25 +282,25 @@ namespace
 						}
 					}
 				;
-				auto MalterlibNoAlloc = [&]()
+				auto fMalterlibNoAlloc = [&]()
 					{
 						MalterlibNoAllocResult.f_Clear();
 						{ // Timing CStr::Parse
 							MalterlibNoAllocTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							MalterlibNoAllocResult += '[';
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								MalterlibNoAllocResult += (CStrPtr::CFormat("{nh}") << *Iter);
-								++Iter;
+								MalterlibNoAllocResult += (CStrPtr::CFormat("{nh}") << *iValue);
+								++iValue;
 								CValue Value;
 								CStrPtr::CFormat Format(",{nh}");
 								Format << Value;
-								for (; Iter != IterEnd; ++Iter)
+								for (; iValue != iEnd; ++iValue)
 								{
-									Value = *Iter;
+									Value = *iValue;
 									MalterlibNoAllocResult += Format;
 								}
 							}
@@ -310,24 +310,24 @@ namespace
 						}
 					}
 				;
-				auto MalterlibStaticNoAlloc = [&]()
+				auto fMalterlibStaticNoAlloc = [&]()
 					{
 						MalterlibStaticNoAllocResult.f_Clear();
 						{ // Timing CStr::Parse
 							MalterlibStaticNoAllocTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							aint StrLen = 0;
 							MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, '[');
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
+								CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*iValue), StrLen);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
 								{
 									MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, ',');
-									CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
+									CStrPtr::fs_ToStrInplaceConcat(MalterlibStaticNoAllocResult, fg_FormatIntFormat<16>(*iValue), StrLen);
 								}
 							}
 							MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, ']');
@@ -337,24 +337,24 @@ namespace
 						}
 					}
 				;
-				auto MalterlibStaticAlloc = [&]()
+				auto fMalterlibStaticAlloc = [&]()
 					{
 						MalterlibStaticAllocResult.f_Clear();
 						{ // Timing CStr::Parse
 							MalterlibStaticAllocTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							aint StrLen = 0;
 							MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, '[');
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
+								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*iValue), StrLen);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
 								{
 									MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, ',');
-									CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*Iter), StrLen);
+									CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocResult, fg_FormatIntFormat<16>(*iValue), StrLen);
 								}
 							}
 							MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, ']');
@@ -364,25 +364,25 @@ namespace
 						}
 					}
 				;
-				auto MalterlibStaticAllocReserve = [&]()
+				auto fMalterlibStaticAllocReserve = [&]()
 					{
 						MalterlibStaticAllocReserveResult.f_Clear();
 						MalterlibStaticAllocReserveResult.f_Reserve(NeededCharSize);
 						{ // Timing CStr::Parse
 							MalterlibStaticAllocReserveTime.f_Start();
 
-							auto Iter = Vector.begin();
-							auto IterEnd = Vector.end();
+							auto iValue = Vector.begin();
+							auto iEnd = Vector.end();
 							aint StrLen = 0;
 							MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, '[');
-							if (Iter != IterEnd)
+							if (iValue != iEnd)
 							{
-								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*Iter), StrLen);
-								++Iter;
-								for (; Iter != IterEnd; ++Iter)
+								CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*iValue), StrLen);
+								++iValue;
+								for (; iValue != iEnd; ++iValue)
 								{
 									MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, ',');
-									CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*Iter), StrLen);
+									CStr::fs_ToStrInplaceConcat(MalterlibStaticAllocReserveResult, fg_FormatIntFormat<16>(*iValue), StrLen);
 								}
 							}
 							MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, ']');
@@ -394,31 +394,31 @@ namespace
 				;
 
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					Karma();
+					fKarma();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					KarmaChar();
+					fKarmaChar();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					KarmaReserve();
+					fKarmaReserve();
 
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					KarmaManualStaticAlloc();
+					fKarmaManualStaticAlloc();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					KarmaManualStaticAllocReserve();
+					fKarmaManualStaticAllocReserve();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					KarmaManualStaticNoAlloc();
+					fKarmaManualStaticNoAlloc();
 
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibAlloc();
+					fMalterlibAlloc();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibAllocReserve();
+					fMalterlibAllocReserve();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibNoAlloc();
+					fMalterlibNoAlloc();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibStaticNoAlloc();
+					fMalterlibStaticNoAlloc();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibStaticAlloc();
+					fMalterlibStaticAlloc();
 				for (int iTest = 0; iTest < s_nTests; ++iTest)
-					MalterlibStaticAllocReserve();
+					fMalterlibStaticAllocReserve();
 
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaResult.c_str()))(ETestFlag_NoValues);
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaCharResult.f_GetArray()))(ETestFlag_NoValues);
@@ -509,12 +509,12 @@ namespace
 						SpiritSemanticTimer.f_Start();
 
 						std::string::iterator iBegin = HexListStdStr.begin();
-						auto Lamba = [&SpiritSemanticVector](CValue const &_Value, boost::spirit::unused_type _Context, bool _bPass)
+						auto fAddValue = [&SpiritSemanticVector](CValue const &_Value, boost::spirit::unused_type _Context, bool _bPass)
 							{
 								SpiritSemanticVector.push_back(_Value);
 							}
 						;
-						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[Lamba] % ',' >> ']'));
+						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[fAddValue] % ',' >> ']'));
 
 						SpiritSemanticTimer.f_Stop(mc_VectorSize);
 					}

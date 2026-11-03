@@ -104,7 +104,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	void const *TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_GetTypeID() const
 	{
-		return &mcp_TypeID;
+		return &mcp_bTypeID;
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
@@ -258,9 +258,9 @@ namespace NMib::NStr
 	{ \
 		using CFormatType = TCStrFormatType_String<t_CFormatter, d_Type, d_StrType>; \
 		template <typename tf_CTypeWithConst> \
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, d_Type * const &_Data) \
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, d_Type * const &_pData) \
 		{ \
-			_Formatter.template f_Alloc<CFormatType>(_Data);\
+			_Formatter.template f_Alloc<CFormatType>(_pData);\
 			return typename CFormatType::CStrFormatTypeClassifier();\
 		} \
 	};\

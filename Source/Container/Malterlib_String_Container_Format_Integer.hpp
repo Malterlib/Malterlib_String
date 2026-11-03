@@ -772,7 +772,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	void const *TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::f_GetTypeID() const
 	{
-		return &mcp_TypeID;
+		return &mcp_bTypeID;
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -885,9 +885,9 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CData>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, t_CData *>::fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+	inline_large auto TCStringFormatter<t_CFormatter, t_CData *>::fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_pData) -> typename CFormatType::CStrFormatTypeClassifier
 	{
-		umint Data = (umint)_Data;
+		umint Data = (umint)_pData;
 		_Formatter.template f_Alloc<CFormatType>(Data);
 		return typename CFormatType::CStrFormatTypeClassifier();
 	}
@@ -908,9 +908,9 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_CTypeWithConst>
-	inline_large auto TCStringFormatter<t_CFormatter, bool>::fs_CreateFormat(t_CFormatter &_Formatter, bool const &_Data) -> typename CFormatType::CStrFormatTypeClassifier
+	inline_large auto TCStringFormatter<t_CFormatter, bool>::fs_CreateFormat(t_CFormatter &_Formatter, bool const &_bData) -> typename CFormatType::CStrFormatTypeClassifier
 	{
-		_Formatter.template f_Alloc<CFormatType>(_Data);
+		_Formatter.template f_Alloc<CFormatType>(_bData);
 		return typename CFormatType::CStrFormatTypeClassifier();
 	}
 }

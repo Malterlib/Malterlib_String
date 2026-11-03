@@ -37,7 +37,7 @@ namespace NMib::NStr
 		static constexpr bool mc_bNothrowAssign = true;
 		static constexpr bool mc_bIsNullTerminated = true;
 		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
-		static constexpr bool mc_AllocatesMemory = false;
+		static constexpr bool mc_bAllocatesMemory = false;
 
 		umint m_Len;
 		CChar m_Data[t_DataLen];

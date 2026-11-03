@@ -100,7 +100,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	void const *TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::f_GetTypeID() const
 	{
-		return &mcp_TypeID;
+		return &mcp_bTypeID;
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>

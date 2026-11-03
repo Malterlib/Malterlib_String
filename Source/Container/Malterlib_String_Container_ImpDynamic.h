@@ -120,7 +120,7 @@ namespace NMib::NStr
 		static constexpr umint mc_MaxAllocChars = (TCLimitsInt<umint>::mc_Max - sizeof(CData)) / sizeof(CChar);
 		static constexpr umint mc_MaxStrLen = mc_MaxAllocChars < CData::mc_InvalidStrLen ? mc_MaxAllocChars : CData::mc_InvalidStrLen;
 		static constexpr bool mc_bNothrowAssign = true;
-		static constexpr bool mc_AllocatesMemory = true;
+		static constexpr bool mc_bAllocatesMemory = true;
 		static constexpr bool mc_bInitConstStr = false;
 		static constexpr bool mc_bIsNullTerminated = true;
 		static constexpr umint mc_MaxExtraChars = CImpParams::mc_MaxExtraChars;

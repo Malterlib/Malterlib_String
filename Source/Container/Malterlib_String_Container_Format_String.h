@@ -69,7 +69,7 @@ namespace NMib::NStr
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename tf_COptions, typename tf_CStrDataType>
 		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, tf_CStrDataType const *_pValue, umint _StrLen);
 
-		inline static bool constexpr mcp_TypeID = false;
+		inline static bool constexpr mcp_bTypeID = false;
 
 		t_CStrDataType const *mp_pStr;
 		umint mp_StrLen;

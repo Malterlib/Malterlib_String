@@ -22,7 +22,7 @@ namespace NMib::NStr
 		mark_nodebug inline_always ch32 operator * () const;
 		mark_nodebug inline_always operator ch32 () const;
 		inline_always TCStrIteratorUnicode &operator ++ ();
-		inline_always smint operator - (TCStrIteratorUnicode const &_Other) const;
+		inline_always smint operator - (TCStrIteratorUnicode const &_iOther) const;
 
 	private:
 		ch32 fp_Next();
@@ -47,7 +47,7 @@ namespace NMib::NStr
 
 		mark_nodebug inline_always ch32 operator * () const;
 		mark_nodebug inline_always operator ch32 () const;
-		inline_always smint operator - (CStrIteratorUTF8 const &_Other) const;
+		inline_always smint operator - (CStrIteratorUTF8 const &_iOther) const;
 		inline_always CStrIteratorUTF8 &operator ++ ();
 
 	private:
@@ -72,7 +72,7 @@ namespace NMib::NStr
 		mark_nodebug inline_always operator ch32 () const;
 		mark_nodebug inline_always ch32 operator * () const;
 		inline_always CStrIteratorUTF16 &operator ++ ();
-		inline_always smint operator - (CStrIteratorUTF16 const &_Other) const;
+		inline_always smint operator - (CStrIteratorUTF16 const &_iOther) const;
 
 		CStrIteratorUTF16 &f_GetIterator();
 
@@ -94,13 +94,13 @@ namespace NMib::NStr
 	TCEnableIf<sizeof(tf_CChar) == 4, TCStrIteratorUnicode<ch32>> fg_GetUnicodeIterator(tf_CChar const *_pStr, umint _Len);
 
 	template <typename tf_FOutFunctor>
-	bool fg_EncodeUTF8BOM(tf_FOutFunctor &&_OutFunctor);
+	bool fg_EncodeUTF8BOM(tf_FOutFunctor &&_fOutFunctor);
 
 	template <bool tf_bCheckLength, typename tf_FOutFunctor>
-	inline_always bool fg_EncodeUTF8Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor);
+	inline_always bool fg_EncodeUTF8Char(ch32 _Char, tf_FOutFunctor &&_fOutFunctor);
 
 	template <bool tf_bCheckLength, typename tf_FOutFunctor>
-	inline_always bool fg_EncodeUTF16Char(ch32 _Char, tf_FOutFunctor &&_OutFunctor);
+	inline_always bool fg_EncodeUTF16Char(ch32 _Char, tf_FOutFunctor &&_fOutFunctor);
 }
 
 #include "Malterlib_String_UnicodeConversion.hpp"

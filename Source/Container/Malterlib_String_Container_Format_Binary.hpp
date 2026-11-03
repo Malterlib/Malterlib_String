@@ -99,7 +99,7 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CBinaryType>
 	void const *TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::f_GetTypeID() const
 	{
-		return &mcp_TypeID;
+		return &mcp_bTypeID;
 	}
 
 	template <typename t_CFormatter, typename t_CBinaryType>

@@ -179,7 +179,7 @@ namespace NMib::NStr
 		template <typename tf_COptions>
 		inline_small static void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer);
 
-		inline static bool constexpr mcp_TypeID = false;
+		inline static bool constexpr mcp_bTypeID = false;
 
 		CStorage mp_Storage;
 	};
@@ -238,7 +238,7 @@ namespace NMib::NStr
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, umint, CPtrOptions>;
 
 		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_Data);
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, t_CData * const &_pData);
 	};
 
 	template <typename t_CFormatter>
@@ -249,7 +249,7 @@ namespace NMib::NStr
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, int8, CBoolOptions>;
 
 		template <typename tf_CTypeWithConst>
-		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, bool const &_Data);
+		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, bool const &_bData);
 	};
 }
 
