@@ -615,13 +615,10 @@ namespace NMib::NStr
 
 		// Make a temporary buffer that can hold the biggest
 
-		enum
-		{
-			NumTempChar = tf_COptions::ENumTempChar
-		};
+		constexpr aint c_NumTempChar = tf_COptions::mc_NumTempChar;
 
-		CChar TempStr[NumTempChar];
-		CChar *pStrPlaceEnd = TempStr + NumTempChar - 1;
+		CChar TempStr[c_NumTempChar];
+		CChar *pStrPlaceEnd = TempStr + c_NumTempChar - 1;
 		CChar *pStrPlace = pStrPlaceEnd;
 
 		CRadixType Radix = _Options.template f_Radix<CRadixType>();
@@ -630,21 +627,21 @@ namespace NMib::NStr
 		{
 			if (_Options.f_ThousandSeparator())
 			{
-				if constexpr (1 << gc_HighestBitSet<tf_COptions::ERadix> == tf_COptions::ERadix)
-					fs_DoNumber_BitExactWithThousand<gc_HighestBitSet<tf_COptions::ERadix>>(_Options, Number, pStrPlace);
-				else if constexpr (tf_COptions::ERadix > 10)
-					fs_DoNumber_Above10StaticWithThousand<tf_COptions::ERadix>(_Options, Number, pStrPlace);
+				if constexpr (1 << gc_HighestBitSet<tf_COptions::mc_Radix> == tf_COptions::mc_Radix)
+					fs_DoNumber_BitExactWithThousand<gc_HighestBitSet<tf_COptions::mc_Radix>>(_Options, Number, pStrPlace);
+				else if constexpr (tf_COptions::mc_Radix > 10)
+					fs_DoNumber_Above10StaticWithThousand<tf_COptions::mc_Radix>(_Options, Number, pStrPlace);
 				else
-					fs_DoNumber_GeneralStaticWithThousand<tf_COptions::ERadix>(_Options, Number, pStrPlace);
+					fs_DoNumber_GeneralStaticWithThousand<tf_COptions::mc_Radix>(_Options, Number, pStrPlace);
 			}
 			else
 			{
-				if constexpr (1 << gc_HighestBitSet<tf_COptions::ERadix> == tf_COptions::ERadix)
-					fs_DoNumber_BitExact<gc_HighestBitSet<tf_COptions::ERadix>>(_Options, Number, pStrPlace);
-				else if constexpr (tf_COptions::ERadix > 10)
-					fs_DoNumber_Above10Static<tf_COptions::ERadix>(_Options, Number, pStrPlace);
+				if constexpr (1 << gc_HighestBitSet<tf_COptions::mc_Radix> == tf_COptions::mc_Radix)
+					fs_DoNumber_BitExact<gc_HighestBitSet<tf_COptions::mc_Radix>>(_Options, Number, pStrPlace);
+				else if constexpr (tf_COptions::mc_Radix > 10)
+					fs_DoNumber_Above10Static<tf_COptions::mc_Radix>(_Options, Number, pStrPlace);
 				else
-					fs_DoNumber_GeneralStatic<tf_COptions::ERadix>(_Options, Number, pStrPlace);
+					fs_DoNumber_GeneralStatic<tf_COptions::mc_Radix>(_Options, Number, pStrPlace);
 			}
 		}
 		else

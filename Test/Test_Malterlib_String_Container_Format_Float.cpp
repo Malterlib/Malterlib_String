@@ -3,10 +3,10 @@
 
 #include <Mib/Core/Core>
 
-static_assert(NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Float>);
-static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Integer>);
-static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_String>);
-static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClass_Other>);
+static_assert(NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClassFloat>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClassInteger>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClassString>);
+static_assert(!NMib::NStr::cHasFormatClass<fp32, NMib::NStr::EStrTypeClassOther>);
 
 namespace
 {
@@ -19,10 +19,7 @@ namespace
 	template <typename t_CTest>
 	struct TCTest
 	{
-		enum
-		{
-			ETest = sizeof(fg_TestValue(t_CTest()) * 1) == 4
-		};
+		static constexpr aint mc_Test = sizeof(fg_TestValue(t_CTest()) * 1) == 4;
 	};
 
 	using namespace NMib::NStr;

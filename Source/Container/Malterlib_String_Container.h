@@ -657,7 +657,7 @@ namespace NMib::NStr
 		template <int tf_CharSize>
 		TCEnableIf<tf_CharSize != 1 && tf_CharSize != 2, void> fp_ConvertFromType(EStrType _Type);
 
-		enum
+		enum EDebug
 		{
 			EDebug_CharSize = sizeof(CChar)
 			, EDebug_Type   = t_CTCStrTraits::CStrTraits::mc_Type

@@ -294,7 +294,7 @@ namespace NMib::NStr
 	inline_small auto TCFormat<t_CTCStrTraits>::operator << (tf_CType const &_Type) & -> TCFormat &
 		requires
 		( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-			!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+			!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 		)
 	{
 		TCStringFormatterAll<TCFormat, tf_CType, tf_CType const>::fs_CreateFormat(*this, _Type);
@@ -306,7 +306,7 @@ namespace NMib::NStr
 	inline_small auto TCFormat<t_CTCStrTraits>::operator << (tf_CType &_Type) & -> TCFormat &
 		requires
 		( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-			!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+			!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 		)
 	{
 		TCStringFormatterAll<TCFormat, tf_CType, tf_CType>::fs_CreateFormat(*this, _Type);
@@ -318,7 +318,7 @@ namespace NMib::NStr
 	inline_small auto TCFormat<t_CTCStrTraits>::operator << (tf_CType const &_Type) && -> TCFormat &&
 		requires
 		( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-			!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+			!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 		)
 	{
 		TCStringFormatterAll<TCFormat, tf_CType, tf_CType const>::fs_CreateFormat(*this, _Type);
@@ -330,7 +330,7 @@ namespace NMib::NStr
 	inline_small auto TCFormat<t_CTCStrTraits>::operator << (tf_CType &_Type) && -> TCFormat &&
 		requires
 		( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-			!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+			!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 		)
 	{
 		TCStringFormatterAll<TCFormat, tf_CType, tf_CType>::fs_CreateFormat(*this, _Type);

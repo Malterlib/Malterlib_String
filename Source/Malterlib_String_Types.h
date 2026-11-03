@@ -96,27 +96,27 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	struct TCStrFormatType_TStr;
 
-	enum EStrTypeClass_Float
+	enum EStrTypeClassFloat
 	{
 	};
 
-	enum EStrTypeClass_String
+	enum EStrTypeClassString
 	{
 	};
 
-	enum EStrTypeClass_Integer
+	enum EStrTypeClassInteger
 	{
 	};
 
-	enum EStrTypeClass_Binary
+	enum EStrTypeClassBinary
 	{
 	};
 
-	enum EStrTypeClass_Untyped
+	enum EStrTypeClassUntyped
 	{
 	};
 
-	enum EStrTypeClass_Other
+	enum EStrTypeClassOther
 	{
 	};
 
@@ -124,41 +124,41 @@ namespace NMib::NStr
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Other _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassOther _Value);
 	};
 
 	struct CStrFormatTypeClassifier_String
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_String _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassString _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Integer
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Integer _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassInteger _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Untyped
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Untyped _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassUntyped _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Binary
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Binary _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassBinary _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Float
 	{
 		template <typename t_CType>
 		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClass_Float _Value);
+		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassFloat _Value);
 	};
 }

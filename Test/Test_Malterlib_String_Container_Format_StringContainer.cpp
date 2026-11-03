@@ -3,20 +3,20 @@
 
 #include <Mib/String/Mixed>
 
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Float>);
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Integer>);
-static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_String>);
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClass_Other>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClassFloat>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClassInteger>);
+static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClassString>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CStr, NMib::NStr::EStrTypeClassOther>);
 
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Float>);
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Integer>);
-static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_String>);
-static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClass_Other>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClassFloat>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClassInteger>);
+static_assert(NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClassString>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::NStr::CMStrDeprecated, NMib::NStr::EStrTypeClassOther>);
 
-static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClass_Float>);
-static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClass_Integer>);
-static_assert(NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClass_String>);
-static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClass_Other>);
+static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClassFloat>);
+static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClassInteger>);
+static_assert(NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClassString>);
+static_assert(!NMib::NStr::cHasFormatClass<ch8 const *, NMib::NStr::EStrTypeClassOther>);
 
 using namespace NMib::NStr;
 

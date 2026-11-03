@@ -11,7 +11,7 @@ namespace NMib::NStr
 
 	struct CMStrPreserve : public CMStrDeprecated
 	{
-		EMStr_Type m_MixedType = EMStr_Type_CStr;
+		EMStrType m_MixedType = EMStrType_CStr;
 		EStrType m_OriginalType = EStrType_UTF;
 
 		CMStrPreserve();

@@ -9,22 +9,22 @@ namespace
 	using namespace NMib::NStr;
 
 	template <typename tf_CChar>
-	struct CStrType;
+	struct TCStrType;
 
 	template <>
-	struct CStrType<ch8>
+	struct TCStrType<ch8>
 	{
 		using CType = CStr;
 	};
 
 	template <>
-	struct CStrType<ch16>
+	struct TCStrType<ch16>
 	{
 		using CType = CWStr;
 	};
 
 	template <>
-	struct CStrType<ch32>
+	struct TCStrType<ch32>
 	{
 		using CType = CUStr;
 	};
@@ -34,7 +34,7 @@ namespace
 		template <typename tf_CChar>
 		void fp_StrUpperCaseTests()
 		{
-			using CString = typename CStrType<tf_CChar>::CType;
+			using CString = typename TCStrType<tf_CChar>::CType;
 
 			DMibTestCategory("StrUpperCase")
 			{
@@ -78,7 +78,7 @@ namespace
 		template <typename tf_CChar>
 		void fp_StrLowerCaseTests()
 		{
-			using CString = typename CStrType<tf_CChar>::CType;
+			using CString = typename TCStrType<tf_CChar>::CType;
 
 			DMibTestCategory("StrLowerCase")
 			{
@@ -122,7 +122,7 @@ namespace
 		template <typename tf_CChar>
 		void fp_StrCapitalizeTests()
 		{
-			using CString = typename CStrType<tf_CChar>::CType;
+			using CString = typename TCStrType<tf_CChar>::CType;
 
 			DMibTestCategory("StrCapitalize")
 			{

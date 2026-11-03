@@ -12,11 +12,8 @@ namespace NMib::NStr
 	{
 		using CIntType = t_CIntType;
 
-		enum
-		{
-			ERadix         = 10
-			, ENumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3)
-		};
+		static constexpr aint mc_Radix = 10;
+		static constexpr aint mc_NumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3);
 
 		uint32 m_Radix:29;
 		uint32 m_bNumberCaps:1;
@@ -43,11 +40,8 @@ namespace NMib::NStr
 	{
 		using CIntType = t_CIntType;
 
-		enum
-		{
-			ERadix         = 10
-			, ENumTempChar = (sizeof(CIntType) * 8) / 3 + 2
-		};
+		static constexpr aint mc_Radix = 10;
+		static constexpr aint mc_NumTempChar = (sizeof(CIntType) * 8) / 3 + 2;
 
 		inline_always static bool f_StaticRadix();
 		inline_always static bool f_NumberCaps();
@@ -66,18 +60,12 @@ namespace NMib::NStr
 
 	private:
 		static_assert(t_Radix >= 2 && t_Radix <= 36);
-		enum
-		{
-			ENumBits          = sizeof(CIntType) * 8
-			, ENumBitsPerChar = gc_HighestBitSet<t_Radix>
-		};
+		static constexpr aint mc_NumBits = sizeof(CIntType) * 8;
+		static constexpr aint mc_NumBitsPerChar = gc_HighestBitSet<t_Radix>;
 
 	public:
-		enum
-		{
-			ERadix         = t_Radix
-			, ENumTempChar = (ENumBits + (ENumBitsPerChar - 1)) / ENumBitsPerChar + 2
-		};
+		static constexpr aint mc_Radix = t_Radix;
+		static constexpr aint mc_NumTempChar = (mc_NumBits + (mc_NumBitsPerChar - 1)) / mc_NumBitsPerChar + 2;
 
 		inline_always TCStrFormatType_Int_OptionsStatic_Radix(t_CParent const &_Parent);
 

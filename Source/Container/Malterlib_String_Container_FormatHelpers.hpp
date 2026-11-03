@@ -44,7 +44,7 @@ namespace NMib::NStr::NPrivate
 		static constexpr bool mc_bValue = sizeof(fps_CheckFormat(fps_GetData())) == sizeof(NTraits::CTrueBySize);
 	};
 
-	static_assert(cHas_f_Format<NContainer::TCVector<uint32>>);
+	static_assert(cHasFormat<NContainer::TCVector<uint32>>);
 
 	template <typename t_CFormatter, typename t_CData, EStringFormatType t_FormatType>
 	struct TCStringFormatterHelper

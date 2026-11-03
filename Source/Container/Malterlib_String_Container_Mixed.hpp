@@ -89,7 +89,7 @@ namespace NMib::NStream
 			if (StrType == NStr::EStrType_Undefined)
 			{
 				StrType = NStr::EStrType_UTF;
-				Type = NStr::EMStr_Type_CStr;
+				Type = NStr::EMStrType_CStr;
 			}
 			else
 				_Stream.f_Consume(Type);
@@ -97,7 +97,7 @@ namespace NMib::NStream
 
 			switch (Type)
 			{
-			case NStr::EMStr_Type_CStr:
+			case NStr::EMStrType_CStr:
 				{
 					NStr::CStr NewStr;
 					ch8 *pStr = NewStr.f_GetStr(Len + 1);
@@ -120,7 +120,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CWStr:
+			case NStr::EMStrType_CWStr:
 				{
 					NStr::CWStr NewStr;
 					ch16 *pStr = NewStr.f_GetStr(Len + 1);
@@ -142,7 +142,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CUStr:
+			case NStr::EMStrType_CUStr:
 				{
 					NStr::CUStr NewStr;
 					ch32 *pStr = NewStr.f_GetStr(Len + 1);

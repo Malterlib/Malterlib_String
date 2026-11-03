@@ -40,8 +40,8 @@ namespace
 {
 	using namespace NMib::NStr;
 	using namespace NMib::NStorage;
-	namespace qi = boost::spirit::qi;
-	namespace karma = boost::spirit::karma;
+	namespace NQi = boost::spirit::qi;
+	namespace NKarma = boost::spirit::karma;
 
 	struct CStr_Tests : public CTest
 	{
@@ -55,7 +55,7 @@ namespace
 			static CStr fs_GenerateHexList()
 			{
 				using CValue = int32;
-				using karma::hex;
+				using NKarma::hex;
 
 				std::vector<CValue> const Vector(VectorSize, 12345);
 
@@ -112,7 +112,7 @@ namespace
 							KarmaStaticAllocTime.f_Start();
 
 							std::back_insert_iterator<std::string> iInserter(KarmaResult);
-							karma::generate(iInserter, '[' << hex % ',' << ']', Vector);
+							NKarma::generate(iInserter, '[' << hex % ',' << ']', Vector);
 
 							KarmaStaticAllocTime.f_Stop(VectorSize);
 						}
@@ -126,7 +126,7 @@ namespace
 							KarmaStaticAllocReserveTime.f_Start();
 
 							std::back_insert_iterator<std::string> iInserter(KarmaReserveResult);
-							karma::generate(iInserter, '[' << hex % ',' << ']', Vector);
+							NKarma::generate(iInserter, '[' << hex % ',' << ']', Vector);
 
 							KarmaStaticAllocReserveTime.f_Stop(VectorSize);
 						}
@@ -138,7 +138,7 @@ namespace
 							KarmaStaticNoAllocTime.f_Start();
 
 							ch8 *pGenerate = KarmaCharResult.f_GetArray();
-							karma::generate(pGenerate, '[' << hex % ',' << ']', Vector);
+							NKarma::generate(pGenerate, '[' << hex % ',' << ']', Vector);
 							*pGenerate = 0;
 
 							KarmaStaticNoAllocTime.f_Stop(VectorSize);
@@ -159,10 +159,10 @@ namespace
 							++OutIter;
 							if (Iter != IterEnd)
 							{
-								karma::generate(OutIter, hex, *Iter);
+								NKarma::generate(OutIter, hex, *Iter);
 								++Iter;
 								for (; Iter != IterEnd; ++Iter)
-									karma::generate(OutIter, ',' << hex, *Iter);
+									NKarma::generate(OutIter, ',' << hex, *Iter);
 							}
 							*OutIter = ']';
 							++OutIter;
@@ -186,10 +186,10 @@ namespace
 							++OutIter;
 							if (Iter != IterEnd)
 							{
-								karma::generate(OutIter, hex, *Iter);
+								NKarma::generate(OutIter, hex, *Iter);
 								++Iter;
 								for (; Iter != IterEnd; ++Iter)
-									karma::generate(OutIter, ',' << hex, *Iter);
+									NKarma::generate(OutIter, ',' << hex, *Iter);
 							}
 							*OutIter = ']';
 							++OutIter;
@@ -210,10 +210,10 @@ namespace
 							++pGenerate;
 							if (Iter != IterEnd)
 							{
-								karma::generate(pGenerate, hex, *Iter);
+								NKarma::generate(pGenerate, hex, *Iter);
 								++Iter;
 								for (; Iter != IterEnd; ++Iter)
-									karma::generate(pGenerate, ',' << hex, *Iter);
+									NKarma::generate(pGenerate, ',' << hex, *Iter);
 							}
 							*pGenerate = ']';
 							++pGenerate;
@@ -467,7 +467,7 @@ namespace
 
 			static void fs_DecodeHexList(CStr const &_HexList)
 			{
-				using qi::hex;
+				using NQi::hex;
 				using CValue = int32;
 
 				// Generate test data
@@ -496,7 +496,7 @@ namespace
 						SpiritTimer.f_Start();
 
 						std::string::iterator iBegin = HexListStdStr.begin();
-						qi::parse(iBegin, HexListStdStr.end(), ('[' >> hex % ',' >> ']'), SpiritVector);
+						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex % ',' >> ']'), SpiritVector);
 
 						SpiritTimer.f_Stop(VectorSize);
 					}
@@ -514,7 +514,7 @@ namespace
 								SpiritSemanticVector.push_back(_Value);
 							}
 						;
-						qi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[Lamba] % ',' >> ']'));
+						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[Lamba] % ',' >> ']'));
 
 						SpiritSemanticTimer.f_Stop(VectorSize);
 					}
@@ -641,7 +641,7 @@ namespace
 
 						CMeasureType KarmaTime("Karma");
 						{
-							using karma::int_;
+							using NKarma::int_;
 							ch8 Result[16];
 							for (umint j = 0; j < nTests; ++j)
 							{
@@ -650,7 +650,7 @@ namespace
 								for (int i = 0; i < nLoops; ++i)
 								{
 									ch8 *pGenerate = Result;
-									karma::generate(pGenerate, int_, i);
+									NKarma::generate(pGenerate, int_, i);
 									*pGenerate = 0;
 								}
 
@@ -742,7 +742,7 @@ namespace
 						};
 						CMeasureType KarmaTime("Karma");
 						{
-							using karma::int_;
+							using NKarma::int_;
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							for (umint j = 0; j < nTests; ++j)
@@ -753,7 +753,7 @@ namespace
 								{
 									Result = std::string();
 									std::back_insert_iterator<std::string> iInserter(Result);
-									karma::generate(iInserter, int_, i);
+									NKarma::generate(iInserter, int_, i);
 								}
 
 								KarmaTime.f_Stop(nLoops);
@@ -825,7 +825,7 @@ namespace
 						};
 						CMeasureType KarmaTime("Karma");
 						{
-							using karma::int_;
+							using NKarma::int_;
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							Result.reserve(12);
@@ -837,7 +837,7 @@ namespace
 								{
 									Result.clear();
 									std::back_insert_iterator<std::string> iInserter(Result);
-									karma::generate(iInserter, int_, i);
+									NKarma::generate(iInserter, int_, i);
 								}
 
 								KarmaTime.f_Stop(nLoops);

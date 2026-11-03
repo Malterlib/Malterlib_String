@@ -35,7 +35,7 @@ namespace NMib::NStream
 			_Stream.f_Feed(Type);
 			switch (Type)
 			{
-			case NStr::EMStr_Type_CStr:
+			case NStr::EMStrType_CStr:
 				{
 					switch (StrType)
 					{
@@ -61,7 +61,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CWStr:
+			case NStr::EMStrType_CWStr:
 				{
 					switch (StrType)
 					{
@@ -90,7 +90,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CUStr:
+			case NStr::EMStrType_CUStr:
 				{
 					switch (StrType)
 					{
@@ -120,12 +120,12 @@ namespace NMib::NStream
 			_Stream.f_Consume(Type);
 			_Data.f_Clear();
 
-			_Data.m_MixedType = (NStr::EMStr_Type)Type;
+			_Data.m_MixedType = (NStr::EMStrType)Type;
 			_Data.m_OriginalType = StrType;
 
 			switch (Type)
 			{
-			case NStr::EMStr_Type_CStr:
+			case NStr::EMStrType_CStr:
 				{
 					NStr::CStr NewStr;
 					ch8 *pStr = NewStr.f_GetStr(Len + 1);
@@ -148,7 +148,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CWStr:
+			case NStr::EMStrType_CWStr:
 				{
 					NStr::CWStr NewStr;
 					ch16 *pStr = NewStr.f_GetStr(Len + 1);
@@ -170,7 +170,7 @@ namespace NMib::NStream
 					}
 				}
 				break;
-			case NStr::EMStr_Type_CUStr:
+			case NStr::EMStrType_CUStr:
 				{
 					NStr::CUStr NewStr;
 					ch32 *pStr = NewStr.f_GetStr(Len + 1);

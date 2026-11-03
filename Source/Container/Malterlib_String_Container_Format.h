@@ -80,7 +80,7 @@ namespace NMib::NStr
 		inline_small TCFormat &operator << (tf_CType const &_Type) &
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+				!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 			)
 		;
 
@@ -88,7 +88,7 @@ namespace NMib::NStr
 		inline_small TCFormat &operator << (tf_CType &_Type) &
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+				!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 			)
 		;
 
@@ -96,7 +96,7 @@ namespace NMib::NStr
 		inline_small TCFormat &&operator << (tf_CType const &_Type) &&
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+				!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 			)
 		;
 
@@ -104,7 +104,7 @@ namespace NMib::NStr
 		inline_small TCFormat &&operator << (tf_CType &_Type) &&
 			requires
 			( // This type has no formatter defined for it. If you want to use the binary formatter use fg_FormatAsBinary wrapper.
-				!cHasFormatClass<tf_CType, EStrTypeClass_Untyped>
+				!cHasFormatClass<tf_CType, EStrTypeClassUntyped>
 			)
 		;
 

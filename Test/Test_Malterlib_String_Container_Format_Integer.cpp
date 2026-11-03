@@ -1,10 +1,10 @@
 // Copyright © Unbroken AB
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Float>);
-static_assert(NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Integer>);
-static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_String>);
-static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClass_Other>);
+static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClassFloat>);
+static_assert(NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClassInteger>);
+static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClassString>);
+static_assert(!NMib::NStr::cHasFormatClass<int32, NMib::NStr::EStrTypeClassOther>);
 
 namespace
 {

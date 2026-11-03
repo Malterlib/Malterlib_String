@@ -11,12 +11,12 @@ namespace NMib::NStr
 {
 	// Combines CStr, CWStr and CUStr to create a string class supporting all of the above character types as needed.
 
-	enum EMStr_Type
+	enum EMStrType
 	{
-		EMStr_Type_None    = 0
-		, EMStr_Type_CStr  = 1
-		, EMStr_Type_CWStr = 2
-		, EMStr_Type_CUStr = 3
+		EMStrType_None    = 0
+		, EMStrType_CStr  = 1
+		, EMStrType_CWStr = 2
+		, EMStrType_CUStr = 3
 	};
 
 	struct CMStrDeprecated : public CStr

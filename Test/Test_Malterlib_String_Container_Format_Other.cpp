@@ -3,7 +3,7 @@
 
 #include <Mib/String/Formatters/AutoClear>
 
-static_assert(!NMib::NStr::cHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NStr::EStrTypeClass_String>);
+static_assert(!NMib::NStr::cHasFormatClass<NMib::TCAutoClearInt<int32>, NMib::NStr::EStrTypeClassString>);
 
 namespace
 {
