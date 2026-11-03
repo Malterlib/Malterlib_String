@@ -22,9 +22,8 @@ namespace NMib::NStr
 namespace NMib::NStream
 {
 	template <typename t_CStream>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::CMStrPreserve>
+	struct TCBinaryStreamTypeReference<t_CStream, NStr::CMStrPreserve>
 	{
-	public:
 		static void fs_Feed(t_CStream &_Stream, NStr::CMStrPreserve const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();

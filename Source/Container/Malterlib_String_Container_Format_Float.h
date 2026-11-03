@@ -25,7 +25,6 @@ namespace NMib::NStr
 	>
 	struct TCStrFormatType_Float final : public TICStrFormatType<t_CFormatter>
 	{
-	public:
 		using CSuper = TICStrFormatType<t_CFormatter>;
 		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_Float;
 		using CTStrTraits = typename t_CFormatter::CTStrTraits;
@@ -167,7 +166,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, pfp32>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, fp32>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -177,7 +175,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, TCByValue<pfp32>>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp32>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -188,7 +185,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, pfp64>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, fp64>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -198,7 +194,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, TCByValue<pfp64>>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp64>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -209,7 +204,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, pfp80>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, fp80>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -219,7 +213,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, TCByValue<pfp80>>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp80>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>

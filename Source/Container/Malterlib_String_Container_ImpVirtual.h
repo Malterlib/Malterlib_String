@@ -10,7 +10,6 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, typename t_CImpParams>
 	struct TICStrImp_Virtual
 	{
-	public:
 		virtual void f_Destroy() = 0;
 		virtual typename t_CStrTraits::CChar *f_GetStr() = 0;
 		virtual bool f_IsEmpty() = 0;

@@ -60,7 +60,6 @@ namespace NMib::NStr::NPrivate
 	template <typename t_CFormatter, typename t_CData>
 	struct TCStringFormatterEnum
 	{
-	public:
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, NTraits::TCEnumUnderlyingType<t_CData>>;
 
 		template <typename tf_CTypeWithConst, typename tf_CData>

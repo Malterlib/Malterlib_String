@@ -26,9 +26,8 @@ namespace
 	};
 
 	using namespace NMib::NStr;
-	class CFloat_Tests : public NMib::NTest::CTest
+	struct CFloat_Tests : public NMib::NTest::CTest
 	{
-	public:
 		int m_Test;
 
 		void f_DoTests()

@@ -54,7 +54,6 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, typename t_CImplementation>
 	struct TCTCStrTraits
 	{
-	public:
 		using CStrTraits = t_CStrTraits;
 		using CImp = t_CImplementation;
 	};

@@ -10,7 +10,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	struct TCStrFormatType_String final : public TICStrFormatType<t_CFormatter>
 	{
-	public:
 		static_assert(t_Type != EStrType_Ansi);
 
 		using CStrFormatTypeClassifier = CStrFormatTypeClassifier_String;

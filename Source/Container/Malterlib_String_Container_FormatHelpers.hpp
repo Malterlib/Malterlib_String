@@ -92,7 +92,6 @@ namespace NMib::NStr::NPrivate
 	template <typename t_CFormatter, typename t_CData>
 	struct TCStringFormatterHelper<t_CFormatter, TCByValue<t_CData>, EStringFormatType::mc_FormatterTemplate>
 	{
-	public:
 		using CFormatType = TCStrFormatType_Inline<t_CFormatter, t_CData, false>;
 
 		template <typename tf_CTypeWithConst>

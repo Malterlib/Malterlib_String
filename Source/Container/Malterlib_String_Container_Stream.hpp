@@ -65,9 +65,8 @@ namespace NMib::NStream
 	}
 
 	template <typename t_CStream, typename t_TCStrTraitsIn>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn>>
+	struct TCBinaryStreamTypeReference<t_CStream, NStr::TCStr<t_TCStrTraitsIn>>
 	{
-	public:
 		static constexpr void fs_Feed(t_CStream &_Stream, NStr::TCStr<t_TCStrTraitsIn> const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();

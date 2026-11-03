@@ -71,7 +71,6 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	struct TCStrImp_Dynamic
 	{
-	public:
 		using CChar = typename t_CStrTraits::CChar;
 		using CImpParams = typename t_CStrTraits::CParams;
 		using CAllocator = typename CImpParams::CAllocator;

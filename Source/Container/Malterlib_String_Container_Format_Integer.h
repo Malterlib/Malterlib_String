@@ -10,7 +10,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CIntType>
 	struct TCStrFormatType_Int_Options : public TICStrFormatType<t_CFormatter>::COptions
 	{
-	public:
 		using CIntType = t_CIntType;
 
 		enum
@@ -200,7 +199,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CInt0, typename t_CInt1>
 	struct TCStringFormatter<t_CFormatter, NNumeric::TCInt<t_CInt0, t_CInt1>>
 	{
-	public:
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, NNumeric::TCInt<t_CInt0, t_CInt1> const &>;
 		template <typename tf_CTypeWithConst>
 		static inline_large typename CFormatType::CStrFormatTypeClassifier fs_CreateFormat(t_CFormatter &_Formatter, NNumeric::TCInt<t_CInt0, t_CInt1> const &_Data);
@@ -218,7 +216,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
 	struct TCStringFormatter<t_CFormatter, TCValueWithOptions<t_COption, t_CIntType>>
 	{
-	public:
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, t_CIntType const &, TCValueWithOptions<t_COption, t_CIntType>>;
 
 		template <typename tf_CTypeWithConst>
@@ -228,7 +225,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_COption, typename t_CIntType>
 	struct TCStringFormatter<t_CFormatter, TCByValue<TCValueWithOptions<t_COption, t_CIntType>>>
 	{
-	public:
 		using CFormatType = TCStrFormatType_Int<t_CFormatter, t_CIntType, TCValueWithOptions<t_COption, t_CIntType>>;
 
 		template <typename tf_CTypeWithConst>

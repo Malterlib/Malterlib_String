@@ -10,7 +10,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CBinaryType>
 	struct TCStrFormatType_Binary final : public TICStrFormatType<t_CFormatter>
 	{
-	public:
 		using CStrFormatTypeClassifier = TCConditional<NTraits::cIsSame<CStrFormatBinaryWrapperUntyped, t_CBinaryType>, CStrFormatTypeClassifier_Untyped, CStrFormatTypeClassifier_Binary>;
 		using CTStrTraits = typename t_CFormatter::CTStrTraits;
 		using CChar = typename CTStrTraits::CStrTraits::CChar;

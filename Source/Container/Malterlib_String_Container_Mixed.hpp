@@ -13,35 +13,30 @@ namespace NMib::NStr
 	template <typename t_CData0>
 	struct TCChooseStrCompareType<CMStrDeprecated, TCStr<t_CData0>>
 	{
-	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	struct TCChooseStrCompareType<TCStr<t_CData0>, CMStrDeprecated>
 	{
-	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<typename TCStr<t_CData0>::CChar, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	struct TCChooseStrCompareType<CMStrDeprecated, t_CData0>
 	{
-	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <typename t_CData0>
 	struct TCChooseStrCompareType<t_CData0, CMStrDeprecated>
 	{
-	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<t_CData0, ch32>>>;
 	};
 
 	template <>
 	struct TCChooseStrCompareType<CMStrDeprecated, CMStrDeprecated>
 	{
-	public:
 		using CType = NTraits::TCSigned<NTraits::TCLargerType<NTraits::TCLargestType<ch32, ch32>>>;
 	};
 
@@ -69,9 +64,8 @@ namespace NMib::NStr
 namespace NMib::NStream
 {
 	template <typename t_CStream>
-	class TCBinaryStreamTypeReference<t_CStream, NStr::CMStrDeprecated>
+	struct TCBinaryStreamTypeReference<t_CStream, NStr::CMStrDeprecated>
 	{
-	public:
 		static constexpr void fs_Feed(t_CStream &_Stream, NStr::CMStrDeprecated const &_Data)
 		{
 			uint64 Len = _Data.f_GetLen();
