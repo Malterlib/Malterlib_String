@@ -123,42 +123,42 @@ namespace NMib::NStr
 	struct CDefaultStrFormatTypeClassifier
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassOther _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassOther _Value);
 	};
 
 	struct CStrFormatTypeClassifier_String
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassString _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassString _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Integer
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassInteger _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassInteger _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Untyped
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassUntyped _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassUntyped _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Binary
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassBinary _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassBinary _Value);
 	};
 
 	struct CStrFormatTypeClassifier_Float
 	{
 		template <typename t_CType>
-		static NTraits::CFalseBySize f_ClassifiedAs(t_CType _Any);
-		static NTraits::CTrueBySize f_ClassifiedAs(EStrTypeClassFloat _Value);
+		static NTraits::CFalseBySize fs_ClassifiedAs(t_CType _Any);
+		static NTraits::CTrueBySize fs_ClassifiedAs(EStrTypeClassFloat _Value);
 	};
 }

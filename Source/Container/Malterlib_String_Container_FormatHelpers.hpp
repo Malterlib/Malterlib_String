@@ -33,15 +33,15 @@ namespace NMib::NStr::NPrivate
 	struct TCHasFormatClassHelper
 	{
 	private:
-		static t_CDataToTest const &fps_GetData();
-		static t_CClassToTestAgainst &fps_GetFormatClass();
+		static t_CDataToTest const &fsp_GetData();
+		static t_CClassToTestAgainst &fsp_GetFormatClass();
 		template <typename tf_CData>
-		static auto fps_CheckFormat(tf_CData const &data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).f_ClassifiedAs(fps_GetFormatClass()));
+		static auto fsp_CheckFormat(tf_CData const &data) -> decltype(CStr::CFormat::fs_GetFormatClassifier(data).fs_ClassifiedAs(fsp_GetFormatClass()));
 		template <typename tf_CData>
-		static auto fps_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
+		static auto fsp_CheckFormat(tf_CData &&) -> NTraits::CFalseBySize;
 
 	public:
-		static constexpr bool mc_bValue = sizeof(fps_CheckFormat(fps_GetData())) == sizeof(NTraits::CTrueBySize);
+		static constexpr bool mc_bValue = sizeof(fsp_CheckFormat(fsp_GetData())) == sizeof(NTraits::CTrueBySize);
 	};
 
 	static_assert(cHasFormat<NContainer::TCVector<uint32>>);

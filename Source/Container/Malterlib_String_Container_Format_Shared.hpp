@@ -5,37 +5,37 @@
 
 namespace NMib::NStr
 {
-	constexpr inline_small bool CStrFormatType_StaticOptions::f_RestrictLength()
+	constexpr inline_small bool CStrFormatType_StaticOptions::f_RestrictLength() const
 	{
 		return false;
 	}
 
-	constexpr inline_small umint CStrFormatType_StaticOptions::f_MinLength()
+	constexpr inline_small umint CStrFormatType_StaticOptions::f_MinLength() const
 	{
 		return 0;
 	}
 
-	constexpr inline_small umint CStrFormatType_StaticOptions::f_MaxLength()
+	constexpr inline_small umint CStrFormatType_StaticOptions::f_MaxLength() const
 	{
 		return TCLimitsInt<umint>::mc_Max;
 	}
 
-	constexpr inline_small aint CStrFormatType_StaticOptions::f_Align()
+	constexpr inline_small aint CStrFormatType_StaticOptions::f_Align() const
 	{
 		return 0;
 	}
 
-	constexpr inline_small bool CStrFormatType_StaticOptions::f_LeftAlign()
+	constexpr inline_small bool CStrFormatType_StaticOptions::f_LeftAlign() const
 	{
 		return false;
 	}
 
-	constexpr inline_small bool CStrFormatType_StaticOptions::f_SimpleAlign()
+	constexpr inline_small bool CStrFormatType_StaticOptions::f_SimpleAlign() const
 	{
 		return true;
 	}
 
-	constexpr inline_small ch8 CStrFormatType_StaticOptions::f_Fillout()
+	constexpr inline_small ch8 CStrFormatType_StaticOptions::f_Fillout() const
 	{
 		return ' ';
 	}
@@ -47,13 +47,13 @@ namespace NMib::NStr
 	}
 
 	template <umint t_MinLength, typename t_CParent>
-	constexpr inline_small umint TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_MinLength()
+	constexpr inline_small umint TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_MinLength() const
 	{
 		return t_MinLength;
 	}
 
 	template <umint t_MinLength, typename t_CParent>
-	constexpr inline_small bool TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_RestrictLength()
+	constexpr inline_small bool TICStrFormatType_StaticOptions_MinLength<t_MinLength, t_CParent>::f_RestrictLength() const
 	{
 		return true;
 	}
@@ -65,13 +65,13 @@ namespace NMib::NStr
 	}
 
 	template <umint t_MaxLength, typename t_CParent>
-	constexpr inline_small umint TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_MaxLength()
+	constexpr inline_small umint TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_MaxLength() const
 	{
 		return t_MaxLength;
 	}
 
 	template <umint t_MaxLength, typename t_CParent>
-	constexpr inline_small bool TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_RestrictLength()
+	constexpr inline_small bool TICStrFormatType_StaticOptions_MaxLength<t_MaxLength, t_CParent>::f_RestrictLength() const
 	{
 		return true;
 	}
@@ -83,7 +83,7 @@ namespace NMib::NStr
 	}
 
 	template <ch32 t_FillOut, typename t_CParent>
-	constexpr inline_small ch32 TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_CParent>::f_Fillout()
+	constexpr inline_small ch32 TICStrFormatType_StaticOptions_FillOut<t_FillOut, t_CParent>::f_Fillout() const
 	{
 		return t_FillOut;
 	}

@@ -31,6 +31,7 @@ namespace
 
 	struct CCase_Tests : public NMib::NTest::CTest
 	{
+	private:
 		template <typename tf_CChar>
 		void fp_StrUpperCaseTests()
 		{
@@ -363,6 +364,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			DMibTestSuite("Case")

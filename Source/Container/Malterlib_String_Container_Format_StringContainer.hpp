@@ -63,7 +63,7 @@ namespace NMib::NStr
 			CSuper::fs_ParseOptions(Args, _pFormat);
 		}
 
-		fp_AddToStr(_String, _CurrentStrLen, Options, mp_TStr);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, mp_TStr);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
@@ -143,7 +143,7 @@ namespace NMib::NStr
 	void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCStr<t_CStrTraitsIn> const &_Value)
 	{
 		COptionsStr Options;
-		fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
@@ -155,12 +155,12 @@ namespace NMib::NStr
 			, COptionsStr &_Options
 		)
 	{
-		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	template <typename tf_COptions>
-	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fp_AddToStr
+	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -264,7 +264,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn, bool t_bReference>
 	template <typename tf_COptions, typename tf_CStrTraitsIn>
-	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fp_AddToStr
+	inline_small void TCStrFormatType_TStr<t_CFormatter, t_CStrTraitsIn, t_bReference>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -273,7 +273,7 @@ namespace NMib::NStr
 		)
 	{
 		TCStr<CTStrTraits> Value(_Value);
-		fp_AddToStr(_String, _CurrentStrLen, _Options, Value);
+		fsp_AddToStr(_String, _CurrentStrLen, _Options, Value);
 	}
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>

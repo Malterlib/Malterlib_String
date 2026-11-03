@@ -67,7 +67,7 @@ namespace NMib::NStr
 			TICStrFormatType_ParseOptionsArgs<CStrType, TCStrFormatType_String, COptionsStr> Args(mp_pStr, *this, _String, _CurrentStrLen, Options, _ArgData);
 			CSuper::fs_ParseOptions(Args, _pFormat);
 		}
-		fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, mp_pStr, mp_StrLen);
+		fsp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, mp_pStr, mp_StrLen);
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
@@ -79,13 +79,13 @@ namespace NMib::NStr
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	fp32 TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Get_fp32() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp32::fs_0());
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp32::fs_Zero());
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	fp64 TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::f_Get_fp64() const
 	{
-		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp64::fs_0());
+		return CTStrTraits::CStrTraits::fs_StrToFloatExact(mp_pStr, mp_StrLen, fp64::fs_Zero());
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
@@ -154,7 +154,7 @@ namespace NMib::NStr
 	void TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CStrDataType const *_pValue)
 	{
 		COptionsStr Options;
-		fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
+		fsp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
@@ -166,12 +166,12 @@ namespace NMib::NStr
 			, COptionsStr &_Options
 		)
 	{
-		fp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, _Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
+		fsp_AddToStr<CTStrTraits::CStrTraits::mc_Type, t_Type>(_String, _CurrentStrLen, _Options, _pValue, CTStrTraits::CStrTraits::fs_StrLen(_pValue));
 	}
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
-	inline_small auto TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fp_AddToStr
+	inline_small auto TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -232,7 +232,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CStrDataType, CStrTypeUnderlying t_Type>
 	template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
-	inline_small void TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fp_AddToStr
+	inline_small void TCStrFormatType_String<t_CFormatter, t_CStrDataType, t_Type>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -247,7 +247,7 @@ namespace NMib::NStr
 		Converted.f_AddFromUnicodeIterator(Size, fg_GetUnicodeIterator(_pValue, _StrLen));
 		Converted.f_SetStrLen(Size);
 
-		fp_AddToStr<tf_DestinationType, tf_DestinationType>(_String, _CurrentStrLen, _Options, Converted.f_GetStr(), Converted.f_GetLen());
+		fsp_AddToStr<tf_DestinationType, tf_DestinationType>(_String, _CurrentStrLen, _Options, Converted.f_GetStr(), Converted.f_GetLen());
 
 		//t_Type;
 	}

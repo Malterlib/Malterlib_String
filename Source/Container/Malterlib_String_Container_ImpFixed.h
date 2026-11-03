@@ -28,7 +28,7 @@ namespace NMib::NStr
 		inline_small void f_SetStrLen(aint _Len);
 
 		inline_small aint f_GetAllocLength() const;
-		static inline_small bool f_FastLen();
+		static inline_small bool fs_FastLen();
 
 		inline_small void f_MakeUnique();
 		inline_small aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);

@@ -51,7 +51,7 @@ namespace NMib::NStr
 	{
 		using CParseType = TCStrParseType_TStr<t_CParser, t_CStrTraitsIn>;
 
-		static inline_large void f_CreateParse(t_CParser &_Formatter, TCStr<t_CStrTraitsIn> &_Data);
+		static inline_large void fs_CreateParse(t_CParser &_Formatter, TCStr<t_CStrTraitsIn> &_Data);
 	};
 }
 

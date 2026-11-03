@@ -66,7 +66,7 @@ namespace NMib::NStr
 		template <typename tf_CType>
 		inline_small CParse &operator >> (tf_CType &_Type)
 		{
-			TCStringParser<TCStrParse<CStrTraits>, tf_CType>::f_CreateParse(*this, _Type);
+			TCStringParser<TCStrParse<CStrTraits>, tf_CType>::fs_CreateParse(*this, _Type);
 			return *this;
 		}
 	};

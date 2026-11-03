@@ -43,6 +43,7 @@ namespace
 
 	struct CFuzzyMatchPerformance_Tests : public NMib::NTest::CTest
 	{
+	private:
 		// Short strings: typical filename/command matching
 		void fp_ShortStrings()
 		{
@@ -343,6 +344,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			fp_ShortStrings();

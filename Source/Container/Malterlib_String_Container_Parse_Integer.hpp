@@ -117,13 +117,13 @@ namespace NMib::NStr
 		template <typename t_CParser> \
 		struct TCStringParser<t_CParser, d_Type> \
 		{ \
-			static inline_large void f_CreateParse(t_CParser &_Formatter, d_Type &_Data) \
+			static inline_large void fs_CreateParse(t_CParser &_Formatter, d_Type &_Data) \
 			{ \
 				EStringParseTypeFlag Flags; \
 				void *pSpace = _Formatter.f_AllocSpace(sizeof(TCStrParseType_Int<t_CParser, d_Type>), Flags); \
 				TCStrParseType_Int<t_CParser, d_Type> *pNew = new(pSpace) TCStrParseType_Int<t_CParser, d_Type>(_Data); \
 				Flags |= (TCStrParseType_Int<t_CParser, d_Type>::mc_bNeedDestruct ? EStringParseTypeFlag::mc_NeedDestruct : EStringParseTypeFlag::mc_None); \
-				_Formatter.fp_AddParse(pNew, Flags); \
+				_Formatter.f_AddParse(pNew, Flags); \
 			} \
 		}; \
 	}

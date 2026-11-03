@@ -84,10 +84,10 @@ namespace NMib::NStr
 
 	private:
 		template <typename tf_COptions, typename tf_CToFormat>
-		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, tf_CToFormat const &_Value);
+		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, tf_CToFormat const &_Value);
 
 		template <typename tf_CToFormat>
-		static inline_small void fp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value);
+		static inline_small void fsp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value);
 
 		CStorageType mp_ToFormat;
 

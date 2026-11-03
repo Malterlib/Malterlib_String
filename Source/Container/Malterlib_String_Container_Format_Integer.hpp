@@ -20,7 +20,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CFormatter, typename t_CIntType>
-	inline_always bool TCStrFormatType_Int_Options<t_CFormatter, t_CIntType>::f_StaticRadix()
+	inline_always bool TCStrFormatType_Int_Options<t_CFormatter, t_CIntType>::fs_StaticRadix()
 	{
 		return false;
 	}
@@ -61,37 +61,37 @@ namespace NMib::NStr
 
 	template <typename t_CIntType>
 	template <typename tf_CRadix>
-	inline_always tf_CRadix TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Radix()
+	inline_always tf_CRadix TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Radix() const
 	{
 		return 10;
 	}
 
 	template <typename t_CIntType>
-	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_StaticRadix()
+	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::fs_StaticRadix()
 	{
 		return true;
 	}
 
 	template <typename t_CIntType>
-	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_NumberCaps()
+	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_NumberCaps() const
 	{
 		return false;
 	}
 
 	template <typename t_CIntType>
-	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Boolean()
+	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Boolean() const
 	{
 		return false;
 	}
 
 	template <typename t_CIntType>
-	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Sign()
+	inline_always bool TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_Sign() const
 	{
 		return false;
 	}
 
 	template <typename t_CIntType>
-	inline_always ch8 TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_ThousandSeparator()
+	inline_always ch8 TCStrFormatType_Int_OptionsStatic<t_CIntType>::f_ThousandSeparator() const
 	{
 		return 0;
 	}
@@ -104,13 +104,13 @@ namespace NMib::NStr
 
 	template <int32 t_Radix, typename t_CParent>
 	template <typename tf_CRadix>
-	inline_always tf_CRadix TCStrFormatType_Int_OptionsStatic_Radix<t_Radix, t_CParent>::f_Radix()
+	inline_always tf_CRadix TCStrFormatType_Int_OptionsStatic_Radix<t_Radix, t_CParent>::f_Radix() const
 	{
 		return t_Radix;
 	}
 
 	template <int32 t_Radix, typename t_CParent>
-	inline_always bool TCStrFormatType_Int_OptionsStatic_Radix<t_Radix, t_CParent>::f_StaticRadix()
+	inline_always bool TCStrFormatType_Int_OptionsStatic_Radix<t_Radix, t_CParent>::fs_StaticRadix()
 	{
 		return true;
 	}
@@ -565,7 +565,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_COptions>
-	void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer)
+	void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fsp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer)
 	{
 		umint Length;
 		CChar const *pValue;
@@ -590,7 +590,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
 	template <typename tf_COptions>
-	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fp_AddToStr
+	inline_small void TCStrFormatType_Int<t_CFormatter, t_CIntType, t_COptions>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -623,7 +623,7 @@ namespace NMib::NStr
 
 		CRadixType Radix = _Options.template f_Radix<CRadixType>();
 
-		if (_Options.f_StaticRadix())
+		if (_Options.fs_StaticRadix())
 		{
 			if (_Options.f_ThousandSeparator())
 			{
@@ -687,9 +687,9 @@ namespace NMib::NStr
 		}
 
 		if (!Options.f_Boolean())
-			fp_AddToStr(_String, _CurrentStrLen, Options, Value);
+			fsp_AddToStr(_String, _CurrentStrLen, Options, Value);
 		else
-			fp_AddToStrBoolean(_String, _CurrentStrLen, Options, Value);
+			fsp_AddToStrBoolean(_String, _CurrentStrLen, Options, Value);
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -697,9 +697,9 @@ namespace NMib::NStr
 	{
 		t_COptions Options;
 		if (!Options.f_Boolean())
-			fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+			fsp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 		else
-			fp_AddToStrBoolean(_String, _CurrentStrLen, Options, _Value);
+			fsp_AddToStrBoolean(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -712,9 +712,9 @@ namespace NMib::NStr
 		)
 	{
 		if (!_Options.f_Boolean())
-			fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+			fsp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 		else
-			fp_AddToStrBoolean(_String, _CurrentStrLen, _Options, _Value);
+			fsp_AddToStrBoolean(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -727,9 +727,9 @@ namespace NMib::NStr
 		)
 	{
 		if (!_Value.f_Boolean())
-			fp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
+			fsp_AddToStr(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
 		else
-			fp_AddToStrBoolean(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
+			fsp_AddToStrBoolean(_String, _CurrentStrLen, _Value, _Value.f_GetValue());
 	}
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -862,22 +862,22 @@ namespace NMib::NStr
 		{
 		}
 
-		static constexpr inline_small bool f_RestrictLength()
+		constexpr inline_small bool f_RestrictLength() const
 		{
 			return true;
 		}
 
-		static constexpr inline_small umint f_MinLength()
+		constexpr inline_small umint f_MinLength() const
 		{
 			return sizeof(umint) * 2;
 		}
 
-		static constexpr inline_small umint f_MaxLength()
+		constexpr inline_small umint f_MaxLength() const
 		{
 			return sizeof(umint) * 2;
 		}
 
-		inline_small static ch8 f_Fillout()
+		inline_small ch8 f_Fillout() const
 		{
 			return '0';
 		}
@@ -900,7 +900,7 @@ namespace NMib::NStr
 		{
 		}
 
-		inline_small static bool f_Boolean()
+		inline_small bool f_Boolean() const
 		{
 			return true;
 		}

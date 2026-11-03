@@ -77,7 +77,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
-	inline_small bool TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_FastLen()
+	inline_small bool TCStrImp_Fixed<t_CStrTraits, t_DataLen>::fs_FastLen()
 	{
 		return true;
 	}

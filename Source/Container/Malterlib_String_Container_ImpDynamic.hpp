@@ -260,7 +260,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	constexpr inline_small bool TCStrImp_Dynamic<t_CStrTraits>::f_FastLen()
+	constexpr inline_small bool TCStrImp_Dynamic<t_CStrTraits>::fs_FastLen()
 	{
 		return true;
 	}

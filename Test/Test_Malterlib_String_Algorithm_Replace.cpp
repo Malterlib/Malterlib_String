@@ -10,6 +10,7 @@ namespace
 
 	struct CReplace_Tests : public NMib::NTest::CTest
 	{
+	private:
 		void fp_ShrinkingTests()
 		{
 			// Tests for shrinking replacement (_LenReplace < _LenFind)
@@ -1045,6 +1046,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			fp_FindReverseTests();

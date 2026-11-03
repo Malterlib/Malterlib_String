@@ -44,7 +44,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	void TCStrParse<t_CStrTraits>::fp_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags)
+	void TCStrParse<t_CStrTraits>::f_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags)
 	{
 		TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)_pParse | static_cast<umint>(_Flags));
 		if (m_nParses < mcp_StaticParses)
@@ -145,7 +145,7 @@ namespace NMib::NStr
 	template <typename t_CType>
 	inline_small auto TCStrParse<t_CStrTraits>::operator >> (t_CType &_Type) -> TCStrParse &
 	{
-		TCStringParser<TCStrParse, t_CType>::f_CreateParse(*this, _Type);
+		TCStringParser<TCStrParse, t_CType>::fs_CreateParse(*this, _Type);
 		return *this;
 	}
 

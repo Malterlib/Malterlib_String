@@ -6,7 +6,7 @@
 namespace NMib::NStr
 {
 	template <typename t_CParser, typename t_CData>
-	void TCStringParser<t_CParser, t_CData>::f_CreateParse(t_CParser const &_Parse, t_CData &_Data)
+	void TCStringParser<t_CParser, t_CData>::fs_CreateParse(t_CParser const &_Parse, t_CData &_Data)
 	{
 		static_assert(NTraits::cIsSame<t_CParser, CVoidTag>, "You need to implement a parser for this type");
 	}

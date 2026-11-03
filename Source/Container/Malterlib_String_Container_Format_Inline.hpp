@@ -134,14 +134,14 @@ namespace NMib::NStr
 			CSuper::fs_ParseOptions(Args, _pFormat);
 		}
 
-		fp_AddToStr(_String, _CurrentStrLen, Options, mp_ToFormat);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, mp_ToFormat);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_CToFormat const &_Value)
 	{
 		CLocalOptions Options;
-		fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
@@ -153,12 +153,12 @@ namespace NMib::NStr
 			, CLocalOptions &_Options
 		)
 	{
-		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_COptions, typename tf_CToFormat>
-	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fp_AddToStr
+	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fsp_AddToStr
 		(
 			TCStr<CTStrTraits> &_String
 			, aint &_CurrentStrLen
@@ -212,7 +212,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CToFormat, bool t_bReference>
 	template <typename tf_CToFormat>
-	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value)
+	inline_small void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::fsp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value)
 	{
 		if constexpr
 		(
@@ -233,7 +233,7 @@ namespace NMib::NStr
 	aint TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Get_aint() const
 	{
 		TCStr<CTStrTraits> Temp;
-		fp_FormatInto(Temp, mp_ToFormat);
+		fsp_FormatInto(Temp, mp_ToFormat);
 		return CTStrTraits::CStrTraits::fs_StrToInt(Temp.f_GetStr(), Temp.f_GetLen(), (aint)0);
 	}
 
@@ -241,7 +241,7 @@ namespace NMib::NStr
 	fp32 TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Get_fp32() const
 	{
 		TCStr<CTStrTraits> Temp;
-		fp_FormatInto(Temp, mp_ToFormat);
+		fsp_FormatInto(Temp, mp_ToFormat);
 		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), Temp.f_GetLen(), (fp32)0);
 	}
 
@@ -249,7 +249,7 @@ namespace NMib::NStr
 	fp64 TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Get_fp64() const
 	{
 		TCStr<CTStrTraits> Temp;
-		fp_FormatInto(Temp, mp_ToFormat);
+		fsp_FormatInto(Temp, mp_ToFormat);
 		return CTStrTraits::CStrTraits::fs_StrToFloatExact(Temp.f_GetStr(), Temp.f_GetLen(), (fp64)0);
 	}
 
@@ -257,7 +257,7 @@ namespace NMib::NStr
 	void TCStrFormatType_Inline<t_CFormatter, t_CToFormat, t_bReference>::f_Visit(CVisitor &_Extractor) const
 	{
 		TCStr<CTStrTraits> Temp;
-		fp_FormatInto(Temp, mp_ToFormat);
+		fsp_FormatInto(Temp, mp_ToFormat);
 		_Extractor(Temp.f_GetStr());
 	}
 

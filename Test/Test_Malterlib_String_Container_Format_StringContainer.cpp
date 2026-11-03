@@ -24,6 +24,7 @@ namespace
 {
 	struct CStr_Tests : public NMib::NTest::CTest
 	{
+	private:
 		template <typename tf_CFormatFrom>
 		void fp_DoCapitalizeTestSource(ch8 const *_pFromName, tf_CFormatFrom const &_From)
 		{
@@ -41,6 +42,7 @@ namespace
 			fp_DoCapitalizeTestSource("CUStr", CUStr("test"));
 		}
 
+	public:
 		void f_DoTests()
 		{
 			DMibTestSuite("Capitalize")

@@ -50,7 +50,6 @@ namespace NMib::NStr
 		TCFormat &operator = (TCFormat &&_Other);
 
 		void f_MoveFormats(TCFormat &&_Other);
-		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags);
 		inline_medium void *f_AllocSpace(umint _Size, EStringFormatTypeFlag &_Flags);
 
 		template <typename tf_CType, typename ...tfp_CParams>
@@ -111,16 +110,17 @@ namespace NMib::NStr
 		template <typename tf_CType>
 		static auto fs_GetFormatClassifier(tf_CType const &_Type) -> decltype(TCStringFormatterAll<TCFormat, tf_CType>::fs_CreateFormat(*((TCFormat *)0), _Type)); // Only used compile time
 
-		template <bool tf_bConcat>
-		static void fp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr);
-
-		template <bool tf_bConcat>
-		static void fp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr);
-
 	private:
+		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags);
 		inline_small TICStrFormatType<TCFormat> **fp_GetFormatList() const;
 		inline_small TICStrFormatType<TCFormat> const *fp_GetFormatEntry(aint _iEntry) const;
 		void *fp_AllocSpace(int _Bytes);
+
+		template <bool tf_bConcat>
+		static void fsp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr);
+
+		template <bool tf_bConcat>
+		static void fsp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr);
 
 		static constexpr umint mcp_StaticFormats = 16;
 		static constexpr umint mcp_StaticSpace = mcp_StaticFormats * 4;

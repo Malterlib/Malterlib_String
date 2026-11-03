@@ -229,28 +229,28 @@ namespace NMib::NStr
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatToStr(TCStr<t_CTCStrTraits> &_Str) const
 	{
 		m_iCurrentArgument = 0;
-		fp_FormatArgList<0>(*this, m_pFormatStr, _Str);
+		fsp_FormatArgList<0>(*this, m_pFormatStr, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 	{
 		m_iCurrentArgument = 0;
-		fp_FormatArgList<1>(*this, m_pFormatStr, _Str);
+		fsp_FormatArgList<1>(*this, m_pFormatStr, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatArgumentsToStr(TCStr<t_CTCStrTraits> &_Str) const
 	{
 		m_iCurrentArgument = 0;
-		fp_FormatArguments<0>(*this, _Str);
+		fsp_FormatArguments<0>(*this, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatArgumentsToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 	{
 		m_iCurrentArgument = 0;
-		fp_FormatArguments<1>(*this, _Str);
+		fsp_FormatArguments<1>(*this, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
@@ -339,7 +339,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bConcat>
-	void TCFormat<t_CTCStrTraits>::fp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr)
+	void TCFormat<t_CTCStrTraits>::fsp_FormatArguments(TCFormat const &_Format, TCStr<t_CTCStrTraits> &_ToStr)
 	{
 		aint CurrentStrLen;
 		aint MaxLen;
@@ -369,7 +369,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	template <bool tf_bConcat>
-	void TCFormat<t_CTCStrTraits>::fp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr)
+	void TCFormat<t_CTCStrTraits>::fsp_FormatArgList(TCFormat const &_Format, CChar const *_pFormat, TCStr<t_CTCStrTraits> &_ToStr)
 	{
 		aint CurrentStrLen;
 		aint MaxLen;

@@ -10,6 +10,7 @@ namespace
 
 	struct CCompare_Tests : public NMib::NTest::CTest
 	{
+	private:
 		void fp_UnsignedOrderingTests()
 		{
 			// ch8 is a signed character type on most platforms, so a byte with
@@ -59,6 +60,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			DMibTestSuite("Compare")

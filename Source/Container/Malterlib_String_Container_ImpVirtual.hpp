@@ -38,7 +38,7 @@ namespace NMib::NStr
 	template <typename t_CTStrTraits>
 	bool TCStrImp_Virtual_PtrWrapper<t_CTStrTraits>::f_FastLen()
 	{
-		return m_pStr->f_FastLen();
+		return m_pStr->fs_FastLen();
 	}
 
 	template <typename t_CTStrTraits>
@@ -80,7 +80,7 @@ namespace NMib::NStr
 	template <typename t_CTStrTraits>
 	bool TCStrImp_Virtual_TStrWrapper<t_CTStrTraits>::f_FastLen()
 	{
-		return m_Str.f_FastLen();
+		return m_Str.fs_FastLen();
 	}
 
 	template <typename t_CTStrTraits>

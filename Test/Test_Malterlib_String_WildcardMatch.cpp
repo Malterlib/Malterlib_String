@@ -49,6 +49,14 @@ namespace
 
 	struct CMatchWildcard_Tests : public NMib::NTest::CTest
 	{
+		void f_DoTests()
+		{
+			fp_DoTests<ch8>("UTF8");
+			fp_DoTests<ch16>("UTF16");
+			fp_DoTests<ch32>("UTF32");
+		}
+
+	private:
 		template <typename tf_CChar>
 		void fp_DoTests(NStr::CStr const &_Type)
 		{
@@ -95,13 +103,6 @@ namespace
 					}
 				}
 			};
-		}
-
-		void f_DoTests()
-		{
-			fp_DoTests<ch8>("UTF8");
-			fp_DoTests<ch16>("UTF16");
-			fp_DoTests<ch32>("UTF32");
 		}
 	};
 

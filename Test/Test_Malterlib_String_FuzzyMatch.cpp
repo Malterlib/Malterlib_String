@@ -11,6 +11,7 @@ namespace
 
 	struct CFuzzyMatch_Tests : public NMib::NTest::CTest
 	{
+	private:
 		void fp_BasicTests()
 		{
 			DMibTestSuite("Basic")
@@ -435,6 +436,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			fp_BasicTests();

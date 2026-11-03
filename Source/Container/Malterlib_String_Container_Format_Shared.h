@@ -9,13 +9,13 @@ namespace NMib::NStr
 {
 	struct CStrFormatType_StaticOptions
 	{
-		static constexpr inline_small bool f_RestrictLength();
-		static constexpr inline_small umint f_MinLength();
-		static constexpr inline_small umint f_MaxLength();
-		static constexpr inline_small aint f_Align();
-		static constexpr inline_small bool f_LeftAlign();
-		static constexpr inline_small bool f_SimpleAlign();
-		static constexpr inline_small ch8 f_Fillout();
+		constexpr inline_small bool f_RestrictLength() const;
+		constexpr inline_small umint f_MinLength() const;
+		constexpr inline_small umint f_MaxLength() const;
+		constexpr inline_small aint f_Align() const;
+		constexpr inline_small bool f_LeftAlign() const;
+		constexpr inline_small bool f_SimpleAlign() const;
+		constexpr inline_small ch8 f_Fillout() const;
 	};
 
 	template <umint t_MinLength, typename t_CParent>
@@ -23,8 +23,8 @@ namespace NMib::NStr
 	{
 		inline_small TICStrFormatType_StaticOptions_MinLength(t_CParent const &_Parent);
 
-		static constexpr inline_small umint f_MinLength();
-		static constexpr inline_small bool f_RestrictLength();
+		constexpr inline_small umint f_MinLength() const;
+		constexpr inline_small bool f_RestrictLength() const;
 	};
 
 	template <umint t_MaxLength, typename t_CParent>
@@ -32,8 +32,8 @@ namespace NMib::NStr
 	{
 		inline_small TICStrFormatType_StaticOptions_MaxLength(t_CParent const &_Parent);
 
-		static constexpr inline_small umint f_MaxLength();
-		static constexpr inline_small bool f_RestrictLength();
+		constexpr inline_small umint f_MaxLength() const;
+		constexpr inline_small bool f_RestrictLength() const;
 	};
 
 	template <ch32 t_FillOut, typename t_CParent>
@@ -41,7 +41,7 @@ namespace NMib::NStr
 	{
 		inline_small TICStrFormatType_StaticOptions_FillOut(t_CParent const &_Parent);
 
-		static constexpr inline_small ch32 f_Fillout();
+		constexpr inline_small ch32 f_Fillout() const;
 	};
 
 	template <typename t_COptions, typename t_CIntType>
@@ -293,7 +293,14 @@ namespace NMib::NStr
 		inline_never void fp_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const *_pParse) const;
 
 		template <typename tf_CImplementation, typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-		inline_never auto fpr_EvalExpression(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, CChar const * &_pParse, bool &_bError, bool _bExitAtValue) const
+		inline_never auto fp_EvalExpressionRecursive
+			(
+				TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
+				, CChar const * &_pParse
+				, bool &_bError
+				, bool _bExitAtValue
+			)
+			const
 			-> tf_CData
 		;
 	};

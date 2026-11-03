@@ -235,7 +235,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CParser, typename t_CStrTraitsIn>
-	inline_large void TCStringParser<t_CParser, TCStr<t_CStrTraitsIn>>::f_CreateParse(t_CParser &_Formatter, TCStr<t_CStrTraitsIn> &_Data)
+	inline_large void TCStringParser<t_CParser, TCStr<t_CStrTraitsIn>>::fs_CreateParse(t_CParser &_Formatter, TCStr<t_CStrTraitsIn> &_Data)
 	{
 		EStringParseTypeFlag Flags;
 		void *pSpace = _Formatter.f_AllocSpace(sizeof(CParseType), Flags);
@@ -243,6 +243,6 @@ namespace NMib::NStr
 		CParseType *pNew = new(pSpace) CParseType(_Data);
 		Flags |= (CParseType::mc_bNeedDestruct ? EStringParseTypeFlag::mc_NeedDestruct : EStringParseTypeFlag::mc_None);
 
-		_Formatter.fp_AddParse(pNew, Flags);
+		_Formatter.f_AddParse(pNew, Flags);
 	}
 }

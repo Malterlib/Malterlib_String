@@ -62,12 +62,12 @@ namespace NMib::NStr
 
 	private:
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions>
-		static inline_small auto fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, umint _StrLen)
+		static inline_small auto fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, CChar const *_pValue, umint _StrLen)
 			-> TCEnableIf<tf_DestinationType == tf_SourceType, void>
 		;
 
 		template <CStrTypeUnderlying tf_DestinationType, CStrTypeUnderlying tf_SourceType, typename t_COptions, typename tf_CStrDataType>
-		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, umint _StrLen);
+		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, t_COptions &_Options, tf_CStrDataType const *_pValue, umint _StrLen);
 
 		inline static bool constexpr mcp_TypeID = false;
 

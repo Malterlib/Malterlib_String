@@ -10,6 +10,7 @@ namespace
 
 	struct CCharacter_Tests : public NMib::NTest::CTest
 	{
+	private:
 		template <typename tf_CChar>
 		void fp_LowerCaseTests()
 		{
@@ -160,6 +161,7 @@ namespace
 			};
 		}
 
+	public:
 		void f_DoTests()
 		{
 			DMibTestSuite("Character")

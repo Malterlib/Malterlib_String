@@ -111,7 +111,7 @@ namespace NMib::NStr
 
 	private:
 		template <typename t_COptions>
-		static inline_small void fp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number);
+		static inline_small void fsp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number);
 
 		inline static bool constexpr mcp_TypeID = false;
 

@@ -112,7 +112,7 @@ namespace NMib::NStr
 	}
 
 	template <typename t_CStrTraits>
-	inline_small bool TCStrImp_Ptr<t_CStrTraits>::f_FastLen()
+	inline_small bool TCStrImp_Ptr<t_CStrTraits>::fs_FastLen()
 	{
 		return true;
 	}

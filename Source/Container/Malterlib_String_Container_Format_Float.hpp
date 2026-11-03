@@ -389,7 +389,7 @@ namespace NMib::NStr
 	>
 	template <typename t_COptions>
 	inline_small void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
-		::fp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number)
+		::fsp_AddToStr(CString &_String, aint &_CurrentStrLen, t_COptions &_Options, CFloat const &_Number)
 	{
 		CFloat Number = _Number;
 		bool bOptionsSign = _Options.m_bSign;
@@ -439,21 +439,21 @@ namespace NMib::NStr
 		CInteger DecimalDisplacementFloat = 0;
 		CInteger DecimalDisplacementConstFloat = 0;
 
-		if (!Number.f_IsInvalid() && Number != CFloat::fs_0())
+		if (!Number.f_IsInvalid() && Number != CFloat::fs_Zero())
 		{
-			DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();
+			DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_One())).f_ToInt();
 			// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
 
 			if (nDigits > 0 && NMib::fg_Convert<CInteger>(nDigits - 1) < DecimalDisplacementConstFloat)
 				DecimalDisplacementConstFloat = NMib::fg_Convert<CInteger>(nDigits - 1);
 			else if (nDigits == -2)
 			{
-				DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_StorageBits)) * CFloat::fs_Log10_2()).f_Floor() - CFloat::fs_1()).f_ToInt();
+				DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_StorageBits)) * CFloat::fs_Log10_2()).f_Floor() - CFloat::fs_One()).f_ToInt();
 				// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
 			}
 			else
 			{
-				DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_1())).f_ToInt();
+				DecimalDisplacementConstFloat = ((NMib::fg_Convert<CFloat>(aint(CFloat::mc_MantissaBits)) * CFloat::fs_Log10_2() - CFloat::fs_One())).f_ToInt();
 				// (((CFloat::mc_StorageBits - 1) * 100) / 302) - 2;
 			}
 
@@ -463,7 +463,7 @@ namespace NMib::NStr
 			CFloat Temp = Number;
 			Temp.f_SetExponent(0);
 			if (Number.f_IsDenormalized())
-				Temp -= CFloat::fs_1();
+				Temp -= CFloat::fs_One();
 			Temp = Temp.f_Log10();
 			DecimalDisplacementFloat = (NMib::fg_Convert<CFloat>(-Exponent) * CFloat::fs_Log10_2() - Temp).f_ToIntRoundTowardZero();
 #else
@@ -546,7 +546,7 @@ namespace NMib::NStr
 				*(pStrPlace--) = '0';
 
 			aint nRemoved = 0;
-			if (bRemoveDigits && Number != CFloat::fs_0())
+			if (bRemoveDigits && Number != CFloat::fs_Zero())
 			{
 				// Automaticly remove digits not needed
 				CChar *pZero = TempStr + c_NumTempChar - 1;
@@ -1003,7 +1003,7 @@ namespace NMib::NStr
 			CSuper::fs_ParseOptions(Args, _pFormat);
 		}
 
-		fp_AddToStr(_String, _CurrentStrLen, Options, Number);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, Number);
 	}
 
 	template
@@ -1022,7 +1022,7 @@ namespace NMib::NStr
 		::fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, CFloat const &_Value)
 	{
 		COptionsFloat Options;
-		fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template
@@ -1040,7 +1040,7 @@ namespace NMib::NStr
 	void TCStrFormatType_Float<t_CFormatter, t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage, t_bReference>
 		::fs_AddToStrStatic(CString &_String, aint &_CurrentStrLen, CFloat const &_Value, COptionsFloat &_Options)
 	{
-		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template

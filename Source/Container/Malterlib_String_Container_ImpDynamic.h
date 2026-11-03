@@ -108,11 +108,10 @@ namespace NMib::NStr
 		inline_medium void f_SetStrLen(aint _Len);
 
 		constexpr inline_small aint f_GetAllocLength() const;
-		static constexpr inline_small bool f_FastLen();
+		static constexpr inline_small bool fs_FastLen();
 
 		void f_Reserve(umint _Len);
 		inline_small void f_MakeUnique();
-		aint fp_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		inline aint f_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		inline_small void f_TrimSize(umint _Length, umint _MaxExtraChars = mc_MaxExtraChars);
 
@@ -129,6 +128,7 @@ namespace NMib::NStr
 		CData *m_pData = const_cast<CData *>(static_cast<CData const *>(&TCStrImp_Dynamic_EmptyStringDataImp<CChar>::mc_Instance));
 
 	private:
+		aint fp_CreateWritableBuffer(aint _Length, bool _bDiscard);
 		umint fp_CalcNewSize(umint _Length);
 		umint fp_GetOldAllocSize();
 		void fp_TrimSize(umint _Length, umint _NeededSize);

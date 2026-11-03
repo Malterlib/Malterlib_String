@@ -47,7 +47,7 @@ namespace NMib::NStr
 		using CFloat = NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
 		using CParseType = TCStrParseType_Float<t_CParser, CFloat>;
 
-		static inline_large void f_CreateParse(t_CParser &_Formatter, CFloat &_Data);
+		static inline_large void fs_CreateParse(t_CParser &_Formatter, CFloat &_Data);
 	};
 }
 

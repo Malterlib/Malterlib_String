@@ -73,7 +73,7 @@ namespace NMib::NStr
 		if (*pParse == '(')
 		{
 			++pParse;
-			_Args.m_Data = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, bError, false);
+			_Args.m_Data = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, bError, false);
 			if (!bError)
 			{
 				fg_ParseWhiteSpace(pParse);
@@ -93,7 +93,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter>
 	template <typename tf_CImplementation, typename tf_CData, typename tf_CFormatType, typename tf_COptions>
-	inline_never auto TICStrFormatType<t_CFormatter>::fpr_EvalExpression
+	inline_never auto TICStrFormatType<t_CFormatter>::fp_EvalExpressionRecursive
 		(
 			TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args
 			, CChar const * &_pParse
@@ -126,7 +126,7 @@ namespace NMib::NStr
 					_bError = true;
 					return tf_CImplementation::fs_DefaultValue();
 				}
-				auto Value = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, _bError, false);
+				auto Value = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, _bError, false);
 				if (_bError)
 					return tf_CImplementation::fs_DefaultValue();
 				ValueData(Value);
@@ -144,7 +144,7 @@ namespace NMib::NStr
 					_bError = true;
 					return tf_CImplementation::fs_DefaultValue();
 				}
-				auto Value = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, _bError, true);
+				auto Value = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, _bError, true);
 				if (_bError)
 					return tf_CImplementation::fs_DefaultValue();
 				ValueData(!Value);
@@ -162,7 +162,7 @@ namespace NMib::NStr
 					_bError = true;
 					return tf_CImplementation::fs_DefaultValue();
 				}
-				auto Value = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, _bError, true);
+				auto Value = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, _bError, true);
 				if (_bError)
 					return tf_CImplementation::fs_DefaultValue();
 				ValueData(tf_CImplementation::fs_BitwiseNot(Value));
@@ -243,7 +243,7 @@ namespace NMib::NStr
 				}
 				else
 				{
-					auto Ret = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, _bError, true);
+					auto Ret = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, _bError, true);
 					if (_bError)
 						return tf_CImplementation::fs_DefaultValue();
 					ValueData(+Ret);
@@ -271,7 +271,7 @@ namespace NMib::NStr
 				}
 				else
 				{
-					auto Value = fpr_EvalExpression<tf_CImplementation>(_Args, pParse, _bError, true);
+					auto Value = fp_EvalExpressionRecursive<tf_CImplementation>(_Args, pParse, _bError, true);
 					if (_bError)
 						return tf_CImplementation::fs_DefaultValue();
 					ValueData(-Value);

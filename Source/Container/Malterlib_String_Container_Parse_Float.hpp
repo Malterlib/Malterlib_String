@@ -59,13 +59,13 @@ namespace NMib::NStr
 
 	template <typename t_CParser, aint t_SignBits, aint t_ExponentBits, aint t_MantissaBits, aint t_PaddingBits, typename t_CImplicitFloat, bool t_bDummyOptimize, typename t_CIntegerStorage>
 	inline_large void TCStringParser<t_CParser, NMib::NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>>
-		::f_CreateParse(t_CParser &_Formatter, CFloat &_Data)
+		::fs_CreateParse(t_CParser &_Formatter, CFloat &_Data)
 	{
 		EStringParseTypeFlag Flags;
 		void *pSpace = _Formatter.f_AllocSpace(sizeof(CParseType), Flags);
 
 		CParseType *pNew = new(pSpace) CParseType(_Data);
 		Flags |= (CParseType::mc_bNeedDestruct ? EStringParseTypeFlag::mc_NeedDestruct : EStringParseTypeFlag::mc_None);
-		_Formatter.fp_AddParse(pNew, Flags);
+		_Formatter.f_AddParse(pNew, Flags);
 	}
 }

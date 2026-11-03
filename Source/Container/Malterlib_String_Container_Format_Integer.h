@@ -25,7 +25,7 @@ namespace NMib::NStr
 		template <typename tf_CInitializer>
 		inline_medium TCStrFormatType_Int_Options(tf_CInitializer const &_Init);
 
-		inline_always static bool f_StaticRadix();
+		inline_always static bool fs_StaticRadix();
 		inline_always bool f_NumberCaps() const;
 		inline_always bool f_Boolean() const;
 		inline_always bool f_Sign() const;
@@ -43,14 +43,14 @@ namespace NMib::NStr
 		static constexpr aint mc_Radix = 10;
 		static constexpr aint mc_NumTempChar = (sizeof(CIntType) * 8) / 3 + 2;
 
-		inline_always static bool f_StaticRadix();
-		inline_always static bool f_NumberCaps();
-		inline_always static bool f_Boolean();
-		inline_always static bool f_Sign();
-		inline_always static ch8 f_ThousandSeparator();
+		inline_always static bool fs_StaticRadix();
+		inline_always bool f_NumberCaps() const;
+		inline_always bool f_Boolean() const;
+		inline_always bool f_Sign() const;
+		inline_always ch8 f_ThousandSeparator() const;
 
 		template <typename tf_CRadix>
-		inline_always static tf_CRadix f_Radix();
+		inline_always tf_CRadix f_Radix() const;
 	};
 
 	template <int32 t_Radix, typename t_CParent>
@@ -69,10 +69,10 @@ namespace NMib::NStr
 
 		inline_always TCStrFormatType_Int_OptionsStatic_Radix(t_CParent const &_Parent);
 
-		inline_always static bool f_StaticRadix();
+		inline_always static bool fs_StaticRadix();
 
 		template <typename tf_CRadix>
-		inline_always static tf_CRadix f_Radix();
+		inline_always tf_CRadix f_Radix() const;
 	};
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -174,10 +174,10 @@ namespace NMib::NStr
 
 	private:
 		template <typename tf_COptions>
-		static void fp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer);
+		static void fsp_AddToStrBoolean(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer);
 
 		template <typename tf_COptions>
-		inline_small static void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer);
+		inline_small static void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Integer);
 
 		inline static bool constexpr mcp_TypeID = false;
 

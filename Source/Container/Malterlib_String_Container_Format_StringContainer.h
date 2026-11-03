@@ -65,10 +65,10 @@ namespace NMib::NStr
 
 	private:
 		template <typename tf_COptions>
-		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, TCStr<CTStrTraits> const &_Value);
+		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, TCStr<CTStrTraits> const &_Value);
 
 		template <typename tf_COptions, typename tf_CStrTraitsIn>
-		static inline_small void fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, TCStr<tf_CStrTraitsIn> const &_Value);
+		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, TCStr<tf_CStrTraitsIn> const &_Value);
 
 		CStorageType mp_TStr;
 

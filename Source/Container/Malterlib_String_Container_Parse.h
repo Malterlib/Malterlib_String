@@ -10,7 +10,7 @@ namespace NMib::NStr
 	template <typename t_CParser, typename t_CData>
 	struct TCStringParser
 	{
-		static void f_CreateParse(t_CParser const &_Parse, t_CData &_Data);
+		static void fs_CreateParse(t_CParser const &_Parse, t_CData &_Data);
 	};
 
 	enum class EStringParseTypeFlag : uint8
@@ -57,8 +57,6 @@ namespace NMib::NStr
 		virtual aint f_Get_Str(CChar *_pStr, aint _MaxChars) const;
 		virtual bool f_ParseData(CChar const * &_pString, CChar const *_pFormat, t_CParser const &_ArgData) const = 0;
 
-		inline_small CChar const *fp_GetNextParse(COption &_NewParse, CChar const * &_pParse) const;
-
 		template <typename t_CParseType, typename t_COptions>
 		inline_small static CChar const *fs_ParseOptions(t_CParseType const &_Parser, t_COptions &_Options, CChar const *_pParse, t_CParser const &_ArgData);
 
@@ -66,6 +64,9 @@ namespace NMib::NStr
 		inline_small aint f_ParseOption(COption &_Option, t_COptions &_Options, t_CParser const &_ArgData) const;
 
 		TICStrParseType *m_pNextParse;
+
+	private:
+		inline_small CChar const *fp_GetNextParse(COption &_NewParse, CChar const * &_pParse) const;
 	};
 
 	template <typename t_CStrTraits>
@@ -79,7 +80,7 @@ namespace NMib::NStr
 
 		~TCStrParse();
 
-		void fp_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags);
+		void f_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags);
 		inline_medium void *f_AllocSpace(umint _Size, EStringParseTypeFlag &_Flags);
 		inline_small CChar const *f_Parse(CChar const *_pToParse, aint &_nParsed, EParseFlag _ParseFlags = EParseFlag_None);
 		inline_small CChar const *f_Parse(CChar const *_pToParse, EParseFlag _ParseFlags = EParseFlag_None);

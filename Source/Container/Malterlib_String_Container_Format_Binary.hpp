@@ -27,7 +27,7 @@ namespace NMib::NStr
 
 	template <typename t_CFormatter, typename t_CBinaryType>
 	template <typename tf_COptions>
-	inline_small void TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::fp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Value)
+	inline_small void TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions const &_Options, CType const &_Value)
 	{
 		uint8 OutValue = 0;
 		auto Temp = fg_FormatMaxLength<2>(fg_FormatMinLength<2>(fg_FormatFillOut<'0'>(fg_FormatIntFormat<16>(OutValue))));
@@ -56,20 +56,20 @@ namespace NMib::NStr
 			CSuper::fs_ParseOptions(Args, _pFormat);
 		}
 
-		fp_AddToStr(_String, _CurrentStrLen, Options, mp_Value);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, mp_Value);
 	}
 
 	template <typename t_CFormatter, typename t_CBinaryType>
 	inline_small void TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CType const &_Value)
 	{
 		COptionsStatic Options;
-		fp_AddToStr(_String, _CurrentStrLen, Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CBinaryType>
 	inline_small void TCStrFormatType_Binary<t_CFormatter, t_CBinaryType>::fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, CType const &_Value, COptionsStatic &_Options)
 	{
-		fp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
+		fsp_AddToStr(_String, _CurrentStrLen, _Options, _Value);
 	}
 
 	template <typename t_CFormatter, typename t_CBinaryType>

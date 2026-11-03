@@ -27,7 +27,7 @@ namespace NMib::NStr
 		constexpr inline_small bool f_IsEmpty() const;
 
 		inline_medium aint f_GetStrLen() const;
-		static inline_small bool f_FastLen();
+		static inline_small bool fs_FastLen();
 		inline_small void f_SetStrLen(aint _Len);
 
 		inline_small aint f_GetAllocLength() const;
