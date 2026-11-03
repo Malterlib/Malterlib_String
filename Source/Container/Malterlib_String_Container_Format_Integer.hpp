@@ -571,14 +571,14 @@ namespace NMib::NStr
 		CChar const *pValue;
 		if (_Integer == 0)
 		{
-			static constexpr CChar ValueArray[] = {'f', 'a', 'l', 's', 'e', 0};
-			pValue = ValueArray;
+			static constexpr CChar c_ValueArray[] = {'f', 'a', 'l', 's', 'e', 0};
+			pValue = c_ValueArray;
 			Length = 5;
 		}
 		else
 		{
-			static constexpr CChar ValueArray[] = {'t', 'r', 'u', 'e', 0};
-			pValue = ValueArray;
+			static constexpr CChar c_ValueArray[] = {'t', 'r', 'u', 'e', 0};
+			pValue = c_ValueArray;
 			Length = 4;
 		}
 

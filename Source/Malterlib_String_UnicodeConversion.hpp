@@ -281,14 +281,14 @@ namespace NMib::NStr
 
 			_Char -= 0x10000;
 
-			uint32 vh = _Char >> 10;
-			uint32 v1 = _Char & 0x3FF;
-			uint32 w1 = 0xD800 + vh;
-			uint32 w2 = 0xDC00 + v1;
+			uint32 HighBits = _Char >> 10;
+			uint32 LowBits = _Char & 0x3FF;
+			uint32 HighSurrogate = 0xD800 + HighBits;
+			uint32 LowSurrogate = 0xDC00 + LowBits;
 
-			*pRet = ch16(w1);
+			*pRet = ch16(HighSurrogate);
 			++pRet;
-			*pRet = ch16(w2);
+			*pRet = ch16(LowSurrogate);
 		}
 		else
 		{

@@ -40,10 +40,10 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	TCFormat<t_CTCStrTraits>::TCFormat(TCFormat &&_Other)
 	{
-		m_pFormatStr = _Other.m_pFormatStr;
-		m_pFormats = m_plFormats;
-		m_nFormats = 0;
-		m_iCurrentAlloc = 0;
+		mp_pFormatStr = _Other.mp_pFormatStr;
+		mp_pFormats = mp_StaticFormatStorage;
+		mp_nFormats = 0;
+		mp_iCurrentAlloc = 0;
 
 		f_MoveFormats(fg_Move(_Other));
 	}
@@ -59,9 +59,9 @@ namespace NMib::NStr
 	{
 		TICStrFormatType<TCFormat> **pFormatList = _Other.fp_GetFormatList();
 
-		for (uaint i = 0; i < _Other.m_nFormats; ++i)
+		for (uaint iFormat = 0; iFormat < _Other.mp_nFormats; ++iFormat)
 		{
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[iFormat] & (~((umint)0x3)));
 			pFormat->f_Move(*this);
 		}
 	}
@@ -71,7 +71,7 @@ namespace NMib::NStr
 	{
 		f_ClearFormats();
 
-		m_pFormatStr = _Other.m_pFormatStr;
+		mp_pFormatStr = _Other.mp_pFormatStr;
 		f_MoveFormats(fg_Move(_Other));
 
 		return *this;
@@ -81,26 +81,26 @@ namespace NMib::NStr
 	void TCFormat<t_CTCStrTraits>::fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags)
 	{
 		TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)_pFormat | static_cast<umint>(_Flags));
-		if (m_nFormats < mcp_StaticFormats)
+		if (mp_nFormats < mcp_StaticFormats)
 		{
-			m_plFormats[m_nFormats] = pFormat;
-			++m_nFormats;
+			mp_StaticFormatStorage[mp_nFormats] = pFormat;
+			++mp_nFormats;
 			return;
 		}
 
-		if (m_nFormats >= m_lFormats.f_GetLen())
+		if (mp_nFormats >= mp_DynamicFormatStorage.f_GetLen())
 		{
-			if (!m_lFormats.f_GetLen())
+			if (!mp_DynamicFormatStorage.f_GetLen())
 			{
-				m_lFormats.f_SetLen(m_nFormats * 2);
-				NMemory::fg_MemCopy(m_lFormats.f_GetArray(), m_plFormats, m_nFormats * sizeof(void *));
+				mp_DynamicFormatStorage.f_SetLen(mp_nFormats * 2);
+				NMemory::fg_MemCopy(mp_DynamicFormatStorage.f_GetArray(), mp_StaticFormatStorage, mp_nFormats * sizeof(void *));
 			}
 			else
-				m_lFormats.f_SetLen(m_nFormats * 2);
+				mp_DynamicFormatStorage.f_SetLen(mp_nFormats * 2);
 		}
-		m_pFormats = m_lFormats.f_GetArray();
-		m_pFormats[m_nFormats] = pFormat;
-		++m_nFormats;
+		mp_pFormats = mp_DynamicFormatStorage.f_GetArray();
+		mp_pFormats[mp_nFormats] = pFormat;
+		++mp_nFormats;
 	}
 
 	template <typename t_CTCStrTraits>
@@ -135,9 +135,9 @@ namespace NMib::NStr
 	inline_medium auto TCFormat<t_CTCStrTraits>::f_GetArg(aint _iArgument) const -> TICStrFormatType<TCFormat> const *
 	{
 		if (_iArgument < 0)
-			_iArgument = m_iCurrentArgument++;
+			_iArgument = mp_iCurrentArgument++;
 
-		if (_iArgument >= (aint)m_nFormats)
+		if (_iArgument >= (aint)mp_nFormats)
 			return nullptr;
 
 		return fp_GetFormatEntry(_iArgument);
@@ -146,32 +146,32 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	umint TCFormat<t_CTCStrTraits>::f_GetNumArgs() const
 	{
-		return m_nFormats;
+		return mp_nFormats;
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_medium TCFormat<t_CTCStrTraits>::TCFormat(CChar const *_pFormatStr)
 	{
-		m_pFormatStr = _pFormatStr;
-		m_pFormats = m_plFormats;
-		m_nFormats = 0;
-		m_iCurrentAlloc = 0;
+		mp_pFormatStr = _pFormatStr;
+		mp_pFormats = mp_StaticFormatStorage;
+		mp_nFormats = 0;
+		mp_iCurrentAlloc = 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	template <typename tf_CTCStrTraits>
 	inline_medium TCFormat<t_CTCStrTraits>::TCFormat(TCStr<tf_CTCStrTraits> const &_Format)
 	{
-		m_pFormatStr = _Format;
-		m_pFormats = m_plFormats;
-		m_nFormats = 0;
-		m_iCurrentAlloc = 0;
+		mp_pFormatStr = _Format;
+		mp_pFormats = mp_StaticFormatStorage;
+		mp_nFormats = 0;
+		mp_iCurrentAlloc = 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	bool TCFormat<t_CTCStrTraits>::f_IsEmpty() const
 	{
-		return *m_pFormatStr == 0;
+		return *mp_pFormatStr == 0;
 	}
 
 	template <typename t_CTCStrTraits>
@@ -179,10 +179,10 @@ namespace NMib::NStr
 	{
 		TICStrFormatType<TCFormat> **pFormatList = fp_GetFormatList();
 
-		for (uaint i = 0; i < m_nFormats; ++i)
+		for (uaint iFormat = 0; iFormat < mp_nFormats; ++iFormat)
 		{
-			EStringFormatTypeFlag Flags = static_cast<EStringFormatTypeFlag>((umint)pFormatList[i] & 0x3);
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
+			EStringFormatTypeFlag Flags = static_cast<EStringFormatTypeFlag>((umint)pFormatList[iFormat] & 0x3);
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[iFormat] & (~((umint)0x3)));
 
 			if (fg_IsSet(Flags, EStringFormatTypeFlag::mc_NeedDealloc))
 			{
@@ -193,27 +193,27 @@ namespace NMib::NStr
 				pFormat->f_Destruct();
 		}
 
-		m_pFormats = m_plFormats;
-		m_nFormats = 0;
-		m_iCurrentAlloc = 0;
+		mp_pFormats = mp_StaticFormatStorage;
+		mp_nFormats = 0;
+		mp_iCurrentAlloc = 0;
 	}
 
 	template <typename t_CTCStrTraits>
 	bool TCFormat<t_CTCStrTraits>::operator == (TCFormat const &_Right) const noexcept
 	{
-		if (fg_StrCmp(m_pFormatStr, _Right.m_pFormatStr) != 0)
+		if (fg_StrCmp(mp_pFormatStr, _Right.mp_pFormatStr) != 0)
 			return false;
 
-		if (m_nFormats != _Right.m_nFormats)
+		if (mp_nFormats != _Right.mp_nFormats)
 			return false;
 
 		TICStrFormatType<TCFormat> **pFormatList = fp_GetFormatList();
 		TICStrFormatType<TCFormat> **pFormatListRight = _Right.fp_GetFormatList();
 
-		for (uaint i = 0; i < m_nFormats; ++i)
+		for (uaint iFormat = 0; iFormat < mp_nFormats; ++iFormat)
 		{
-			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[i] & (~((umint)0x3)));
-			TICStrFormatType<TCFormat> *pFormatRight = (TICStrFormatType<TCFormat> *)((umint)pFormatListRight[i] & (~((umint)0x3)));
+			TICStrFormatType<TCFormat> *pFormat = (TICStrFormatType<TCFormat> *)((umint)pFormatList[iFormat] & (~((umint)0x3)));
+			TICStrFormatType<TCFormat> *pFormatRight = (TICStrFormatType<TCFormat> *)((umint)pFormatListRight[iFormat] & (~((umint)0x3)));
 
 			if (pFormat->f_GetTypeID() != pFormatRight->f_GetTypeID())
 				return false;
@@ -228,35 +228,35 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatToStr(TCStr<t_CTCStrTraits> &_Str) const
 	{
-		m_iCurrentArgument = 0;
-		fsp_FormatArgList<0>(*this, m_pFormatStr, _Str);
+		mp_iCurrentArgument = 0;
+		fsp_FormatArgList<0>(*this, mp_pFormatStr, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 	{
-		m_iCurrentArgument = 0;
-		fsp_FormatArgList<1>(*this, m_pFormatStr, _Str);
+		mp_iCurrentArgument = 0;
+		fsp_FormatArgList<1>(*this, mp_pFormatStr, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatArgumentsToStr(TCStr<t_CTCStrTraits> &_Str) const
 	{
-		m_iCurrentArgument = 0;
+		mp_iCurrentArgument = 0;
 		fsp_FormatArguments<0>(*this, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small void TCFormat<t_CTCStrTraits>::f_FormatArgumentsToStrConcat(TCStr<t_CTCStrTraits> &_Str) const
 	{
-		m_iCurrentArgument = 0;
+		mp_iCurrentArgument = 0;
 		fsp_FormatArguments<1>(*this, _Str);
 	}
 
 	template <typename t_CTCStrTraits>
 	void TCFormat<t_CTCStrTraits>::f_SetFormatStr(CChar const *_pFormatStr)
 	{
-		m_pFormatStr = _pFormatStr;
+		mp_pFormatStr = _pFormatStr;
 	}
 
 	template <typename t_CTCStrTraits>
@@ -357,10 +357,10 @@ namespace NMib::NStr
 			*(_ToStr.f_GetStrWritable()) = 0;
 		}
 
-		umint nFormats = _Format.m_nFormats;
-		for (umint i = 0; i < nFormats; ++i)
+		umint nFormats = _Format.mp_nFormats;
+		for (umint iFormat = 0; iFormat < nFormats; ++iFormat)
 		{
-			TICStrFormatType<TCFormat> const *pFormatVar = _Format.fp_GetFormatEntry(i);
+			TICStrFormatType<TCFormat> const *pFormatVar = _Format.fp_GetFormatEntry(iFormat);
 			pFormatVar->f_AddToStr(_ToStr, CurrentStrLen, nullptr, _Format);
 		}
 
@@ -538,25 +538,25 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	inline_small auto TCFormat<t_CTCStrTraits>::fp_GetFormatList() const -> TICStrFormatType<TCFormat> **
 	{
-		return m_pFormats;
+		return mp_pFormats;
 	}
 
 	template <typename t_CTCStrTraits>
 	inline_small auto TCFormat<t_CTCStrTraits>::fp_GetFormatEntry(aint _iEntry) const -> TICStrFormatType<TCFormat> const *
 	{
-		return (TICStrFormatType<TCFormat> const *)((umint)m_pFormats[_iEntry] & (~((umint)0x3)));
+		return (TICStrFormatType<TCFormat> const *)((umint)mp_pFormats[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CTCStrTraits>
 	void *TCFormat<t_CTCStrTraits>::fp_AllocSpace(int _Bytes)
 	{
 		umint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
-		if (m_iCurrentAlloc + Needed > mcp_StaticSpace)
+		if (mp_iCurrentAlloc + Needed > mcp_StaticSpace)
 			return nullptr;
 
-		void *pSpace = (void *)(m_AllocSpace + m_iCurrentAlloc);
+		void *pSpace = (void *)(mp_AllocSpace + mp_iCurrentAlloc);
 
-		m_iCurrentAlloc += Needed;
+		mp_iCurrentAlloc += Needed;
 
 		return pSpace;
 	}

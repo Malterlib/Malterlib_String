@@ -8,37 +8,37 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseList() -> TICStrParseType<TCStrParse> **
 	{
-		return m_pParses;
+		return mp_pParses;
 	}
 
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseList() const -> TICStrParseType<TCStrParse> const **
 	{
-		return m_pParses;
+		return mp_pParses;
 	}
 
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseEntry(aint _iEntry) -> TICStrParseType<TCStrParse> *
 	{
-		return (TICStrParseType<TCStrParse> *)((umint)m_pParses[_iEntry] & (~((umint)0x3)));
+		return (TICStrParseType<TCStrParse> *)((umint)mp_pParses[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::fp_GetParseEntry(aint _iEntry) const -> TICStrParseType<TCStrParse> const *
 	{
-		return (TICStrParseType<TCStrParse> const *)((umint)m_pParses[_iEntry] & (~((umint)0x3)));
+		return (TICStrParseType<TCStrParse> const *)((umint)mp_pParses[_iEntry] & (~((umint)0x3)));
 	}
 
 	template <typename t_CStrTraits>
 	void *TCStrParse<t_CStrTraits>::fp_AllocSpace(int _Bytes)
 	{
 		umint Needed = (_Bytes + sizeof(aint) - 1) / sizeof(aint);
-		if (m_iCurrentAlloc + Needed > mcp_StaticSpace)
+		if (mp_iCurrentAlloc + Needed > mcp_StaticSpace)
 			return nullptr;
 
-		void *pSpace = (void *)(m_AllocSpace + m_iCurrentAlloc);
+		void *pSpace = (void *)(mp_AllocSpace + mp_iCurrentAlloc);
 
-		m_iCurrentAlloc += Needed;
+		mp_iCurrentAlloc += Needed;
 
 		return pSpace;
 	}
@@ -47,26 +47,26 @@ namespace NMib::NStr
 	void TCStrParse<t_CStrTraits>::f_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags)
 	{
 		TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)_pParse | static_cast<umint>(_Flags));
-		if (m_nParses < mcp_StaticParses)
+		if (mp_nParses < mcp_StaticParses)
 		{
-			m_plParses[m_nParses] = pParse;
-			++m_nParses;
+			mp_StaticParseStorage[mp_nParses] = pParse;
+			++mp_nParses;
 			return;
 		}
 
-		if (m_nParses >= m_lParses.f_GetLen())
+		if (mp_nParses >= mp_DynamicParseStorage.f_GetLen())
 		{
-			if (!m_lParses.f_GetLen())
+			if (!mp_DynamicParseStorage.f_GetLen())
 			{
-				m_lParses.f_SetLen(m_nParses * 2);
-				NMemory::fg_MemCopy(m_lParses.f_GetArray(), m_plParses, m_nParses * sizeof(void *));
+				mp_DynamicParseStorage.f_SetLen(mp_nParses * 2);
+				NMemory::fg_MemCopy(mp_DynamicParseStorage.f_GetArray(), mp_StaticParseStorage, mp_nParses * sizeof(void *));
 			}
 			else
-				m_lParses.f_SetLen(m_nParses * 2);
+				mp_DynamicParseStorage.f_SetLen(mp_nParses * 2);
 		}
-		m_pParses = m_lParses.f_GetArray();
-		m_pParses[m_nParses] = pParse;
-		++m_nParses;
+		mp_pParses = mp_DynamicParseStorage.f_GetArray();
+		mp_pParses[mp_nParses] = pParse;
+		++mp_nParses;
 	}
 
 	template <typename t_CStrTraits>
@@ -89,9 +89,9 @@ namespace NMib::NStr
 	inline_medium auto TCStrParse<t_CStrTraits>::f_GetArg(aint _iArgument) const -> TICStrParseType<TCStrParse> const *
 	{
 		if (_iArgument < 0)
-			_iArgument = m_iCurrentArgument++;
+			_iArgument = mp_iCurrentArgument++;
 
-		if (_iArgument >= (aint)m_nParses)
+		if (_iArgument >= (aint)mp_nParses)
 			return nullptr;
 
 		return fp_GetParseEntry(_iArgument);
@@ -100,10 +100,10 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_medium TCStrParse<t_CStrTraits>::TCStrParse(CChar const *_pParseStr)
 	{
-		m_pParseStr = _pParseStr;
-		m_pParses = m_plParses;
-		m_nParses = 0;
-		m_iCurrentAlloc = 0;
+		mp_pParseStr = _pParseStr;
+		mp_pParses = mp_StaticParseStorage;
+		mp_nParses = 0;
+		mp_iCurrentAlloc = 0;
 	}
 
 	template <typename t_CStrTraits>
@@ -111,10 +111,10 @@ namespace NMib::NStr
 	{
 		TICStrParseType<TCStrParse> **pParseList = fp_GetParseList();
 
-		for (uaint i = 0; i < m_nParses; ++i)
+		for (uaint iParse = 0; iParse < mp_nParses; ++iParse)
 		{
-			EStringParseTypeFlag Flags = static_cast<EStringParseTypeFlag>(((umint)pParseList[i] & 0x3));
-			TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)pParseList[i] & (~((umint)0x3)));
+			EStringParseTypeFlag Flags = static_cast<EStringParseTypeFlag>(((umint)pParseList[iParse] & 0x3));
+			TICStrParseType<TCStrParse> *pParse = (TICStrParseType<TCStrParse> *)((umint)pParseList[iParse] & (~((umint)0x3)));
 
 			if (fg_IsSet(Flags, EStringParseTypeFlag::mc_NeedDealloc))
 			{
@@ -129,16 +129,16 @@ namespace NMib::NStr
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::f_Parse(CChar const *_pToParse, aint &_nParsed, EParseFlag _ParseFlags) -> CChar const *
 	{
-		m_iCurrentArgument = 0;
-		return fs_ParseArgList(m_pParseStr, _pToParse, *this, _ParseFlags, _nParsed);
+		mp_iCurrentArgument = 0;
+		return fs_ParseArgList(mp_pParseStr, _pToParse, *this, _ParseFlags, _nParsed);
 	}
 
 	template <typename t_CStrTraits>
 	inline_small auto TCStrParse<t_CStrTraits>::f_Parse(CChar const *_pToParse, EParseFlag _ParseFlags) -> CChar const *
 	{
-		m_iCurrentArgument = 0;
+		mp_iCurrentArgument = 0;
 		aint nParsed;
-		return fs_ParseArgList(m_pParseStr, _pToParse, *this, _ParseFlags, nParsed);
+		return fs_ParseArgList(mp_pParseStr, _pToParse, *this, _ParseFlags, nParsed);
 	}
 
 	template <typename t_CStrTraits>

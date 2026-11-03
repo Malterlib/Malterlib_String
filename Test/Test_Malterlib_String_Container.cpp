@@ -51,13 +51,13 @@ namespace
 			using CMeasureType = TCConditional<t_bMemoryTests, CTestMemoryMeasure, CTestPerformanceMeasure>;
 			using CTestType = TCConditional<t_bMemoryTests, CTestMemoryNumAllocations, CTestPerformance>;
 
-			static umint const VectorSize = 512;
+			static constexpr umint mc_VectorSize = 512;
 			static CStr fs_GenerateHexList()
 			{
 				using CValue = int32;
 				using NKarma::hex;
 
-				std::vector<CValue> const Vector(VectorSize, 12345);
+				std::vector<CValue> const Vector(mc_VectorSize, 12345);
 
 				CMeasureType MalterlibAllocTime("Malterlib");
 				CMeasureType MalterlibAllocReserveTime("Malterlib");
@@ -77,7 +77,7 @@ namespace
 
 				// Test 100 times and pick the fastest
 
-				umint NeededCharSize = VectorSize * 5 + 3;
+				umint NeededCharSize = mc_VectorSize * 5 + 3;
 				CStr MalterlibAllocResult;
 				CStr MalterlibAllocReserveResult;
 				CStr MalterlibStaticAllocResult;
@@ -101,9 +101,9 @@ namespace
 				MalterlibStaticNoAllocResult.f_SetPtr(MalterlibStaticNoAllocResultData.f_GetArray(), NeededCharSize);
 
 #ifdef DMibDebug
-				static int const nTests = 100;
+				static int const s_nTests = 100;
 #else
-				static int const nTests = 100;
+				static int const s_nTests = 100;
 #endif
 				auto Karma = [&]()
 					{
@@ -114,7 +114,7 @@ namespace
 							std::back_insert_iterator<std::string> iInserter(KarmaResult);
 							NKarma::generate(iInserter, '[' << hex % ',' << ']', Vector);
 
-							KarmaStaticAllocTime.f_Stop(VectorSize);
+							KarmaStaticAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -128,7 +128,7 @@ namespace
 							std::back_insert_iterator<std::string> iInserter(KarmaReserveResult);
 							NKarma::generate(iInserter, '[' << hex % ',' << ']', Vector);
 
-							KarmaStaticAllocReserveTime.f_Stop(VectorSize);
+							KarmaStaticAllocReserveTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -141,7 +141,7 @@ namespace
 							NKarma::generate(pGenerate, '[' << hex % ',' << ']', Vector);
 							*pGenerate = 0;
 
-							KarmaStaticNoAllocTime.f_Stop(VectorSize);
+							KarmaStaticNoAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -167,7 +167,7 @@ namespace
 							*OutIter = ']';
 							++OutIter;
 
-							KarmaManualStaticAllocTime.f_Stop(VectorSize);
+							KarmaManualStaticAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -194,7 +194,7 @@ namespace
 							*OutIter = ']';
 							++OutIter;
 						}
-						KarmaManualStaticAllocReserveTime.f_Stop(VectorSize);
+						KarmaManualStaticAllocReserveTime.f_Stop(mc_VectorSize);
 					}
 				;
 				auto KarmaManualStaticNoAlloc = [&]()
@@ -219,7 +219,7 @@ namespace
 							++pGenerate;
 							*pGenerate = 0;
 						}
-						KarmaManualStaticNoAllocTime.f_Stop(VectorSize);
+						KarmaManualStaticNoAllocTime.f_Stop(mc_VectorSize);
 					}
 				;
 
@@ -249,7 +249,7 @@ namespace
 
 							MalterlibAllocResult += ']';
 
-							MalterlibAllocTime.f_Stop(VectorSize);
+							MalterlibAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -278,7 +278,7 @@ namespace
 							}
 							MalterlibAllocReserveResult += ']';
 
-							MalterlibAllocReserveTime.f_Stop(VectorSize);
+							MalterlibAllocReserveTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -306,7 +306,7 @@ namespace
 							}
 							MalterlibNoAllocResult += ']';
 
-							MalterlibNoAllocTime.f_Stop(VectorSize);
+							MalterlibNoAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -333,7 +333,7 @@ namespace
 							MalterlibStaticNoAllocResult.f_AddCharLengthAware(StrLen, ']');
 							MalterlibStaticNoAllocResult.f_SetStrLen(StrLen);
 
-							MalterlibStaticNoAllocTime.f_Stop(VectorSize);
+							MalterlibStaticNoAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -360,7 +360,7 @@ namespace
 							MalterlibStaticAllocResult.f_AddCharLengthAware(StrLen, ']');
 							MalterlibStaticAllocResult.f_SetStrLen(StrLen);
 
-							MalterlibStaticAllocTime.f_Stop(VectorSize);
+							MalterlibStaticAllocTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
@@ -388,36 +388,36 @@ namespace
 							MalterlibStaticAllocReserveResult.f_AddCharLengthAware(StrLen, ']');
 							MalterlibStaticAllocReserveResult.f_SetStrLen(StrLen);
 
-							MalterlibStaticAllocReserveTime.f_Stop(VectorSize);
+							MalterlibStaticAllocReserveTime.f_Stop(mc_VectorSize);
 						}
 					}
 				;
 
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					Karma();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					KarmaChar();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					KarmaReserve();
 
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					KarmaManualStaticAlloc();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					KarmaManualStaticAllocReserve();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					KarmaManualStaticNoAlloc();
 
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibAlloc();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibAllocReserve();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibNoAlloc();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibStaticNoAlloc();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibStaticAlloc();
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 					MalterlibStaticAllocReserve();
 
 				DMibTest(DMibExpr(MalterlibAllocResult) == DMibExpr(KarmaResult.c_str()))(ETestFlag_NoValues);
@@ -483,12 +483,12 @@ namespace
 				std::vector<CValue> ManualVector;
 				std::vector<CValue> ManualHexOnlyVector;
 #ifdef DMibDebug
-				static int const nTests = 100;
+				static int const s_nTests = 100;
 #else
-				static int const nTests = 100;
+				static int const s_nTests = 100;
 #endif
 				// Test 100 times and pick the fastest
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 				{
 					std::string HexListStdStr(_HexList.f_GetStr());
 					SpiritVector.clear();
@@ -498,10 +498,10 @@ namespace
 						std::string::iterator iBegin = HexListStdStr.begin();
 						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex % ',' >> ']'), SpiritVector);
 
-						SpiritTimer.f_Stop(VectorSize);
+						SpiritTimer.f_Stop(mc_VectorSize);
 					}
 				}
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 				{
 					std::string HexListStdStr(_HexList.f_GetStr());
 					SpiritSemanticVector.clear();
@@ -516,70 +516,70 @@ namespace
 						;
 						NQi::parse(iBegin, HexListStdStr.end(), ('[' >> hex[Lamba] % ',' >> ']'));
 
-						SpiritSemanticTimer.f_Stop(VectorSize);
+						SpiritSemanticTimer.f_Stop(mc_VectorSize);
 					}
 				}
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 				{
 					MalterlibVector.clear();
 					{ // Timing CStr::Parse
-						CValue val;
+						CValue Value;
 						MalterlibTimer.f_Start();
 
 						CStr::CChar const *pParse = _HexList;
-						pParse = (TCStrParse<CStr::CStrTraits>("[{nh}") >> val).f_Parse(pParse);
-						MalterlibVector.push_back(val);
+						pParse = (TCStrParse<CStr::CStrTraits>("[{nh}") >> Value).f_Parse(pParse);
+						MalterlibVector.push_back(Value);
 						TCStrParse<CStr::CStrTraits> Parser(",{nh}");
-						Parser >> val;
+						Parser >> Value;
 						while (*pParse != ']')
 						{
 							pParse = Parser.f_Parse(pParse);
-							MalterlibVector.push_back(val);
+							MalterlibVector.push_back(Value);
 						}
 
-						MalterlibTimer.f_Stop(VectorSize);
+						MalterlibTimer.f_Stop(mc_VectorSize);
 					}
 				}
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 				{
 					ManualVector.clear();
 					{ // Timing Manual
 						ManualTimer.f_Start();
 
-						CValue val;
+						CValue Value;
 						CStr::CChar const *pParse = _HexList;
 						if (*pParse == '[')
 							++pParse;
 						while (*pParse && *pParse != ']')
 						{
-							val = fg_StrToIntParse(pParse, CValue(-1), (CStr::CChar const *)nullptr, true, EStrToIntParseMode_Hex);
-							ManualVector.push_back(val);
+							Value = fg_StrToIntParse(pParse, CValue(-1), (CStr::CChar const *)nullptr, true, EStrToIntParseMode_Hex);
+							ManualVector.push_back(Value);
 							if (*pParse == ',')
 								++pParse;
 						}
 
-						ManualTimer.f_Stop(VectorSize);
+						ManualTimer.f_Stop(mc_VectorSize);
 					}
 				}
-				for (int i = 0; i < nTests; ++i)
+				for (int iTest = 0; iTest < s_nTests; ++iTest)
 				{
 					ManualHexOnlyVector.clear();
 					{ // Timing manual hex only
 						ManualHexOnlyTimer.f_Start();
 
-						CValue val;
+						CValue Value;
 						CStr::CChar const *pParse = _HexList;
 						if (*pParse == '[')
 							++pParse;
 						while (*pParse && *pParse != ']')
 						{
-							val = fg_StrToIntParseHexNoSign(pParse, CValue(-1));
-							ManualHexOnlyVector.push_back(val);
+							Value = fg_StrToIntParseHexNoSign(pParse, CValue(-1));
+							ManualHexOnlyVector.push_back(Value);
 							if (*pParse == ',')
 								++pParse;
 						}
 
-						ManualHexOnlyTimer.f_Stop(VectorSize);
+						ManualHexOnlyTimer.f_Stop(mc_VectorSize);
 					}
 				}
 				DMibTest(DMibExpr(MalterlibVector == SpiritVector));
@@ -609,33 +609,33 @@ namespace
 			void f_FormatInt()
 			{
 #ifdef DMibDebug
-				static umint const nTestsGlobal = 10;
+				static umint const s_nTestsGlobal = 10;
 #else
-				static umint const nTestsGlobal = 1000;
+				static umint const s_nTestsGlobal = 1000;
 #endif
-				static int32 const nLoopsGlobal = 10000;
+				static int32 const s_nLoopsGlobal = 10000;
 				// Do
 
 				DMibTestCategory("Static")
 				{
-					static umint const nTestsPropagate = nTestsGlobal;
-					static int32 const nLoopsPropagate = nLoopsGlobal;
+					static umint const s_nTestsPropagate = s_nTestsGlobal;
+					static int32 const s_nLoopsPropagate = s_nLoopsGlobal;
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CMeasureType MalterlibTime("Malterlib CFStr16");
 						CFStr16 MalterlibResult;
 
 						CMeasureType MalterlibCFStr16InplaceTime("Malterlib CFStr16 inplace");
 						{
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCFStr16InplaceTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									CFStr16::fs_ToStrInplace(MalterlibResult, i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									CFStr16::fs_ToStrInplace(MalterlibResult, iLoop);
 
-								MalterlibCFStr16InplaceTime.f_Stop(nLoops);
+								MalterlibCFStr16InplaceTime.f_Stop(s_nLoops);
 							}
 						};
 
@@ -643,18 +643,18 @@ namespace
 						{
 							using NKarma::int_;
 							ch8 Result[16];
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								KarmaTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									ch8 *pGenerate = Result;
-									NKarma::generate(pGenerate, int_, i);
+									NKarma::generate(pGenerate, int_, iLoop);
 									*pGenerate = 0;
 								}
 
-								KarmaTime.f_Stop(nLoops);
+								KarmaTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
@@ -665,14 +665,14 @@ namespace
 							ch8 ResultData[12];
 							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrPtrTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									CStrPtr::fs_ToStrInplace(Result, i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									CStrPtr::fs_ToStrInplace(Result, iLoop);
 
-								MalterlibCStrPtrTime.f_Stop(nLoops);
+								MalterlibCStrPtrTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
@@ -680,14 +680,14 @@ namespace
 						CMeasureType MalterlibCFStr16Time("Malterlib CFStr16");
 						{
 							CFStr16 Result;
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCFStr16Time.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									Result = CFStr16::fs_ToStr(i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									Result = CFStr16::fs_ToStr(iLoop);
 
-								MalterlibCFStr16Time.f_Stop(nLoops);
+								MalterlibCFStr16Time.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
@@ -697,14 +697,14 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								ItoaTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									_itoa(i, Result, 10);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									_itoa(iLoop, Result, 10);
 
-								ItoaTime.f_Stop(nLoops);
+								ItoaTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
@@ -722,22 +722,22 @@ namespace
 					};
 
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CStr MalterlibResult;
 						CMeasureType MalterlibCStrInplaceTime("Malterlib CStr inplace");
 						{
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrInplaceTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									MalterlibResult.f_Clear();
-									CStr::fs_ToStrInplace(MalterlibResult, i);
+									CStr::fs_ToStrInplace(MalterlibResult, iLoop);
 								}
 
-								MalterlibCStrInplaceTime.f_Stop(nLoops);
+								MalterlibCStrInplaceTime.f_Stop(s_nLoops);
 							}
 						};
 						CMeasureType KarmaTime("Karma");
@@ -745,18 +745,18 @@ namespace
 							using NKarma::int_;
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								KarmaTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									Result = std::string();
 									std::back_insert_iterator<std::string> iInserter(Result);
-									NKarma::generate(iInserter, int_, i);
+									NKarma::generate(iInserter, int_, iLoop);
 								}
 
-								KarmaTime.f_Stop(nLoops);
+								KarmaTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
@@ -765,14 +765,14 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									Result = CStr::fs_ToStr(i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									Result = CStr::fs_ToStr(iLoop);
 
-								MalterlibCStrTime.f_Stop(nLoops);
+								MalterlibCStrTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result)
 								DMibTest(DMibExpr(MalterlibResult == Result));
@@ -782,19 +782,19 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							std::stringstream Stream;
-							for (umint j = 0; j < nTests / 10; ++j)
+							for (umint iTest = 0; iTest < s_nTests / 10; ++iTest)
 							{
 								StringStreamTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									Stream.str("");
 									Stream.clear();
-									Stream << i;
+									Stream << iLoop;
 									Result = Stream.str();
 								}
 
-								StringStreamTime.f_Stop(nLoops);
+								StringStreamTime.f_Stop(s_nLoops);
 							}
 							if (MalterlibResult != Result.c_str())
 								DMibTest(DMibExpr(MalterlibResult == Result.c_str()));
@@ -807,20 +807,20 @@ namespace
 						DMibTest(DMibExpr(Alloc))(ETest_ExpectFail); // We need a CStr that has storage interally when possible
 					};
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CStr MalterlibResult;
 						CMeasureType MalterlibCStrInplaceTime("Malterlib CStr inplace");
 						{
 							MalterlibResult.f_Reserve(12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrInplaceTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									CStr::fs_ToStrInplace(MalterlibResult, i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									CStr::fs_ToStrInplace(MalterlibResult, iLoop);
 
-								MalterlibCStrInplaceTime.f_Stop(nLoops);
+								MalterlibCStrInplaceTime.f_Stop(s_nLoops);
 							}
 						};
 						CMeasureType KarmaTime("Karma");
@@ -829,18 +829,18 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							std::string Result;
 							Result.reserve(12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								KarmaTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									Result.clear();
 									std::back_insert_iterator<std::string> iInserter(Result);
-									NKarma::generate(iInserter, int_, i);
+									NKarma::generate(iInserter, int_, iLoop);
 								}
 
-								KarmaTime.f_Stop(nLoops);
+								KarmaTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result.c_str())
@@ -851,12 +851,12 @@ namespace
 							CPrefCyclesTimeMeasureMin Time;
 							CStr Result;
 							Result.f_Reserve(12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrTime.f_Start();
-								for (int i = 0; i < nLoops; ++i)
-									Result = CStr::fs_ToStr(i);
-								MalterlibCStrTime.f_Stop(nLoops);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									Result = CStr::fs_ToStr(iLoop);
+								MalterlibCStrTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -868,19 +868,19 @@ namespace
 							std::string Result;
 							Result.reserve(12);
 							std::stringstream Stream;
-							for (umint j = 0; j < nTests / 10; ++j)
+							for (umint iTest = 0; iTest < s_nTests / 10; ++iTest)
 							{
 								StringStreamTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									Stream.str("");
 									Stream.clear();
-									Stream << i;
+									Stream << iLoop;
 									Result = Stream.str();
 								}
 
-								StringStreamTime.f_Stop(nLoops);
+								StringStreamTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result.c_str())
@@ -897,28 +897,28 @@ namespace
 
 				DMibTestCategory("Dynamic")
 				{
-					static umint const nTestsPropagate = nTestsGlobal;
-					static int32 const nLoopsPropagate = nLoopsGlobal;
+					static umint const s_nTestsPropagate = s_nTestsGlobal;
+					static int32 const s_nLoopsPropagate = s_nLoopsGlobal;
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CFStr16 MalterlibResult;
 						CMeasureType MalterlibCFStrOptTime("Malterlib CFStr16 Opt");
 						{
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCFStrOptTime.f_Start();
 
 								CFStr16::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
-									Value = i;
+									Value = iLoop;
 									MalterlibResult = Format;
 								}
 
-								MalterlibCFStrOptTime.f_Stop(nLoops);
+								MalterlibCFStrOptTime.f_Stop(s_nLoops);
 							}
 						};
 						CMeasureType MalterlibCStrPtrOptTime("Malterlib CStrPtr Opt");
@@ -926,20 +926,20 @@ namespace
 							ch8 ResultData[12];
 							CStrPtr Result;
 							Result.f_SetPtr(ResultData, 12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCStrPtrOptTime.f_Start();
 
 								CStrPtr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
-									Value = i;
+									Value = iLoop;
 									Result = Format;
 								}
 
-								MalterlibCStrPtrOptTime.f_Stop(nLoops);
+								MalterlibCStrPtrOptTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -948,14 +948,14 @@ namespace
 						CMeasureType MalterlibCFStr16Time("Malterlib CFStr16");
 						{
 							CFStr16 Result;
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibCFStr16Time.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									Result = CFStr16::CFormat("{}") << i;
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									Result = CFStr16::CFormat("{}") << iLoop;
 
-								MalterlibCFStr16Time.f_Stop(nLoops);
+								MalterlibCFStr16Time.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -965,14 +965,14 @@ namespace
 						{
 							CPrefCyclesTimeMeasureMin Time;
 							char Result[12];
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								SprintfTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									snprintf(Result, 12, "%i", i);
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									snprintf(Result, 12, "%i", iLoop);
 
-								SprintfTime.f_Stop(nLoops);
+								SprintfTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -988,42 +988,42 @@ namespace
 					};
 
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CMeasureType MalterlibOptTime("Malterlib Opt");
 						CStr MalterlibResult;
 						{
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibOptTime.f_Start();
 
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
-									Value = i;
+									Value = iLoop;
 									MalterlibResult.f_Clear();
 									MalterlibResult = Format;
 								}
 
-								MalterlibOptTime.f_Stop(nLoops);
+								MalterlibOptTime.f_Stop(s_nLoops);
 							}
 						};
 						CMeasureType MalterlibTime("Malterlib");
 						{
 							CStr Result;
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
 									Result.f_Clear();
-									Result = CStr::CFormat("{}") << i;
+									Result = CStr::CFormat("{}") << iLoop;
 								}
 
-								MalterlibTime.f_Stop(nLoops);
+								MalterlibTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -1035,40 +1035,40 @@ namespace
 						DMibTest(DMibExpr(Alloc));
 					}
 					{
-						static umint const nTests = nTestsPropagate;
-						static int32 const nLoops = nLoopsPropagate;
+						static umint const s_nTests = s_nTestsPropagate;
+						static int32 const s_nLoops = s_nLoopsPropagate;
 						CMeasureType MalterlibOptTime("Malterlib Opt");
 						CStr MalterlibResult;
 						{
 							MalterlibResult.f_Reserve(12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibOptTime.f_Start();
 
 								CStr::CFormat Format("{}");
 								int Value;
 								Format << Value;
-								for (int i = 0; i < nLoops; ++i)
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
 								{
-									Value = i;
+									Value = iLoop;
 									MalterlibResult = Format;
 								}
 
-								MalterlibOptTime.f_Stop(nLoops);
+								MalterlibOptTime.f_Stop(s_nLoops);
 							}
 						};
 						CMeasureType MalterlibTime("Malterlib");
 						{
 							CStr Result;
 							Result.f_Reserve(12);
-							for (umint j = 0; j < nTests; ++j)
+							for (umint iTest = 0; iTest < s_nTests; ++iTest)
 							{
 								MalterlibTime.f_Start();
 
-								for (int i = 0; i < nLoops; ++i)
-									Result = CStr::CFormat("{}") << i;
+								for (int iLoop = 0; iLoop < s_nLoops; ++iLoop)
+									Result = CStr::CFormat("{}") << iLoop;
 
-								MalterlibTime.f_Stop(nLoops);
+								MalterlibTime.f_Stop(s_nLoops);
 							}
 
 							if (MalterlibResult != Result)
@@ -1087,9 +1087,9 @@ namespace
 		{
 			{
 				DMibTestPath("CFormat rvalue args");
-				CStrVMem fmtstr = "{} {}";
-				CStrVMem::CFormat format(fmtstr);
-				DMibTest(DMibExpr((format << CStrVMem("Hello") << CStr("World")).f_GetStr()) == DMibExpr("Hello World"));
+				CStrVMem FormatString = "{} {}";
+				CStrVMem::CFormat Format(FormatString);
+				DMibTest(DMibExpr((Format << CStrVMem("Hello") << CStr("World")).f_GetStr()) == DMibExpr("Hello World"));
 			}
 		}
 

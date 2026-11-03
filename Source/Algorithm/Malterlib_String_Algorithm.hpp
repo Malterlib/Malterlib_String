@@ -58,8 +58,8 @@ namespace NMib::NStr
 	template <typename tf_CData1, typename tf_CData2>
 	inline_large tf_CData1 *fg_StrCopy(tf_CData1 *_pTo, tf_CData2 const *_pFrom, umint _MaxLen)
 	{
-		tf_CData1 const *_pEnd = _pTo + _MaxLen - 1;
-		while (*_pFrom && _pTo < _pEnd)
+		tf_CData1 const *pEnd = _pTo + _MaxLen - 1;
+		while (*_pFrom && _pTo < pEnd)
 			*_pTo++ = *_pFrom++;
 		*_pTo = 0;
 		return _pTo;

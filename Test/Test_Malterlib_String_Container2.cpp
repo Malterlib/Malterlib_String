@@ -25,10 +25,10 @@ CStr const &fg_GetTestStringInAnotherTranslationUnit();
 
 namespace
 {
-	static uch8 const gc_AnsiTestStringSource[] = {'a', 'b', 'c', 'd', 0xc6, 0xc5, 0xd6, 0xe6, 0xe5, 0xf6, 0};
+	static constexpr uch8 gc_AnsiTestStringSource[] = {'a', 'b', 'c', 'd', 0xc6, 0xc5, 0xd6, 0xe6, 0xe5, 0xf6, 0};
 
-	char const *gc_AnsiTestString = (char const *)gc_AnsiTestStringSource;
-	char const *gc_AnsiTestStringUTF = str_utf8("abcdÆÅÖæåö");
+	char const *g_AnsiTestString = (char const *)gc_AnsiTestStringSource;
+	constexpr char const *gc_AnsiTestStringUTF = str_utf8("abcdÆÅÖæåö");
 
 	struct CGlobalFunctions_Tests : public NMib::NTest::CTest
 	{
@@ -261,27 +261,27 @@ namespace
 						, CStr(""),      "CStr Empty"
 					}
 				;
-				int siz = (sizeof(UniqueStrings) / sizeof(CStr)) / 2;
-				for (int i = 0; i < siz; ++i)
+				int nStrings = (sizeof(UniqueStrings) / sizeof(CStr)) / 2;
+				for (int iLeft = 0; iLeft < nStrings; ++iLeft)
 				{
-					DMibTestPath(UniqueStrings[i * 2 + 1]);
-					for (int j = 0; j < siz; ++j)
+					DMibTestPath(UniqueStrings[iLeft * 2 + 1]);
+					for (int iRight = 0; iRight < nStrings; ++iRight)
 					{
-						DMibTestPath(UniqueStrings[j * 2 + 1]);
-						CStr const &Left = UniqueStrings[i * 2];
-						CStr const &Right = UniqueStrings[j * 2];
-						if (i % 3 == j % 3)
+						DMibTestPath(UniqueStrings[iRight * 2 + 1]);
+						CStr const &Left = UniqueStrings[iLeft * 2];
+						CStr const &Right = UniqueStrings[iRight * 2];
+						if (iLeft % 3 == iRight % 3)
 						{
 							DMibTest(DMibExpr(fg_StrCmpNoCase(Left, Right) == 0));
 							DMibTest(DMibExpr(fg_StrCmpNoCase(Right, Left) == 0));
 						}
 						else
 						{
-							auto cmp1 = fg_StrCmpNoCase(Left, Right);
-							DMibTest(DMibExpr(cmp1 != 0));
-							auto cmp2 = fg_StrCmpNoCase(Right, Left);
-							DMibTest(DMibExpr(cmp2 != 0));
-							DMibTest(DMibExpr(cmp2 == -cmp1));
+							auto CompareLeftRight = fg_StrCmpNoCase(Left, Right);
+							DMibTest(DMibExpr(CompareLeftRight != 0));
+							auto CompareRightLeft = fg_StrCmpNoCase(Right, Left);
+							DMibTest(DMibExpr(CompareRightLeft != 0));
+							DMibTest(DMibExpr(CompareRightLeft == -CompareLeftRight));
 						}
 					}
 				}
@@ -367,7 +367,7 @@ namespace
 					{
 						CStr Out;
 						umint Len = 0;
-						auto fl_AddChars = [&](umint _nChars) -> ch8 *
+						auto fAddChars = [&](umint _nChars) -> ch8 *
 							{
 								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
@@ -381,7 +381,7 @@ namespace
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
-							if (!fg_EncodeUTF8Char<true>(*pParse, fl_AddChars))
+							if (!fg_EncodeUTF8Char<true>(*pParse, fAddChars))
 								break;
 							++pParse;
 						}
@@ -415,7 +415,7 @@ namespace
 					{
 						CWStr Out;
 						umint Len = 0;
-						auto fl_AddChars = [&](umint _nChars) -> ch16 *
+						auto fAddChars = [&](umint _nChars) -> ch16 *
 							{
 								umint OutLen = Out.f_CreateWritableBuffer(Len + _nChars + 1, false);
 								if (OutLen < Len + _nChars)
@@ -429,7 +429,7 @@ namespace
 						ch32 const *pParse = UTF32.f_GetStr();
 						while (*pParse)
 						{
-							if (!fg_EncodeUTF16Char<true>(*pParse, fl_AddChars))
+							if (!fg_EncodeUTF16Char<true>(*pParse, fAddChars))
 								break;
 							++pParse;
 						}
@@ -448,7 +448,7 @@ namespace
 					DMibTestPath("ch8");
 					{
 						DMibTestPath("ANSI");
-						CAnsiStr TestString(gc_AnsiTestString);
+						CAnsiStr TestString(g_AnsiTestString);
 						CStr TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
@@ -457,7 +457,7 @@ namespace
 					}
 					{
 						DMibTestPath("ANSI not tracked");
-						CAnsiStrNonTracked TestString(gc_AnsiTestString);
+						CAnsiStrNonTracked TestString(g_AnsiTestString);
 						CStrNonTracked TestConvert = TestString;
 						CStr MixedFrom = TestString;
 						CStr MixedTo = TestConvert;
@@ -512,12 +512,12 @@ namespace
 					DMibTestPath("From ch8");
 					{
 						DMibTestPath("ANSI");
-						CAnsiStr TestFrom(gc_AnsiTestString);
+						CAnsiStr TestFrom(g_AnsiTestString);
 						{
 							DMibTestPath("To ch8");
 							{
 								DMibTestPath("ANSI");
-								CAnsiStr TestTo(gc_AnsiTestString);
+								CAnsiStr TestTo(g_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
@@ -533,7 +533,7 @@ namespace
 							DMibTestPath("To ch8");
 							{
 								DMibTestPath("ANSI");
-								CAnsiStr TestTo(gc_AnsiTestString);
+								CAnsiStr TestTo(g_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
@@ -600,7 +600,7 @@ namespace
 							DMibTestPath("To ch8");
 							{
 								DMibTestPath("ANSI");
-								CAnsiStr TestTo(gc_AnsiTestString);
+								CAnsiStr TestTo(g_AnsiTestString);
 								auto TestResult = TestFrom;
 								TestResult += TestTo;
 								CStr ReferenceResult = CStr(TestFrom) + CStr(TestTo);
@@ -881,7 +881,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStr TestTo;
-								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(g_AnsiTestString, TestTo);
 								CStr FromResult(gc_AnsiTestStringUTF);
 								CStr ToResult = TestTo;
 								DMibTest(DMibExpr(FromResult) == DMibExpr(ToResult));
@@ -892,7 +892,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
-								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(gc_AnsiTestString, TestTo);
+								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(g_AnsiTestString, TestTo);
 								CStr TestFrom(gc_AnsiTestStringUTF);
 								DMibTest(DMibExpr(TestFrom) == DMibExpr(TestTo));
 							}
@@ -908,7 +908,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStr TestTo;
-								CAnsiStr TestFrom(gc_AnsiTestString);
+								CAnsiStr TestFrom(g_AnsiTestString);
 								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CMStrDeprecated FromResult = CMStrDeprecated(TestFrom);
 								CMStrDeprecated ToResult = CMStrDeprecated(TestTo);
@@ -926,7 +926,7 @@ namespace
 							{
 								DMibTestPath("UTF");
 								CStrNonTracked TestTo;
-								CAnsiStrNonTracked TestFrom(gc_AnsiTestString);
+								CAnsiStrNonTracked TestFrom(g_AnsiTestString);
 								NMib::NStr::NPlatform::fg_SystemDecodeAnsiStr(TestFrom, TestTo);
 								CStr ToResult = TestTo;
 								CStr FromResult = TestFrom;
@@ -1532,16 +1532,16 @@ namespace
 		{
 			DMibTestSuite("UserData")
 			{
-				for (umint i = 0; i < 2; ++i)
+				for (umint iVariant = 0; iVariant < 2; ++iVariant)
 				{
-					DMibTestPath(i == 0 ? "Non-Empty" : "Empty");
+					DMibTestPath(iVariant == 0 ? "Non-Empty" : "Empty");
 
 					for (umint TestValue = 0; TestValue < 4; ++TestValue)
 					{
 						DMibTestPath("{}"_f << TestValue);
 
 						CStr TestString;
-						if (i == 0)
+						if (iVariant == 0)
 							TestString = "Test";
 
 						TestString.f_SetUserData(TestValue);
@@ -1696,7 +1696,7 @@ namespace
 
 				CTestExtractor Extractor;
 
-				auto fl_Test = [&](CStr::CFormat const &_Format)
+				auto fTest = [&](CStr::CFormat const &_Format)
 					{
 						DMibTest(DMibExpr(_Format.f_GetNumArgs()) == DMibExpr(8u))(ETest_FailAndStop);
 						_Format.f_GetArg(0)->f_Visit(Extractor);
@@ -1711,7 +1711,7 @@ namespace
 				;
 
 				CStr::CFormat Test("");
-				fl_Test(Test << int32(5) << uint32(6) << int64(7) << uint64(8) << fp32(9.5) << fp64(10.5) << "String" << fg_FormatAsBinary(CTesting()));
+				fTest(Test << int32(5) << uint32(6) << int64(7) << uint64(8) << fp32(9.5) << fp64(10.5) << "String" << fg_FormatAsBinary(CTesting()));
 
 				DMibTest(DMibExpr(Extractor.m_Extracted) == DMibExpr((uint32(DMibBitRange(0, 7)))));
 			};
@@ -1914,7 +1914,7 @@ namespace
 					{
 						DMibTestPath("FoundInWild");
 						{
-							CStr A = "Result";
+							CStr Target = "Result";
 							DMibTest
 								(
 									DMibExpr
@@ -1925,7 +1925,7 @@ namespace
 											"reference as an argument.'"
 										)
 									)
-									== DMibLExpr((A = CStr::CFormat("{}{}") << A << "Value"))
+									== DMibLExpr((Target = CStr::CFormat("{}{}") << Target << "Value"))
 								)
 							;
 						}

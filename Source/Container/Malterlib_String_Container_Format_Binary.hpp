@@ -37,9 +37,9 @@ namespace NMib::NStr
 		uint8 const *pValue = (uint8 const *)_Value.f_GetArray();
 		umint nBytes = _Value.f_GetSize();
 
-		for (umint i = 0; i < nBytes; ++i)
+		for (umint iByte = 0; iByte < nBytes; ++iByte)
 		{
-			NMemory::fg_MemCopy(&OutValue, pValue + i, 1);
+			NMemory::fg_MemCopy(&OutValue, pValue + iByte, 1);
 			CFormatType::fs_AddToStrStatic(_String, _CurrentStrLen, Temp);
 		}
 	}

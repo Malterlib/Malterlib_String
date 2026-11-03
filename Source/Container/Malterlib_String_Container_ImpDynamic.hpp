@@ -16,8 +16,8 @@ namespace NMib::NStr
 			, .m_UserData = _UserData
 		}
 	{
-		for (umint i = 0; i < t_nChars; ++i)
-			m_Data[i] = _String[i];
+		for (umint iChar = 0; iChar < t_nChars; ++iChar)
+			m_Data[iChar] = _String[iChar];
 	}
 
 	template <umint t_nChars, typename t_CChar>

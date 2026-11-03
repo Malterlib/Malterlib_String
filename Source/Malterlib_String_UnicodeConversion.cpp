@@ -126,11 +126,11 @@ namespace NMib::NStr
 					continue;
 				++pParse;
 
-				ch32 X = ((Str0 & ((1 << 6) - 1)) << 10) | (Str1 & ((1 << 10) - 1));
-				ch32 W = (Str0 >> 6) & ((1 << 5) - 1);
-				ch32 U = W + 1;
+				ch32 PlaneOffset = ((Str0 & ((1 << 6) - 1)) << 10) | (Str1 & ((1 << 10) - 1));
+				ch32 PlaneMinusOne = (Str0 >> 6) & ((1 << 5) - 1);
+				ch32 Plane = PlaneMinusOne + 1;
 
-				DestChar = U << 16 | X;
+				DestChar = Plane << 16 | PlaneOffset;
 				break;
 			}
 			DestChar = (*(pParse++));

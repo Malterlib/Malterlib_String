@@ -40,7 +40,7 @@ namespace NMib::NStr
 		static constexpr bool mc_AllocatesMemory = false;
 
 		umint m_Len;
-		CChar m_lData[t_DataLen];
+		CChar m_Data[t_DataLen];
 	};
 }
 

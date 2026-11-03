@@ -60,12 +60,12 @@ namespace NMib::NStr
 
 	private:
 		static_assert(t_Radix >= 2 && t_Radix <= 36);
-		static constexpr aint mc_NumBits = sizeof(CIntType) * 8;
-		static constexpr aint mc_NumBitsPerChar = gc_HighestBitSet<t_Radix>;
+		static constexpr aint mcp_NumBits = sizeof(CIntType) * 8;
+		static constexpr aint mcp_NumBitsPerChar = gc_HighestBitSet<t_Radix>;
 
 	public:
 		static constexpr aint mc_Radix = t_Radix;
-		static constexpr aint mc_NumTempChar = (mc_NumBits + (mc_NumBitsPerChar - 1)) / mc_NumBitsPerChar + 2;
+		static constexpr aint mc_NumTempChar = (mcp_NumBits + (mcp_NumBitsPerChar - 1)) / mcp_NumBitsPerChar + 2;
 
 		inline_always TCStrFormatType_Int_OptionsStatic_Radix(t_CParent const &_Parent);
 

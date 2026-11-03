@@ -786,8 +786,8 @@ namespace NMib::NStr
 				{
 					fOutput('.');
 
-					for (aint i = 1; i < NumberSize; ++i)
-						fOutput(pSourceStr[i]);
+					for (aint iDigit = 1; iDigit < NumberSize; ++iDigit)
+						fOutput(pSourceStr[iDigit]);
 					if (NumberSize == 0)
 						fOutput('0');
 				}
@@ -829,8 +829,8 @@ namespace NMib::NStr
 					aint NumberSize = c_NumTempChar - ((pStrPlace - TempStr) + 1);
 
 					CChar *pSourceStr = pStrPlace + 1;
-					for (aint i = 0; i < NumberSize; ++i)
-						fOutput(pSourceStr[i]);
+					for (aint iDigit = 0; iDigit < NumberSize; ++iDigit)
+						fOutput(pSourceStr[iDigit]);
 				}
 				else
 					fOutput('0');
@@ -839,15 +839,15 @@ namespace NMib::NStr
 			{
 				if (DecimalPlacement > NumberSize)
 				{
-					for (aint i = 0; i < NumberSize; ++i)
-						fOutput(pSourceStr[i]);
-					for (aint i = NumberSize; i < DecimalPlacement; ++i)
+					for (aint iDigit = 0; iDigit < NumberSize; ++iDigit)
+						fOutput(pSourceStr[iDigit]);
+					for (aint iDigit = NumberSize; iDigit < DecimalPlacement; ++iDigit)
 						fOutput('0');
 
 					if (_Options.m_MinDecimals > 0)
 					{
 						fOutput('.');
-						for (aint i = 0; i < _Options.m_MinDecimals; ++i)
+						for (aint iDigit = 0; iDigit < _Options.m_MinDecimals; ++iDigit)
 							fOutput('0');
 					}
 					else if (_Options.m_MinDigits > 0)
@@ -855,7 +855,7 @@ namespace NMib::NStr
 						if (_Options.m_MinDigits > DecimalPlacement)
 						{
 							fOutput('.');
-							for (aint i = DecimalPlacement; i < _Options.m_MinDigits; ++i)
+							for (aint iDigit = DecimalPlacement; iDigit < _Options.m_MinDigits; ++iDigit)
 								fOutput('0');
 						}
 					}
@@ -873,42 +873,42 @@ namespace NMib::NStr
 						if (_Options.m_MinDecimals > 0)
 						{
 							fOutput('.');
-							for (aint i = 0; i < _Options.m_MinDecimals; ++i)
+							for (aint iDigit = 0; iDigit < _Options.m_MinDecimals; ++iDigit)
 								fOutput('0');
 						}
 					}
 					else
 					{
 						fOutput('.');
-						for (aint i = DecimalPlacement; i < 0; ++i)
+						for (aint iDigit = DecimalPlacement; iDigit < 0; ++iDigit)
 							fOutput('0');
-						for (aint i = 0; i < NumberSize; ++i)
-							fOutput(pSourceStr[i]);
+						for (aint iDigit = 0; iDigit < NumberSize; ++iDigit)
+							fOutput(pSourceStr[iDigit]);
 
 						if (_Options.m_MinDecimals >= 0)
 						{
-							for (aint i = NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
+							for (aint iDigit = NumberSize - DecimalPlacement; iDigit < _Options.m_MinDecimals; ++iDigit)
 								fOutput('0');
 						}
 						else if (_Options.m_MinDigits >= 0)
 						{
-							for (aint i = NumberSize; i < _Options.m_MinDigits; ++i)
+							for (aint iDigit = NumberSize; iDigit < _Options.m_MinDigits; ++iDigit)
 								fOutput('0');
 						}
 					}
 				}
 				else
 				{
-					for (aint i = 0; i < DecimalPlacement; ++i)
-						fOutput(pSourceStr[i]);
+					for (aint iDigit = 0; iDigit < DecimalPlacement; ++iDigit)
+						fOutput(pSourceStr[iDigit]);
 					if (DecimalPlacement == 0)
 						fOutput('0');
 					if (_Options.m_MinDecimals > 0)
 					{
 						fOutput('.');
-						for (aint i = DecimalPlacement; i < NumberSize; ++i)
-							fOutput(pSourceStr[i]);
-						for (aint i = NumberSize - DecimalPlacement; i < _Options.m_MinDecimals; ++i)
+						for (aint iDigit = DecimalPlacement; iDigit < NumberSize; ++iDigit)
+							fOutput(pSourceStr[iDigit]);
+						for (aint iDigit = NumberSize - DecimalPlacement; iDigit < _Options.m_MinDecimals; ++iDigit)
 							fOutput('0');
 					}
 					else if (_Options.m_MinDigits > 0)
@@ -916,9 +916,9 @@ namespace NMib::NStr
 						if (NumberSize > DecimalPlacement || _Options.m_MinDigits > NumberSize)
 						{
 							fOutput('.');
-							for (aint i = DecimalPlacement; i < NumberSize; ++i)
-								fOutput(pSourceStr[i]);
-							for (aint i = NumberSize; i < _Options.m_MinDigits; ++i)
+							for (aint iDigit = DecimalPlacement; iDigit < NumberSize; ++iDigit)
+								fOutput(pSourceStr[iDigit]);
+							for (aint iDigit = NumberSize; iDigit < _Options.m_MinDigits; ++iDigit)
 								fOutput('0');
 						}
 					}
@@ -935,8 +935,8 @@ namespace NMib::NStr
 						else
 						{
 							fOutput('.');
-							for (aint i = DecimalPlacement; i < NumberSize; ++i)
-								fOutput(pSourceStr[i]);
+							for (aint iDigit = DecimalPlacement; iDigit < NumberSize; ++iDigit)
+								fOutput(pSourceStr[iDigit]);
 						}
 					}
 				}

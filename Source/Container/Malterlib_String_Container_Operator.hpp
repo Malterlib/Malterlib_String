@@ -52,8 +52,8 @@ namespace NMib::NStr
 		int MaxLen = CImp::f_CreateWritableBuffer(_Index + 1, false);
 		if (_Index >= MaxLen)
 		{
-			static CChar SafeWrite;
-			return SafeWrite;
+			static CChar s_SafeWrite;
+			return s_SafeWrite;
 		}
 
 		return CImp::f_GetStrWritable()[_Index];

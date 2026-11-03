@@ -20,7 +20,7 @@ namespace NMib::NStr
 		CData const *pEndStr = nullptr;
 		if constexpr (tf_bUseMaxLen)
 			pEndStr = pParseStr + _MaxLen;
-		static tf_CReturn const Ten = fg_Convert<tf_CReturn>(10);
+		static tf_CReturn const s_Ten = fg_Convert<tf_CReturn>(10);
 
 		aint SearchMode = 0;
 		tf_CReturn Sign = tf_CReturn::fs_One();
@@ -93,7 +93,7 @@ namespace NMib::NStr
 				{
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
-						DestNumber *= Ten;
+						DestNumber *= s_Ten;
 						DestNumber += fg_Convert<tf_CReturn>((*pParseStr) - '0');
 						bFoundNum = true;
 					}
@@ -141,7 +141,7 @@ namespace NMib::NStr
 				{
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
-						DecimalPlace *= Ten;
+						DecimalPlace *= s_Ten;
 						DestDecimals += (fg_Convert<tf_CReturn>((*pParseStr) - '0')) / DecimalPlace;
 						bFoundNum = true;
 					}
@@ -162,7 +162,7 @@ namespace NMib::NStr
 				{
 					if ((*pParseStr) >= '0' && (*pParseStr) <= '9')
 					{
-						DestExponent *= Ten;
+						DestExponent *= s_Ten;
 						DestExponent += fg_Convert<tf_CReturn>((*pParseStr) - '0');
 						bFoundNum = true;
 					}
@@ -198,7 +198,7 @@ namespace NMib::NStr
 		_pStr = (tf_CData const *)pParseStr;
 
 		if (bFoundNum)
-			return (DestNumber + DestDecimals) * Ten.f_Pow(DestExponent * ExponentSign) * Sign;
+			return (DestNumber + DestDecimals) * s_Ten.f_Pow(DestExponent * ExponentSign) * Sign;
 		else
 			return _FailValue;
 	}

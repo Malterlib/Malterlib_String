@@ -100,15 +100,15 @@ namespace NMib::NStr
 		static constexpr umint mcp_StaticParses = 16;
 		static constexpr umint mcp_StaticSpace = mcp_StaticParses * 4;
 
-		uaint m_nParses;
-		mutable aint m_iCurrentArgument;
-		TICStrParseType<TCStrParse> **m_pParses;
-		CChar const *m_pParseStr;
+		uaint mp_nParses;
+		mutable aint mp_iCurrentArgument;
+		TICStrParseType<TCStrParse> **mp_pParses;
+		CChar const *mp_pParseStr;
 
-		TICStrParseType<TCStrParse> *m_plParses[mcp_StaticParses];
-		NContainer::TCVector<TICStrParseType<TCStrParse> *> m_lParses;
+		TICStrParseType<TCStrParse> *mp_StaticParseStorage[mcp_StaticParses];
+		NContainer::TCVector<TICStrParseType<TCStrParse> *> mp_DynamicParseStorage;
 
-		aint m_AllocSpace[mcp_StaticSpace];
-		int m_iCurrentAlloc;
+		aint mp_AllocSpace[mcp_StaticSpace];
+		int mp_iCurrentAlloc;
 	};
 }

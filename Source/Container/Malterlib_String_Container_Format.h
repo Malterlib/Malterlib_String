@@ -125,16 +125,16 @@ namespace NMib::NStr
 		static constexpr umint mcp_StaticFormats = 16;
 		static constexpr umint mcp_StaticSpace = mcp_StaticFormats * 4;
 
-		uaint m_nFormats;
-		mutable aint m_iCurrentArgument;
-		TICStrFormatType<TCFormat> **m_pFormats;
-		CChar const *m_pFormatStr;
+		uaint mp_nFormats;
+		mutable aint mp_iCurrentArgument;
+		TICStrFormatType<TCFormat> **mp_pFormats;
+		CChar const *mp_pFormatStr;
 
-		TICStrFormatType<TCFormat> *m_plFormats[mcp_StaticFormats];
-		NContainer::TCVector<TICStrFormatType<TCFormat> *, CAllocator> m_lFormats;
+		TICStrFormatType<TCFormat> *mp_StaticFormatStorage[mcp_StaticFormats];
+		NContainer::TCVector<TICStrFormatType<TCFormat> *, CAllocator> mp_DynamicFormatStorage;
 
-		aint m_AllocSpace[mcp_StaticSpace];
-		int m_iCurrentAlloc;
+		aint mp_AllocSpace[mcp_StaticSpace];
+		int mp_iCurrentAlloc;
 	};
 
 	struct CStrFormatBinaryWrapper

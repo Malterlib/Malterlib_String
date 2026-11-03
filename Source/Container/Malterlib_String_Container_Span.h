@@ -24,10 +24,10 @@ namespace NMib::NStr
 		umint f_GetLen() const;
 
 	private:
-		static constexpr CChar const mc_EmptyStr[1] = {0};
+		static constexpr CChar const mcp_EmptyStr[1] = {0};
 
-		CChar const *m_pStr = mc_EmptyStr;
-		umint m_Length = 0;
+		CChar const *mp_pStr = mcp_EmptyStr;
+		umint mp_Length = 0;
 	};
 }
 

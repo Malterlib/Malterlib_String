@@ -23,14 +23,14 @@ namespace
 
 	static constexpr umint gc_nTries = 5;
 
-	bool volatile gs_bSink;
+	bool volatile g_bSink;
 
 	template <typename tf_FOperation>
 	inline_never void fg_Measure(NTest::CTestPerformanceMeasure &_Measure, umint _nIterations, tf_FOperation const &_fOperation)
 	{
 		auto fMeasure = [&_fOperation, _nIterations]() inline_never
 			{
-				for (umint i = 0; i < _nIterations; ++i)
+				for (umint iIteration = 0; iIteration < _nIterations; ++iIteration)
 					_fOperation();
 			}
 		;
@@ -59,7 +59,7 @@ namespace
 							, []() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(gc_Str<"hello">.m_Str, gc_Str<"hello">.m_Str);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -78,7 +78,7 @@ namespace
 							, []() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"world">.m_Str);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -97,7 +97,7 @@ namespace
 							, []() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"hllo wrd">.m_Str);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -116,7 +116,7 @@ namespace
 							, []() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(gc_Str<"Hello World">.m_Str, gc_Str<"hello world">.m_Str);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -135,7 +135,7 @@ namespace
 							, []() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(gc_Str<"abcdef">.m_Str, gc_Str<"xyz">.m_Str);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -164,7 +164,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -184,7 +184,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(Candidate, PartialQuery);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -204,7 +204,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(Candidate, NoMatchQuery);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -222,7 +222,7 @@ namespace
 			{
 				// Build a long candidate with repeated patterns
 				CStr LongCandidate;
-				for (umint i = 0; i < 20; ++i)
+				for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
 					LongCandidate += "/opt/Source/Malterlib/Malterlib/String/Source/Malterlib_String_FuzzyMatch.cpp";
 
 				{
@@ -236,7 +236,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(LongCandidate, Query);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -256,7 +256,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(LongCandidate, PartialQuery);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -268,7 +268,7 @@ namespace
 				{
 					DMibTestPath("LongBothStrings");
 					CStr LongQuery;
-					for (umint i = 0; i < 5; ++i)
+					for (umint iRepeat = 0; iRepeat < 5; ++iRepeat)
 						LongQuery += "Malterlib_String_FuzzyMatch";
 					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
 					fg_Measure
@@ -278,7 +278,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(LongCandidate, LongQuery);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -297,10 +297,10 @@ namespace
 				{
 					DMibTestPath("RepeatedCharacters");
 					CStr Candidate;
-					for (umint i = 0; i < 200; ++i)
+					for (umint iRepeat = 0; iRepeat < 200; ++iRepeat)
 						Candidate += "a";
 					CStr Query;
-					for (umint i = 0; i < 20; ++i)
+					for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
 						Query += "a";
 					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
 					fg_Measure
@@ -310,7 +310,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;
@@ -322,7 +322,7 @@ namespace
 				{
 					DMibTestPath("OverlappingPatterns");
 					CStr Candidate;
-					for (umint i = 0; i < 50; ++i)
+					for (umint iRepeat = 0; iRepeat < 50; ++iRepeat)
 						Candidate += "abab";
 					CStr Query = "ababababab";
 					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
@@ -333,7 +333,7 @@ namespace
 							, [&]() inline_always_lambda
 							{
 								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								gs_bSink = bool(Result);
+								g_bSink = bool(Result);
 							}
 						)
 					;

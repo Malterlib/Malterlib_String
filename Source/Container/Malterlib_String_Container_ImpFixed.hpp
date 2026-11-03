@@ -7,7 +7,7 @@ namespace NMib::NStr
 {
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small constexpr TCStrImp_Fixed<t_CStrTraits, t_DataLen>::TCStrImp_Fixed()
-		: m_lData{0}
+		: m_Data{0}
 		, m_Len(0)
 	{
 	}
@@ -17,17 +17,17 @@ namespace NMib::NStr
 	{
 		umint Len = _Str.f_GetStrLen();
 		m_Len = Len;
-		//NMib::NMemory::fg_ObjectCopy((CChar *)m_lData, (CChar const*)_Str.m_lData, Len+1);
-		NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len + 1) * sizeof(CChar));
+		//NMib::NMemory::fg_ObjectCopy((CChar *)m_Data, (CChar const*)_Str.m_Data, Len+1);
+		NMib::NMemory::fg_MemCopy(m_Data, _Str.m_Data, (Len + 1) * sizeof(CChar));
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small constexpr TCStrImp_Fixed<t_CStrTraits, t_DataLen>::TCStrImp_Fixed(CChar const *_pString, umint _Len)
 	{
 		umint nChars = fg_Min(t_DataLen - 1, _Len);
-		for (umint i = 0; i < nChars; ++i)
-			m_lData[i] = _pString[i];
-		m_lData[nChars] = 0;
+		for (umint iChar = 0; iChar < nChars; ++iChar)
+			m_Data[iChar] = _pString[iChar];
+		m_Data[nChars] = 0;
 		m_Len = nChars;
 	}
 
@@ -36,27 +36,27 @@ namespace NMib::NStr
 	{
 		umint Len = _Str.f_GetStrLen();
 		m_Len = Len;
-		//NMib::NMemory::fg_ObjectCopy((CChar *)m_lData, (CChar const*)_Str.m_lData, Len+1);
-		NMib::NMemory::fg_MemCopy(m_lData, _Str.m_lData, (Len + 1) * sizeof(CChar));
+		//NMib::NMemory::fg_ObjectCopy((CChar *)m_Data, (CChar const*)_Str.m_Data, Len+1);
+		NMib::NMemory::fg_MemCopy(m_Data, _Str.m_Data, (Len + 1) * sizeof(CChar));
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small auto TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_GetStrWritable() -> CChar *
 	{
-		return m_lData;
+		return m_Data;
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small auto TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_GetStr() const -> CChar const *
 	{
-		return (CChar const *)m_lData;
+		return (CChar const *)m_Data;
 	}
 
 	template <typename t_CStrTraits, aint t_DataLen>
 	constexpr inline_small bool TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_IsEmpty() const
 	{
 		if (m_Len == mc_InvalidStrLen)
-			return m_lData[0] == 0;
+			return m_Data[0] == 0;
 
 		return m_Len == 0;
 	}
@@ -71,7 +71,7 @@ namespace NMib::NStr
 	inline_medium aint TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_GetStrLen() const
 	{
 		if (m_Len == mc_InvalidStrLen)
-			const_cast<TCStrImp_Fixed *>(this)->m_Len = t_CStrTraits::fs_StrLen(m_lData);
+			const_cast<TCStrImp_Fixed *>(this)->m_Len = t_CStrTraits::fs_StrLen(m_Data);
 
 		return m_Len;
 	}
@@ -95,7 +95,7 @@ namespace NMib::NStr
 		else
 		{
 			m_Len = _Len;
-			m_lData[_Len] = 0;
+			m_Data[_Len] = 0;
 		}
 	}
 
@@ -108,7 +108,7 @@ namespace NMib::NStr
 	template <typename t_CStrTraits, aint t_DataLen>
 	inline_small constexpr void TCStrImp_Fixed<t_CStrTraits, t_DataLen>::f_Destroy()
 	{
-		m_lData[0] = 0;
+		m_Data[0] = 0;
 		m_Len = 0;
 	}
 

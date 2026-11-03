@@ -241,7 +241,7 @@ namespace NMib::NStr
 				umint OldColumn = Column;
 				Column = ((Column + _TabSize) / _TabSize) * _TabSize;
 				umint nFill = Column - OldColumn;
-				for (umint i = 0; i < nFill; ++i)
+				for (umint iFill = 0; iFill < nFill; ++iFill)
 					*(pWrite++) = ' ';
 			}
 			else if (Char == '\r')
