@@ -11,9 +11,6 @@ namespace NMib::NStr
 
 	struct CMStrPreserve : public CMStrDeprecated
 	{
-		EMStrType m_MixedType = EMStrType_CStr;
-		EStrType m_OriginalType = EStrType_UTF;
-
 		CMStrPreserve();
 		CMStrPreserve(CMStrPreserve const &_Other);
 		CMStrPreserve(CMStrPreserve &&_Other);
@@ -24,6 +21,9 @@ namespace NMib::NStr
 		CMStrPreserve &operator = (CMStrPreserve &&_Other);
 		template <typename tf_CValue>
 		CMStrPreserve &operator = (tf_CValue &&_Other);
+
+		EMStrType m_MixedType = EMStrType_CStr;
+		EStrType m_OriginalType = EStrType_UTF;
 	};
 
 	DMibDeprecatedSuppressStop;

@@ -24,35 +24,42 @@ namespace
 {
 	struct CStr_Tests : public NMib::NTest::CTest
 	{
+		void f_DoTests();
+
 	private:
 		template <typename tf_CFormatFrom>
-		void fp_DoCapitalizeTestSource(ch8 const *_pFromName, tf_CFormatFrom const &_From)
-		{
-			DMibTestPath(_pFromName);
-			DMibExpect(fg_Format<CStr>("{cc}", _From), ==, "Test");
-		}
+		void fp_DoCapitalizeTestSource(ch8 const *_pFromName, tf_CFormatFrom const &_From);
 
 		template <typename tf_CFormatTo>
-		void fp_DoCapitalizeTest(ch8 const *_pName)
-		{
-			DMibTestPath(_pName);
-			fp_DoCapitalizeTestSource("ch8 const *", "test");
-			fp_DoCapitalizeTestSource("CStr", CStr("test"));
-			fp_DoCapitalizeTestSource("CWStr", CWStr("test"));
-			fp_DoCapitalizeTestSource("CUStr", CUStr("test"));
-		}
-
-	public:
-		void f_DoTests()
-		{
-			DMibTestSuite("Capitalize")
-			{
-				fp_DoCapitalizeTest<CStr>("CStr");
-				fp_DoCapitalizeTest<CWStr>("CWStr");
-				fp_DoCapitalizeTest<CUStr>("CUStr");
-			};
-		}
+		void fp_DoCapitalizeTest(ch8 const *_pName);
 	};
+
+	void CStr_Tests::f_DoTests()
+	{
+		DMibTestSuite("Capitalize")
+		{
+			fp_DoCapitalizeTest<CStr>("CStr");
+			fp_DoCapitalizeTest<CWStr>("CWStr");
+			fp_DoCapitalizeTest<CUStr>("CUStr");
+		};
+	}
+
+	template <typename tf_CFormatFrom>
+	void CStr_Tests::fp_DoCapitalizeTestSource(ch8 const *_pFromName, tf_CFormatFrom const &_From)
+	{
+		DMibTestPath(_pFromName);
+		DMibExpect(fg_Format<CStr>("{cc}", _From), ==, "Test");
+	}
+
+	template <typename tf_CFormatTo>
+	void CStr_Tests::fp_DoCapitalizeTest(ch8 const *_pName)
+	{
+		DMibTestPath(_pName);
+		fp_DoCapitalizeTestSource("ch8 const *", "test");
+		fp_DoCapitalizeTestSource("CStr", CStr("test"));
+		fp_DoCapitalizeTestSource("CWStr", CWStr("test"));
+		fp_DoCapitalizeTestSource("CUStr", CUStr("test"));
+	}
 
 	DMibTestRegister(CStr_Tests, Malterlib::String::Format);
 }

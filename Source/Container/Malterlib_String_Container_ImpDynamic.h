@@ -16,14 +16,14 @@ namespace NMib::NStr
 		inline_small void f_RefCountIncrease();
 		inline_small bool f_RefCountDecrease();
 
+		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
+
 		NAtomic::TCAtomicIndeterminate<umint> m_RefCount{1};
 		umint m_Len:sizeof(umint) * 8 - 2 = 0;
 		umint m_bReserved:1 = 0;
 		umint m_bConstant:1 = 0;
 		umint m_StrLen:sizeof(umint) * 8 - 2 = mc_InvalidStrLen;
 		umint m_UserData:2 = 0;
-
-		static constexpr umint mc_InvalidStrLen = ((umint(1) << (sizeof(umint) * 8 - 2))) - 1;
 	};
 
 	template <umint t_nChars, typename t_CChar>

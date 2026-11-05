@@ -35,11 +35,8 @@ namespace NMib::NStr
 		using CTStrTraits = t_CTCStrTraits;
 		using CFomatArgType = TICStrFormatType<TCFormat>;
 
-		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
-
 		TCFormat(TCFormat &&_Other);
 		TCFormat(TCFormat const &_Other) = delete;
-		TCFormat &operator = (TCFormat const &_Other) = delete;
 
 		explicit inline_medium TCFormat(CChar const *_pFormatStr);
 		template <typename tf_CTCStrTraits>
@@ -47,6 +44,7 @@ namespace NMib::NStr
 
 		~TCFormat();
 
+		TCFormat &operator = (TCFormat const &_Other) = delete;
 		TCFormat &operator = (TCFormat &&_Other);
 
 		void f_MoveFormats(TCFormat &&_Other);
@@ -109,6 +107,8 @@ namespace NMib::NStr
 
 		template <typename tf_CType>
 		static auto fs_GetFormatClassifier(tf_CType const &_Type) -> decltype(TCStringFormatterAll<TCFormat, tf_CType>::fs_CreateFormat(*((TCFormat *)0), _Type)); // Only used compile time
+
+		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 
 	private:
 		void fp_AddFormat(TICStrFormatType<TCFormat> *_pFormat, EStringFormatTypeFlag _Flags);

@@ -10,14 +10,16 @@ namespace
 {
 	struct CInt_Tests : public NMib::NTest::CTest
 	{
-		void f_DoTests()
-		{
-			DMibTestSuite("General")
-			{
-				DMibTest(DMibExpr(0) == DMibExpr(0));
-			};
-		}
+		void f_DoTests();
 	};
+
+	void CInt_Tests::f_DoTests()
+	{
+		DMibTestSuite("General")
+		{
+			DMibTest(DMibExpr(0) == DMibExpr(0));
+		};
+	}
 
 	DMibTestRegister(CInt_Tests, Malterlib::String::Format);
 }

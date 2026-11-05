@@ -70,9 +70,9 @@ namespace NMib::NStr
 		template <typename tf_COptions, typename tf_CStrTraitsIn>
 		static inline_small void fsp_AddToStr(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, tf_COptions &_Options, TCStr<tf_CStrTraitsIn> const &_Value);
 
-		CStorageType mp_TStr;
-
 		inline static bool constexpr mcp_bTypeID = false;
+
+		CStorageType mp_TStr;
 	};
 
 	template <typename t_CFormatter, typename t_CStrTraitsIn>

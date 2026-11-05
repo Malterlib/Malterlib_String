@@ -132,7 +132,7 @@ namespace NMib::NStr
 
 	template <typename t_CTCStrTraits>
 	auto TCStr<t_CTCStrTraits>::f_GetUnicodeIterator() const -> CUnicodeIterator
-		requires (mc_Type != EStrType_Ansi)
+		requires (CStrTraits::mc_Type != EStrType_Ansi)
 	{
 		return CUnicodeIterator(*this);
 	}
