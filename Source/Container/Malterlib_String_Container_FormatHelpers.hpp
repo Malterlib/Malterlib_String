@@ -40,7 +40,7 @@ namespace NMib::NStr::NPrivate
 		template <typename tf_CData>
 		static auto fsp_CheckFormat(tf_CData &&_Data) -> NTraits::CFalseBySize;
 
-	public:
+	public: // NOLINT(malterlib-member-order): the initializer of mc_bValue uses the private helpers
 		static constexpr bool mc_bValue = sizeof(fsp_CheckFormat(fsp_GetData())) == sizeof(NTraits::CTrueBySize);
 	};
 

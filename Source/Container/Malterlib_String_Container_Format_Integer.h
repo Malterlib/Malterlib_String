@@ -12,16 +12,6 @@ namespace NMib::NStr
 	{
 		using CIntType = t_CIntType;
 
-		static constexpr aint mc_Radix = 10;
-		static constexpr aint mc_NumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3);
-
-		uint32 m_Radix:29;
-		uint32 m_bNumberCaps:1;
-		uint32 m_bSign:1;
-		uint32 m_bBoolean:1;
-
-		typename TICStrFormatType<t_CFormatter>::CChar m_ThousandSeparator;
-
 		template <typename tf_CInitializer>
 		inline_medium TCStrFormatType_Int_Options(tf_CInitializer const &_Init);
 
@@ -33,15 +23,22 @@ namespace NMib::NStr
 
 		template <typename tf_CRadix>
 		inline_always tf_CRadix f_Radix() const;
+
+		static constexpr aint mc_Radix = 10;
+		static constexpr aint mc_NumTempChar = sizeof(t_CIntType) * 8 + 2 + ((sizeof(t_CIntType) * 8 + 2) / 3);
+
+		uint32 m_Radix:29;
+		uint32 m_bNumberCaps:1;
+		uint32 m_bSign:1;
+		uint32 m_bBoolean:1;
+
+		typename TICStrFormatType<t_CFormatter>::CChar m_ThousandSeparator;
 	};
 
 	template <typename t_CIntType>
 	struct TCStrFormatType_Int_OptionsStatic : public CStrFormatType_StaticOptions
 	{
 		using CIntType = t_CIntType;
-
-		static constexpr aint mc_Radix = 10;
-		static constexpr aint mc_NumTempChar = (sizeof(CIntType) * 8) / 3 + 2;
 
 		inline_always static bool fs_StaticRadix();
 		inline_always bool f_NumberCaps() const;
@@ -51,6 +48,9 @@ namespace NMib::NStr
 
 		template <typename tf_CRadix>
 		inline_always tf_CRadix f_Radix() const;
+
+		static constexpr aint mc_Radix = 10;
+		static constexpr aint mc_NumTempChar = (sizeof(CIntType) * 8) / 3 + 2;
 	};
 
 	template <int32 t_Radix, typename t_CParent>
@@ -63,16 +63,16 @@ namespace NMib::NStr
 		static constexpr aint mcp_NumBits = sizeof(CIntType) * 8;
 		static constexpr aint mcp_NumBitsPerChar = gc_HighestBitSet<t_Radix>;
 
-	public:
-		static constexpr aint mc_Radix = t_Radix;
-		static constexpr aint mc_NumTempChar = (mcp_NumBits + (mcp_NumBitsPerChar - 1)) / mcp_NumBitsPerChar + 2;
-
+	public: // NOLINT(malterlib-member-order): the public mc_NumTempChar uses mcp_NumBits and mcp_NumBitsPerChar
 		inline_always TCStrFormatType_Int_OptionsStatic_Radix(t_CParent const &_Parent);
 
 		inline_always static bool fs_StaticRadix();
 
 		template <typename tf_CRadix>
 		inline_always tf_CRadix f_Radix() const;
+
+		static constexpr aint mc_Radix = t_Radix;
+		static constexpr aint mc_NumTempChar = (mcp_NumBits + (mcp_NumBitsPerChar - 1)) / mcp_NumBitsPerChar + 2;
 	};
 
 	template <typename t_CFormatter, typename t_CIntType, typename t_COptions>
@@ -86,8 +86,6 @@ namespace NMib::NStr
 		using CUnsignedType = NTraits::TCUnsigned<CType>;
 		using CRadixType = TCConditional<NTraits::cIsFundamental<CUnsignedType>, CUnsignedType, uint32>;
 		using CVisitor = typename CSuper::CVisitor;
-
-		static constexpr bool mc_bNeedDestruct = !NTraits::cIsReference<t_CIntType>;
 
 		struct CStorage : public t_COptions
 		{
@@ -171,6 +169,8 @@ namespace NMib::NStr
 
 		template <typename tf_COption2, typename tf_CIntType2>
 		inline_small static void fs_AddToStrStatic(TCStr<CTStrTraits> &_String, aint &_CurrentStrLen, TCValueWithOptions<tf_COption2, tf_CIntType2> const &_Value);
+
+		static constexpr bool mc_bNeedDestruct = !NTraits::cIsReference<t_CIntType>;
 
 	private:
 		template <typename tf_COptions>

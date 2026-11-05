@@ -8,14 +8,14 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	struct TCStr<t_CTCStrTraits>::CParse : public TCStrParse<CStrTraits>
 	{
-		TCStrParse<CStrTraits> &f_ByPointer()
-		{
-			return *this;
-		}
-
 		inline_medium CParse(typename TCStr<t_CTCStrTraits>::CChar const *_pParseStr)
 			: TCStrParse<CStrTraits>(_pParseStr)
 		{
+		}
+
+		TCStrParse<CStrTraits> &f_ByPointer()
+		{
+			return *this;
 		}
 
 		inline_small aint f_Parse(TCStr<t_CTCStrTraits> const &_Str, aint &_nParsed, EParseFlag _ParseFlags)

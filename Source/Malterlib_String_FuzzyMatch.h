@@ -16,10 +16,10 @@ namespace NMib::NStr
 
 	struct CFuzzyMatchResult
 	{
+		explicit operator bool () const;
+
 		fp64 m_Score = -1.0;
 		NContainer::TCVector<CFuzzyMatchRange> m_Matches;
-
-		explicit operator bool () const;
 	};
 
 	CFuzzyMatchResult fg_FuzzyMatchString(CStr const &_Str0, CStr const &_Str1);

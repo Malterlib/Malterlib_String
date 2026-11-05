@@ -75,11 +75,10 @@ namespace NMib::NStr
 		using CChar = typename t_CStrTraits::CChar;
 		using CStrTraits = t_CStrTraits;
 
-		inline_medium TICStrParseType<TCStrParse> const *f_GetArg(aint _iArgument) const;
 		inline_medium TCStrParse(CChar const *_pParseStr);
-
 		~TCStrParse();
 
+		inline_medium TICStrParseType<TCStrParse> const *f_GetArg(aint _iArgument) const;
 		void f_AddParse(TICStrParseType<TCStrParse> *_pParse, EStringParseTypeFlag _Flags);
 		inline_medium void *f_AllocSpace(umint _Size, EStringParseTypeFlag &_Flags);
 		inline_small CChar const *f_Parse(CChar const *_pToParse, aint &_nParsed, EParseFlag _ParseFlags = EParseFlag_None);

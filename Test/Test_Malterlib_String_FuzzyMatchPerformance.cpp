@@ -43,316 +43,322 @@ namespace
 
 	struct CFuzzyMatchPerformance_Tests : public NMib::NTest::CTest
 	{
+		void f_DoTests();
+
 	private:
-		// Short strings: typical filename/command matching
-		void fp_ShortStrings()
-		{
-			DMibTestSuite(NTest::CTestCategory("ShortStrings") << NTest::CTestGroup("Performance"))
-			{
-				{
-					DMibTestPath("ExactMatch");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsShort
-							, []() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(gc_Str<"hello">.m_Str, gc_Str<"hello">.m_Str);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("SubstringMatch");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsShort
-							, []() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"world">.m_Str);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("PartialMatch");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsShort
-							, []() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"hllo wrd">.m_Str);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("CaseInsensitive");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsShort
-							, []() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(gc_Str<"Hello World">.m_Str, gc_Str<"hello world">.m_Str);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("NoMatch");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsShort
-							, []() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(gc_Str<"abcdef">.m_Str, gc_Str<"xyz">.m_Str);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-			};
-		}
-
-		// Medium strings: typical file path matching
-		void fp_MediumStrings()
-		{
-			DMibTestSuite(NTest::CTestCategory("MediumStrings") << NTest::CTestGroup("Performance"))
-			{
-				CStr Candidate = "/opt/Source/Malterlib/Malterlib/String/Source/Malterlib_String_FuzzyMatch.cpp";
-				CStr Query = "FuzzyMatch.cpp";
-
-				{
-					DMibTestPath("PathSubstring");
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsMedium
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("PathPartial");
-					CStr PartialQuery = "strfzy";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsMedium
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(Candidate, PartialQuery);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("PathNoMatch");
-					CStr NoMatchQuery = "zzzzzzz";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsMedium
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(Candidate, NoMatchQuery);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-			};
-		}
-
-		// Long strings: stress test with repeated patterns
-		void fp_LongStrings()
-		{
-			DMibTestSuite(NTest::CTestCategory("LongStrings") << NTest::CTestGroup("Performance"))
-			{
-				// Build a long candidate with repeated patterns
-				CStr LongCandidate;
-				for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
-					LongCandidate += "/opt/Source/Malterlib/Malterlib/String/Source/Malterlib_String_FuzzyMatch.cpp";
-
-				{
-					DMibTestPath("LongCandidateSubstring");
-					CStr Query = "FuzzyMatch.cpp";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsLong
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(LongCandidate, Query);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("LongCandidatePartial");
-					CStr PartialQuery = "strfzymtch";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsLong
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(LongCandidate, PartialQuery);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("LongBothStrings");
-					CStr LongQuery;
-					for (umint iRepeat = 0; iRepeat < 5; ++iRepeat)
-						LongQuery += "Malterlib_String_FuzzyMatch";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsLong
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(LongCandidate, LongQuery);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-			};
-		}
-
-		// Worst case: many repeated characters causing lots of partial matches
-		void fp_WorstCase()
-		{
-			DMibTestSuite(NTest::CTestCategory("WorstCase") << NTest::CTestGroup("Performance"))
-			{
-				{
-					DMibTestPath("RepeatedCharacters");
-					CStr Candidate;
-					for (umint iRepeat = 0; iRepeat < 200; ++iRepeat)
-						Candidate += "a";
-					CStr Query;
-					for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
-						Query += "a";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsLong
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-
-				{
-					DMibTestPath("OverlappingPatterns");
-					CStr Candidate;
-					for (umint iRepeat = 0; iRepeat < 50; ++iRepeat)
-						Candidate += "abab";
-					CStr Query = "ababababab";
-					NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
-					fg_Measure
-						(
-							Measure
-							, gc_nIterationsLong
-							, [&]() inline_always_lambda
-							{
-								auto Result = fg_FuzzyMatchString(Candidate, Query);
-								g_bSink = bool(Result);
-							}
-						)
-					;
-					NTest::CTestPerformance PerfTest(0.0, false);
-					PerfTest.f_Add(Measure);
-					DMibExpectTrue(PerfTest);
-				}
-			};
-		}
-
-	public:
-		void f_DoTests()
-		{
-			fp_ShortStrings();
-			fp_MediumStrings();
-			fp_LongStrings();
-			fp_WorstCase();
-		}
+		void fp_ShortStrings();
+		void fp_MediumStrings();
+		void fp_LongStrings();
+		void fp_WorstCase();
 	};
+
+	void CFuzzyMatchPerformance_Tests::f_DoTests()
+	{
+		fp_ShortStrings();
+		fp_MediumStrings();
+		fp_LongStrings();
+		fp_WorstCase();
+	}
+
+	// Short strings: typical filename/command matching.
+	void CFuzzyMatchPerformance_Tests::fp_ShortStrings()
+	{
+		DMibTestSuite(NTest::CTestCategory("ShortStrings") << NTest::CTestGroup("Performance"))
+		{
+			{
+				DMibTestPath("ExactMatch");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsShort
+						, []() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(gc_Str<"hello">.m_Str, gc_Str<"hello">.m_Str);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("SubstringMatch");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsShort
+						, []() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"world">.m_Str);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("PartialMatch");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsShort
+						, []() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(gc_Str<"hello world">.m_Str, gc_Str<"hllo wrd">.m_Str);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("CaseInsensitive");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsShort
+						, []() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(gc_Str<"Hello World">.m_Str, gc_Str<"hello world">.m_Str);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("NoMatch");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsShort
+						, []() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(gc_Str<"abcdef">.m_Str, gc_Str<"xyz">.m_Str);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+		};
+	}
+
+	// Medium strings: typical file path matching.
+	void CFuzzyMatchPerformance_Tests::fp_MediumStrings()
+	{
+		DMibTestSuite(NTest::CTestCategory("MediumStrings") << NTest::CTestGroup("Performance"))
+		{
+			CStr Candidate = "/opt/Source/Malterlib/Malterlib/String/Source/Malterlib_String_FuzzyMatch.cpp";
+			CStr Query = "FuzzyMatch.cpp";
+
+			{
+				DMibTestPath("PathSubstring");
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsMedium
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(Candidate, Query);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("PathPartial");
+				CStr PartialQuery = "strfzy";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsMedium
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(Candidate, PartialQuery);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("PathNoMatch");
+				CStr NoMatchQuery = "zzzzzzz";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsMedium
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(Candidate, NoMatchQuery);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+		};
+	}
+
+	// Long strings: stress test with repeated patterns.
+	void CFuzzyMatchPerformance_Tests::fp_LongStrings()
+	{
+		DMibTestSuite(NTest::CTestCategory("LongStrings") << NTest::CTestGroup("Performance"))
+		{
+			// Build a long candidate with repeated patterns
+			CStr LongCandidate;
+			for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
+				LongCandidate += "/opt/Source/Malterlib/Malterlib/String/Source/Malterlib_String_FuzzyMatch.cpp";
+
+			{
+				DMibTestPath("LongCandidateSubstring");
+				CStr Query = "FuzzyMatch.cpp";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsLong
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(LongCandidate, Query);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("LongCandidatePartial");
+				CStr PartialQuery = "strfzymtch";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsLong
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(LongCandidate, PartialQuery);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("LongBothStrings");
+				CStr LongQuery;
+				for (umint iRepeat = 0; iRepeat < 5; ++iRepeat)
+					LongQuery += "Malterlib_String_FuzzyMatch";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsLong
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(LongCandidate, LongQuery);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+		};
+	}
+
+	// Worst case: many repeated characters causing lots of partial matches.
+	void CFuzzyMatchPerformance_Tests::fp_WorstCase()
+	{
+		DMibTestSuite(NTest::CTestCategory("WorstCase") << NTest::CTestGroup("Performance"))
+		{
+			{
+				DMibTestPath("RepeatedCharacters");
+				CStr Candidate;
+				for (umint iRepeat = 0; iRepeat < 200; ++iRepeat)
+					Candidate += "a";
+				CStr Query;
+				for (umint iRepeat = 0; iRepeat < 20; ++iRepeat)
+					Query += "a";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsLong
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(Candidate, Query);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+
+			{
+				DMibTestPath("OverlappingPatterns");
+				CStr Candidate;
+				for (umint iRepeat = 0; iRepeat < 50; ++iRepeat)
+					Candidate += "abab";
+				CStr Query = "ababababab";
+				NTest::CTestPerformanceMeasure Measure("FuzzyMatch");
+				fg_Measure
+					(
+						Measure
+						, gc_nIterationsLong
+						, [&]() inline_always_lambda
+						{
+							auto Result = fg_FuzzyMatchString(Candidate, Query);
+							g_bSink = bool(Result);
+						}
+					)
+				;
+				NTest::CTestPerformance PerfTest(0.0, false);
+				PerfTest.f_Add(Measure);
+				DMibExpectTrue(PerfTest);
+			}
+		};
+	}
 
 	DMibTestRegister(CFuzzyMatchPerformance_Tests, Malterlib::String::Algorithm);
 }

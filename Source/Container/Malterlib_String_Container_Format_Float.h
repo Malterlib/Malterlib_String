@@ -30,9 +30,6 @@ namespace NMib::NStr
 		using CTStrTraits = typename t_CFormatter::CTStrTraits;
 		using CFloatIn = NNumeric::TCFloat<t_SignBits, t_ExponentBits, t_MantissaBits, t_PaddingBits, t_CImplicitFloat, t_bDummyOptimize, t_CIntegerStorage>;
 
-		static constexpr aint mc_MantissaBits = t_MantissaBits + 8;
-		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<mc_MantissaBits + (mc_MantissaBits - 1)> + 3;
-		static constexpr aint mc_ExponentBits = (t_ExponentBits > mc_MinExponentBits ? t_ExponentBits : mc_MinExponentBits);
 		using CFloat = CFloatIn;
 		using CChar = typename CTStrTraits::CStrTraits::CChar;
 		using CInteger = typename CFloat::CInteger;
@@ -45,10 +42,6 @@ namespace NMib::NStr
 
 		using COption = typename TICStrFormatType<t_CFormatter>::COption;
 		using COptions = typename TICStrFormatType<t_CFormatter>::COptions;
-
-		inline_small TCStrFormatType_Float(CFloatIn const &_Value);
-		virtual umint f_Destruct() override;
-		virtual void f_Move(t_CFormatter &_Formatter) override;
 
 		struct COptionsFloat : public COptions
 		{
@@ -93,6 +86,10 @@ namespace NMib::NStr
 			inline_small static auto fs_GetArgumentValue(tf_CArgument *_pArg) -> decltype(_pArg->f_Get_fp64());
 		};
 
+		inline_small TCStrFormatType_Float(CFloatIn const &_Value);
+		virtual umint f_Destruct() override;
+		virtual void f_Move(t_CFormatter &_Formatter) override;
+
 		virtual void f_AddToStr(CString &_String, aint &_CurrentStrLen, CChar const *_pFormat, t_CFormatter const &_ArgData) const override;
 		virtual aint f_Get_aint() const override;
 		virtual fp32 f_Get_fp32() const override;
@@ -107,6 +104,9 @@ namespace NMib::NStr
 		template <typename tf_CData, typename tf_CFormatType, typename tf_COptions>
 		inline_small aint f_ParseOption(TICStrFormatType_ParseOptionsArgs<tf_CData, tf_CFormatType, tf_COptions> &_Args, COption &_Option) const;
 
+		static constexpr aint mc_MantissaBits = t_MantissaBits + 8;
+		static constexpr aint mc_MinExponentBits = gc_HighestBitSet<mc_MantissaBits + (mc_MantissaBits - 1)> + 3;
+		static constexpr aint mc_ExponentBits = (t_ExponentBits > mc_MinExponentBits ? t_ExponentBits : mc_MinExponentBits);
 		static constexpr bool mc_bNeedDestruct = !t_bReference;
 
 	private:
@@ -223,7 +223,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, pfp128>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, fp128>::CFormatType;
 
 		template <typename tf_CTypeWithConst>
@@ -233,7 +232,6 @@ namespace NMib::NStr
 	template <typename t_CFormatter>
 	struct TCStringFormatter<t_CFormatter, TCByValue<pfp128>>
 	{
-	public:
 		using CFormatType = typename TCStringFormatter<t_CFormatter, TCByValue<fp128>>::CFormatType;
 
 		template <typename tf_CTypeWithConst>

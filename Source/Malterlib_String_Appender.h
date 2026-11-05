@@ -12,21 +12,21 @@ namespace NMib::NStr
 	{
 		using CString = t_CString;
 
-		TCStringAppender(t_CString &_String);
-		~TCStringAppender();
-
 		struct CCommitted
 		{
-			t_CString &m_String;
-
 			CCommitted(TCStringAppender &_Appender);
 			~CCommitted();
 
 			void f_Abort();
 
+			t_CString &m_String;
+
 		private:
 			TCStringAppender *mp_pAppender;
 		};
+
+		TCStringAppender(t_CString &_String);
+		~TCStringAppender();
 
 		void operator += (typename t_CString::CUnsignedChar _Character);
 		void operator += (t_CString const &_String);

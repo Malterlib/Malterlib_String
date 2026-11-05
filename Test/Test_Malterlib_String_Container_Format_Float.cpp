@@ -25,16 +25,18 @@ namespace
 	using namespace NMib::NStr;
 	struct CFloat_Tests : public NMib::NTest::CTest
 	{
-		int m_Test;
+		void f_DoTests();
 
-		void f_DoTests()
-		{
-			DMibTestSuite("General")
-			{
-				DMibTest(DMibExpr(1) == DMibExpr(1))(ETest_FailAndStop);
-			};
-		}
+		int m_Test;
 	};
+
+	void CFloat_Tests::f_DoTests()
+	{
+		DMibTestSuite("General")
+		{
+			DMibTest(DMibExpr(1) == DMibExpr(1))(ETest_FailAndStop);
+		};
+	}
 
 	DMibTestRegister(CFloat_Tests, Malterlib::String::Format);
 }

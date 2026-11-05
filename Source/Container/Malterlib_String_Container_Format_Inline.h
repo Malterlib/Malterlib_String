@@ -34,7 +34,7 @@ namespace NMib::NStr
 		template <typename tf_CType>
 		static auto fsp_GetFormatOptionsType(tf_CType const &_Type);
 
-	public:
+	public: // NOLINT(malterlib-member-order): the public CLocalOptions uses fsp_GetFormatOptionsType
 		struct CLocalOptions : public COptions
 		{
 			using COptionsType = decltype(fsp_GetFormatOptionsType(fg_GetReference<t_CToFormat>()));
@@ -89,9 +89,9 @@ namespace NMib::NStr
 		template <typename tf_CToFormat>
 		static inline_small void fsp_FormatInto(TCStr<CTStrTraits> &_String, tf_CToFormat const &_Value);
 
-		CStorageType mp_ToFormat;
-
 		inline static bool constexpr mcp_bTypeID = false;
+
+		CStorageType mp_ToFormat;
 	};
 }
 

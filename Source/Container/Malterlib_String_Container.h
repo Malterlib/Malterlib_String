@@ -42,8 +42,6 @@ namespace NMib::NStr
 	template <typename t_CTCStrTraits>
 	struct TCStr : public t_CTCStrTraits::CImp
 	{
-		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
-
 		using CStrTraits = typename t_CTCStrTraits::CStrTraits;
 		using CAllocator = typename CStrTraits::CAllocator;
 		using CImp = typename t_CTCStrTraits::CImp;
@@ -63,7 +61,7 @@ namespace NMib::NStr
 
 		using CAppender = TCStringAppender<TCStr>;
 
-		using CUnicodeIterator = TCGetUnicodeIterator<CChar, mc_Type>;
+		using CUnicodeIterator = TCGetUnicodeIterator<CChar, CStrTraits::mc_Type>;
 
 		struct CParse;
 
@@ -132,10 +130,10 @@ namespace NMib::NStr
 			}
 		;
 
-		inline static TCStr fs_ToStr(CFormat const &_Format);
-
 		template <typename tf_CStrTraitsF>
 		inline_large TCStr(TCStr<tf_CStrTraitsF> const &_From);
+
+		inline static TCStr fs_ToStr(CFormat const &_Format);
 
 		template <typename tf_CType>
 		inline static TCStr fs_ToStr(tf_CType const &_Format);
@@ -155,7 +153,7 @@ namespace NMib::NStr
 		static TCStr fs_ReadTextStream(NStream::CBinaryStream &_Stream, bool _bAssumeUTF8 = false);
 
 		CUnicodeIterator f_GetUnicodeIterator() const
-			requires (mc_Type != EStrType_Ansi)
+			requires (CStrTraits::mc_Type != EStrType_Ansi)
 		;
 
 		inline_small void f_Assign(TCStr const &_Src);
@@ -630,10 +628,17 @@ namespace NMib::NStr
 
 		TCStr operator ^ (umint _nCopies) const;
 
+		static constexpr EStrType mc_Type = t_CTCStrTraits::CStrTraits::mc_Type;
 		static constexpr CChar mc_FormatStr[] = {'{', '}', 0};
 
 	private:
 		using CTempStr = TCConditional<NTraits::cIsSame<typename CStrTraits::CAllocator, NMemory::CAllocator_NonTrackedHeap>, CStrNonTracked, CStr>;
+
+		enum EDebug
+		{
+			EDebug_CharSize = sizeof(CChar)
+			, EDebug_Type   = t_CTCStrTraits::CStrTraits::mc_Type
+		};
 
 		static_assert(sizeof(CChar) != 1 || mc_Type == EStrType_Ansi || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
 		static_assert(sizeof(CChar) != 2 || mc_Type == EStrType_Unicode || mc_Type == EStrType_UTF);
@@ -656,12 +661,6 @@ namespace NMib::NStr
 
 		template <int tf_CharSize>
 		TCEnableIf<tf_CharSize != 1 && tf_CharSize != 2, void> fp_ConvertFromType(EStrType _Type);
-
-		enum EDebug
-		{
-			EDebug_CharSize = sizeof(CChar)
-			, EDebug_Type   = t_CTCStrTraits::CStrTraits::mc_Type
-		};
 	};
 
 	template <typename t_CStr0, typename t_CStr1>

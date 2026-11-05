@@ -16,7 +16,6 @@ namespace NMib::NStr
 	struct TCStrTraits
 	{
 		using CChar = t_CChar;
-		static constexpr EStrType mc_Type = (EStrType)t_Type;
 		using CTypes = TCStrTraitsTypes<t_CChar, t_Type>;
 		using CParams = t_CParams;
 		using CAllocator = typename t_CParams::CAllocator;
@@ -66,6 +65,8 @@ namespace NMib::NStr
 		static inline_small tf_CReturn fs_StrToFloatExactNullTerminated(tf_CData const *_pStr, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
 		template <typename tf_CData, typename tf_CReturn>
 		static inline_small tf_CReturn fs_StrToFloatExact(tf_CData const *_pStr, umint _MaxLen, tf_CReturn _FailValue, tf_CData const *_pStrTerminators = nullptr);
+
+		static constexpr EStrType mc_Type = (EStrType)t_Type;
 	};
 }
 
