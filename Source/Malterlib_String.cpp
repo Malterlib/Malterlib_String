@@ -7,7 +7,6 @@ namespace NMib::NStr
 {
 	DMibImpErrorClassImplement(CExceptionParse);
 
-	// NOLINTBEGIN(malterlib-parameter-naming): the check asks for parameter names in explicit instantiations, which have none
 	template struct TCStr<CStrTraits_CStr>;
 	template struct TCStr<CStrTraits_CWStr>;
 	template struct TCStr<CStrTraits_CUStr>;
@@ -44,7 +43,6 @@ namespace NMib::NStr
 
 	template TCStr<NMib::NStr::CStrTraits_CStrNonTracked> &TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::operator = (TCStr<NMib::NStr::CStrTraits_CStr> const &);
 	template void NMib::NStr::TCStr<NMib::NStr::CStrTraits_CStrNonTracked>::f_SetStr(TCStr<NMib::NStr::CStrTraits_CStr> const &);
-	// NOLINTEND(malterlib-parameter-naming)
 
 #ifdef DMibDebug
 	CWStr g_DebugOutputTemp16;
