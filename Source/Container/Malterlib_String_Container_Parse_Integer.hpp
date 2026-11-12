@@ -36,9 +36,9 @@ namespace NMib::NStr
 				case 'B': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base2; break;
 				case 'F':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (CTStrTraits::fs_CharUpperCase(*ToCompare))
+						switch (CTStrTraits::fs_CharUpperCase(*pToCompare))
 						{
 						case 'H': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base16; break;
 						case 'N': _Options.m_NumberFormat = (int)COptionsInt::ENumberFormat_Base10; break;

@@ -250,9 +250,9 @@ namespace NMib::NStr
 				case '+': _Args.m_Options.m_bSign = true; break;
 				case 'F':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (CTStrTraits::CStrTraits::fs_CharUpperCase(*ToCompare))
+						switch (CTStrTraits::CStrTraits::fs_CharUpperCase(*pToCompare))
 						{
 						case 'H': _Args.m_Options.m_Radix = 16; break;
 						case 'N': _Args.m_Options.m_Radix = 10; break;

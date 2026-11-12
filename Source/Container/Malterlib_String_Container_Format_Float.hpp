@@ -261,9 +261,9 @@ namespace NMib::NStr
 				{
 				case 'F':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (*ToCompare)
+						switch (*pToCompare)
 						{
 						case 'E': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_Exponent; break;
 						case 'e': _Args.m_Options.m_FloatFormat = COptionsFloat::EFloatFormat_ExponentLowerCase; break;
@@ -279,9 +279,9 @@ namespace NMib::NStr
 					break;
 				case 'D':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (fg_CharUpperCase(*ToCompare))
+						switch (fg_CharUpperCase(*pToCompare))
 						{
 						case 'B': _Args.m_Options.m_MinDigits = -2; break;
 						case 'S': _Args.m_Options.m_MinDigits = -1; break;
@@ -307,9 +307,9 @@ namespace NMib::NStr
 					break;
 				case 'S':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (fg_CharUpperCase(*ToCompare))
+						switch (fg_CharUpperCase(*pToCompare))
 						{
 						case 'I': _Args.m_Options.m_bShowInf = 1; break;
 						case 'D': _Args.m_Options.m_bShowDenormalized = 1; break;
@@ -320,9 +320,9 @@ namespace NMib::NStr
 					break;
 				case 'H':
 					{
-						CChar const *ToCompare = _Option.m_pDataStart;
+						CChar const *pToCompare = _Option.m_pDataStart;
 
-						switch (fg_CharUpperCase(*ToCompare))
+						switch (fg_CharUpperCase(*pToCompare))
 						{
 						case 'I': _Args.m_Options.m_bShowInf = 0; break;
 						case 'D': _Args.m_Options.m_bShowDenormalized = 0; break;
